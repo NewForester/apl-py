@@ -15,7 +15,11 @@ def     read_evaluate_print (prompt):
     try:
         while True:
             print(end=prompt)
-            line = input()
+            line = input().lstrip()
+            if line:
+                if line[0] == ')':
+                    if line[0:4].upper() == ')OFF':
+                        apl_exit("Bye bye")
             print('⎕', line)
     except EOFError:
         apl_exit(None)
