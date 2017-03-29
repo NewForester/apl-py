@@ -3,10 +3,18 @@
 
     UNDER DEVELOPMENT
 
-    This version adds trivial apl_quit() and apl_exit() routines to the read-evaluate-print loop.
+    This version adds a dummy evaluate routine.
 """
 
 import sys
+
+# ------------------------------
+
+def     evaluate(expression):
+    """
+    Evaluate an APL expression - dummy version
+    """
+    return (expression)
 
 def     read_evaluate_print (prompt):
     """
@@ -20,7 +28,7 @@ def     read_evaluate_print (prompt):
                 if line[0] == ')':
                     if line[0:4].upper() == ')OFF':
                         apl_exit("Bye bye")
-            print('⎕', line)
+            print('⎕', evaluate(line))
     except EOFError:
         apl_exit(None)
 
