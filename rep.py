@@ -3,10 +3,12 @@
 
     UNDER DEVELOPMENT
 
-    This version adds a dummy evaluate routine.
+    This version adds simple APL exception handling
 """
 
 import sys
+
+from apl_exception import APL_Exception as apl_exception
 
 # ------------------------------
 
@@ -28,7 +30,15 @@ def     read_evaluate_print (prompt):
                 if line[0] == ')':
                     if line[0:4].upper() == ')OFF':
                         apl_exit("Bye bye")
-            print('⎕', evaluate(line))
+
+            try:
+                result = evaluate(line)
+            except apl_exception as e:
+                print(' '*(len(prompt)+len(line)-len(e.line)),end="^\n")
+                result = e.message
+            finally:
+                print('⎕', result)
+
     except EOFError:
         apl_exit(None)
 
@@ -36,7 +46,7 @@ def     apl_quit ():
     """
     Quit without clean up
     """
-    print ()
+    print()
     sys.exit(0)
 
 def     apl_exit (message):
@@ -44,9 +54,9 @@ def     apl_exit (message):
     Clean up and quit
     """
     if message is None:
-        print ()
+        print()
     else:
-        print (message)
+        print(message)
     sys.exit(0)
 
 # EOF
