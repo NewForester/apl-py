@@ -2,7 +2,7 @@
 """
     A simple wrapper script for the APL Read-Evaluate-Print loop
 
-    Supports 'shell' and 'calculator' modes
+    This version adds simple APL exception handling
 """
 
 import sys
@@ -10,6 +10,8 @@ import sys
 from functools import reduce
 
 from rep import read_evaluate_print, apl_quit, evaluate
+
+from apl_exception import APL_Exception as apl_exception
 
 # ------------------------------
 
@@ -24,6 +26,13 @@ if __name__ == '__main__':
     else:
         # evaluate parameters as an APL expresson
 
-        print(evaluate(reduce(lambda x, y: x + ' ' + y, sys.argv[1:])))
+        line = reduce(lambda x, y: x + ' ' + y, sys.argv[1:])
+
+        try:
+            print(evaluate(line))
+        except apl_exception as e:
+            print(line)
+            print(' '*(len(line)-len(e.line)),end="^\n")
+            print(e.message)
 
 # EOF
