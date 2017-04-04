@@ -26,10 +26,12 @@ if __name__ == '__main__':
     else:
         # evaluate parameters as an APL expresson
 
-        line = reduce(lambda x, y: x + ' ' + y, sys.argv[1:])
+        line = reduce(lambda x, y: x + ' ' + y, sys.argv[1:]).strip()
 
         try:
-            print(evaluate(line))
+            result = evaluate(line)
+            if result is not None:
+                print('{:g}'.format(result))
         except apl_exception as e:
             print(line)
             print(' '*(len(line)-len(e.line)),end="^\n")

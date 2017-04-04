@@ -3,20 +3,63 @@
 
     UNDER DEVELOPMENT
 
-    This version adds simple APL exception handling
+    This version supports strict right-to-left evaluation of monadic and dyadic functions
 """
 
 import sys
+import re
+
+from monadic import monadic_function
+from dyadic import dyadic_function
 
 from apl_exception import APL_Exception as apl_exception
 
 # ------------------------------
 
+_reNumber = re.compile(r'[0-9]*\.?[0-9]*([eE]-?[0-9]+)?')
+
+# ------------------------------
+
 def     evaluate(expression):
     """
-    Evaluate an APL expression - dummy version
+    Evaluate an APL expression
+
+        - strict right-to-left evaluation of
+        - sequences of monadic and dyadic functions
+        - without parentheses to alter the order of evaluation
     """
-    return (expression)
+
+    if not expression:
+        return
+
+    try:
+        # try a number
+
+        match = _reNumber.match(expression)
+        if match:
+            number = match.group(0)
+            if number:
+                expression = expression[len(number):].lstrip()
+
+                if not expression:
+                    return float(number)
+
+                # try a dyadic function
+
+                function = dyadic_function(expression)
+                rhs = evaluate(expression[1:].lstrip())
+                return function(float(number),rhs)
+
+        # try a monadic function
+
+        function = monadic_function(expression)
+        rhs = evaluate(expression[1:].lstrip())
+        return function(rhs)
+
+    except apl_exception as e:
+        if not e.line:
+           e.line = expression
+        raise (e)
 
 def     read_evaluate_print (prompt):
     """
@@ -31,13 +74,14 @@ def     read_evaluate_print (prompt):
                     if line[0:4].upper() == ')OFF':
                         apl_exit("Bye bye")
 
+            result = None
             try:
                 result = evaluate(line)
+                if result is not None:
+                    print('⎕ {:g}'.format(result))
             except apl_exception as e:
                 print(' '*(len(prompt)+len(line)-len(e.line)),end="^\n")
-                result = e.message
-            finally:
-                print('⎕', result)
+                print('⎕ {:s}'.format(e.message))
 
     except EOFError:
         apl_exit(None)
