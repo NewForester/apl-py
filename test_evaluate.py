@@ -7,6 +7,7 @@
     Test recognition of:
       - numbers
       - invocation of monadic and dyadic functions
+      - parentheses to alter order of execution
 """
 
 from apl_exception import APL_Exception as apl_exception
@@ -62,6 +63,30 @@ def     test_scalar (expr):
     0.5
     >>> test_scalar('1 + 2 - 3 ÷ 4')
     2.25
+    """
+    try:
+        return evaluate(expr)
+    except apl_exception as e:
+        print (e.message)
+
+def     test_parentheses (expr):
+    """
+    >>> test_parentheses('(0)')
+    0.0
+    >>> test_parentheses('1 + 2 × 2 + 1')
+    7.0
+    >>> test_parentheses('(1 + 2) × (2 + 1)')
+    9.0
+    >>> test_parentheses('(1 + 2) × 2 + 1')
+    9.0
+    >>> test_parentheses('1 - 2 - 3 - 4')
+    -2.0
+    >>> test_parentheses('((1 - 2) - 3) - 4')
+    -8.0
+    >>> test_parentheses('1 - (2 - 3) - 4')
+    6.0
+    >>> test_parentheses('1 - (2 - 3 - 4')
+    SYNTAX ERROR
     """
     try:
         return evaluate(expr)

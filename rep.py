@@ -3,7 +3,7 @@
 
     UNDER DEVELOPMENT
 
-    This version supports strict right-to-left evaluation of monadic and dyadic functions
+    This version supports expressions with parentheses
 """
 
 import sys
@@ -20,13 +20,33 @@ _reNumber = re.compile(r'[0-9]*\.?[0-9]*([eE][-+]?[0-9]+)?')
 
 # ------------------------------
 
+def     expression_within_parentheses (expr,opos,cpos):
+    """
+    Find expression in parentheses
+
+    Raises SYNTAX ERROR (closing parenthesis missing)
+    """
+    pos = expr[cpos + 1:].find(')')
+    if pos == -1:
+        raise (apl_exception("SYNTAX ERROR"))
+    cpos += pos + 1
+
+    pos = expr[opos + 1:cpos].find('(')
+    if pos == -1:
+        return expr[:cpos + 1]
+    opos += pos + 1
+
+    return expression_within_parentheses(expr,opos,cpos)
+
+# ------------------------------
+
 def     evaluate(expression):
     """
     Evaluate an APL expression
 
         - strict right-to-left evaluation of
         - sequences of monadic and dyadic functions
-        - without parentheses to alter the order of evaluation
+        - with parentheses to alter the order of evaluation
     """
 
     try:
@@ -35,14 +55,22 @@ def     evaluate(expression):
         if not expression:
             return lhs
 
-        # try a number
+        if expression[0] == '(':
+            # try expression in parentheses
 
-        match = _reNumber.match(expression)
-        if match:
-            number = match.group(0)
-            if number:
-                lhs = float(number)
-                expression = expression[len(number):].lstrip()
+            subexpression = expression_within_parentheses(expression,0,0)
+            lhs = evaluate(subexpression[1:-1])
+            expression = expression[len(subexpression):].lstrip()
+
+        else:
+            # try a number
+
+            match = _reNumber.match(expression)
+            if match:
+                number = match.group(0)
+                if number:
+                    lhs = float(number)
+                    expression = expression[len(number):].lstrip()
 
         if not expression:
             return lhs
