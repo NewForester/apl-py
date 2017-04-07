@@ -29,37 +29,43 @@ def     evaluate(expression):
         - without parentheses to alter the order of evaluation
     """
 
-    if not expression:
-        return
-
     try:
+        lhs = None
+
+        if not expression:
+            return lhs
+
         # try a number
 
         match = _reNumber.match(expression)
         if match:
             number = match.group(0)
             if number:
+                lhs = float(number)
                 expression = expression[len(number):].lstrip()
 
-                if not expression:
-                    return float(number)
+        if not expression:
+            return lhs
 
-                # try a dyadic function
+        if lhs is None:
+            # try a monadic function
 
-                function = dyadic_function(expression)
-                rhs = evaluate(expression[1:].lstrip())
-                return function(float(number),rhs)
+            function = monadic_function(expression)
+            rhs = evaluate(expression[1:].lstrip())
+            return function(rhs)
+        else:
+            # try a dyadic function
 
-        # try a monadic function
-
-        function = monadic_function(expression)
-        rhs = evaluate(expression[1:].lstrip())
-        return function(rhs)
+            function = dyadic_function(expression)
+            rhs = evaluate(expression[1:].lstrip())
+            return function(lhs,rhs)
 
     except apl_exception as e:
         if not e.line:
            e.line = expression
         raise (e)
+
+# ------------------------------
 
 def     read_evaluate_print (prompt):
     """
@@ -86,12 +92,16 @@ def     read_evaluate_print (prompt):
     except EOFError:
         apl_exit(None)
 
+# ------------------------------
+
 def     apl_quit ():
     """
     Quit without clean up
     """
     print()
     sys.exit(0)
+
+# ------------------------------
 
 def     apl_exit (message):
     """

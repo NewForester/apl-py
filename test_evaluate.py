@@ -4,7 +4,9 @@
 
     WIP - grows as evaluate is extended
 
-    Test recognition of numbers
+    Test recognition of:
+      - numbers
+      - invocation of monadic and dyadic functions
 """
 
 from apl_exception import APL_Exception as apl_exception
@@ -31,6 +33,35 @@ def     test_number (expr):
     1000.0
     >>> test_number('3.142e-0')
     3.142
+    """
+    try:
+        return evaluate(expr)
+    except apl_exception as e:
+        print (e.message)
+
+def     test_scalar (expr):
+    """
+    >>> test_scalar('+2')
+    2.0
+    >>> test_scalar('-2')
+    -2.0
+    >>> test_scalar('×2')
+    1
+    >>> test_scalar('÷2')
+    0.5
+    >>> test_scalar('+-×÷2')
+    -1
+
+    >>> test_scalar('1 + 2')
+    3.0
+    >>> test_scalar('1 - 2')
+    -1.0
+    >>> test_scalar('1 × 2')
+    2.0
+    >>> test_scalar('1 ÷ 2')
+    0.5
+    >>> test_scalar('1 + 2 - 3 ÷ 4')
+    2.25
     """
     try:
         return evaluate(expr)
