@@ -16,7 +16,7 @@ from apl_exception import APL_Exception as apl_exception
 
 # ------------------------------
 
-_reNumber = re.compile(r'[0-9]*\.?[0-9]*([eE]-?[0-9]+)?')
+_reNumber = re.compile(r'[0-9]*\.?[0-9]*([eE][-+]?[0-9]+)?')
 
 # ------------------------------
 
