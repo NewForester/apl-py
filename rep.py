@@ -16,7 +16,13 @@ from apl_exception import APL_Exception as apl_exception
 
 # ------------------------------
 
-_reNumber = re.compile(r'[0-9]*\.?[0-9]*([eE][-+]?[0-9]+)?')
+_reNumber = re.compile(r'¯?[0-9]*\.?[0-9]*([eE][-+¯]?[0-9]+)?')
+
+# ------------------------------
+
+def     print_result (result):
+    if result is not None:
+        print('{:g}'.format(result).replace('-','¯'))
 
 # ------------------------------
 
@@ -69,7 +75,7 @@ def     evaluate(expression):
             if match:
                 number = match.group(0)
                 if number:
-                    lhs = float(number)
+                    lhs = float(number.replace('¯','-'))
                     expression = expression[len(number):].lstrip()
 
         if not expression:
@@ -109,13 +115,12 @@ def     read_evaluate_print (prompt):
                         apl_exit("Bye bye")
 
             result = None
+            print('⎕',end=' ')
             try:
-                result = evaluate(line)
-                if result is not None:
-                    print('⎕ {:g}'.format(result))
+                print_result(evaluate(line))
             except apl_exception as e:
                 print(' '*(len(prompt)+len(line)-len(e.line)),end="^\n")
-                print('⎕ {:s}'.format(e.message))
+                print(e.message)
 
     except EOFError:
         apl_exit(None)

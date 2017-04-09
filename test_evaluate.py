@@ -20,6 +20,8 @@ def     test_number (expr):
     """
     >>> test_number('0')
     0.0
+    >>> test_number('¯1')
+    -1.0
     >>> test_number('3.142')
     3.142
     >>> test_number('.5')
@@ -32,6 +34,8 @@ def     test_number (expr):
     0.001
     >>> test_number('1e+3')
     1000.0
+    >>> test_number('1e¯3')
+    0.001
     >>> test_number('3.142e-0')
     3.142
     """
@@ -44,8 +48,8 @@ def     test_scalar (expr):
     """
     >>> test_scalar('+2')
     2.0
-    >>> test_scalar('-2')
-    -2.0
+    >>> test_scalar('-¯2')
+    2.0
     >>> test_scalar('×2')
     1
     >>> test_scalar('÷2')

@@ -9,7 +9,7 @@ import sys
 
 from functools import reduce
 
-from rep import read_evaluate_print, apl_quit, evaluate
+from rep import read_evaluate_print, apl_quit, evaluate, print_result
 
 from apl_exception import APL_Exception as apl_exception
 
@@ -29,9 +29,7 @@ if __name__ == '__main__':
         line = reduce(lambda x, y: x + ' ' + y, sys.argv[1:]).strip()
 
         try:
-            result = evaluate(line)
-            if result is not None:
-                print('{:g}'.format(result))
+            print_result(evaluate(line))
         except apl_exception as e:
             print(line)
             print(' '*(len(line)-len(e.line)),end="^\n")
