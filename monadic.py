@@ -35,13 +35,10 @@ def     signum (B):
 
     scalar argument only
     """
-    if B:
-        if B > 0:
-            return 1
-        else:
-            return -1
-    else:
-        return 0
+    if B > 0:   return 1
+    if B < 0:   return -1
+
+    return 0
 
 def     reciprocal (B):
     """
@@ -55,6 +52,23 @@ def     reciprocal (B):
         return operator.truediv(1.0,B)
     except:
         raise (apl_exception("RANGE ERROR"))
+
+# ------------------------------
+
+def     logical_negation (B):
+    """
+    Boolean integer inverse of B
+
+    scalar argument only
+
+    throws DOMAIN ERROR (B is not 0 or 1)
+    """
+    if B == 1:  return 0
+    if B == 0:  return 1
+
+    raise (apl_exception("DOMAIN ERROR"))
+
+# ------------------------------
 
 def     to_be_implemented (B):
     """
@@ -71,7 +85,28 @@ monadic_functions = {
     '-':        negation,
     '×':        signum,
     '÷':        reciprocal,
-    '*':        to_be_implemented,
+
+    '~':        logical_negation,
+
+    '?':        to_be_implemented,      # roll
+    '⌈':        to_be_implemented,      # ceiling
+    '⌊':        to_be_implemented,      # floor
+    '⍴':        to_be_implemented,      # shape
+    '∣':        to_be_implemented,      # absolute value
+    '⍳':        to_be_implemented,      # index generator
+    '*':        to_be_implemented,      # exponential
+    ',':        to_be_implemented,      # reshape into a vector
+    '⌹':        to_be_implemented,      # matrix inverse
+    '○':        to_be_implemented,      # pi times
+    '⍟':        to_be_implemented,      # natural logarithm
+    '⌽':        to_be_implemented,      # reversal, last axis
+    '⊖':        to_be_implemented,      # reversal, first axis
+    '⍋':        to_be_implemented,      # grade up
+    '⍒':        to_be_implemented,      # grade down
+    '⍎':        to_be_implemented,      # execute
+    '⍕':        to_be_implemented,      # monadic format
+    '⍉':        to_be_implemented,      # transpose
+    '!':        to_be_implemented,      # factorial
     };
 
 def     monadic_function (symbol):

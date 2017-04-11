@@ -53,6 +53,54 @@ def     dyadic_test (A,symbol,B):
     >>> dyadic_test (-1,'÷',0)
     RANGE ERROR
 
+    # --
+
+    >>> dyadic_test (1,'∨',0)
+    1
+    >>> dyadic_test (0,'∨',0)
+    0
+    >>> dyadic_test (6,'∨',7)
+    1
+    >>> dyadic_test (21,'∨',15)
+    3
+    >>> dyadic_test (7.5,'∨',-5)
+    2.5
+    >>> dyadic_test (-7.5,'∨',5)
+    2.5
+
+    >>> dyadic_test (1,'∧',0)
+    0
+    >>> dyadic_test (1,'∧',1)
+    1
+    >>> dyadic_test (6,'∧',7)
+    42.0
+    >>> dyadic_test (21,'∧',15)
+    105.0
+    >>> dyadic_test (7.5,'∧',-5)
+    -15.0
+    >>> dyadic_test (-7.5,'∧',5)
+    -15.0
+
+    >>> dyadic_test (0,'⍱',1)
+    0
+    >>> dyadic_test (0,'⍱',0)
+    1
+    >>> dyadic_test (0,'⍱',-1)
+    DOMAIN ERROR
+    >>> dyadic_test (-1,'⍱',0)
+    DOMAIN ERROR
+
+    >>> dyadic_test (0,'⍲',1)
+    1
+    >>> dyadic_test (1,'⍲',1)
+    0
+    >>> dyadic_test (0,'⍲',-1)
+    DOMAIN ERROR
+    >>> dyadic_test (-1,'⍲',0)
+    DOMAIN ERROR
+
+    # --
+
     >>> dyadic_test (1,'*',1)
     FUNCTION NOT YET IMPLEMENTED
     >>> dyadic_test (1,'"',1)
