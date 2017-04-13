@@ -8,6 +8,7 @@
       - numbers
       - invocation of monadic and dyadic functions
       - parentheses to alter order of execution
+      - strings in apostrophes or quotes
 """
 
 from apl_exception import APL_Exception as apl_exception
@@ -91,6 +92,37 @@ def     test_parentheses (expr):
     6.0
     >>> test_parentheses('1 - (2 - 3 - 4')
     SYNTAX ERROR
+    """
+    try:
+        return evaluate(expr)
+    except apl_exception as e:
+        print (e.message)
+
+# ------------------------------
+
+def     test_string (expr):
+    """
+    Implementation of string handling incomplete - parser test only
+
+    >>> test_number("'Hello'")
+    'Hello'
+    0
+    >>> test_number("'Hello\\"Jello'")
+    'Hello"Jello'
+    0
+    >>> test_number("'Hello''Jello'")
+    'Hello'Jello'
+    0
+
+    >>> test_number('"Hello"')
+    "Hello"
+    1
+    >>> test_number('"Hello\\'Jello"')
+    "Hello'Jello"
+    1
+    >>> test_number('"Hello""Jello"')
+    "Hello"Jello"
+    1
     """
     try:
         return evaluate(expr)

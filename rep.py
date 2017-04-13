@@ -4,6 +4,8 @@
     UNDER DEVELOPMENT
 
     This version supports expressions with parentheses
+
+    It also recognises strings.  For now, those in apostrophes evaluate to 0 and those in quotes to 1
 """
 
 import sys
@@ -17,6 +19,9 @@ from apl_exception import APL_Exception as apl_exception
 # ------------------------------
 
 _reNumber = re.compile(r'¯?[0-9]*\.?[0-9]*([eE][-+¯]?[0-9]+)?')
+
+_reAposString = re.compile(r"'([^']|'')*'")
+_reQuotString = re.compile(r'"([^"]|"")*"')
 
 # ------------------------------
 
@@ -67,6 +72,28 @@ def     evaluate(expression):
             subexpression = expression_within_parentheses(expression,0,0)
             lhs = evaluate(subexpression[1:-1])
             expression = expression[len(subexpression):].lstrip()
+
+        elif expression[0] == "'":
+            # try a string in apostrophes
+
+            match = _reAposString.match(expression)
+            if match:
+                string = match.group(0)
+                if string:
+                    print(string.replace("''","'"))
+                    lhs = 0
+                    expression = expression[len(string):].lstrip()
+
+        elif expression[0] == '"':
+            # try a string in quotes
+
+            match = _reQuotString.match(expression)
+            if match:
+                string = match.group(0)
+                if string:
+                    print(string.replace('""','"'))
+                    lhs = 1
+                    expression = expression[len(string):].lstrip()
 
         else:
             # try a number
