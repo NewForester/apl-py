@@ -120,6 +120,62 @@ def     nand (A,B):
 
 # ------------------------------
 
+def     lt (A,B):
+    """
+    A < B
+
+    scalar arguments only
+    """
+
+    return int(operator.lt(A,B))
+
+def     le (A,B):
+    """
+    A <= B
+
+    scalar arguments only
+    """
+
+    return int(operator.le(A,B))
+
+def     eq (A,B):
+    """
+    A == B
+
+    scalar arguments only
+    """
+
+    return int(operator.eq(A,B))
+
+def     ge (A,B):
+    """
+    A >= B
+
+    scalar arguments only
+    """
+
+    return int(operator.ge(A,B))
+
+def     gt (A,B):
+    """
+    A > B
+
+    scalar arguments only
+    """
+
+    return int(operator.gt(A,B))
+
+def     ne (A,B):
+    """
+    A != B
+
+    scalar arguments only
+    """
+
+    return int(operator.ne(A,B))
+
+# ------------------------------
+
 def     to_be_implemented (A,B):
     """
     placeholder for functions not yet implemented
@@ -140,6 +196,13 @@ dyadic_functions = {
     '∧':        and_lcm,
     '⍱':        nor,
     '⍲':        nand,
+
+    '<':        lt,
+    '≤':        le,
+    '=':        eq,
+    '≥':        ge,
+    '>':        gt,
+    '≠':        ne,
 
     '*':        to_be_implemented,      # exponentiation
     '○':        to_be_implemented,      # trigonometric function
@@ -165,12 +228,6 @@ dyadic_functions = {
     '⍉':        to_be_implemented,      # transpose
     '!':        to_be_implemented,      # combinations
     '¨':        to_be_implemented,      # diaeresis
-    '<':        to_be_implemented,      # less than
-    '≤':        to_be_implemented,      # less than or equal
-    '=':        to_be_implemented,      # equal
-    '≥':        to_be_implemented,      # greater than or equal
-    '>':        to_be_implemented,      # greater than
-    '≠':        to_be_implemented,      # not equal
     };
 
 def     dyadic_function (symbol):

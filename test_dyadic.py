@@ -101,6 +101,74 @@ def     dyadic_test (A,symbol,B):
 
     # --
 
+    >>> dyadic_test  (1,'<',0)
+    0
+    >>> dyadic_test  (0,'<',1)
+    1
+    >>> dyadic_test  (0,'<',0)
+    0
+    >>> dyadic_test  (-1,'<',0)
+    1
+    >>> dyadic_test  (0,'<',-1)
+    0
+
+    >>> dyadic_test  (1,'≤',0)
+    0
+    >>> dyadic_test  (0,'≤',1)
+    1
+    >>> dyadic_test  (0,'≤',0)
+    1
+    >>> dyadic_test  (-1,'≤',0)
+    1
+    >>> dyadic_test  (0,'≤',-1)
+    0
+
+    >>> dyadic_test  (1,'=',0)
+    0
+    >>> dyadic_test  (0,'=',1)
+    0
+    >>> dyadic_test  (0,'=',0)
+    1
+    >>> dyadic_test  (-1,'=',0)
+    0
+    >>> dyadic_test  (0,'=',-1)
+    0
+
+    >>> dyadic_test  (1,'≥',0)
+    1
+    >>> dyadic_test  (0,'≥',1)
+    0
+    >>> dyadic_test  (0,'≥',0)
+    1
+    >>> dyadic_test  (-1,'≥',0)
+    0
+    >>> dyadic_test  (0,'≥',-1)
+    1
+
+    >>> dyadic_test  (1,'>',0)
+    1
+    >>> dyadic_test  (0,'>',1)
+    0
+    >>> dyadic_test  (0,'>',0)
+    0
+    >>> dyadic_test  (-1,'>',0)
+    0
+    >>> dyadic_test  (0,'>',-1)
+    1
+
+    >>> dyadic_test  (1,'≠',0)
+    1
+    >>> dyadic_test  (0,'≠',1)
+    1
+    >>> dyadic_test  (0,'≠',0)
+    0
+    >>> dyadic_test  (-1,'≠',0)
+    1
+    >>> dyadic_test  (0,'≠',-1)
+    1
+
+    # --
+
     >>> dyadic_test (1,'*',1)
     FUNCTION NOT YET IMPLEMENTED
     >>> dyadic_test (1,'"',1)
