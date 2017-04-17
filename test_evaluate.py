@@ -129,6 +129,48 @@ def     test_string (expr):
     except apl_exception as e:
         print (e.message)
 
+# ------------------------------
+
+def     test_name (expr):
+    """
+    Implementation of name handling incomplete - parser test only
+
+    >>> test_number("Hello")
+    Hello
+    2
+    >>> test_number("Hello_Paul")
+    Hello_Paul
+    2
+    >>> test_number("arithmetic")
+    arithmetic
+    2
+
+    >>> test_number('5+A')
+    A
+    7.0
+    >>> test_number('a+6')
+    a
+    8.0
+    >>> test_number('-banana')
+    banana
+    -2
+    >>> test_number('ba2a2a2')
+    ba2a2a2
+    2
+
+    >>> test_number('⎕three+1')
+    three
+    4.0
+
+    >>> test_number(')FOUR+2')
+    FOUR
+    6.0
+    """
+    try:
+        return evaluate(expr)
+    except apl_exception as e:
+        print (e.message)
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

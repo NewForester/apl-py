@@ -6,6 +6,8 @@
     This version supports expressions with parentheses
 
     It also recognises strings.  For now, those in apostrophes evaluate to 0 and those in quotes to 1
+
+    It also recognises names.  For now, ordinary names evaluate to 2, system variable names to 3 and system command names to 4.
 """
 
 import sys
@@ -19,6 +21,7 @@ from apl_exception import APL_Exception as apl_exception
 # ------------------------------
 
 _reNumber = re.compile(r'¯?[0-9]*\.?[0-9]*([eE][-+¯]?[0-9]+)?')
+_reName   = re.compile(r'[A-Za-z][A-Z_a-z0-9]*')
 
 _reAposString = re.compile(r"'([^']|'')*'")
 _reQuotString = re.compile(r'"([^"]|"")*"')
@@ -58,6 +61,7 @@ def     evaluate(expression):
         - strict right-to-left evaluation of
         - sequences of monadic and dyadic functions
         - with parentheses to alter the order of evaluation
+        - strings and names recognised
     """
 
     try:
@@ -72,6 +76,39 @@ def     evaluate(expression):
             subexpression = expression_within_parentheses(expression,0,0)
             lhs = evaluate(subexpression[1:-1])
             expression = expression[len(subexpression):].lstrip()
+
+        elif expression[0].isalpha():
+            # try a name (user defined variable or function)
+
+            match = _reName.match(expression)
+            if match:
+                name = match.group(0)
+                if name:
+                    print(name)
+                    lhs = 2
+                    expression = expression[len(name):].lstrip()
+
+        elif expression[0] == '⎕':
+            # try a system variable name
+
+            match = _reName.match(expression[1:])
+            if match:
+                name = match.group(0)
+                if name:
+                    print(name)
+                    lhs = 3
+                    expression = expression[len(name)+1:].lstrip()
+
+        elif expression[0] == ')':
+            # try a system command name
+
+            match = _reName.match(expression[1:])
+            if match:
+                name = match.group(0)
+                if name:
+                    print(name)
+                    lhs = 4
+                    expression = expression[len(name)+1:].lstrip()
 
         elif expression[0] == "'":
             # try a string in apostrophes
