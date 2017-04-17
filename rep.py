@@ -52,6 +52,81 @@ def     expression_within_parentheses (expr,opos,cpos):
 
     return expression_within_parentheses(expr,opos,cpos)
 
+
+# ------------------------------
+
+def     extract_subexpression (expr):
+    """
+    Extract leading subexpression in parentheses from expression
+    """
+    subexpression = expression_within_parentheses(expr,0,0)
+
+    return (evaluate(subexpression[1:-1]), len(subexpression))
+
+# ------------------------------
+
+def     extract_name (expr,prefix):
+    """
+    Extract leading name from expression
+    """
+    if not prefix:
+        lhs = (2)
+        match = _reName.match(expr)
+    elif prefix == '⎕':
+        lhs = (3)
+        match = _reName.match(expr[1:])
+    elif prefix == ')':
+        lhs = (4)
+        match = _reName.match(expr[1:])
+    else:
+        match = None
+
+    if match:
+        name = match.group(0)
+        if name:
+            print(name)
+            return (lhs, len(prefix)+len(name))
+
+    return (None, 0)
+
+# ------------------------------
+
+def     extract_string (expr,delim):
+    """
+    Extract leading string from expression
+    """
+    if delim == "'":
+        lhs = 0
+        match = _reAposString.match(expr)
+    elif delim == '"':
+        lhs = 1
+        match = _reQuotString.match(expr)
+    else:
+        match = None
+
+    if match:
+        string = match.group(0)
+        if string:
+            print(string.replace(delim*2,delim))
+            return (lhs, len(string))
+
+    return (None, 0)
+
+# ------------------------------
+
+def     extract_number (expr):
+    """
+    Extract leading number from expression
+    """
+    match = _reNumber.match(expr)
+
+    if match:
+        number = match.group(0)
+        if number:
+            return (float(number.replace('¯','-')), len(number))
+
+    return (None, 0)
+
 # ------------------------------
 
 def     evaluate(expression):
@@ -70,77 +145,26 @@ def     evaluate(expression):
         if not expression:
             return lhs
 
-        if expression[0] == '(':
-            # try expression in parentheses
+        consumed = 0
+        leader = expression[0]
 
-            subexpression = expression_within_parentheses(expression,0,0)
-            lhs = evaluate(subexpression[1:-1])
-            expression = expression[len(subexpression):].lstrip()
-
-        elif expression[0].isalpha():
-            # try a name (user defined variable or function)
-
-            match = _reName.match(expression)
-            if match:
-                name = match.group(0)
-                if name:
-                    print(name)
-                    lhs = 2
-                    expression = expression[len(name):].lstrip()
-
-        elif expression[0] == '⎕':
-            # try a system variable name
-
-            match = _reName.match(expression[1:])
-            if match:
-                name = match.group(0)
-                if name:
-                    print(name)
-                    lhs = 3
-                    expression = expression[len(name)+1:].lstrip()
-
-        elif expression[0] == ')':
-            # try a system command name
-
-            match = _reName.match(expression[1:])
-            if match:
-                name = match.group(0)
-                if name:
-                    print(name)
-                    lhs = 4
-                    expression = expression[len(name)+1:].lstrip()
-
-        elif expression[0] == "'":
-            # try a string in apostrophes
-
-            match = _reAposString.match(expression)
-            if match:
-                string = match.group(0)
-                if string:
-                    print(string.replace("''","'"))
-                    lhs = 0
-                    expression = expression[len(string):].lstrip()
-
-        elif expression[0] == '"':
-            # try a string in quotes
-
-            match = _reQuotString.match(expression)
-            if match:
-                string = match.group(0)
-                if string:
-                    print(string.replace('""','"'))
-                    lhs = 1
-                    expression = expression[len(string):].lstrip()
-
+        if leader == '(':
+            lhs, consumed = extract_subexpression(expression)
+        elif leader.isalpha():
+            lhs, consumed = extract_name(expression,"")
+        elif leader == '⎕':
+            lhs, consumed = extract_name(expression,leader)
+        elif leader == ')':
+            lhs, consumed = extract_name(expression,leader)
+        elif leader == "'":
+            lhs, consumed = extract_string(expression,leader)
+        elif leader == '"':
+            lhs, consumed = extract_string(expression,leader)
         else:
-            # try a number
+            lhs, consumed = extract_number(expression)
 
-            match = _reNumber.match(expression)
-            if match:
-                number = match.group(0)
-                if number:
-                    lhs = float(number.replace('¯','-'))
-                    expression = expression[len(number):].lstrip()
+        if consumed:
+            expression = expression[consumed:].lstrip()
 
         if not expression:
             return lhs
