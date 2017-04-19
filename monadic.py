@@ -7,6 +7,7 @@
     WIP - scalar parameters only
 """
 
+import math
 import operator
 
 from apl_exception import APL_Exception as apl_exception
@@ -51,7 +52,42 @@ def     reciprocal (B):
     try:
         return operator.truediv(1.0,B)
     except:
-        raise (apl_exception("RANGE ERROR"))
+        raise (apl_exception("DOMAIN ERROR"))
+
+def     ceil (B):
+    """
+    ceil
+
+    scalar argument only
+    """
+    return math.ceil(B)
+
+def     floor (B):
+    """
+    floor
+
+    scalar argument only
+    """
+    return math.floor(B)
+
+def     exp (B):
+    """
+    e raised to the power
+
+    scalar argument only
+    """
+    return math.exp(B)
+
+def     log (B):
+    """
+    natural logarithm
+
+    scalar argument only
+    """
+    try:
+        return math.log(B)
+    except ValueError:
+        raise (apl_exception("DOMAIN ERROR"))
 
 # ------------------------------
 
@@ -81,32 +117,40 @@ def     to_be_implemented (B):
 # ------------------------------
 
 monadic_functions = {
+    # Mathematical
     '+':        identity,
     '-':        negation,
     '×':        signum,
     '÷':        reciprocal,
 
+    '⌈':        ceil,
+    '⌊':        floor,
+    '*':        exp,
+    '⍟':        log,
+    # Logical
     '~':        logical_negation,
 
-    '?':        to_be_implemented,      # roll
-    '⌈':        to_be_implemented,      # ceiling
-    '⌊':        to_be_implemented,      # floor
-    '⍴':        to_be_implemented,      # shape
+# Mathematical
     '∣':        to_be_implemented,      # absolute value
-    '⍳':        to_be_implemented,      # index generator
-    '*':        to_be_implemented,      # exponential
-    ',':        to_be_implemented,      # reshape into a vector
+    '!':        to_be_implemented,      # factorial
+    '?':        to_be_implemented,      # roll
     '⌹':        to_be_implemented,      # matrix inverse
     '○':        to_be_implemented,      # pi times
-    '⍟':        to_be_implemented,      # natural logarithm
+# Structural
+    '⍴':        to_be_implemented,      # shape
+    ',':        to_be_implemented,      # reshape into a vector
     '⌽':        to_be_implemented,      # reversal, last axis
     '⊖':        to_be_implemented,      # reversal, first axis
+    '⍉':        to_be_implemented,      # transpose
+# Seletion and Set Operations
+# Search and Sort
+    '⍳':        to_be_implemented,      # index generator
     '⍋':        to_be_implemented,      # grade up
     '⍒':        to_be_implemented,      # grade down
-    '⍎':        to_be_implemented,      # execute
+# Miscellaneous
     '⍕':        to_be_implemented,      # monadic format
-    '⍉':        to_be_implemented,      # transpose
-    '!':        to_be_implemented,      # factorial
+    '⍎':        to_be_implemented,      # execute
+# Operators
     };
 
 def     monadic_function (symbol):

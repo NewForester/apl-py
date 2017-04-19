@@ -47,11 +47,56 @@ def     dyadic_test (A,symbol,B):
     >>> dyadic_test (0,'÷',1)
     0.0
     >>> dyadic_test (1,'÷',0)
-    RANGE ERROR
+    DOMAIN ERROR
     >>> dyadic_test (0,'÷',-1)
     -0.0
     >>> dyadic_test (-1,'÷',0)
-    RANGE ERROR
+    DOMAIN ERROR
+
+    >>> dyadic_test  (1,'⌈',0)
+    1
+    >>> dyadic_test  (0,'⌈',1)
+    1
+    >>> dyadic_test  (-1,'⌈',0)
+    0
+    >>> dyadic_test  (0,'⌈',-1)
+    0
+
+    >>> dyadic_test  (1,'⌊',0)
+    0
+    >>> dyadic_test  (0,'⌊',1)
+    0
+    >>> dyadic_test  (-1,'⌊',0)
+    -1
+    >>> dyadic_test  (0,'⌊',-1)
+    -1
+
+    >>> dyadic_test  (1,'*',0)
+    1.0
+    >>> dyadic_test  (0,'*',1)
+    0.0
+    >>> dyadic_test  (-1,'*',0)
+    1.0
+    >>> dyadic_test  (0,'*',-1)
+    DOMAIN ERROR
+
+    >>> dyadic_test  (1,'⍟',0)
+    DOMAIN ERROR
+    >>> dyadic_test  (0,'⍟',1)
+    0.0
+    >>> dyadic_test  (-1,'⍟',0)
+    DOMAIN ERROR
+    >>> dyadic_test  (0,'⍟',-1)
+    0.0
+
+    >>> dyadic_test  (2,'⍟',4)
+    2.0
+    >>> dyadic_test  (2,'⍟',1024)
+    10.0
+    >>> dyadic_test  (10,'⍟',100)
+    2.0
+    >>> dyadic_test  (10,'⍟',1000000)
+    6.0
 
     # --
 
@@ -169,7 +214,7 @@ def     dyadic_test (A,symbol,B):
 
     # --
 
-    >>> dyadic_test (1,'*',1)
+    >>> dyadic_test (1,'⍕',1)
     FUNCTION NOT YET IMPLEMENTED
     >>> dyadic_test (1,'"',1)
     INVALID TOKEN

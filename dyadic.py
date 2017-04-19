@@ -7,6 +7,7 @@
     WIP - scalar parameters only
 """
 
+import math
 import operator
 
 from apl_exception import APL_Exception as apl_exception
@@ -48,7 +49,49 @@ def     divide (A,B):
     try:
         return operator.truediv(A,B)
     except:
-        raise (apl_exception("RANGE ERROR"))
+        raise (apl_exception("DOMAIN ERROR"))
+
+def     maximum (A,B):
+    """
+    A maximum B
+
+    scalar arguments only
+    """
+    return max(A,B)
+
+def     minimum (A,B):
+    """
+    A minimum B
+
+    scalar arguments only
+    """
+    return min(A,B)
+
+def     exp (A,B):
+    """
+    A to the power B
+
+    scalar arguments only
+    """
+    try:
+        return math.pow(A,B)
+    except ValueError:
+        raise (apl_exception("DOMAIN ERROR"))
+
+def     log (A,B):
+    """
+    log to base A of B
+
+    scalar arguments only
+    """
+    try:
+        if A == 10: return math.log10(B)
+        # Python 3.3 and later # if A == 2:  return math.log2(B)
+        if A == 0:  return 0.0
+
+        return math.log(B,A)
+    except ValueError:
+        raise (apl_exception("DOMAIN ERROR"))
 
 # ------------------------------
 
@@ -70,6 +113,8 @@ def     _highest_common_factor (A,B):
     Highest Common Factor by the Euclid method
 
     scalar argument only
+
+    Note: math.gcd() is Python 3.5 and later
     """
     if B == 0:
         return abs(A)
@@ -187,11 +232,17 @@ def     to_be_implemented (A,B):
 # ------------------------------
 
 dyadic_functions = {
+    # Mathematical
     '+':        add,
     '-':        subtract,
     '×':        multiply,
     '÷':        divide,
 
+    '⌈':        maximum,
+    '⌊':        minimum,
+    '*':        exp,
+    '⍟':        log,
+    # Logical / Comparison
     '∨':        or_gcd,
     '∧':        and_lcm,
     '⍱':        nor,
@@ -203,32 +254,41 @@ dyadic_functions = {
     '≥':        ge,
     '>':        gt,
     '≠':        ne,
+                # one more
 
-    '*':        to_be_implemented,      # exponentiation
-    '○':        to_be_implemented,      # trigonometric function
+# Mathematical
+    '∣':        to_be_implemented,      # residue
+    '!':        to_be_implemented,      # combinations
     '?':        to_be_implemented,      # deal
-    '∈':        to_be_implemented,      # membership
-    '⌈':        to_be_implemented,      # maximum
-    '⌊':        to_be_implemented,      # minimum
-    '⍴':        to_be_implemented,      # reshape
-    '↑':        to_be_implemented,      # take
-    '↓':        to_be_implemented,      # drop
     '⊥':        to_be_implemented,      # decode
     '⊤':        to_be_implemented,      # encode
-    '∣':        to_be_implemented,      # residue
-    ',':        to_be_implemented,      # catenation
-    '\\':       to_be_implemented,      # expansion
-    '/':        to_be_implemented,      # compression
-    '⍳':        to_be_implemented,      # index
     '⌹':        to_be_implemented,      # matrix divide
+    '○':        to_be_implemented,      # trigonometric function
+# Structural
+    '⍴':        to_be_implemented,      # reshape
+    ',':        to_be_implemented,      # catenation
+                                        # another ?
     '⌽':        to_be_implemented,      # rotation, last axis
     '⊖':        to_be_implemented,      # rotation, first axis
-    '⍟':        to_be_implemented,      # logarithm
-    '⍕':        to_be_implemented,      # format
     '⍉':        to_be_implemented,      # transpose
-    '!':        to_be_implemented,      # combinations
+    '↑':        to_be_implemented,      # take
+    '↓':        to_be_implemented,      # drop
+                                        # three more
+# Seletion and Set Operations
+    '\\':       to_be_implemented,      # expansion
+    '/':        to_be_implemented,      # compression
+                                        # nine more
+# Search and Sort
+    '⍳':        to_be_implemented,      # index
+    '∈':        to_be_implemented,      # membership
+                                        # three more
+# Miscellaneous
+    '⍕':        to_be_implemented,      # format
+                                        # a dozen more
+# Operators
     '¨':        to_be_implemented,      # diaeresis
-    };
+                                        # a dozen more
+};
 
 def     dyadic_function (symbol):
     """
