@@ -164,6 +164,18 @@ def     test_sys_vars (expr):
 
 # ------------------------------
 
+def     test_sys_cmds (expr):
+    """
+    >>> test_sys_cmds(')dummy')
+    UNKNOWN SYSTEM COMMAND
+    """
+    try:
+        return evaluate(expr)
+    except apl_exception as e:
+        print (e.message)
+
+# ------------------------------
+
 def     test_name (expr):
     """
     Implementation of name handling incomplete - parser test only
@@ -190,10 +202,6 @@ def     test_name (expr):
     >>> test_name('ba2a2a2')
     ba2a2a2
     2
-
-    >>> test_name(')FOUR+2')
-    FOUR
-    6.0
     """
     try:
         return evaluate(expr)

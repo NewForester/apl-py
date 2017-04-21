@@ -9,8 +9,9 @@
 
     It also evaluates:
       - system variables - reference and assignment
+      - system commands - invocation
 
-    For now, workspace names evaluate to 2 and system command names to 4.
+    For now, workspace names evaluate to 2.
 """
 
 import sys
@@ -20,6 +21,7 @@ from monadic import monadic_function
 from dyadic import dyadic_function
 
 from system_vars import system_variable
+from system_cmds import system_command
 
 from apl_exception import APL_Exception as apl_exception
 
@@ -116,6 +118,21 @@ def     evaluate_system_variable (expr):
 
 # ------------------------------
 
+def     handle_system_command (expr):
+    """
+    Invoke a system command
+    """
+    match = _reName.match(expr[1:])
+    if match:
+        name = match.group(0)
+        if name:
+            system_command(name, expr[len(name)+1:])
+            return (None, len(expr))
+
+    return (None, 0)
+
+# ------------------------------
+
 def     extract_string (expr,delim):
     """
     Extract leading string from expression
@@ -162,8 +179,8 @@ def     evaluate(expression):
         - sequences of monadic and dyadic functions
         - with parentheses to alter the order of evaluation
         - strings recognised
-        - system variables handled
-        - system commands and workspace names only recognised
+        - system variables and system commands handled
+        - workspace names only recognised
     """
 
     try:
@@ -182,7 +199,7 @@ def     evaluate(expression):
         elif leader == '⎕':
             lhs, consumed = evaluate_system_variable(expression)
         elif leader == ')':
-            lhs, consumed = extract_name(expression,leader)
+            lhs, consumed = handle_system_command(expression)
         elif leader == "'":
             lhs, consumed = extract_string(expression,leader)
         elif leader == '"':
