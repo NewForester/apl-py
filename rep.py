@@ -7,7 +7,10 @@
 
     It also recognises strings.  For now, those in apostrophes evaluate to 0 and those in quotes to 1
 
-    It also recognises names.  For now, ordinary names evaluate to 2, system variable names to 3 and system command names to 4.
+    It also evaluates:
+      - system variables - reference and assignment
+
+    For now, workspace names evaluate to 2 and system command names to 4.
 """
 
 import sys
@@ -15,6 +18,8 @@ import re
 
 from monadic import monadic_function
 from dyadic import dyadic_function
+
+from system_vars import system_variable
 
 from apl_exception import APL_Exception as apl_exception
 
@@ -52,7 +57,6 @@ def     expression_within_parentheses (expr,opos,cpos):
 
     return expression_within_parentheses(expr,opos,cpos)
 
-
 # ------------------------------
 
 def     extract_subexpression (expr):
@@ -86,6 +90,27 @@ def     extract_name (expr,prefix):
         if name:
             print(name)
             return (lhs, len(prefix)+len(name))
+
+    return (None, 0)
+
+# ------------------------------
+
+def     evaluate_system_variable (expr):
+    """
+    Evaluate or assign to a system variable
+    """
+    match = _reName.match(expr[1:])
+    if match:
+        name = match.group(0)
+        if name:
+            rhs_expr = expr[len(name)+1:].lstrip()
+            if rhs_expr and rhs_expr[0] == '←':
+                rhs = evaluate(rhs_expr[1:].lstrip())
+                lhs = system_variable(name,rhs)
+                return (lhs, len(expr))
+            else:
+                lhs = system_variable(name)
+                return (lhs, len(name)+1)
 
     return (None, 0)
 
@@ -136,7 +161,9 @@ def     evaluate(expression):
         - strict right-to-left evaluation of
         - sequences of monadic and dyadic functions
         - with parentheses to alter the order of evaluation
-        - strings and names recognised
+        - strings recognised
+        - system variables handled
+        - system commands and workspace names only recognised
     """
 
     try:
@@ -153,7 +180,7 @@ def     evaluate(expression):
         elif leader.isalpha():
             lhs, consumed = extract_name(expression,"")
         elif leader == '⎕':
-            lhs, consumed = extract_name(expression,leader)
+            lhs, consumed = evaluate_system_variable(expression)
         elif leader == ')':
             lhs, consumed = extract_name(expression,leader)
         elif leader == "'":
@@ -191,7 +218,7 @@ def     evaluate(expression):
 
 def     read_evaluate_print (prompt):
     """
-    Read input, echo input
+    Read input, evaluate it and output the result
     """
     try:
         while True:

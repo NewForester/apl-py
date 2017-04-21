@@ -45,6 +45,8 @@ def     test_number (expr):
     except apl_exception as e:
         print (e.message)
 
+# ------------------------------
+
 def     test_scalar (expr):
     """
     >>> test_scalar('+2')
@@ -73,6 +75,8 @@ def     test_scalar (expr):
         return evaluate(expr)
     except apl_exception as e:
         print (e.message)
+
+# ------------------------------
 
 def     test_parentheses (expr):
     """
@@ -104,24 +108,53 @@ def     test_string (expr):
     """
     Implementation of string handling incomplete - parser test only
 
-    >>> test_number("'Hello'")
+    >>> test_string("'Hello'")
     'Hello'
     0
-    >>> test_number("'Hello\\"Jello'")
+    >>> test_string("'Hello\\"Jello'")
     'Hello"Jello'
     0
-    >>> test_number("'Hello''Jello'")
+    >>> test_string("'Hello''Jello'")
     'Hello'Jello'
     0
 
-    >>> test_number('"Hello"')
+    >>> test_string('"Hello"')
     "Hello"
     1
-    >>> test_number('"Hello\\'Jello"')
+    >>> test_string('"Hello\\'Jello"')
     "Hello'Jello"
     1
-    >>> test_number('"Hello""Jello"')
+    >>> test_string('"Hello""Jello"')
     "Hello"Jello"
+    1
+    """
+    try:
+        return evaluate(expr)
+    except apl_exception as e:
+        print (e.message)
+
+# ------------------------------
+
+def     test_sys_vars (expr):
+    """
+    >>> test_sys_vars('⎕dummy')
+    UNKNOWN SYSTEM VARIABLE
+
+    >>> test_sys_vars('⎕IO')
+    1
+    >>> test_sys_vars('⎕Io←0')
+    0
+    >>> test_sys_vars('⎕io')
+    0
+    >>> test_sys_vars('⎕iO←0')
+    0
+    >>> test_sys_vars('⎕IO←2')
+    DOMAIN ERROR
+    >>> test_sys_vars('⎕io')
+    0
+    >>> test_sys_vars('⎕IO←1')
+    1
+    >>> test_sys_vars('⎕io')
     1
     """
     try:
@@ -135,34 +168,30 @@ def     test_name (expr):
     """
     Implementation of name handling incomplete - parser test only
 
-    >>> test_number("Hello")
+    >>> test_name("Hello")
     Hello
     2
-    >>> test_number("Hello_Paul")
+    >>> test_name("Hello_Paul")
     Hello_Paul
     2
-    >>> test_number("arithmetic")
+    >>> test_name("arithmetic")
     arithmetic
     2
 
-    >>> test_number('5+A')
+    >>> test_name('5+A')
     A
     7.0
-    >>> test_number('a+6')
+    >>> test_name('a+6')
     a
     8.0
-    >>> test_number('-banana')
+    >>> test_name('-banana')
     banana
     -2
-    >>> test_number('ba2a2a2')
+    >>> test_name('ba2a2a2')
     ba2a2a2
     2
 
-    >>> test_number('⎕three+1')
-    three
-    4.0
-
-    >>> test_number(')FOUR+2')
+    >>> test_name(')FOUR+2')
     FOUR
     6.0
     """
@@ -170,6 +199,8 @@ def     test_name (expr):
         return evaluate(expr)
     except apl_exception as e:
         print (e.message)
+
+# ------------------------------
 
 if __name__ == "__main__":
     import doctest
