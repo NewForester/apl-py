@@ -14,7 +14,6 @@
     For now, workspace names evaluate to 2.
 """
 
-import sys
 import re
 
 from monadic import monadic_function
@@ -23,7 +22,9 @@ from dyadic import dyadic_function
 from system_vars import system_variable
 from system_cmds import system_command
 
-from apl_exception import APL_Exception as apl_exception
+from workspace_vars import workspace_variable
+
+from apl_exception import APL_Exception as apl_exception, apl_exit
 
 # ------------------------------
 
@@ -32,12 +33,6 @@ _reName   = re.compile(r'[A-Za-z][A-Z_a-z0-9]*')
 
 _reAposString = re.compile(r"'([^']|'')*'")
 _reQuotString = re.compile(r'"([^"]|"")*"')
-
-# ------------------------------
-
-def     print_result (result):
-    if result is not None:
-        print('{:g}'.format(result).replace('-','¯'))
 
 # ------------------------------
 
@@ -71,27 +66,24 @@ def     extract_subexpression (expr):
 
 # ------------------------------
 
-def     extract_name (expr,prefix):
+def     handle_name (expr):
     """
-    Extract leading name from expression
-    """
-    if not prefix:
-        lhs = (2)
-        match = _reName.match(expr)
-    elif prefix == '⎕':
-        lhs = (3)
-        match = _reName.match(expr[1:])
-    elif prefix == ')':
-        lhs = (4)
-        match = _reName.match(expr[1:])
-    else:
-        match = None
+    Evaluate, assign to or create a workspace variable
 
+    does not handle functions
+    """
+    match = _reName.match(expr)
     if match:
         name = match.group(0)
         if name:
-            print(name)
-            return (lhs, len(prefix)+len(name))
+            rhs_expr = expr[len(name):].lstrip()
+            if rhs_expr and rhs_expr[0] == '←':
+                rhs = evaluate(rhs_expr[1:].lstrip())
+                lhs = workspace_variable(name,rhs)
+                return (lhs, len(expr))
+            else:
+                lhs = workspace_variable(name)
+                return (lhs, len(name))
 
     return (None, 0)
 
@@ -107,7 +99,7 @@ def     evaluate_system_variable (expr):
         if name:
             rhs_expr = expr[len(name)+1:].lstrip()
             if rhs_expr and rhs_expr[0] == '←':
-                rhs = evaluate(rhs_expr[1:].lstrip())
+                rhs = evaluate(rhs_expr[1:])
                 lhs = system_variable(name,rhs)
                 return (lhs, len(expr))
             else:
@@ -181,101 +173,56 @@ def     evaluate(expression):
         - strings recognised
         - system variables and system commands handled
         - workspace names only recognised
-    """
+        """
 
     try:
         lhs = None
 
-        if not expression:
-            return lhs
+        expr = expression.lstrip()
+
+        if not expr:
+            raise (apl_exception("SYNTAX ERROR"))
 
         consumed = 0
-        leader = expression[0]
+        leader = expr[0]
 
         if leader == '(':
-            lhs, consumed = extract_subexpression(expression)
+            lhs, consumed = extract_subexpression(expr)
         elif leader.isalpha():
-            lhs, consumed = extract_name(expression,"")
+            lhs, consumed = handle_name(expr)
         elif leader == '⎕':
-            lhs, consumed = evaluate_system_variable(expression)
+            lhs, consumed = evaluate_system_variable(expr)
         elif leader == ')':
-            lhs, consumed = handle_system_command(expression)
+            lhs, consumed = handle_system_command(expr)
         elif leader == "'":
-            lhs, consumed = extract_string(expression,leader)
+            lhs, consumed = extract_string(expr,leader)
         elif leader == '"':
-            lhs, consumed = extract_string(expression,leader)
+            lhs, consumed = extract_string(expr,leader)
         else:
-            lhs, consumed = extract_number(expression)
+            lhs, consumed = extract_number(expr)
 
         if consumed:
-            expression = expression[consumed:].lstrip()
+            expr = expr[consumed:].lstrip()
 
-        if not expression:
+        if not expr:
             return lhs
 
         if lhs is None:
             # try a monadic function
 
-            function = monadic_function(expression)
-            rhs = evaluate(expression[1:].lstrip())
+            function = monadic_function(expr)
+            rhs = evaluate(expr[1:])
             return function(rhs)
         else:
             # try a dyadic function
 
-            function = dyadic_function(expression)
-            rhs = evaluate(expression[1:].lstrip())
+            function = dyadic_function(expr)
+            rhs = evaluate(expr[1:])
             return function(lhs,rhs)
 
     except apl_exception as e:
         if not e.line:
-           e.line = expression
+           e.line = expr
         raise (e)
-
-# ------------------------------
-
-def     read_evaluate_print (prompt):
-    """
-    Read input, evaluate it and output the result
-    """
-    try:
-        while True:
-            print(end=prompt)
-            line = input().lstrip()
-            if line:
-                if line[0] == ')':
-                    if line[0:4].upper() == ')OFF':
-                        apl_exit("Bye bye")
-
-            result = None
-            print('⎕',end=' ')
-            try:
-                print_result(evaluate(line))
-            except apl_exception as e:
-                print(' '*(len(prompt)+len(line)-len(e.line)),end="^\n")
-                print(e.message)
-
-    except EOFError:
-        apl_exit(None)
-
-# ------------------------------
-
-def     apl_quit ():
-    """
-    Quit without clean up
-    """
-    print()
-    sys.exit(0)
-
-# ------------------------------
-
-def     apl_exit (message):
-    """
-    Clean up and quit
-    """
-    if message is None:
-        print()
-    else:
-        print(message)
-    sys.exit(0)
 
 # EOF

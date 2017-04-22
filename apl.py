@@ -1,38 +1,88 @@
 #!/usr/bin/python3
 """
-    A simple wrapper script for the APL Read-Evaluate-Print loop
+    a simple implementation of APL in Python 3
 
-    This version adds simple APL exception handling
+    UNDER DEVELOPMENT
+
+    This module is the command-line script.
+
+    The script, with arguments, evaluates them as an APL expression.
+
+    The script, without arguments, enters a read-evaluate-print shell:
+        * the read part is the Python input() function
+        * the evaluate part is in evaluate.py
+        * the print part is in this module.
 """
 
 import sys
 
-from functools import reduce
+from evaluate import evaluate
 
-from rep import read_evaluate_print, apl_quit, evaluate, print_result
+from apl_exception import APL_Exception as apl_exception, apl_quit, apl_exit
 
-from apl_exception import APL_Exception as apl_exception
+# ------------------------------
+
+def     print_result (result,prefix=""):
+    """
+    print the result of evaluating an APL expression
+    """
+    if result is not None:
+        if prefix:
+            print (prefix,end=" ")
+
+        print('{0:g}'.format(result).replace('-','¯'))
+
+# ------------------------------
+
+def     print_error (e,line,prompt=""):
+    """
+    print the error response when APL expression evaluation fails
+    """
+    print(' '*(len(prompt)+len(line)-len(e.line.lstrip())),end="^\n")
+    print(e.message)
+
+# ------------------------------
+
+def     read_evaluate_print (prompt):
+    """
+    Read input, evaluate it and output the result
+    """
+    try:
+        while True:
+            result = None
+
+            print(end=prompt)
+            line = input()
+
+            if line.strip():
+                try:
+                    print_result(evaluate(line),"⎕")
+                except apl_exception as e:
+                    print_error (e,line,prompt)
+
+    except EOFError:
+        apl_exit(0,"")
 
 # ------------------------------
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        print("APL Shell")
+        print("APL Shell implemented in Python 3, Copyright 2017 NewForester")
 
         try:
             read_evaluate_print('       ')
         except KeyboardInterrupt:
-            apl_quit()
+            apl_quit(2)
     else:
         # evaluate parameters as an APL expresson
 
-        line = reduce(lambda x, y: x + ' ' + y, sys.argv[1:]).strip()
-
+        line = ' '.join(sys.argv[1:])
         try:
             print_result(evaluate(line))
+            apl_exit(0)
         except apl_exception as e:
             print(line)
-            print(' '*(len(line)-len(e.line)),end="^\n")
-            print(e.message)
+            print_error(e,line)
+            apl_exit(1)
 
 # EOF

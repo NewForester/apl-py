@@ -13,7 +13,7 @@
 
 from apl_exception import APL_Exception as apl_exception
 
-from rep import evaluate
+from evaluate import evaluate
 
 # ------------------------------
 

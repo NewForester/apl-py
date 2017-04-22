@@ -14,7 +14,7 @@ def     sys_cmd_off (arguments):
     """
     time to go ...
     """
-    apl_exit("Bye bye")
+    apl_exit(0,"Bye bye")
 
 # ------------------------------
 
