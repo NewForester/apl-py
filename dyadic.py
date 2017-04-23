@@ -93,6 +93,25 @@ def     log (A,B):
     except ValueError:
         raise (apl_exception("DOMAIN ERROR"))
 
+def     residue (A,B):
+    """
+    B modulo A
+
+    scalar arguments only
+    """
+    if A == 0:  return B
+
+    result = math.fmod(B,A)
+
+    if result < 0:
+        if A > 0:       result += A
+    elif result > 0:
+        if A < 0:       result += A
+    else:
+        result = 0.0
+
+    return result
+
 # ------------------------------
 
 def     _Boolean (B):
@@ -242,6 +261,9 @@ dyadic_functions = {
     '⌊':        minimum,
     '*':        exp,
     '⍟':        log,
+
+    '|':        residue,
+
     # Logical / Comparison
     '∨':        or_gcd,
     '∧':        and_lcm,
@@ -257,7 +279,6 @@ dyadic_functions = {
                 # one more
 
 # Mathematical
-    '∣':        to_be_implemented,      # residue
     '!':        to_be_implemented,      # combinations
     '?':        to_be_implemented,      # deal
     '⊥':        to_be_implemented,      # decode

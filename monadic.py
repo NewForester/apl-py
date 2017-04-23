@@ -89,6 +89,14 @@ def     log (B):
     except ValueError:
         raise (apl_exception("DOMAIN ERROR"))
 
+def     magnitude (B):
+    """
+    absolute value of B
+
+    scalar argument only
+    """
+    return math.fabs(B)
+
 # ------------------------------
 
 def     logical_negation (B):
@@ -127,11 +135,12 @@ monadic_functions = {
     '⌊':        floor,
     '*':        exp,
     '⍟':        log,
+
+    '|':        magnitude,
     # Logical
     '~':        logical_negation,
 
 # Mathematical
-    '∣':        to_be_implemented,      # absolute value
     '!':        to_be_implemented,      # factorial
     '?':        to_be_implemented,      # roll
     '⌹':        to_be_implemented,      # matrix inverse
