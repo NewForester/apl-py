@@ -8,10 +8,9 @@
     It also recognises strings.  For now, those in apostrophes evaluate to 0 and those in quotes to 1
 
     It also evaluates:
+      - workspace variables
       - system variables - reference and assignment
       - system commands - invocation
-
-    For now, workspace names evaluate to 2.
 """
 
 import re
@@ -66,7 +65,7 @@ def     extract_subexpression (expr):
 
 # ------------------------------
 
-def     handle_name (expr):
+def     evaluate_name (expr):
     """
     Evaluate, assign to or create a workspace variable
 
@@ -170,9 +169,8 @@ def     evaluate(expression):
         - strict right-to-left evaluation of
         - sequences of monadic and dyadic functions
         - with parentheses to alter the order of evaluation
+        - workspace variables, system variables and system commands evaluated
         - strings recognised
-        - system variables and system commands handled
-        - workspace names only recognised
         """
 
     try:
@@ -189,7 +187,7 @@ def     evaluate(expression):
         if leader == '(':
             lhs, consumed = extract_subexpression(expr)
         elif leader.isalpha():
-            lhs, consumed = handle_name(expr)
+            lhs, consumed = evaluate_name(expr)
         elif leader == '⎕':
             lhs, consumed = evaluate_system_variable(expr)
         elif leader == ')':

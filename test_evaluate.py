@@ -178,30 +178,28 @@ def     test_sys_cmds (expr):
 
 def     test_name (expr):
     """
-    Implementation of name handling incomplete - parser test only
+    >>> test_name('A')
+    UNKNOWN VARIABLE
+    >>> test_name('A←2.5')
+    2.5
+    >>> test_name('A')
+    2.5
 
-    >>> test_name("Hello")
-    Hello
-    2
-    >>> test_name("Hello_Paul")
-    Hello_Paul
-    2
-    >>> test_name("arithmetic")
-    arithmetic
-    2
+    >>> test_name('Banana←3.5')
+    3.5
+    >>> test_name('M27←4.5')
+    4.5
+    >>> test_name('27M←5.5')
+    INVALID TOKEN
 
-    >>> test_name('5+A')
-    A
-    7.0
-    >>> test_name('a+6')
-    a
-    8.0
-    >>> test_name('-banana')
-    banana
-    -2
-    >>> test_name('ba2a2a2')
-    ba2a2a2
-    2
+    >>> test_name('A')
+    2.5
+    >>> test_name('A-1')
+    1.5
+    >>> test_name('1-A')
+    -1.5
+    >>> test_name('÷A')
+    0.4
     """
     try:
         return evaluate(expr)
