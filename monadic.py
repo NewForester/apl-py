@@ -8,6 +8,7 @@
 """
 
 import math
+import random
 import operator
 
 from apl_exception import APL_Exception as apl_exception
@@ -97,6 +98,18 @@ def     magnitude (B):
     """
     return math.fabs(B)
 
+def     roll (B):
+    """
+    random selection of a number from the range [1,B]
+
+    scalar argument only
+    """
+
+    try:
+        return random.randint(1,B)
+    except ValueError:
+        raise (apl_exception("DOMAIN ERROR"))
+
 # ------------------------------
 
 def     logical_negation (B):
@@ -137,12 +150,12 @@ monadic_functions = {
     '⍟':        log,
 
     '|':        magnitude,
+    '?':        roll,
     # Logical
     '~':        logical_negation,
 
 # Mathematical
     '!':        to_be_implemented,      # factorial
-    '?':        to_be_implemented,      # roll
     '⌹':        to_be_implemented,      # matrix inverse
     '○':        to_be_implemented,      # pi times
 # Structural

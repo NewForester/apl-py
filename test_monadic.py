@@ -82,6 +82,13 @@ def     monadic_test (symbol,B):
     >>> monadic_test ('|',-1)
     1.0
 
+    >>> monadic_test ('?',1)
+    1
+    >>> monadic_test ('?',0)
+    DOMAIN ERROR
+    >>> monadic_test ('?',-1)
+    DOMAIN ERROR
+
     # --
 
     >>> monadic_test ('~',1)

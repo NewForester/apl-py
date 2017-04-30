@@ -8,7 +8,10 @@
 """
 
 import math
+import random
 import operator
+
+from system_vars import confirm_int
 
 from apl_exception import APL_Exception as apl_exception
 
@@ -111,6 +114,21 @@ def     residue (A,B):
         result = 0.0
 
     return result
+
+def     deal (A,B):
+    """
+    random selection of A numbers from the range [1,B] without replacement
+
+    scalar arguments only
+    """
+
+    A = confirm_int(A)
+    B = confirm_int(B)
+
+    try:
+        return tuple(random.sample(range(1,B+1),A))
+    except ValueError:
+        raise (apl_exception("DOMAIN ERROR"))
 
 # ------------------------------
 
@@ -263,6 +281,7 @@ dyadic_functions = {
     '⍟':        log,
 
     '|':        residue,
+    '?':        deal,
 
     # Logical / Comparison
     '∨':        or_gcd,
@@ -280,7 +299,6 @@ dyadic_functions = {
 
 # Mathematical
     '!':        to_be_implemented,      # combinations
-    '?':        to_be_implemented,      # deal
     '⊥':        to_be_implemented,      # decode
     '⊤':        to_be_implemented,      # encode
     '⌹':        to_be_implemented,      # matrix divide
