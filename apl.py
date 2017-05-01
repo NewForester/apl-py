@@ -22,15 +22,40 @@ from apl_exception import APL_Exception as apl_exception, apl_quit, apl_exit
 
 # ------------------------------
 
+def     format_scalar (scalar):
+    """
+    format a scalar number for printing
+    """
+    try:
+        return '{0:g}'.format(scalar).replace('-','¯')
+    except Exception as e:
+        print (scalar)
+        raise(e)
+
+# ------------------------------
+
+def     format_result (result):
+    """
+    print the result of evaluating an APL expression
+    """
+    if type(result) == type(()):
+        return '(' + ' '.join(map(format_result, result)) + ')'
+    elif result is not None:
+        return format_scalar(result)
+
+# ------------------------------
+
 def     print_result (result,prefix=""):
     """
     print the result of evaluating an APL expression
     """
-    if result is not None:
-        if prefix:
-            print (prefix,end=" ")
+    if prefix:
+        print(prefix,end=' ')
 
-        print('{0:g}'.format(result).replace('-','¯'))
+    if type(result) == type(()):
+        print (' '.join(map(format_result, result)))
+    elif result is not None:
+        print (format_scalar(result))
 
 # ------------------------------
 

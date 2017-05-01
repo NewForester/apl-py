@@ -3,14 +3,11 @@
 
     UNDER DEVELOPMENT
 
-    This version supports expressions with parentheses
+    This version supports expressions with parentheses and vectors (but the vector calculator is not yet implemented)
+
+    Expression evaluation includes system commands, system variables and workspace variables
 
     It also recognises strings.  For now, those in apostrophes evaluate to 0 and those in quotes to 1
-
-    It also evaluates:
-      - workspace variables
-      - system variables - reference and assignment
-      - system commands - invocation
 """
 
 import re
@@ -23,7 +20,7 @@ from system_cmds import system_command
 
 from workspace_vars import workspace_variable
 
-from apl_exception import APL_Exception as apl_exception, apl_exit
+from apl_exception import APL_Exception as apl_exception
 
 # ------------------------------
 
@@ -55,9 +52,9 @@ def     expression_within_parentheses (expr,opos,cpos):
 
 # ------------------------------
 
-def     extract_subexpression (expr):
+def     evaluate_subexpression (expr):
     """
-    Extract leading subexpression in parentheses from expression
+    Extract and evaluate a leading subexpression in parentheses
     """
     subexpression = expression_within_parentheses(expr,0,0)
 
@@ -162,45 +159,74 @@ def     extract_number (expr):
 
 # ------------------------------
 
+def     parse(expr):
+    """
+    Extract and evaluate the next token in a APL expression (left to right)
+
+    Beware indirection recursion
+    """
+    lhs = []
+
+    while True:
+        leader = expr[0]
+        consumed = 0
+
+        if leader == '(':
+            value, consumed = evaluate_subexpression(expr)
+        elif leader.isalpha():
+            value, consumed = evaluate_name(expr)
+        elif leader == '⎕':
+            value, consumed = evaluate_system_variable(expr)
+        elif leader == ')':
+            if len(lhs):
+                raise (apl_exception("SYNTAX ERROR"))
+            value, consumed = handle_system_command(expr)
+        elif leader == "'":
+            value, consumed = extract_string(expr,leader)
+        elif leader == '"':
+            value, consumed = extract_string(expr,leader)
+        else:
+            value, consumed = extract_number(expr)
+
+        if value is not None:
+            lhs.append(value)
+
+        if consumed == 0:
+            break
+        else:
+            expr = expr[consumed:]
+
+        if not expr or expr[0] != ' ':
+            break
+        else:
+            expr = expr.lstrip()
+
+        if not expr:
+            break
+
+    if len(lhs) > 1:
+        return (tuple(lhs), expr)
+    elif len(lhs) == 1:
+        return (lhs[0], expr)
+    else:
+        return (None, expr)
+
+# ------------------------------
+
 def     evaluate(expression):
     """
     Evaluate an APL expression
 
-        - strict right-to-left evaluation of
-        - sequences of monadic and dyadic functions
-        - with parentheses to alter the order of evaluation
-        - workspace variables, system variables and system commands evaluated
-        - strings recognised
-        """
+    this routine is recursive
+    """
 
     try:
-        lhs = None
-
         expr = expression.lstrip()
 
         if not expr:
             raise (apl_exception("SYNTAX ERROR"))
 
-        consumed = 0
-        leader = expr[0]
-
-        if leader == '(':
-            lhs, consumed = extract_subexpression(expr)
-        elif leader.isalpha():
-            lhs, consumed = evaluate_name(expr)
-        elif leader == '⎕':
-            lhs, consumed = evaluate_system_variable(expr)
-        elif leader == ')':
-            lhs, consumed = handle_system_command(expr)
-        elif leader == "'":
-            lhs, consumed = extract_string(expr,leader)
-        elif leader == '"':
-            lhs, consumed = extract_string(expr,leader)
-        else:
-            lhs, consumed = extract_number(expr)
-
-        if consumed:
-            expr = expr[consumed:].lstrip()
+        lhs, expr = parse(expr)
 
         if not expr:
             return lhs

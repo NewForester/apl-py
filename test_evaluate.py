@@ -15,6 +15,8 @@ from apl_exception import APL_Exception as apl_exception
 
 from evaluate import evaluate
 
+from apl import print_result
+
 # ------------------------------
 
 def     test_number (expr):
@@ -203,6 +205,38 @@ def     test_name (expr):
     """
     try:
         return evaluate(expr)
+    except apl_exception as e:
+        print (e.message)
+
+# ------------------------------
+
+def     test_parse_vector (expr):
+    """
+    >>> test_parse_vector('1 2 3')
+    1 2 3
+    >>> test_parse_vector('¯1 ¯2 ¯3')
+    ¯1 ¯2 ¯3
+    >>> test_parse_vector('0.5 (1.5+2.5) 3.5')
+    0.5 4 3.5
+    >>> test_parse_vector('0.5 (1.5+2.5) 3.5')
+    0.5 4 3.5
+
+    >>> test_parse_vector('A ← 10')
+    10
+    >>> test_parse_vector('1 A 3')
+    1 10 3
+    >>> test_parse_vector('1 (A÷2) 3')
+    1 5 3
+    >>> test_parse_vector('1 ⎕IO 3')
+    1 1 3
+
+    >>> test_parse_vector('A ← 10 20')
+    10 20
+    >>> test_parse_vector('1 A 3')
+    1 (10 20) 3
+    """
+    try:
+        print_result(evaluate(expr))
     except apl_exception as e:
         print (e.message)
 
