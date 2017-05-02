@@ -144,6 +144,31 @@ def     dyadic_test (A,symbol,B):
     >>> dyadic_test  (2,'?',1)
     DOMAIN ERROR
 
+    >>> dyadic_test  (1,'!',1)
+    1
+    >>> dyadic_test  (1,'!',0)
+    0
+    >>> dyadic_test  (1,'!',-1)
+    -1
+    >>> dyadic_test  (0,'!',1)
+    1
+    >>> dyadic_test  (0,'!',0)
+    1
+    >>> dyadic_test  (0,'!',-1)
+    1
+    >>> dyadic_test  (0,'!',5)
+    1
+    >>> dyadic_test  (1,'!',5)
+    5
+    >>> dyadic_test  (2,'!',5)
+    10
+    >>> dyadic_test  (3,'!',5)
+    10
+    >>> dyadic_test  (4,'!',5)
+    5
+    >>> dyadic_test  (5,'!',5)
+    1
+
     # --
 
     >>> dyadic_test (1,'∨',0)

@@ -7,9 +7,10 @@
     WIP - scalar parameters only
 """
 
+import operator
 import math
 import random
-import operator
+import mpmath
 
 from system_vars import confirm_int
 
@@ -127,6 +128,25 @@ def     deal (A,B):
 
     try:
         return tuple(random.sample(range(1,B+1),A))
+    except ValueError:
+        raise (apl_exception("DOMAIN ERROR"))
+
+def     combinations (A,B):
+    """
+    number of combinations of size A from a population of size B
+
+    for floating point numbers this is binomial(B,A)
+
+    rules for negative integers and floating point are interesting
+
+    scalar arguments only
+    """
+
+    try:
+        if type(A) is int and type(B) is int:
+            return int(mpmath.binomial(B,A))
+        else:
+            return float(mpmath.binomial(B,A))
     except ValueError:
         raise (apl_exception("DOMAIN ERROR"))
 
@@ -282,6 +302,7 @@ dyadic_functions = {
 
     '|':        residue,
     '?':        deal,
+    '!':        combinations,
 
     # Logical / Comparison
     '∨':        or_gcd,
@@ -298,7 +319,6 @@ dyadic_functions = {
                 # one more
 
 # Mathematical
-    '!':        to_be_implemented,      # combinations
     '⊥':        to_be_implemented,      # decode
     '⊤':        to_be_implemented,      # encode
     '⌹':        to_be_implemented,      # matrix divide

@@ -7,9 +7,10 @@
     WIP - scalar parameters only
 """
 
+import operator
 import math
 import random
-import operator
+import mpmath
 
 from apl_exception import APL_Exception as apl_exception
 
@@ -110,6 +111,21 @@ def     roll (B):
     except ValueError:
         raise (apl_exception("DOMAIN ERROR"))
 
+def     factorial (B):
+    """
+    factorial B also valid for floating point numbers
+
+    scalar argument only
+    """
+
+    try:
+        if type(B) is int:
+            return int(mpmath.factorial(B))
+        else:
+            return float(mpmath.factorial(B))
+    except ValueError:
+        raise (apl_exception("DOMAIN ERROR"))
+
 # ------------------------------
 
 def     logical_negation (B):
@@ -151,11 +167,11 @@ monadic_functions = {
 
     '|':        magnitude,
     '?':        roll,
+    '!':        factorial,
     # Logical
     '~':        logical_negation,
 
 # Mathematical
-    '!':        to_be_implemented,      # factorial
     '⌹':        to_be_implemented,      # matrix inverse
     '○':        to_be_implemented,      # pi times
 # Structural
