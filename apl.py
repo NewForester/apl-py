@@ -68,6 +68,16 @@ def     print_error (e,line,prompt=""):
 
 # ------------------------------
 
+def     strip_comment (line):
+    pos = line.find('⍝')
+
+    if pos != -1:
+        return line[:pos]
+    else:
+        return line
+
+# ------------------------------
+
 def     read_evaluate_print (prompt):
     """
     Read input, evaluate it and output the result
@@ -77,7 +87,7 @@ def     read_evaluate_print (prompt):
             result = None
 
             print(end=prompt)
-            line = input()
+            line = strip_comment(input())
 
             if line.strip():
                 try:
@@ -101,13 +111,15 @@ if __name__ == '__main__':
     else:
         # evaluate parameters as an APL expresson
 
-        line = ' '.join(sys.argv[1:])
-        try:
-            print_result(evaluate(line))
-            apl_exit(0)
-        except apl_exception as e:
-            print(line)
-            print_error(e,line)
-            apl_exit(1)
+        line = strip_comment(' '.join(sys.argv[1:]))
+
+        if line.strip():
+            try:
+                print_result(evaluate(line))
+                apl_exit(0)
+            except apl_exception as e:
+                print(line)
+                print_error(e,line)
+                apl_exit(1)
 
 # EOF
