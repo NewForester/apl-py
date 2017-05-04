@@ -169,6 +169,28 @@ def     dyadic_test (A,symbol,B):
     >>> dyadic_test  (5,'!',5)
     1
 
+    >>> dyadic_test  (1,'○',0)
+    0.0
+    >>> dyadic_test  (2,'○',0)
+    1.0
+    >>> dyadic_test  (3,'○',0)
+    0.0
+    >>> dyadic_test  (4,'○',0)
+    1.0
+    >>> dyadic_test  (5,'○',0)
+    0.0
+    >>> dyadic_test  (6,'○',0)
+    1.0
+    >>> dyadic_test  (7,'○',0)
+    0.0
+
+    >>> dyadic_test  (0,'○',0.5)
+    0.8660254037844386
+    >>> dyadic_test  (4,'○',2)
+    2.23606797749979
+    >>> dyadic_test  (-4,'○',2)
+    1.7320508075688772
+
     # --
 
     >>> dyadic_test (1,'∨',0)

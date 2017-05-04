@@ -126,6 +126,14 @@ def     factorial (B):
     except ValueError:
         raise (apl_exception("DOMAIN ERROR"))
 
+def     pi (B):
+    """
+    identity
+
+    scalar argument only
+    """
+    return math.pi * B
+
 # ------------------------------
 
 def     logical_negation (B):
@@ -168,12 +176,13 @@ monadic_functions = {
     '|':        magnitude,
     '?':        roll,
     '!':        factorial,
+    '○':        pi,
+
     # Logical
     '~':        logical_negation,
 
 # Mathematical
     '⌹':        to_be_implemented,      # matrix inverse
-    '○':        to_be_implemented,      # pi times
 # Structural
     '⍴':        to_be_implemented,      # shape
     ',':        to_be_implemented,      # reshape into a vector

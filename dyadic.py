@@ -18,6 +18,36 @@ from apl_exception import APL_Exception as apl_exception
 
 # --------------
 
+trigonometric_functions = (
+    None,               # -12
+    None,
+    None,
+    None,
+    None,               # -8
+    math.atanh,
+    math.acosh,
+    math.asinh,
+    lambda x: math.sqrt(x*x-1), # -4
+    math.atan,
+    math.acos,
+    math.asin,
+    lambda x: math.sqrt(1-x*x), # 0
+    math.sin,
+    math.cos,
+    math.tan,
+    lambda x: math.sqrt(x*x+1), # +4
+    math.sinh,
+    math.cosh,
+    math.tanh,
+    None,               # +8
+    None,
+    None,
+    None,
+    None,               # +12
+)
+
+# --------------
+
 def     add (A,B):
     """
     A plus B
@@ -149,6 +179,22 @@ def     combinations (A,B):
             return float(mpmath.binomial(B,A))
     except ValueError:
         raise (apl_exception("DOMAIN ERROR"))
+
+def     trigonometric (A,B):
+    """
+    A plus B
+
+    scalar arguments only
+    """
+    if type(A) is int:
+        if abs(A) <= 12:
+            function = trigonometric_functions[A+12]
+            if function is None:
+                return to_be_implemented (A,B)
+            else:
+                return function(B)
+
+    raise (apl_exception("DOMAIN ERROR"))
 
 # ------------------------------
 
@@ -303,6 +349,7 @@ dyadic_functions = {
     '|':        residue,
     '?':        deal,
     '!':        combinations,
+    '○':        trigonometric,
 
     # Logical / Comparison
     '∨':        or_gcd,
@@ -322,7 +369,6 @@ dyadic_functions = {
     '⊥':        to_be_implemented,      # decode
     '⊤':        to_be_implemented,      # encode
     '⌹':        to_be_implemented,      # matrix divide
-    '○':        to_be_implemented,      # trigonometric function
 # Structural
     '⍴':        to_be_implemented,      # reshape
     ',':        to_be_implemented,      # catenation

@@ -108,6 +108,13 @@ def     monadic_test (symbol,B):
     >>> monadic_test ('!',0.125)
     0.9417426998
 
+    >>> monadic_test ('○',1)
+    3.1415926536
+    >>> monadic_test ('○',0)
+    0.0
+    >>> monadic_test ('○',-1)
+    -3.1415926536
+
     # --
 
     >>> monadic_test ('~',1)
