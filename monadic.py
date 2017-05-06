@@ -12,6 +12,8 @@ import math
 import random
 import mpmath
 
+from system_vars import integerCT
+
 from apl_exception import APL_Exception as apl_exception
 
 # ------------------------------
@@ -58,18 +60,26 @@ def     reciprocal (B):
 
 def     ceil (B):
     """
-    ceil
+    ceil with comparison tolerance
 
     scalar argument only
     """
+    B = integerCT(B)
+
+    if type(B) is int:  return B
+
     return math.ceil(B)
 
 def     floor (B):
     """
-    floor
+    floor with comparison tolerance
 
     scalar argument only
     """
+    B = integerCT(B)
+
+    if type(B) is int:  return B
+
     return math.floor(B)
 
 def     exp (B):
@@ -117,6 +127,7 @@ def     factorial (B):
 
     scalar argument only
     """
+    B = integerCT(B)
 
     try:
         if type(B) is int:
@@ -144,6 +155,8 @@ def     logical_negation (B):
 
     throws DOMAIN ERROR (B is not 0 or 1)
     """
+    B = integerCT(B)
+
     if B == 1:  return 0
     if B == 0:  return 1
 

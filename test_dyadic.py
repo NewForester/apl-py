@@ -99,30 +99,30 @@ def     dyadic_test (A,symbol,B):
     6.0
 
     >>> dyadic_test  (3,'|',3)
-    0.0
+    0
     >>> dyadic_test  (3,'|',4)
-    1.0
+    1
     >>> dyadic_test  (3,'|',5)
-    2.0
+    2
     >>> dyadic_test  (3,'|',-3)
-    0.0
+    0
     >>> dyadic_test  (3,'|',-4)
-    2.0
+    2
     >>> dyadic_test  (3,'|',-5)
-    1.0
+    1
 
     >>> dyadic_test  (-3,'|',3)
-    0.0
+    0
     >>> dyadic_test  (-3,'|',4)
-    -2.0
+    -2
     >>> dyadic_test  (-3,'|',5)
-    -1.0
+    -1
     >>> dyadic_test  (-3,'|',-3)
-    0.0
+    0
     >>> dyadic_test  (-3,'|',-4)
-    -1.0
+    -1
     >>> dyadic_test  (-3,'|',-5)
-    -2.0
+    -2
 
     >>> dyadic_test  (0,'|',1)
     1

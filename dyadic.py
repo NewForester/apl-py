@@ -12,7 +12,7 @@ import math
 import random
 import mpmath
 
-from system_vars import confirm_int
+from system_vars import confirm_bool, confirm_int, equalCT, integerCT
 
 from apl_exception import APL_Exception as apl_exception
 
@@ -129,11 +129,17 @@ def     log (A,B):
 
 def     residue (A,B):
     """
-    B modulo A
+    B modulo A with comparison tolerance
 
     scalar arguments only
     """
-    if A == 0:  return B
+    if type(A) is int:
+        if A == 0:          return B
+    else:
+        if equalCT(A,0):    return B
+
+    if type(integerCT(operator.truediv(B,A))) is int:
+        return 0
 
     result = math.fmod(B,A)
 
@@ -144,7 +150,10 @@ def     residue (A,B):
     else:
         result = 0.0
 
-    return result
+    if type(A) is int and type(B) is int:
+        return int(result)
+    else:
+        return result
 
 def     deal (A,B):
     """
@@ -198,19 +207,6 @@ def     trigonometric (A,B):
 
 # ------------------------------
 
-def     _Boolean (B):
-    """
-    Boolean integer value of B
-
-    scalar argument only
-
-    throws DOMAIN ERROR (B is not 0 or 1)
-    """
-    if B == 1:  return 1
-    if B == 0:  return 0
-
-    raise (apl_exception("DOMAIN ERROR"))
-
 def     _highest_common_factor (A,B):
     """
     Highest Common Factor by the Euclid method
@@ -231,7 +227,7 @@ def     or_gcd (A,B):
     scalar arguments only
     """
     try:
-        return int(_Boolean(A) + _Boolean(B) != 0)
+        return int(confirm_bool(A) + confirm_bool(B) != 0)
     except:
         return _highest_common_factor(A,B)
 
@@ -242,7 +238,7 @@ def     and_lcm (A,B):
     scalar arguments only
     """
     try:
-        return int(_Boolean(A) + _Boolean(B) == 2)
+        return int(confirm_bool(A) + confirm_bool(B) == 2)
     except:
         return A * B / _highest_common_factor(A,B)
 
@@ -254,7 +250,7 @@ def     nor (A,B):
 
     throws DOMAIN ERROR (B is not 0 or 1)
     """
-    return int(_Boolean(A) + _Boolean(B) == 0)
+    return int(confirm_bool(A) + confirm_bool(B) == 0)
 
 def     nand (A,B):
     """
@@ -264,16 +260,21 @@ def     nand (A,B):
 
     throws DOMAIN ERROR (B is not 0 or 1)
     """
-    return int(_Boolean(A) + _Boolean(B) != 2)
+    return int(confirm_bool(A) + confirm_bool(B) != 2)
 
 # ------------------------------
 
 def     lt (A,B):
     """
-    A < B
+    A < B with comparison tolerance
 
     scalar arguments only
     """
+    if type(A) is int and type(B) is int:
+        return int(operator.lt(A,B))
+
+    if equalCT(A,B):
+        return 0
 
     return int(operator.lt(A,B))
 
@@ -283,44 +284,63 @@ def     le (A,B):
 
     scalar arguments only
     """
+    if type(A) is int and type(B) is int:
+        return int(operator.le(A,B))
+
+    if equalCT(A,B):
+        return 1
 
     return int(operator.le(A,B))
 
 def     eq (A,B):
     """
-    A == B
+    A == B with comparison tolerance
 
     scalar arguments only
     """
+    if type(A) is int and type(B) is int:
+        return int(operator.eq(A,B))
 
-    return int(operator.eq(A,B))
+    return int(equalCT(A,B))
 
 def     ge (A,B):
     """
-    A >= B
+    A >= B with comparison tolerance
 
     scalar arguments only
     """
+    if type(A) is int and type(B) is int:
+        return int(operator.ge(A,B))
+
+    if equalCT(A,B):
+        return 1
 
     return int(operator.ge(A,B))
 
 def     gt (A,B):
     """
-    A > B
+    A > B with comparison tolerance
 
     scalar arguments only
     """
+    if type(A) is int and type(B) is int:
+        return int(operator.gt(A,B))
+
+    if equalCT(A,B):
+        return 0
 
     return int(operator.gt(A,B))
 
 def     ne (A,B):
     """
-    A != B
+    A != B with comparison tolerance
 
     scalar arguments only
     """
+    if type(A) is int and type(B) is int:
+        return int(operator.ne(A,B))
 
-    return int(operator.ne(A,B))
+    return int(not equalCT(A,B))
 
 # ------------------------------
 
