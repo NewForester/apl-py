@@ -6,6 +6,9 @@
     This is an initial version:  there is much still to be done
 """
 
+import  math
+import  operator
+
 from apl_exception import APL_Exception as apl_exception
 
 # ------------------------------
@@ -20,27 +23,54 @@ class   apl_system_variable(object):
 
 # ------------------------------
 
-def     confirm_bool (value):
-    value = confirm_int (value)
+def     equalCT (A,B):
+    return operator.le(math.fabs(A-B),comparisonTolerance.value * max(math.fabs(A), math.fabs(B)))
 
-    if value == 0:  return 0
-    if value == 1:  return 1
+# ------------------------------
+
+def     integerCT (B):
+    if not type(B) is int:
+        integer = int(B+0.5)
+
+        if equalCT(integer,B):
+            return integer
+
+    return B
+
+# ------------------------------
+
+def     confirm_bool (B):
+    B = integerCT(B)
+
+    if B == 0:  return 0
+    if B == 1:  return 1
 
     raise (apl_exception("DOMAIN ERROR"))
 
 # ------------------------------
 
-def     confirm_int (value):
-    integer = int(value)
+def     confirm_int (B):
+    B = integerCT(B)
 
-    if integer == value:    return integer
+    if not type(B) is int:
+        raise (apl_exception("DOMAIN ERROR"))
 
-    raise (apl_exception("DOMAIN ERROR"))
+    return B
 
 # ------------------------------
+
+def     confirm_real (B):
+    return float(B)
+
+# ------------------------------
+
+indexOrigin = apl_system_variable(1, confirm_bool)
+
+comparisonTolerance = apl_system_variable(1e-13, confirm_real)
 
 system_variables = {
-    "IO":       apl_system_variable(1, confirm_bool),
+    "IO":       indexOrigin,
+    "CT":       comparisonTolerance,
 }
 
 # ------------------------------
