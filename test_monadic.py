@@ -13,6 +13,8 @@ from apl_exception import APL_Exception as apl_exception
 
 from monadic import monadic_function
 
+from apl import print_result
+
 # ------------------------------
 
 def     monadic_test (symbol,B):
@@ -22,10 +24,10 @@ def     monadic_test (symbol,B):
     >>> monadic_test ('+',0)
     0
     >>> monadic_test ('+',-1)
-    -1
+    ¯1
 
     >>> monadic_test ('-',1)
-    -1
+    ¯1
     >>> monadic_test ('-',0)
     0
     >>> monadic_test ('-',-1)
@@ -36,51 +38,51 @@ def     monadic_test (symbol,B):
     >>> monadic_test ('×',0)
     0
     >>> monadic_test ('×',-1)
-    -1
+    ¯1
 
     >>> monadic_test ('÷',1)
-    1.0
+    1
     >>> monadic_test ('÷',0)
     DOMAIN ERROR
     >>> monadic_test ('÷',-1)
-    -1.0
+    ¯1
 
     >>> monadic_test ('⌈',1.5)
     2
     >>> monadic_test ('⌈',0)
     0
     >>> monadic_test ('⌈',-1.5)
-    -1
+    ¯1
 
     >>> monadic_test ('⌊',1.5)
     1
     >>> monadic_test ('⌊',0)
     0
     >>> monadic_test ('⌊',-1.5)
-    -2
+    ¯2
 
     >>> monadic_test ('*',1)
-    2.7182818285
+    2.71828
     >>> monadic_test ('*',0)
-    1.0
+    1
     >>> monadic_test ('*',-1)
-    0.3678794412
+    0.367879
 
     >>> monadic_test ('⍟',2.718281828459045)
-    1.0
+    1
     >>> monadic_test ('⍟',1.0)
-    0.0
+    0
     >>> monadic_test ('⍟',0.36787944117144233)
-    -1.0
+    ¯1
     >>> monadic_test ('⍟',0)
     DOMAIN ERROR
 
     >>> monadic_test ('|',1)
-    1.0
+    1
     >>> monadic_test ('|',0)
-    0.0
+    0
     >>> monadic_test ('|',-1)
-    1.0
+    1
 
     >>> monadic_test ('?',1)
     1
@@ -102,18 +104,18 @@ def     monadic_test (symbol,B):
     >>> monadic_test ('!',8)
     40320
     >>> monadic_test ('!',0.5)
-    0.8862269255
+    0.886227
     >>> monadic_test ('!',0.25)
-    0.9064024771
+    0.906402
     >>> monadic_test ('!',0.125)
-    0.9417426998
+    0.941743
 
     >>> monadic_test ('○',1)
-    3.1415926536
+    3.14159
     >>> monadic_test ('○',0)
-    0.0
+    0
     >>> monadic_test ('○',-1)
-    -3.1415926536
+    ¯3.14159
 
     # --
 
@@ -132,7 +134,7 @@ def     monadic_test (symbol,B):
     INVALID TOKEN
     """
     try:
-        return round(monadic_function(symbol)(B),10)
+        print_result(monadic_function(symbol)(B))
     except apl_exception as e:
         print (e.message)
 

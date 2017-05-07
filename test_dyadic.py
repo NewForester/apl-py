@@ -13,6 +13,8 @@ from apl_exception import APL_Exception as apl_exception
 
 from dyadic import dyadic_function
 
+from apl import print_result
+
 # ------------------------------
 
 def     dyadic_test (A,symbol,B):
@@ -22,16 +24,16 @@ def     dyadic_test (A,symbol,B):
     >>> dyadic_test  (0,'+',1)
     1
     >>> dyadic_test  (-1,'+',0)
-    -1
+    ¯1
     >>> dyadic_test  (0,'+',-1)
-    -1
+    ¯1
 
     >>> dyadic_test  (1,'-',0)
     1
     >>> dyadic_test  (0,'-',1)
-    -1
+    ¯1
     >>> dyadic_test  (-1,'-',0)
-    -1
+    ¯1
     >>> dyadic_test  (0,'-',-1)
     1
 
@@ -45,11 +47,11 @@ def     dyadic_test (A,symbol,B):
     0
 
     >>> dyadic_test (0,'÷',1)
-    0.0
+    0
     >>> dyadic_test (1,'÷',0)
     DOMAIN ERROR
     >>> dyadic_test (0,'÷',-1)
-    -0.0
+    ¯0
     >>> dyadic_test (-1,'÷',0)
     DOMAIN ERROR
 
@@ -67,36 +69,36 @@ def     dyadic_test (A,symbol,B):
     >>> dyadic_test  (0,'⌊',1)
     0
     >>> dyadic_test  (-1,'⌊',0)
-    -1
+    ¯1
     >>> dyadic_test  (0,'⌊',-1)
-    -1
+    ¯1
 
     >>> dyadic_test  (1,'*',0)
-    1.0
+    1
     >>> dyadic_test  (0,'*',1)
-    0.0
+    0
     >>> dyadic_test  (-1,'*',0)
-    1.0
+    1
     >>> dyadic_test  (0,'*',-1)
     DOMAIN ERROR
 
     >>> dyadic_test  (1,'⍟',0)
     DOMAIN ERROR
     >>> dyadic_test  (0,'⍟',1)
-    0.0
+    0
     >>> dyadic_test  (-1,'⍟',0)
     DOMAIN ERROR
     >>> dyadic_test  (0,'⍟',-1)
-    0.0
+    0
 
     >>> dyadic_test  (2,'⍟',4)
-    2.0
+    2
     >>> dyadic_test  (2,'⍟',1024)
-    10.0
+    10
     >>> dyadic_test  (10,'⍟',100)
-    2.0
+    2
     >>> dyadic_test  (10,'⍟',1000000)
-    6.0
+    6
 
     >>> dyadic_test  (3,'|',3)
     0
@@ -114,25 +116,25 @@ def     dyadic_test (A,symbol,B):
     >>> dyadic_test  (-3,'|',3)
     0
     >>> dyadic_test  (-3,'|',4)
-    -2
+    ¯2
     >>> dyadic_test  (-3,'|',5)
-    -1
+    ¯1
     >>> dyadic_test  (-3,'|',-3)
     0
     >>> dyadic_test  (-3,'|',-4)
-    -1
+    ¯1
     >>> dyadic_test  (-3,'|',-5)
-    -2
+    ¯2
 
     >>> dyadic_test  (0,'|',1)
     1
     >>> dyadic_test  (0,'|',0)
     0
     >>> dyadic_test  (0,'|',-1)
-    -1
+    ¯1
 
     >>> dyadic_test  (1,'?',1)
-    (1,)
+    1
     >>> dyadic_test  (1,'?',0)
     DOMAIN ERROR
     >>> dyadic_test  (1,'?',-1)
@@ -149,7 +151,7 @@ def     dyadic_test (A,symbol,B):
     >>> dyadic_test  (1,'!',0)
     0
     >>> dyadic_test  (1,'!',-1)
-    -1
+    ¯1
     >>> dyadic_test  (0,'!',1)
     1
     >>> dyadic_test  (0,'!',0)
@@ -170,26 +172,26 @@ def     dyadic_test (A,symbol,B):
     1
 
     >>> dyadic_test  (1,'○',0)
-    0.0
+    0
     >>> dyadic_test  (2,'○',0)
-    1.0
+    1
     >>> dyadic_test  (3,'○',0)
-    0.0
+    0
     >>> dyadic_test  (4,'○',0)
-    1.0
+    1
     >>> dyadic_test  (5,'○',0)
-    0.0
+    0
     >>> dyadic_test  (6,'○',0)
-    1.0
+    1
     >>> dyadic_test  (7,'○',0)
-    0.0
+    0
 
     >>> dyadic_test  (0,'○',0.5)
-    0.8660254037844386
+    0.866025
     >>> dyadic_test  (4,'○',2)
-    2.23606797749979
+    2.23607
     >>> dyadic_test  (-4,'○',2)
-    1.7320508075688772
+    1.73205
 
     # --
 
@@ -211,13 +213,13 @@ def     dyadic_test (A,symbol,B):
     >>> dyadic_test (1,'∧',1)
     1
     >>> dyadic_test (6,'∧',7)
-    42.0
+    42
     >>> dyadic_test (21,'∧',15)
-    105.0
+    105
     >>> dyadic_test (7.5,'∧',-5)
-    -15.0
+    ¯15
     >>> dyadic_test (-7.5,'∧',5)
-    -15.0
+    ¯15
 
     >>> dyadic_test (0,'⍱',1)
     0
@@ -313,7 +315,7 @@ def     dyadic_test (A,symbol,B):
     INVALID TOKEN
     """
     try:
-        return dyadic_function(symbol)(A,B)
+        print_result(dyadic_function(symbol)(A,B))
     except apl_exception as e:
         print (e.message)
 

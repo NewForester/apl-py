@@ -22,28 +22,28 @@ from apl import print_result
 def     test_number (expr):
     """
     >>> test_number('0')
-    0.0
+    0
     >>> test_number('¯1')
-    -1.0
+    ¯1
     >>> test_number('3.142')
     3.142
     >>> test_number('.5')
     0.5
     >>> test_number('1e3')
-    1000.0
+    1000
     >>> test_number('1E3')
-    1000.0
+    1000
     >>> test_number('1e-3')
     0.001
     >>> test_number('1e+3')
-    1000.0
+    1000
     >>> test_number('1e¯3')
     0.001
     >>> test_number('3.142e-0')
     3.142
     """
     try:
-        return evaluate(expr)
+        print_result(evaluate(expr))
     except apl_exception as e:
         print (e.message)
 
@@ -52,29 +52,29 @@ def     test_number (expr):
 def     test_scalar (expr):
     """
     >>> test_scalar('+2')
-    2.0
+    2
     >>> test_scalar('-¯2')
-    2.0
+    2
     >>> test_scalar('×2')
     1
     >>> test_scalar('÷2')
     0.5
     >>> test_scalar('+-×÷2')
-    -1
+    ¯1
 
     >>> test_scalar('1 + 2')
-    3.0
+    3
     >>> test_scalar('1 - 2')
-    -1.0
+    ¯1
     >>> test_scalar('1 × 2')
-    2.0
+    2
     >>> test_scalar('1 ÷ 2')
     0.5
     >>> test_scalar('1 + 2 - 3 ÷ 4')
     2.25
     """
     try:
-        return evaluate(expr)
+        print_result(evaluate(expr))
     except apl_exception as e:
         print (e.message)
 
@@ -83,24 +83,24 @@ def     test_scalar (expr):
 def     test_parentheses (expr):
     """
     >>> test_parentheses('(0)')
-    0.0
+    0
     >>> test_parentheses('1 + 2 × 2 + 1')
-    7.0
+    7
     >>> test_parentheses('(1 + 2) × (2 + 1)')
-    9.0
+    9
     >>> test_parentheses('(1 + 2) × 2 + 1')
-    9.0
+    9
     >>> test_parentheses('1 - 2 - 3 - 4')
-    -2.0
+    ¯2
     >>> test_parentheses('((1 - 2) - 3) - 4')
-    -8.0
+    ¯8
     >>> test_parentheses('1 - (2 - 3) - 4')
-    6.0
+    6
     >>> test_parentheses('1 - (2 - 3 - 4')
     SYNTAX ERROR
     """
     try:
-        return evaluate(expr)
+        print_result(evaluate(expr))
     except apl_exception as e:
         print (e.message)
 
@@ -131,7 +131,7 @@ def     test_string (expr):
     1
     """
     try:
-        return evaluate(expr)
+        print_result(evaluate(expr))
     except apl_exception as e:
         print (e.message)
 
@@ -160,7 +160,7 @@ def     test_sys_vars (expr):
     1
     """
     try:
-        return evaluate(expr)
+        print_result(evaluate(expr))
     except apl_exception as e:
         print (e.message)
 
@@ -199,12 +199,12 @@ def     test_name (expr):
     >>> test_name('A-1')
     1.5
     >>> test_name('1-A')
-    -1.5
+    ¯1.5
     >>> test_name('÷A')
     0.4
     """
     try:
-        return evaluate(expr)
+        print_result(evaluate(expr))
     except apl_exception as e:
         print (e.message)
 
