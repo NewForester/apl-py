@@ -62,11 +62,11 @@ def     monadic_test (symbol,B):
     ¯2
 
     >>> monadic_test ('*',1)
-    2.71828
+    2.718281828
     >>> monadic_test ('*',0)
     1
     >>> monadic_test ('*',-1)
-    0.367879
+    0.3678794412
 
     >>> monadic_test ('⍟',2.718281828459045)
     1
@@ -104,18 +104,18 @@ def     monadic_test (symbol,B):
     >>> monadic_test ('!',8)
     40320
     >>> monadic_test ('!',0.5)
-    0.886227
+    0.8862269255
     >>> monadic_test ('!',0.25)
-    0.906402
+    0.9064024771
     >>> monadic_test ('!',0.125)
-    0.941743
+    0.9417426998
 
     >>> monadic_test ('○',1)
-    3.14159
+    3.141592654
     >>> monadic_test ('○',0)
     0
     >>> monadic_test ('○',-1)
-    ¯3.14159
+    ¯3.141592654
 
     # --
 

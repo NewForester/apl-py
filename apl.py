@@ -27,7 +27,7 @@ def     format_scalar (scalar):
     format a scalar number for printing
     """
     try:
-        return '{0:g}'.format(scalar).replace('-','¯')
+        return '{0:.10g}'.format(scalar).replace('-','¯')
     except Exception as e:
         print (scalar)
         raise(e)
