@@ -15,7 +15,7 @@ import re
 from monadic import monadic_function
 from dyadic import dyadic_function
 
-from system_vars import system_variable
+from system_vars import system_variable, integerCT
 from system_cmds import system_command
 
 from workspace_vars import workspace_variable
@@ -153,7 +153,7 @@ def     extract_number (expr):
     if match:
         number = match.group(0)
         if number:
-            return (float(number.replace('¯','-')), len(number))
+            return (integerCT(float(number.replace('¯','-'))), len(number))
 
     return (None, 0)
 
