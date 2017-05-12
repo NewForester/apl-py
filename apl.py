@@ -15,6 +15,7 @@
 """
 
 import sys
+import readline
 
 from evaluate import evaluate
 
@@ -72,9 +73,9 @@ def     strip_comment (line):
     pos = line.find('⍝')
 
     if pos != -1:
-        return line[:pos]
-    else:
-        return line
+        line = line[:pos]
+
+    return line.rstrip()
 
 # ------------------------------
 
@@ -82,21 +83,14 @@ def     read_evaluate_print (prompt):
     """
     Read input, evaluate it and output the result
     """
-    try:
-        while True:
-            result = None
+    while True:
+        line = strip_comment(input(prompt))
 
-            print(end=prompt)
-            line = strip_comment(input())
-
-            if line.strip():
-                try:
-                    print_result(evaluate(line),"⎕")
-                except apl_exception as e:
-                    print_error (e,line,prompt)
-
-    except EOFError:
-        apl_exit(0,"")
+        if line:
+            try:
+                print_result(evaluate(line),"⎕")
+            except apl_exception as e:
+                print_error (e,line,prompt)
 
 # ------------------------------
 
@@ -106,6 +100,8 @@ if __name__ == '__main__':
 
         try:
             read_evaluate_print('       ')
+        except EOFError:
+            apl_exit(0,"")
         except KeyboardInterrupt:
             apl_quit(2)
     else:
@@ -113,7 +109,7 @@ if __name__ == '__main__':
 
         line = strip_comment(' '.join(sys.argv[1:]))
 
-        if line.strip():
+        if line:
             try:
                 print_result(evaluate(line))
                 apl_exit(0)
