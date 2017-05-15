@@ -4,11 +4,14 @@
     UNDER DEVELOPMENT
 
     This is an initial version:  there is much still to be done
+
+    APL scalar/vector aware
 """
 
 import  math
 import  operator
 
+from apl_quantity import eval_monadic
 from apl_exception import APL_Exception as apl_exception
 
 # ------------------------------
@@ -64,9 +67,8 @@ def     confirm_real (B):
 
 # ------------------------------
 
-indexOrigin = apl_system_variable(1, confirm_bool)
-
-comparisonTolerance = apl_system_variable(1e-13, confirm_real)
+indexOrigin =           apl_system_variable(1,      lambda B: eval_monadic(confirm_bool,B))
+comparisonTolerance =   apl_system_variable(1e-13,  lambda B: eval_monadic(confirm_real,B))
 
 system_variables = {
     "IO":       indexOrigin,

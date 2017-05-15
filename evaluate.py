@@ -1,9 +1,9 @@
 """
-    The top level of the APL Read-Evaluate-Print loop
+    the top level of the APL Read-Evaluate-Print loop
 
     UNDER DEVELOPMENT
 
-    This version supports expressions with parentheses and vectors (but the vector calculator is not yet implemented)
+    This version supports mixed scalar/vector expressions with subexpressions in parentheses
 
     Expression evaluation includes system commands, system variables and workspace variables
 
@@ -20,6 +20,7 @@ from system_cmds import system_command
 
 from workspace_vars import workspace_variable
 
+from apl_quantity import APL_quantity as apl_value, APL_scalar as apl_scalar, APL_vector as apl_vector
 from apl_exception import APL_Exception as apl_exception
 
 # ------------------------------
@@ -153,7 +154,7 @@ def     extract_number (expr):
     if match:
         number = match.group(0)
         if number:
-            return (integerCT(float(number.replace('¯','-'))), len(number))
+            return (float(number.replace('¯','-')), len(number))
 
     return (None, 0)
 
@@ -189,6 +190,8 @@ def     parse(expr):
             value, consumed = extract_number(expr)
 
         if value is not None:
+            if type(value) == apl_scalar:
+                value = value.python()
             lhs.append(value)
 
         if consumed == 0:
@@ -204,12 +207,16 @@ def     parse(expr):
         if not expr:
             break
 
-    if len(lhs) > 1:
-        return (tuple(lhs), expr)
-    elif len(lhs) == 1:
-        return (lhs[0], expr)
+    if len(lhs) == 0:
+        lhs = None
+    elif len(lhs) > 1:
+        lhs = apl_vector(lhs)
     else:
-        return (None, expr)
+        lhs = lhs[0]
+        if not isinstance(lhs,apl_value):
+            lhs = apl_scalar(lhs)
+
+    return (lhs, expr)
 
 # ------------------------------
 

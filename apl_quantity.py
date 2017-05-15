@@ -43,4 +43,15 @@ class APL_vector (APL_quantity):
     def __init__(self,value):
         APL_quantity.__init__(self,value,len(value))
 
+# ------------------------------
+
+def eval_monadic(Fn,B):
+    """
+    evaluate an monadic Python function that does not understand APL quantitites
+    """
+    if B.dimension() == None:
+        return APL_scalar(Fn(B.python()))
+    else:
+        raise (apl_exception("LENGTH ERROR"))
+
 # EOF
