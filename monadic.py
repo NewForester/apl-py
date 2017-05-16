@@ -1,10 +1,9 @@
-#!/usr/bin/python3
 """
     monadic APL functions
 
     WIP - limited set
 
-    WIP - scalar parameters only
+    WIP - extended to handle APL scalars and vectors
 """
 
 import operator
@@ -14,6 +13,7 @@ import mpmath
 
 from system_vars import integerCT
 
+from apl_quantity import monadic2scalar, monadic2vector
 from apl_exception import APL_Exception as apl_exception
 
 # ------------------------------
@@ -176,23 +176,23 @@ def     to_be_implemented (B):
 
 monadic_functions = {
     # Mathematical
-    '+':        identity,
-    '-':        negation,
-    '×':        signum,
-    '÷':        reciprocal,
+    '+':        lambda B: monadic2scalar(identity,B),
+    '-':        lambda B: monadic2scalar(negation,B),
+    '×':        lambda B: monadic2scalar(signum,B),
+    '÷':        lambda B: monadic2scalar(reciprocal,B),
 
-    '⌈':        ceil,
-    '⌊':        floor,
-    '*':        exp,
-    '⍟':        log,
+    '⌈':        lambda B: monadic2scalar(ceil,B),
+    '⌊':        lambda B: monadic2scalar(floor,B),
+    '*':        lambda B: monadic2scalar(exp,B),
+    '⍟':        lambda B: monadic2scalar(log,B),
 
-    '|':        magnitude,
-    '?':        roll,
-    '!':        factorial,
-    '○':        pi,
+    '|':        lambda B: monadic2scalar(magnitude,B),
+    '?':        lambda B: monadic2scalar(roll,B),
+    '!':        lambda B: monadic2scalar(factorial,B),
+    '○':        lambda B: monadic2scalar(pi,B),
 
     # Logical
-    '~':        logical_negation,
+    '~':        lambda B: monadic2scalar(logical_negation,B),
 
 # Mathematical
     '⌹':        to_be_implemented,      # matrix inverse
@@ -212,6 +212,8 @@ monadic_functions = {
     '⍎':        to_be_implemented,      # execute
 # Operators
     };
+
+# ------------------------------
 
 def     monadic_function (symbol):
     """

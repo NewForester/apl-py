@@ -11,7 +11,7 @@
 import  math
 import  operator
 
-from apl_quantity import eval_monadic
+from apl_quantity import eval_monadic, APL_scalar as apl_scalar
 from apl_exception import APL_Exception as apl_exception
 
 # ------------------------------
@@ -27,7 +27,7 @@ class   apl_system_variable(object):
 # ------------------------------
 
 def     equalCT (A,B):
-    return operator.le(math.fabs(A-B),comparisonTolerance.value * max(math.fabs(A), math.fabs(B)))
+    return operator.le(math.fabs(A-B),comparisonTolerance.value.python() * max(math.fabs(A), math.fabs(B)))
 
 # ------------------------------
 
@@ -67,8 +67,8 @@ def     confirm_real (B):
 
 # ------------------------------
 
-indexOrigin =           apl_system_variable(1,      lambda B: eval_monadic(confirm_bool,B))
-comparisonTolerance =   apl_system_variable(1e-13,  lambda B: eval_monadic(confirm_real,B))
+indexOrigin =           apl_system_variable(apl_scalar(1),      lambda B: eval_monadic(confirm_bool,B))
+comparisonTolerance =   apl_system_variable(apl_scalar(1e-13),  lambda B: eval_monadic(confirm_real,B))
 
 system_variables = {
     "IO":       indexOrigin,

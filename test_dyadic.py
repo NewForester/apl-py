@@ -6,7 +6,7 @@
 
     WIP - grows as dyadic.py grows
 
-    WIP - scalar parameters only
+    WIP - scalar parameters (cast to apl_scalar) only
 """
 
 from apl_exception import APL_Exception as apl_exception
@@ -14,6 +14,8 @@ from apl_exception import APL_Exception as apl_exception
 from dyadic import dyadic_function
 
 from apl import print_result
+
+from apl_quantity import APL_scalar as apl_scalar
 
 # ------------------------------
 
@@ -315,7 +317,7 @@ def     dyadic_test (A,symbol,B):
     INVALID TOKEN
     """
     try:
-        print_result(dyadic_function(symbol)(A,B))
+        print_result(dyadic_function(symbol)(apl_scalar(A),apl_scalar(B)))
     except apl_exception as e:
         print (e.message)
 

@@ -49,60 +49,60 @@ def     test_number (expr):
 
 # ------------------------------
 
-#def     test_scalar (expr):
-    #"""
-    #>>> test_scalar('+2')
-    #2
-    #>>> test_scalar('-¯2')
-    #2
-    #>>> test_scalar('×2')
-    #1
-    #>>> test_scalar('÷2')
-    #0.5
-    #>>> test_scalar('+-×÷2')
-    #¯1
+def     test_scalar (expr):
+    """
+    >>> test_scalar('+2')
+    2
+    >>> test_scalar('-¯2')
+    2
+    >>> test_scalar('×2')
+    1
+    >>> test_scalar('÷2')
+    0.5
+    >>> test_scalar('+-×÷2')
+    ¯1
 
-    #>>> test_scalar('1 + 2')
-    #3
-    #>>> test_scalar('1 - 2')
-    #¯1
-    #>>> test_scalar('1 × 2')
-    #2
-    #>>> test_scalar('1 ÷ 2')
-    #0.5
-    #>>> test_scalar('1 + 2 - 3 ÷ 4')
-    #2.25
-    #"""
-    #try:
-        #print_result(evaluate(expr))
-    #except apl_exception as e:
-        #print (e.message)
+    >>> test_scalar('1 + 2')
+    3
+    >>> test_scalar('1 - 2')
+    ¯1
+    >>> test_scalar('1 × 2')
+    2
+    >>> test_scalar('1 ÷ 2')
+    0.5
+    >>> test_scalar('1 + 2 - 3 ÷ 4')
+    2.25
+    """
+    try:
+        print_result(evaluate(expr))
+    except apl_exception as e:
+        print (e.message)
 
 # ------------------------------
 
-#def     test_parentheses (expr):
-    #"""
-    #>>> test_parentheses('(0)')
-    #0
-    #>>> test_parentheses('1 + 2 × 2 + 1')
-    #7
-    #>>> test_parentheses('(1 + 2) × (2 + 1)')
-    #9
-    #>>> test_parentheses('(1 + 2) × 2 + 1')
-    #9
-    #>>> test_parentheses('1 - 2 - 3 - 4')
-    #¯2
-    #>>> test_parentheses('((1 - 2) - 3) - 4')
-    #¯8
-    #>>> test_parentheses('1 - (2 - 3) - 4')
-    #6
-    #>>> test_parentheses('1 - (2 - 3 - 4')
-    #SYNTAX ERROR
-    #"""
-    #try:
-        #print_result(evaluate(expr))
-    #except apl_exception as e:
-        #print (e.message)
+def     test_parentheses (expr):
+    """
+    >>> test_parentheses('(0)')
+    0
+    >>> test_parentheses('1 + 2 × 2 + 1')
+    7
+    >>> test_parentheses('(1 + 2) × (2 + 1)')
+    9
+    >>> test_parentheses('(1 + 2) × 2 + 1')
+    9
+    >>> test_parentheses('1 - 2 - 3 - 4')
+    ¯2
+    >>> test_parentheses('((1 - 2) - 3) - 4')
+    ¯8
+    >>> test_parentheses('1 - (2 - 3) - 4')
+    6
+    >>> test_parentheses('1 - (2 - 3 - 4')
+    SYNTAX ERROR
+    """
+    try:
+        print_result(evaluate(expr))
+    except apl_exception as e:
+        print (e.message)
 
 # ------------------------------
 
@@ -196,13 +196,13 @@ def     test_name (expr):
 
     >>> test_name('A')
     2.5
+    >>> test_name('A-1')
+    1.5
+    >>> test_name('1-A')
+    ¯1.5
+    >>> test_name('÷A')
+    0.4
     """
-    #>>> test_name('A-1')
-    #1.5
-    #>>> test_name('1-A')
-    #¯1.5
-    #>>> test_name('÷A')
-    #0.4
     try:
         print_result(evaluate(expr))
     except apl_exception as e:
@@ -216,6 +216,10 @@ def     test_parse_vector (expr):
     1 2 3
     >>> test_parse_vector('¯1 ¯2 ¯3')
     ¯1 ¯2 ¯3
+    >>> test_parse_vector('0.5 (1.5+2.5) 3.5')
+    0.5 4 3.5
+    >>> test_parse_vector('0.5 (1.5+2.5) 3.5')
+    0.5 4 3.5
 
     >>> test_parse_vector('1 2 3 4')
     1 2 3 4
@@ -226,10 +230,27 @@ def     test_parse_vector (expr):
     >>> test_parse_vector('1 (2 3 4)')
     1 (2 3 4)
 
+    >>> test_parse_vector('1 2 + 3 4')
+    4 6
+    >>> test_parse_vector('(1 2) + 3 4')
+    4 6
+    >>> test_parse_vector('1 2 + (3 4)')
+    4 6
+    >>> test_parse_vector('(1 2) + (3 4)')
+    4 6
+    >>> test_parse_vector('1 (2 + 3) 4')
+    1 5 4
+    >>> test_parse_vector('1 2 + 3')
+    4 5
+    >>> test_parse_vector('1 + 2 3')
+    3 4
+
     >>> test_parse_vector('A ← 10')
     10
     >>> test_parse_vector('1 A 3')
     1 10 3
+    >>> test_parse_vector('1 (A÷2) 3')
+    1 5 3
     >>> test_parse_vector('1 ⎕IO 3')
     1 1 3
 
@@ -238,10 +259,6 @@ def     test_parse_vector (expr):
     >>> test_parse_vector('1 A 3')
     1 (10 20) 3
     """
-    #>>> test_parse_vector('0.5 (1.5+2.5) 3.5')
-    #0.5 4 3.5
-    #>>> test_parse_vector('1 (A÷2) 3')
-    #1 5 3
     try:
         print_result(evaluate(expr))
     except apl_exception as e:

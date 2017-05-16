@@ -1,10 +1,9 @@
-#!/usr/bin/python3
 """
     dyadic APL functions
 
     WIP - limited set
 
-    WIP - scalar parameters only
+    WIP - extended to handle APL scalars and vectors
 """
 
 import operator
@@ -14,6 +13,7 @@ import mpmath
 
 from system_vars import confirm_bool, confirm_int, equalCT, integerCT
 
+from apl_quantity import dyadic2scalar, dyadic2vector
 from apl_exception import APL_Exception as apl_exception
 
 # --------------
@@ -166,7 +166,7 @@ def     deal (A,B):
     B = confirm_int(B)
 
     try:
-        return tuple(random.sample(range(1,B+1),A))
+        return random.sample(range(1,B+1),A)
     except ValueError:
         raise (apl_exception("DOMAIN ERROR"))
 
@@ -356,33 +356,33 @@ def     to_be_implemented (A,B):
 
 dyadic_functions = {
     # Mathematical
-    '+':        add,
-    '-':        subtract,
-    '×':        multiply,
-    '÷':        divide,
+    '+':        lambda A,B: dyadic2scalar(add,A,B),
+    '-':        lambda A,B: dyadic2scalar(subtract,A,B),
+    '×':        lambda A,B: dyadic2scalar(multiply,A,B),
+    '÷':        lambda A,B: dyadic2scalar(divide,A,B),
 
-    '⌈':        maximum,
-    '⌊':        minimum,
-    '*':        exp,
-    '⍟':        log,
+    '⌈':        lambda A,B: dyadic2scalar(maximum,A,B),
+    '⌊':        lambda A,B: dyadic2scalar(minimum,A,B),
+    '*':        lambda A,B: dyadic2scalar(exp,A,B),
+    '⍟':        lambda A,B: dyadic2scalar(log,A,B),
 
-    '|':        residue,
-    '?':        deal,
-    '!':        combinations,
-    '○':        trigonometric,
+    '|':        lambda A,B: dyadic2scalar(residue,A,B),
+    '?':        lambda A,B: dyadic2vector(deal,A,B),
+    '!':        lambda A,B: dyadic2scalar(combinations,A,B),
+    '○':        lambda A,B: dyadic2scalar(trigonometric,A,B),
 
     # Logical / Comparison
-    '∨':        or_gcd,
-    '∧':        and_lcm,
-    '⍱':        nor,
-    '⍲':        nand,
+    '∨':        lambda A,B: dyadic2scalar(or_gcd,A,B),
+    '∧':        lambda A,B: dyadic2scalar(and_lcm,A,B),
+    '⍱':        lambda A,B: dyadic2scalar(nor,A,B),
+    '⍲':        lambda A,B: dyadic2scalar(nand,A,B),
 
-    '<':        lt,
-    '≤':        le,
-    '=':        eq,
-    '≥':        ge,
-    '>':        gt,
-    '≠':        ne,
+    '<':        lambda A,B: dyadic2scalar(lt,A,B),
+    '≤':        lambda A,B: dyadic2scalar(le,A,B),
+    '=':        lambda A,B: dyadic2scalar(eq,A,B),
+    '≥':        lambda A,B: dyadic2scalar(ge,A,B),
+    '>':        lambda A,B: dyadic2scalar(gt,A,B),
+    '≠':        lambda A,B: dyadic2scalar(ne,A,B),
                 # one more
 
 # Mathematical
@@ -414,6 +414,8 @@ dyadic_functions = {
     '¨':        to_be_implemented,      # diaeresis
                                         # a dozen more
 };
+
+# ------------------------------
 
 def     dyadic_function (symbol):
     """
