@@ -8,6 +8,17 @@ from apl_exception import APL_Exception as apl_exception
 
 # ------------------------------
 
+def _format_element (value):
+    """
+    format a single element of an APL quantity
+    """
+    if isinstance(value,APL_quantity):
+        return '({0})'.format(value)
+    else:
+        return '{0:.10g}'.format(value)
+
+# ------------------------------
+
 class APL_quantity (object):
     """
     trivial class that holds an APL quantity
@@ -21,6 +32,12 @@ class APL_quantity (object):
             return APL_scalar_iter(self.value)
         else:
             return self.value.__iter__()
+
+    def __str__(self):
+        if self.dim is None:
+            return _format_element(self.value)
+        else:
+            return ' '.join(map(_format_element, self.value))
 
     def python(self):
         return self.value

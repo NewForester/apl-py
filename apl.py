@@ -24,43 +24,11 @@ from apl_exception import APL_Exception as apl_exception, apl_quit, apl_exit
 
 # ------------------------------
 
-def     format_scalar (scalar):
-    """
-    format a scalar number for printing
-    """
-    try:
-        if type(scalar) == apl_scalar:
-            return '{0:.10g}'.format(scalar.python()).replace('-','¯')
-        else:
-            return '{0:.10g}'.format(scalar).replace('-','¯')
-    except Exception as e:
-        print (scalar)
-        raise(e)
-
-# ------------------------------
-
-def     format_result (result):
-    """
-    print the result of evaluating an APL expression
-    """
-    if type(result) == apl_vector:
-        return '(' + ' '.join(map(format_result, result)) + ')'
-    elif result is not None:
-        return format_scalar(result)
-
-# ------------------------------
-
 def     print_result (result,prefix=""):
     """
     print the result of evaluating an APL expression
     """
-    if prefix:
-        print(prefix,end=' ')
-
-    if type(result) != apl_scalar:
-        print (' '.join(map(format_result, result)))
-    elif result is not None:
-        print (format_scalar(result))
+    print("{0}{1}".format(prefix,result).replace('-','¯'))
 
 # ------------------------------
 
