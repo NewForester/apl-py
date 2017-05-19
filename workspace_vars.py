@@ -6,7 +6,7 @@
     This is an initial version:  there is much still to be done
 """
 
-from apl_exception import APL_Exception as apl_exception
+from apl_error import apl_error
 
 # ------------------------------
 
@@ -38,7 +38,7 @@ def     workspace_variable (name,value=None):
             apl_var.value = value
     except KeyError:
         if value is None:
-            raise (apl_exception("UNKNOWN VARIABLE"))
+            apl_error("UNKNOWN VARIABLE")
 
         apl_var = apl_variable(value)
 

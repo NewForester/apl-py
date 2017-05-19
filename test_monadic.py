@@ -9,13 +9,12 @@
     WIP - scalar parameters (cast to apl_scalar) only
 """
 
-from apl_exception import APL_Exception as apl_exception
-
 from monadic import monadic_function
 
 from apl import print_result
 
 from apl_quantity import APL_scalar as apl_scalar
+from apl_error import APL_exception as apl_exception
 
 # ------------------------------
 
@@ -137,8 +136,8 @@ def     monadic_test (symbol,B):
     """
     try:
         print_result(monadic_function(symbol)(apl_scalar(B)))
-    except apl_exception as e:
-        print (e.message)
+    except apl_exception as error:
+        print(error.message)
 
 if __name__ == "__main__":
     import doctest

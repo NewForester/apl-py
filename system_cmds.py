@@ -6,7 +6,7 @@
     This is an initial version:  there is much still to be done
 """
 
-from apl_exception import APL_Exception as apl_exception, apl_exit
+from apl_error import apl_error, apl_exit
 
 # ------------------------------
 
@@ -35,6 +35,6 @@ def     system_command (name,arguments):
     try:
         system_commands[name.upper()](arguments.lstrip())
     except KeyError:
-        raise (apl_exception("UNKNOWN SYSTEM COMMAND", name))
+        apl_error("UNKNOWN SYSTEM COMMAND", name)
 
 # EOF

@@ -14,7 +14,7 @@ import mpmath
 from system_vars import confirm_bool, confirm_int, equalCT, integerCT
 
 from apl_quantity import dyadic2scalar, dyadic2vector
-from apl_exception import APL_Exception as apl_exception
+from apl_error import apl_error
 
 # --------------
 
@@ -83,7 +83,7 @@ def     divide (A,B):
     try:
         return operator.truediv(A,B)
     except:
-        raise (apl_exception("DOMAIN ERROR"))
+        apl_error("DOMAIN ERROR")
 
 def     maximum (A,B):
     """
@@ -110,7 +110,7 @@ def     exp (A,B):
     try:
         return math.pow(A,B)
     except ValueError:
-        raise (apl_exception("DOMAIN ERROR"))
+        apl_error("DOMAIN ERROR")
 
 def     log (A,B):
     """
@@ -125,7 +125,7 @@ def     log (A,B):
 
         return math.log(B,A)
     except ValueError:
-        raise (apl_exception("DOMAIN ERROR"))
+        apl_error("DOMAIN ERROR")
 
 def     residue (A,B):
     """
@@ -168,7 +168,7 @@ def     deal (A,B):
     try:
         return random.sample(range(1,B+1),A)
     except ValueError:
-        raise (apl_exception("DOMAIN ERROR"))
+        apl_error("DOMAIN ERROR")
 
 def     combinations (A,B):
     """
@@ -187,7 +187,7 @@ def     combinations (A,B):
         else:
             return float(mpmath.binomial(B,A))
     except ValueError:
-        raise (apl_exception("DOMAIN ERROR"))
+        apl_error("DOMAIN ERROR")
 
 def     trigonometric (A,B):
     """
@@ -203,7 +203,7 @@ def     trigonometric (A,B):
             else:
                 return function(B)
 
-    raise (apl_exception("DOMAIN ERROR"))
+    apl_error("DOMAIN ERROR")
 
 # ------------------------------
 
@@ -350,7 +350,7 @@ def     to_be_implemented (A,B):
 
     throws FUNCTION NOT YET IMPLEMENTED
     """
-    raise (apl_exception("FUNCTION NOT YET IMPLEMENTED"))
+    apl_error("FUNCTION NOT YET IMPLEMENTED")
 
 # ------------------------------
 
@@ -426,6 +426,6 @@ def     dyadic_function (symbol):
     try:
         return dyadic_functions[symbol[0]]
     except KeyError:
-        raise (apl_exception("INVALID TOKEN", symbol))
+        apl_error("INVALID TOKEN", symbol)
 
 # EOF

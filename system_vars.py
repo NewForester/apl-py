@@ -12,7 +12,7 @@ import  math
 import  operator
 
 from apl_quantity import eval_monadic, APL_scalar as apl_scalar
-from apl_exception import APL_Exception as apl_exception
+from apl_error import apl_error
 
 # ------------------------------
 
@@ -48,7 +48,7 @@ def     confirm_bool (B):
     if B == 0:  return 0
     if B == 1:  return 1
 
-    raise (apl_exception("DOMAIN ERROR"))
+    apl_error("DOMAIN ERROR")
 
 # ------------------------------
 
@@ -56,7 +56,7 @@ def     confirm_int (B):
     B = integerCT(B)
 
     if not type(B) is int:
-        raise (apl_exception("DOMAIN ERROR"))
+        apl_error("DOMAIN ERROR")
 
     return B
 
@@ -88,7 +88,7 @@ def     system_variable (name,value=None):
     try:
         sys_var = system_variables[name.upper()]
     except KeyError:
-        raise (apl_exception("UNKNOWN SYSTEM VARIABLE", name))
+        apl_error("UNKNOWN SYSTEM VARIABLE", name)
 
     if not value is None:
         sys_var.value = sys_var.confirm(value)

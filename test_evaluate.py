@@ -11,11 +11,11 @@
       - strings in apostrophes or quotes
 """
 
-from apl_exception import APL_Exception as apl_exception
-
 from evaluate import evaluate
 
 from apl import print_result
+
+from apl_error import APL_exception as apl_exception
 
 # ------------------------------
 
@@ -44,8 +44,8 @@ def     test_number (expr):
     """
     try:
         print_result(evaluate(expr))
-    except apl_exception as e:
-        print (e.message)
+    except apl_exception as error:
+        print (error.message)
 
 # ------------------------------
 
@@ -75,8 +75,8 @@ def     test_scalar (expr):
     """
     try:
         print_result(evaluate(expr))
-    except apl_exception as e:
-        print (e.message)
+    except apl_exception as error:
+        print (error.message)
 
 # ------------------------------
 
@@ -101,8 +101,8 @@ def     test_parentheses (expr):
     """
     try:
         print_result(evaluate(expr))
-    except apl_exception as e:
-        print (e.message)
+    except apl_exception as error:
+        print (error.message)
 
 # ------------------------------
 
@@ -132,8 +132,8 @@ def     test_string (expr):
     """
     try:
         print_result(evaluate(expr))
-    except apl_exception as e:
-        print (e.message)
+    except apl_exception as error:
+        print (error.message)
 
 # ------------------------------
 
@@ -161,8 +161,8 @@ def     test_sys_vars (expr):
     """
     try:
         print_result(evaluate(expr))
-    except apl_exception as e:
-        print (e.message)
+    except apl_exception as error:
+        print (error.message)
 
 # ------------------------------
 
@@ -173,8 +173,8 @@ def     test_sys_cmds (expr):
     """
     try:
         return evaluate(expr)
-    except apl_exception as e:
-        print (e.message)
+    except apl_exception as error:
+        print (error.message)
 
 # ------------------------------
 
@@ -205,8 +205,8 @@ def     test_name (expr):
     """
     try:
         print_result(evaluate(expr))
-    except apl_exception as e:
-        print (e.message)
+    except apl_exception as error:
+        print (error.message)
 
 # ------------------------------
 
@@ -261,8 +261,8 @@ def     test_parse_vector (expr):
     """
     try:
         print_result(evaluate(expr))
-    except apl_exception as e:
-        print (e.message)
+    except apl_exception as error:
+        print (error.message)
 
 # ------------------------------
 

@@ -14,7 +14,7 @@ import mpmath
 from system_vars import integerCT
 
 from apl_quantity import monadic2scalar, monadic2vector
-from apl_exception import APL_Exception as apl_exception
+from apl_error import apl_error
 
 # ------------------------------
 
@@ -56,7 +56,7 @@ def     reciprocal (B):
     try:
         return operator.truediv(1.0,B)
     except:
-        raise (apl_exception("DOMAIN ERROR"))
+        apl_error("DOMAIN ERROR")
 
 def     ceil (B):
     """
@@ -99,7 +99,7 @@ def     log (B):
     try:
         return math.log(B)
     except ValueError:
-        raise (apl_exception("DOMAIN ERROR"))
+        apl_error("DOMAIN ERROR")
 
 def     magnitude (B):
     """
@@ -119,7 +119,7 @@ def     roll (B):
     try:
         return random.randint(1,B)
     except ValueError:
-        raise (apl_exception("DOMAIN ERROR"))
+        apl_error("DOMAIN ERROR")
 
 def     factorial (B):
     """
@@ -135,7 +135,7 @@ def     factorial (B):
         else:
             return float(mpmath.factorial(B))
     except ValueError:
-        raise (apl_exception("DOMAIN ERROR"))
+        apl_error("DOMAIN ERROR")
 
 def     pi (B):
     """
@@ -160,7 +160,7 @@ def     logical_negation (B):
     if B == 1:  return 0
     if B == 0:  return 1
 
-    raise (apl_exception("DOMAIN ERROR"))
+    apl_error("DOMAIN ERROR")
 
 # ------------------------------
 
@@ -170,7 +170,7 @@ def     to_be_implemented (B):
 
     throws FUNCTION NOT YET IMPLEMENTED
     """
-    raise (apl_exception("FUNCTION NOT YET IMPLEMENTED"))
+    apl_error("FUNCTION NOT YET IMPLEMENTED")
 
 # ------------------------------
 
@@ -224,6 +224,6 @@ def     monadic_function (symbol):
     try:
         return monadic_functions[symbol[0]]
     except KeyError:
-        raise (apl_exception("INVALID TOKEN", symbol))
+        apl_error("INVALID TOKEN", symbol)
 
 # EOF

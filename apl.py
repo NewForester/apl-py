@@ -20,28 +20,31 @@ import readline
 from evaluate import evaluate
 
 from apl_quantity import APL_scalar as apl_scalar, APL_vector as apl_vector
-from apl_exception import APL_Exception as apl_exception, apl_quit, apl_exit
+from apl_error import APL_exception as apl_exception, apl_exit, apl_quit
 
 # ------------------------------
 
 def     print_result (result,prefix=""):
     """
-    print the result of evaluating an APL expression
+    print the result when APL expression evaluation succeeds
     """
     print("{0}{1}".format(prefix,result).replace('-','¯'))
 
 # ------------------------------
 
-def     print_error (e,line,prompt=""):
+def     print_error (error,expr,prompt=""):
     """
     print the error response when APL expression evaluation fails
     """
-    print(' '*(len(prompt)+len(line)-len(e.line.lstrip())),end="^\n")
-    print(e.message)
+    print(' '*(len(prompt)+len(expr)-len(error.expr.lstrip())),end="^\n")
+    print(error.message)
 
 # ------------------------------
 
-def     strip_comment (line):
+def     _strip_comment (line):
+    """
+    strip end-of-line comment
+    """
     pos = line.find('⍝')
 
     if pos != -1:
@@ -53,16 +56,17 @@ def     strip_comment (line):
 
 def     read_evaluate_print (prompt):
     """
-    Read input, evaluate it and output the result
+    read input, evaluate it and print the result
     """
     while True:
-        line = strip_comment(input(prompt))
+        line = input(prompt)
 
-        if line:
+        expr = _strip_comment(line)
+        if expr:
             try:
-                print_result(evaluate(line),"⎕")
+                print_result(evaluate(expr),"⎕")
             except apl_exception as e:
-                print_error (e,line,prompt)
+                print_error (e,expr,prompt)
 
 # ------------------------------
 
@@ -75,19 +79,20 @@ if __name__ == '__main__':
         except EOFError:
             apl_exit(0,"")
         except KeyboardInterrupt:
-            apl_quit(2)
+            apl_quit(2,"^C")
     else:
         # evaluate parameters as an APL expresson
 
-        line = strip_comment(' '.join(sys.argv[1:]))
+        line = ' '.join(sys.argv[1:])
 
-        if line:
+        expr = _strip_comment(line)
+        if expr:
             try:
-                print_result(evaluate(line))
+                print_result(evaluate(expr))
                 apl_exit(0)
-            except apl_exception as e:
+            except apl_exception as error:
                 print(line)
-                print_error(e,line)
+                print_error(error,expr)
                 apl_exit(1)
 
 # EOF

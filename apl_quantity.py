@@ -4,7 +4,7 @@
     UNDER DEVELOPMENT
 """
 
-from apl_exception import APL_Exception as apl_exception
+from apl_error import apl_error
 
 # ------------------------------
 
@@ -101,7 +101,7 @@ def eval_monadic(Fn,B):
     if B.dimension() == None:
         return APL_scalar(Fn(B.python()))
     else:
-        raise (apl_exception("LENGTH ERROR"))
+        apl_error("LENGTH ERROR")
 
 # ------------------------------
 
@@ -145,7 +145,7 @@ def dyadic2scalar (Fn,A,B):
     else:
         if bDim is not None:
             if aDim != bDim:
-                raise (apl_exception("LENGTH ERROR"))
+                apl_error("LENGTH ERROR")
         dim = aDim
 
     return APL_quantity(map(Fn,A,B),dim)

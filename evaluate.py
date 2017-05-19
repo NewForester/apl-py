@@ -21,7 +21,7 @@ from system_cmds import system_command
 from workspace_vars import workspace_variable
 
 from apl_quantity import APL_quantity as apl_value, APL_scalar as apl_scalar, APL_vector as apl_vector
-from apl_exception import APL_Exception as apl_exception
+from apl_error import APL_exception as apl_exception, apl_error
 
 # ------------------------------
 
@@ -41,7 +41,7 @@ def     expression_within_parentheses (expr,opos,cpos):
     """
     pos = expr[cpos + 1:].find(')')
     if pos == -1:
-        raise (apl_exception("SYNTAX ERROR"))
+        apl_error("SYNTAX ERROR")
     cpos += pos + 1
 
     pos = expr[opos + 1:cpos].find('(')
@@ -180,7 +180,7 @@ def     parse(expr):
             value, consumed = evaluate_system_variable(expr)
         elif leader == ')':
             if len(lhs):
-                raise (apl_exception("SYNTAX ERROR"))
+                apl_error("SYNTAX ERROR")
             value, consumed = handle_system_command(expr)
         elif leader == "'":
             value, consumed = extract_string(expr,leader)
@@ -231,7 +231,7 @@ def     evaluate(expression):
         expr = expression.lstrip()
 
         if not expr:
-            raise (apl_exception("SYNTAX ERROR"))
+            apl_error("SYNTAX ERROR")
 
         lhs, expr = parse(expr)
 
@@ -251,9 +251,9 @@ def     evaluate(expression):
             rhs = evaluate(expr[1:])
             return function(lhs,rhs)
 
-    except apl_exception as e:
-        if not e.line:
-           e.line = expr
-        raise (e)
+    except apl_exception as error:
+        if not error.expr:
+           error.expr = expr
+        raise (error)
 
 # EOF
