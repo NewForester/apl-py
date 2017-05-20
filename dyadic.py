@@ -360,59 +360,74 @@ dyadic_functions = {
     '-':        lambda A,B: dyadic2scalar(subtract,A,B),
     '×':        lambda A,B: dyadic2scalar(multiply,A,B),
     '÷':        lambda A,B: dyadic2scalar(divide,A,B),
-
     '⌈':        lambda A,B: dyadic2scalar(maximum,A,B),
     '⌊':        lambda A,B: dyadic2scalar(minimum,A,B),
+    '|':        lambda A,B: dyadic2scalar(residue,A,B),
+
+    # Algebraic
     '*':        lambda A,B: dyadic2scalar(exp,A,B),
     '⍟':        lambda A,B: dyadic2scalar(log,A,B),
-
-    '|':        lambda A,B: dyadic2scalar(residue,A,B),
     '?':        lambda A,B: dyadic2vector(deal,A,B),
     '!':        lambda A,B: dyadic2scalar(combinations,A,B),
     '○':        lambda A,B: dyadic2scalar(trigonometric,A,B),
+    '⌹':        to_be_implemented,      # matrix divide
 
-    # Logical / Comparison
+    # Logical
     '∨':        lambda A,B: dyadic2scalar(or_gcd,A,B),
     '∧':        lambda A,B: dyadic2scalar(and_lcm,A,B),
     '⍱':        lambda A,B: dyadic2scalar(nor,A,B),
     '⍲':        lambda A,B: dyadic2scalar(nand,A,B),
 
+    # Comparison
     '<':        lambda A,B: dyadic2scalar(lt,A,B),
     '≤':        lambda A,B: dyadic2scalar(le,A,B),
     '=':        lambda A,B: dyadic2scalar(eq,A,B),
     '≥':        lambda A,B: dyadic2scalar(ge,A,B),
     '>':        lambda A,B: dyadic2scalar(gt,A,B),
     '≠':        lambda A,B: dyadic2scalar(ne,A,B),
-                # one more
+    '≡':        to_be_implemented,      # match (return 0/1 irrespective of rank etc)
 
-# Mathematical
-    '⊥':        to_be_implemented,      # decode
-    '⊤':        to_be_implemented,      # encode
-    '⌹':        to_be_implemented,      # matrix divide
-# Structural
-    '⍴':        to_be_implemented,      # reshape
-    ',':        to_be_implemented,      # catenation
-                                        # another ?
+# Structural (aka manipulative)
+    '⍴':        to_be_implemented,      # (rho) reshape
+    ',':        to_be_implemented,      # (comma) concatenation
+    '⍪':        to_be_implemented,      #
     '⌽':        to_be_implemented,      # rotation, last axis
     '⊖':        to_be_implemented,      # rotation, first axis
     '⍉':        to_be_implemented,      # transpose
-    '↑':        to_be_implemented,      # take
-    '↓':        to_be_implemented,      # drop
-                                        # three more
-# Seletion and Set Operations
+    '⊂':        to_be_implemented,      # (enclose) - creates an array of vectors (?!?)
+    '⊃':        to_be_implemented,      # (disclose) = picks from an array (?!?)
+
+# Selection and Set Operations
     '\\':       to_be_implemented,      # expansion
     '/':        to_be_implemented,      # compression
-                                        # nine more
-# Search and Sort
-    '⍳':        to_be_implemented,      # index
-    '∈':        to_be_implemented,      # membership
-                                        # three more
-# Miscellaneous
-    '⍕':        to_be_implemented,      # format
-                                        # a dozen more
-# Operators
-    '¨':        to_be_implemented,      # diaeresis
-                                        # a dozen more
+    '↑':        to_be_implemented,      # take
+    '↓':        to_be_implemented,      # drop
+    '⌷':        to_be_implemented,      # index
+    '~':        to_be_implemented,      # without - removes items
+    '⌿':        to_be_implemented,      #
+    '⍀':        to_be_implemented,      #
+    '∪':        to_be_implemented,      #
+    '∩':        to_be_implemented,      #
+    '⊣':        to_be_implemented,      #
+    '⊢':        to_be_implemented,      #
+
+# Search
+    '⍳':        to_be_implemented,      # index of B in A
+    '∈':        to_be_implemented,      # membership ... same as ?
+    '∊':        to_be_implemented,      # membership - is A in B (also characters) - return a boolean
+    '⍷':        to_be_implemented,      # find (look for a substring)
+
+# Sorting
+    '⍋':        to_be_implemented,      # Sort ascending with specified collating sequence
+    '⍒':        to_be_implemented,      # Sort descending with specified collating sequence
+
+# Encode/decode
+    '⊤':        to_be_implemented,      # (encode) Convert to a new number system
+    '⊥':        to_be_implemented,      # (decode) Convert back to units
+
+# Formatting
+    '⍕':        to_be_implemented,      # Format data for display
+    '⍺':        to_be_implemented,      # Use picture to format data for display
 };
 
 # ------------------------------

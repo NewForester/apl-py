@@ -180,37 +180,44 @@ monadic_functions = {
     '-':        lambda B: monadic2scalar(negation,B),
     '×':        lambda B: monadic2scalar(signum,B),
     '÷':        lambda B: monadic2scalar(reciprocal,B),
-
     '⌈':        lambda B: monadic2scalar(ceil,B),
     '⌊':        lambda B: monadic2scalar(floor,B),
+    '|':        lambda B: monadic2scalar(magnitude,B),
+
+    # Algebraic
     '*':        lambda B: monadic2scalar(exp,B),
     '⍟':        lambda B: monadic2scalar(log,B),
-
-    '|':        lambda B: monadic2scalar(magnitude,B),
     '?':        lambda B: monadic2scalar(roll,B),
     '!':        lambda B: monadic2scalar(factorial,B),
     '○':        lambda B: monadic2scalar(pi,B),
+    '⌹':        to_be_implemented,      # matrix inverse
 
     # Logical
     '~':        lambda B: monadic2scalar(logical_negation,B),
 
-# Mathematical
-    '⌹':        to_be_implemented,      # matrix inverse
-# Structural
-    '⍴':        to_be_implemented,      # shape
-    ',':        to_be_implemented,      # reshape into a vector
+# Structural (aka manipulative)
+    '⍳':        to_be_implemented,      # index generator
+    '≡':        to_be_implemented,      # depth - reports on nesting
+    '⍴':        to_be_implemented,      # shape - reports dimensions
+    ',':        to_be_implemented,      # unravel - reshape into a vector
+    '∊':        to_be_implemented,      # enlist - ditto but also nested arrays
     '⌽':        to_be_implemented,      # reversal, last axis
     '⊖':        to_be_implemented,      # reversal, first axis
     '⍉':        to_be_implemented,      # transpose
-# Seletion and Set Operations
-# Search and Sort
-    '⍳':        to_be_implemented,      # index generator
-    '⍋':        to_be_implemented,      # grade up
-    '⍒':        to_be_implemented,      # grade down
+    '⊂':        to_be_implemented,      # (enclose) - turn array into nested scalar (?!?)
+    '⊃':        to_be_implemented,      # (disclose) - the inverse
+
+# Selection
+    '↑':        to_be_implemented,      # take - first element of an array
+
+# Sort
+    '⍋':        to_be_implemented,      # grade up (ascending sort indicies)
+    '⍒':        to_be_implemented,      # grade down (descending sort indicies)
+
 # Miscellaneous
     '⍕':        to_be_implemented,      # monadic format
     '⍎':        to_be_implemented,      # execute
-# Operators
+    '⍬':        to_be_implemented,      # zilde - empty numeric vector - same as ⍳0 or 0⍴0
     };
 
 # ------------------------------
