@@ -1,9 +1,15 @@
 """
     dyadic APL functions
 
-    WIP - limited set
+    WIP - This module supports mixed scalar/vector expressions.  Arrays are not supported.
 
-    WIP - extended to handle APL scalars and vectors
+    The base functions are private Python functions.  They take two and return one Python number.
+
+    Here a Python number is typically float:  complex numbers are not supported.
+
+    Some functions may raise the APL 'DOMAIN ERROR' but none should raise a Python exception.
+
+    WIP - Many base functions still to implement.
 """
 
 import operator
@@ -48,42 +54,42 @@ trigonometric_functions = (
 
 # --------------
 
-def     add (A,B):
+def     _add (A,B):
     """
     A plus B
-
-    scalar arguments only
     """
     return operator.add(A,B)
 
-def     subtract (A,B):
+# --------------
+
+def     _subtract (A,B):
     """
     A minus B
-
-    scalar arguments only
     """
     return operator.sub(A,B)
 
-def     multiply (A,B):
-    """
-    A multiplied by B
+# --------------
 
-    scalar arguments only
+def     _multiply (A,B):
+    """
+    A times B
     """
     return operator.mul(A,B)
 
-def     divide (A,B):
+# --------------
+
+def     _divide (A,B):
     """
-    A divided by B
-
-    scalar arguments only
-
-    throws RANGE ERROR (B == 0)
+    A divided by B - may raise DOMAIN ERROR
     """
     try:
         return operator.truediv(A,B)
     except:
+        if equalCT(A,0) and equalCT(B,0):   return 1
+
         apl_error("DOMAIN ERROR")
+
+# --------------
 
 def     maximum (A,B):
     """
@@ -348,7 +354,7 @@ def     to_be_implemented (A,B):
     """
     placeholder for functions not yet implemented
 
-    throws FUNCTION NOT YET IMPLEMENTED
+    raises FUNCTION NOT YET IMPLEMENTED
     """
     apl_error("FUNCTION NOT YET IMPLEMENTED")
 
@@ -356,10 +362,10 @@ def     to_be_implemented (A,B):
 
 dyadic_functions = {
     # Mathematical
-    '+':        lambda A,B: dyadic2scalar(add,A,B),
-    '-':        lambda A,B: dyadic2scalar(subtract,A,B),
-    '×':        lambda A,B: dyadic2scalar(multiply,A,B),
-    '÷':        lambda A,B: dyadic2scalar(divide,A,B),
+    '+':        lambda A,B: dyadic2scalar(_add,A,B),
+    '-':        lambda A,B: dyadic2scalar(_subtract,A,B),
+    '×':        lambda A,B: dyadic2scalar(_multiply,A,B),
+    '÷':        lambda A,B: dyadic2scalar(_divide,A,B),
     '⌈':        lambda A,B: dyadic2scalar(maximum,A,B),
     '⌊':        lambda A,B: dyadic2scalar(minimum,A,B),
     '|':        lambda A,B: dyadic2scalar(residue,A,B),
@@ -436,7 +442,7 @@ def     dyadic_function (symbol):
     """
     return the dyadic function given its APL symbol
 
-    throws INVALID TOKEN if the symbol is not recognised
+    raises INVALID TOKEN if the symbol is not recognised
     """
     try:
         return dyadic_functions[symbol[0]]

@@ -13,9 +13,13 @@ def _format_element (value):
     format a single element of an APL quantity
     """
     if isinstance(value,APL_quantity):
-        return '({0})'.format(value)
+        string = '({0})'.format(value)
     else:
-        return '{0:.10g}'.format(value)
+        string = '{0:.10g}'.format(value)
+
+    if string == '-0':  return '0'
+
+    return string
 
 # ------------------------------
 

@@ -1,53 +1,119 @@
 #!/usr/bin/python3
 """
-    Unit test for monadic.py - doctest style
+    doctest style unit tests for monadic.py
 
-    There are a handful of tests for each monadic APL function.
+    Each test passes a string to the evaluate function.
 
-    WIP - grows as monadic.py grows
+    Each string represnts an APL expression involving a monadic function.
 
-    WIP - scalar parameters (cast to apl_scalar) only
+    Many of these expressions exercise the vector calculator.
+
+    WIP - grows as monadic.py grows.
 """
 
-from monadic import monadic_function
+from evaluate import evaluate
 
 from apl import print_result
 
-from apl_quantity import APL_scalar as apl_scalar
 from apl_error import APL_exception as apl_exception
+
+# ------------------------------
+
+def     test (expression):
+    """
+    test both positive and negative outcomes
+    """
+    try:
+        print_result(evaluate(expression))
+    except apl_exception as error:
+        print(error.message)
+
+# ------------------------------
+
+def     aardvark ():
+    """
+    so named to ensure it is run first
+
+    >>> test('P ← 0 0.5 1 2')
+    0 0.5 1 2
+    >>> test('N ← ¯0 ¯0.5 ¯1 ¯2')
+    0 ¯0.5 ¯1 ¯2
+
+    >>> test('PD ← 0.25 0.5 1 2')
+    0.25 0.5 1 2
+    >>> test('ND ← ¯0.25 ¯0.5 ¯1 ¯2')
+    ¯0.25 ¯0.5 ¯1 ¯2
+    """
+    pass
+
+# ------------------------------
+
+def     monadic_plus ():
+    """
+    >>> test('+ 0')
+    0
+
+    >>> test('+ P')
+    0 0.5 1 2
+    >>> test('+ N')
+    0 ¯0.5 ¯1 ¯2
+    """
+    pass
+
+# --------------
+
+def     monadic_minus ():
+    """
+    >>> test('- 0')
+    0
+
+    >>> test('- P')
+    0 ¯0.5 ¯1 ¯2
+    >>> test('- N')
+    0 0.5 1 2
+    """
+    pass
+
+# --------------
+
+def     monadic_times ():
+    """
+    >>> test('× 0')
+    0
+
+    >>> test('× P')
+    0 1 1 1
+    >>> test('× N')
+    0 ¯1 ¯1 ¯1
+    """
+    pass
+
+# --------------
+
+def     monadic_divide ():
+    """
+    >>> test('÷ 0')
+    DOMAIN ERROR
+    >>> test('÷ 1')
+    1
+
+    >>> test('÷ PD')
+    4 2 1 0.5
+    >>> test('÷ ND')
+    ¯4 ¯2 ¯1 ¯0.5
+    """
+    pass
+
+# ------------------------------
+
+from monadic import monadic_function
+
+from apl_quantity import APL_scalar as apl_scalar
 
 # ------------------------------
 
 def     monadic_test (symbol,B):
     """
-    >>> monadic_test ('+',1)
-    1
-    >>> monadic_test ('+',0)
-    0
-    >>> monadic_test ('+',-1)
-    ¯1
-
-    >>> monadic_test ('-',1)
-    ¯1
-    >>> monadic_test ('-',0)
-    0
-    >>> monadic_test ('-',-1)
-    1
-
-    >>> monadic_test ('×',1)
-    1
-    >>> monadic_test ('×',0)
-    0
-    >>> monadic_test ('×',-1)
-    ¯1
-
-    >>> monadic_test ('÷',1)
-    1
-    >>> monadic_test ('÷',0)
-    DOMAIN ERROR
-    >>> monadic_test ('÷',-1)
-    ¯1
-
     >>> monadic_test ('⌈',1.5)
     2
     >>> monadic_test ('⌈',0)

@@ -1,9 +1,15 @@
 """
     monadic APL functions
 
-    WIP - limited set
+    WIP - This module supports mixed scalar/vector expressions.  Arrays are not supported.
 
-    WIP - extended to handle APL scalars and vectors
+    The base functions are private Python functions.  They take and return one Python number.
+
+    Here a Python number is typically float:  complex numbers are not supported.
+
+    Some functions may raise the APL 'DOMAIN ERROR' but none should raise a Python exception.
+
+    WIP - Many base functions still to implement.
 """
 
 import operator
@@ -16,47 +22,45 @@ from system_vars import integerCT
 from apl_quantity import monadic2scalar, monadic2vector
 from apl_error import apl_error
 
-# ------------------------------
+# --------------
 
-def     identity (B):
+def     _identity (B):
     """
     identity
-
-    scalar argument only
     """
     return operator.pos(B)
 
-def     negation (B):
+# --------------
+
+def     _negation (B):
     """
     change sign of B
-
-    scalar argument only
     """
     return operator.neg(B)
 
-def     signum (B):
+# --------------
+
+def     _signum (B):
     """
     sign of B
-
-    scalar argument only
     """
     if B > 0:   return 1
     if B < 0:   return -1
 
     return 0
 
-def     reciprocal (B):
+# --------------
+
+def     _reciprocal (B):
     """
-    1 divided by B
-
-    scalar argument only
-
-    throws RANGE ERROR (B == 0)
+    reciprocal of B - may raise DOMAIN ERROR
     """
     try:
         return operator.truediv(1.0,B)
     except:
         apl_error("DOMAIN ERROR")
+
+# ------------------------------
 
 def     ceil (B):
     """
@@ -168,7 +172,7 @@ def     to_be_implemented (B):
     """
     placeholder for functions not yet implemented
 
-    throws FUNCTION NOT YET IMPLEMENTED
+    raises FUNCTION NOT YET IMPLEMENTED
     """
     apl_error("FUNCTION NOT YET IMPLEMENTED")
 
@@ -176,10 +180,10 @@ def     to_be_implemented (B):
 
 monadic_functions = {
     # Mathematical
-    '+':        lambda B: monadic2scalar(identity,B),
-    '-':        lambda B: monadic2scalar(negation,B),
-    '×':        lambda B: monadic2scalar(signum,B),
-    '÷':        lambda B: monadic2scalar(reciprocal,B),
+    '+':        lambda B: monadic2scalar(_identity,B),
+    '-':        lambda B: monadic2scalar(_negation,B),
+    '×':        lambda B: monadic2scalar(_signum,B),
+    '÷':        lambda B: monadic2scalar(_reciprocal,B),
     '⌈':        lambda B: monadic2scalar(ceil,B),
     '⌊':        lambda B: monadic2scalar(floor,B),
     '|':        lambda B: monadic2scalar(magnitude,B),
@@ -226,7 +230,7 @@ def     monadic_function (symbol):
     """
     return the monadic function given its APL symbol
 
-    throws INVALID TOKEN if the symbol is not recognised
+    raises INVALID TOKEN if the symbol is not recognised
     """
     try:
         return monadic_functions[symbol[0]]
