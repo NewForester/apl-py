@@ -22,7 +22,7 @@ from system_vars import integerCT
 from apl_quantity import monadic2scalar, monadic2vector
 from apl_error import apl_error
 
-# --------------
+# ------------------------------
 
 def     _identity (B):
     """

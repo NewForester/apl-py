@@ -34,11 +34,13 @@ def     aardvark ():
     """
     so named to ensure it is run first
 
+    for + - and ×
     >>> test('P ← 0 0.5 1 2')
     0 0.5 1 2
     >>> test('N ← ¯0 ¯0.5 ¯1 ¯2')
     0 ¯0.5 ¯1 ¯2
 
+    for ÷
     >>> test('PD ← 0.25 0.5 1 2')
     0.25 0.5 1 2
     >>> test('ND ← ¯0.25 ¯0.5 ¯1 ¯2')

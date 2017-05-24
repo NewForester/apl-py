@@ -1,0 +1,242 @@
+#!/bin/bash --posix
+#
+# exercise the scripting ability of the APL Python intepreter
+#
+
+error() { echo -e "\e[31m$@\e[0m"; }
+note()  { echo -e "\e[32m$@\e[0m"; }
+
+# do not assume the intepreter is on the PATH
+
+for APL in apl.py ./apl.py ../apl.py "error APL intepreter not found"; do
+    which ${APL} > /dev/null && break;
+done
+
+# helper functions
+
+exec 8<&0;
+exec 9<&1;
+
+function invoke
+{
+  echo;
+  echo "bash $" "$@" >&9;
+  eval "$@" <&8;
+  echo;
+}
+
+function narrative
+{
+    plus="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+
+    echo;
+    echo -e "\e[34m${plus}\e[0m";
+    cat;
+    read -p "Press enter to continue " junk <&8;
+    echo -e "\e[34m${plus}\e[0m";
+    echo;
+}
+
+function herald
+{
+    echo "--------------------------------------------------------------------";
+    echo -e "\e[33m$@\e[0m";
+    echo "--------------------------------------------------------------------";
+}
+
+if [[ $# == 0 ]]; then
+	narrative <<- EOF
+	These are tests of apl-py's execution of scripts rather than interactive use.
+
+	The emphasis is less on 'are expressions evaluated the same way' but on:
+	    - are command line flags handled properly
+	    - do the echoing of input and suppression on prompts work are expected ?
+	    - does the redirection of input work correctly ?
+
+	Three cases are recognised:
+	    a) pure and simple redirection of stdin using < and |
+	    b) invocation with flags, such as -f file to read expression from file
+	    c) turning a file into a script using the familiar #! first line
+
+	All three have their uses.  If these tests prefer b) it is only because it
+	allows test cases to be built using fewer external files.
+
+	The APL command )OFF will cause the interpreter to exit:  anything that follows
+	is ignored.  If there is no )OFF, the interpreter may enter interactive mode or
+	interpret the remaining command line arguments as an expression.
+
+	Entering interactive mode requires tester intervention to exit the interpreter
+	before the test can move on to the next test case.  This is disconcerting since
+	the prompt is six innocent spaces.  Watch out for the copyright banner.
+	EOF
+    steps="1 2 3 4 5 6"
+else
+    steps="$*"
+fi
+
+for step in ${steps}; do
+    case ${step} in
+      (1)
+        narrative <<- EOF
+	The first test cases are without scripts to check interactive
+	operation still works.
+	EOF
+
+        herald "Test Case 1a - Invoke interactive mode - no script";
+        note "... you should need to exit the interpreter yourself";
+        invoke "${APL}";
+
+        herald "Test Case 1b - Evaluate a command line expression - no script";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" 1 2 3 × 3 2 1
+        ;;
+
+      (2)
+        narrative <<- EOF
+	The following test cases check simple script invocation.  The scripts
+	'self-terminate' as each contains the )OFF system command.
+	EOF
+
+        herald "Test Case 2a - Execute script from stdin redirected using '<'";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" '<' test_2.txt;
+
+        herald "Test Case 2b - Execute script from stdin redirected using '|'";
+        note "... this test should terminate of its own accord";
+        invoke cat test_2.txt '|' "${APL}";
+
+        herald "Test Case 2c - Execute script using command line flag";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" -f test_2.txt;
+
+        herald "Test Case 2d - Execute implicit script using #!";
+        note "... this test should terminate of its own accord";
+        invoke ./test_2.apl;
+        ;;
+
+      (3)
+        narrative <<- EOF
+	The following test cases check what happens when a script does not
+	self-terminate. The scripts are as before but the )OFF command
+	had been commented out.
+	EOF
+
+        herald "Test Case 3a - Execute script from stdin redirected using '<'";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" '<' test_3.txt;
+
+        herald "Test Case 3b - Execute script from stdin redirected using '|'";
+        note "... this test should terminate of its own accord";
+        invoke cat test_3.txt '|' "${APL}";
+
+        herald "Test Case 3c - Execute script using command line flag";
+        note "... you should need to exit the interpreter yourself";
+        invoke "${APL}" -f test_3.txt;
+
+        herald "Test Case 3d - Execute implicit script using #!";
+        note "... you should need to exit the interpreter yourself";
+        invoke ./test_3.apl;
+        ;;
+
+      (4)
+
+        narrative <<- EOF
+	The following test cases check what happens when a script is used
+	in conjunction with a command line expression.
+	EOF
+
+        herald "Test Case 4a - Execute script from stdin redirected using '<'";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" 16 ÷ 4 '<' test_4.txt;
+
+        herald "Test Case 4b - Execute script from stdin redirected using '|'";
+        note "... this test should terminate of its own accord";
+        invoke cat test_4.txt '|' "${APL}" 16 ÷ 4;
+
+        herald "Test Case 4c - Execute script using command line flag";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" -f test_4.txt -- 16 ÷ 4;
+
+        herald "Test Case 4d - Execute implicit script using #!";
+        note "... this test should terminate of its own accord";
+        invoke ./test_4.apl -- 16 ÷ 4 ;
+        ;;
+
+      (5)
+        narrative <<- EOF
+	The following test cases check what happens when a script is used
+	in conjunction with a command line expression and the -s option is
+	used to run in silent mode
+	EOF
+
+        herald "Test Case 5a - Execute script from stdin redirected using '<'";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" -s -- 16 ÷ 4 '<' test_5.txt;
+
+        herald "Test Case 5b - Execute script from stdin redirected using '|'";
+        note "... this test should terminate of its own accord";
+        invoke cat test_5.txt '|' "${APL}" -s -- 16 ÷ 4;
+
+        herald "Test Case 5c - Execute script using command line flag";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" -s -f test_5.txt -- 16 ÷ 4;
+
+        herald "Test Case 5d - Execute implicit script using #!";
+        note "... this test should terminate of its own accord";
+        invoke ./test_5.apl -- 16 ÷ 4 ;
+        ;;
+
+      (6)
+        narrative <<- EOF
+	The following test cases check what happens when a script is used
+	with the -s option and an APL error occurs.
+
+	In all cases:
+	    a) the offending line should be output as if -s had not been specified
+	    b) the file name and line number should also be output
+	    c) execution of the scripts stops and the interpreter exists
+	EOF
+
+        herald "Test Case 6a - Execute script from stdin redirected using '<'";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" -s -- 16 ÷ 4 '<' test_6.txt;
+
+        herald "Test Case 6b - Execute script from stdin redirected using '|'";
+        note "... this test should terminate of its own accord";
+        invoke cat test_6.txt '|' "${APL}" -s -- 16 ÷ 4;
+
+        herald "Test Case 6c - Execute script using command line flag";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" -s -f test_6.txt -- 16 ÷ 4;
+
+        herald "Test Case 6d - Execute implicit script using #!";
+        note "... this test should terminate of its own accord";
+        invoke ./test_6.apl -- 16 ÷ 4;
+        ;;
+
+      (7)
+        narrative <<- EOF
+	The following test cases check output redirection through tee will
+	capture a session log, including a Python stack trace if necessary.
+	EOF
+
+        herald "Test Case 7a - Execute script from stdin redirected using '<'";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" '<' test_7.txt '|&' tee -i case_7a.log;
+
+        herald "Test Case 7b - Execute script from stdin redirected using '|'";
+        note "... this test should terminate of its own accord";
+        invoke cat test_7.txt '|' "${APL}" '|&' tee -i case_7b.log;
+
+        herald "Test Case 7c - Execute script using command line flag";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" -f test_7.txt '|&' tee -i case_7c.log;
+
+        herald "Test Case 7d - Execute implicit script using #!";
+        note "... this test should terminate of its own accord";
+        invoke ./test_7.apl '|&' tee -i case_7d.log;
+        ;;
+    esac
+done
+
+# EOF

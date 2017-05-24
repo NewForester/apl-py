@@ -22,7 +22,7 @@ from system_vars import confirm_bool, confirm_int, equalCT, integerCT
 from apl_quantity import dyadic2scalar, dyadic2vector
 from apl_error import apl_error
 
-# --------------
+# ------------------------------
 
 trigonometric_functions = (
     None,               # -12
@@ -52,7 +52,7 @@ trigonometric_functions = (
     None,               # +12
 )
 
-# --------------
+# ------------------------------
 
 def     _add (A,B):
     """
