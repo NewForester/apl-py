@@ -45,6 +45,18 @@ def     aardvark ():
     0.25 0.5 1 2
     >>> test('ND ← ¯0.25 ¯0.5 ¯1 ¯2')
     ¯0.25 ¯0.5 ¯1 ¯2
+
+    for ⌈ ⌊ and |
+    >>> test('PM ← 0.25 0.5 1.9 2.1')
+    0.25 0.5 1.9 2.1
+    >>> test('NM ← ¯0.25 ¯0.5 ¯1.9 ¯2.1')
+    ¯0.25 ¯0.5 ¯1.9 ¯2.1
+
+    for |
+    >>> test('P10 ← 1 2 3 4 5 6 7 8 9 10')
+    1 2 3 4 5 6 7 8 9 10
+    >>> test('M10 ← ¯1 ¯2 ¯3 ¯4 ¯5 ¯6 ¯7 ¯8 ¯9 ¯10')
+    ¯1 ¯2 ¯3 ¯4 ¯5 ¯6 ¯7 ¯8 ¯9 ¯10
     """
     pass
 
@@ -146,6 +158,82 @@ def     dyadic_divide ():
     """
     pass
 
+# --------------
+
+def     dyadic_maximum ():
+    """
+    >>> test('1 ⌈ 1')
+    1
+
+    >>> test('0 ⌈ PM')
+    0.25 0.5 1.9 2.1
+    >>> test('NM ⌈ 0')
+    0 0 0 0
+
+    >>> test('PM ⌈ PM')
+    0.25 0.5 1.9 2.1
+    >>> test('NM ⌈ NM')
+    ¯0.25 ¯0.5 ¯1.9 ¯2.1
+    >>> test('PM ⌈ NM')
+    0.25 0.5 1.9 2.1
+    >>> test('NM ⌈ PM')
+    0.25 0.5 1.9 2.1
+    """
+    pass
+
+# --------------
+
+def     dyadic_minimum ():
+    """
+    >>> test('1 ⌊ 1')
+    1
+
+    >>> test('0 ⌊ PM')
+    0 0 0 0
+    >>> test('NM ⌊ 0')
+    ¯0.25 ¯0.5 ¯1.9 ¯2.1
+
+    >>> test('PM ⌊ PM')
+    0.25 0.5 1.9 2.1
+    >>> test('NM ⌊ NM')
+    ¯0.25 ¯0.5 ¯1.9 ¯2.1
+    >>> test('PM ⌊ NM')
+    ¯0.25 ¯0.5 ¯1.9 ¯2.1
+    >>> test('NM ⌊ PM')
+    ¯0.25 ¯0.5 ¯1.9 ¯2.1
+    """
+    pass
+
+# --------------
+
+def     dyadic_residue ():
+    """
+    >>> test('0 | 0')
+    0
+    >>> test('1 | 1')
+    0
+
+    >>> test('0 | PM')
+    0.25 0.5 1.9 2.1
+    >>> test('NM | 0')
+    0 0 0 0
+
+    >>> test('PM | PM')
+    0 0 0 0
+    >>> test('NM | NM')
+    0 0 0 0
+    >>> test('PM | NM')
+    0 0 0 0
+    >>> test('NM | PM')
+    0 0 0 0
+
+    >>> test('P10 | 10')
+    0 0 1 2 0 4 3 2 1 0
+    >>> test('M10 | 10')
+    0 0 ¯2 ¯2 0 ¯2 ¯4 ¯6 ¯8 0
+    """
+    pass
+
 # ------------------------------
 
 from dyadic import dyadic_function
@@ -156,24 +244,6 @@ from apl_quantity import APL_scalar as apl_scalar
 
 def     dyadic_test (A,symbol,B):
     """
-    >>> dyadic_test  (1,'⌈',0)
-    1
-    >>> dyadic_test  (0,'⌈',1)
-    1
-    >>> dyadic_test  (-1,'⌈',0)
-    0
-    >>> dyadic_test  (0,'⌈',-1)
-    0
-
-    >>> dyadic_test  (1,'⌊',0)
-    0
-    >>> dyadic_test  (0,'⌊',1)
-    0
-    >>> dyadic_test  (-1,'⌊',0)
-    ¯1
-    >>> dyadic_test  (0,'⌊',-1)
-    ¯1
-
     >>> dyadic_test  (1,'*',0)
     1
     >>> dyadic_test  (0,'*',1)
@@ -200,39 +270,6 @@ def     dyadic_test (A,symbol,B):
     2
     >>> dyadic_test  (10,'⍟',1000000)
     6
-
-    >>> dyadic_test  (3,'|',3)
-    0
-    >>> dyadic_test  (3,'|',4)
-    1
-    >>> dyadic_test  (3,'|',5)
-    2
-    >>> dyadic_test  (3,'|',-3)
-    0
-    >>> dyadic_test  (3,'|',-4)
-    2
-    >>> dyadic_test  (3,'|',-5)
-    1
-
-    >>> dyadic_test  (-3,'|',3)
-    0
-    >>> dyadic_test  (-3,'|',4)
-    ¯2
-    >>> dyadic_test  (-3,'|',5)
-    ¯1
-    >>> dyadic_test  (-3,'|',-3)
-    0
-    >>> dyadic_test  (-3,'|',-4)
-    ¯1
-    >>> dyadic_test  (-3,'|',-5)
-    ¯2
-
-    >>> dyadic_test  (0,'|',1)
-    1
-    >>> dyadic_test  (0,'|',0)
-    0
-    >>> dyadic_test  (0,'|',-1)
-    ¯1
 
     >>> dyadic_test  (1,'?',1)
     1

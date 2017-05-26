@@ -45,6 +45,12 @@ def     aardvark ():
     0.25 0.5 1 2
     >>> test('ND ← ¯0.25 ¯0.5 ¯1 ¯2')
     ¯0.25 ¯0.5 ¯1 ¯2
+
+    for ⌈ ⌊ and |
+    >>> test('PM ← 0.25 0.5 1.9 2.1')
+    0.25 0.5 1.9 2.1
+    >>> test('NM ← ¯0.25 ¯0.5 ¯1.9 ¯2.1')
+    ¯0.25 ¯0.5 ¯1.9 ¯2.1
     """
     pass
 
@@ -106,6 +112,48 @@ def     monadic_divide ():
     """
     pass
 
+# --------------
+
+def     monadic_ciel ():
+    """
+    >>> test('⌈ 0')
+    0
+
+    >>> test('⌈ PM')
+    1 1 2 3
+    >>> test('⌈ NM')
+    0 0 ¯1 ¯2
+    """
+    pass
+
+# --------------
+
+def     monadic_floor ():
+    """
+    >>> test('⌊ 0')
+    0
+
+    >>> test('⌊ PM')
+    0 0 1 2
+    >>> test('⌊ NM')
+    ¯1 ¯1 ¯2 ¯3
+    """
+    pass
+
+# --------------
+
+def     monadic_magnitude ():
+    """
+    >>> test('| 0')
+    0
+
+    >>> test('| PM')
+    0.25 0.5 1.9 2.1
+    >>> test('| NM')
+    0.25 0.5 1.9 2.1
+    """
+    pass
+
 # ------------------------------
 
 from monadic import monadic_function
@@ -116,20 +164,6 @@ from apl_quantity import APL_scalar as apl_scalar
 
 def     monadic_test (symbol,B):
     """
-    >>> monadic_test ('⌈',1.5)
-    2
-    >>> monadic_test ('⌈',0)
-    0
-    >>> monadic_test ('⌈',-1.5)
-    ¯1
-
-    >>> monadic_test ('⌊',1.5)
-    1
-    >>> monadic_test ('⌊',0)
-    0
-    >>> monadic_test ('⌊',-1.5)
-    ¯2
-
     >>> monadic_test ('*',1)
     2.718281828
     >>> monadic_test ('*',0)
@@ -145,13 +179,6 @@ def     monadic_test (symbol,B):
     ¯1
     >>> monadic_test ('⍟',0)
     DOMAIN ERROR
-
-    >>> monadic_test ('|',1)
-    1
-    >>> monadic_test ('|',0)
-    0
-    >>> monadic_test ('|',-1)
-    1
 
     >>> monadic_test ('?',1)
     1

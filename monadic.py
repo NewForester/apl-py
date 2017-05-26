@@ -60,13 +60,11 @@ def     _reciprocal (B):
     except:
         apl_error("DOMAIN ERROR")
 
-# ------------------------------
+# --------------
 
-def     ceil (B):
+def     _ceil (B):
     """
-    ceil with comparison tolerance
-
-    scalar argument only
+    ceil of B with comparison tolerance
     """
     B = integerCT(B)
 
@@ -74,17 +72,27 @@ def     ceil (B):
 
     return math.ceil(B)
 
-def     floor (B):
-    """
-    floor with comparison tolerance
+# --------------
 
-    scalar argument only
+def     _floor (B):
+    """
+    floor of B with comparison tolerance
     """
     B = integerCT(B)
 
     if type(B) is int:  return B
 
     return math.floor(B)
+
+# --------------
+
+def     _magnitude (B):
+    """
+    absolute value of B
+    """
+    return math.fabs(B)
+
+# ------------------------------
 
 def     exp (B):
     """
@@ -104,14 +112,6 @@ def     log (B):
         return math.log(B)
     except ValueError:
         apl_error("DOMAIN ERROR")
-
-def     magnitude (B):
-    """
-    absolute value of B
-
-    scalar argument only
-    """
-    return math.fabs(B)
 
 def     roll (B):
     """
@@ -184,9 +184,9 @@ monadic_functions = {
     '-':        lambda B: monadic2scalar(_negation,B),
     '×':        lambda B: monadic2scalar(_signum,B),
     '÷':        lambda B: monadic2scalar(_reciprocal,B),
-    '⌈':        lambda B: monadic2scalar(ceil,B),
-    '⌊':        lambda B: monadic2scalar(floor,B),
-    '|':        lambda B: monadic2scalar(magnitude,B),
+    '⌈':        lambda B: monadic2scalar(_ceil,B),
+    '⌊':        lambda B: monadic2scalar(_floor,B),
+    '|':        lambda B: monadic2scalar(_magnitude,B),
 
     # Algebraic
     '*':        lambda B: monadic2scalar(exp,B),

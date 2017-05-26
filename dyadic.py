@@ -91,21 +91,49 @@ def     _divide (A,B):
 
 # --------------
 
-def     maximum (A,B):
+def     _maximum (A,B):
     """
     A maximum B
-
-    scalar arguments only
     """
     return max(A,B)
 
-def     minimum (A,B):
+# --------------
+
+def     _minimum (A,B):
     """
     A minimum B
-
-    scalar arguments only
     """
     return min(A,B)
+
+# --------------
+
+def     _residue (A,B):
+    """
+    B modulo A with comparison tolerance
+    """
+    if type(A) is int:
+        if A == 0:          return B
+    else:
+        if equalCT(A,0):    return B
+
+    if type(integerCT(operator.truediv(B,A))) is int:
+        return 0
+
+    result = math.fmod(B,A)
+
+    if result < 0:
+        if A > 0:       result += A
+    elif result > 0:
+        if A < 0:       result += A
+    else:
+        result = 0.0
+
+    if type(A) is int and type(B) is int:
+        return int(result)
+    else:
+        return result
+
+# ------------------------------
 
 def     exp (A,B):
     """
@@ -132,34 +160,6 @@ def     log (A,B):
         return math.log(B,A)
     except ValueError:
         apl_error("DOMAIN ERROR")
-
-def     residue (A,B):
-    """
-    B modulo A with comparison tolerance
-
-    scalar arguments only
-    """
-    if type(A) is int:
-        if A == 0:          return B
-    else:
-        if equalCT(A,0):    return B
-
-    if type(integerCT(operator.truediv(B,A))) is int:
-        return 0
-
-    result = math.fmod(B,A)
-
-    if result < 0:
-        if A > 0:       result += A
-    elif result > 0:
-        if A < 0:       result += A
-    else:
-        result = 0.0
-
-    if type(A) is int and type(B) is int:
-        return int(result)
-    else:
-        return result
 
 def     deal (A,B):
     """
@@ -366,9 +366,9 @@ dyadic_functions = {
     '-':        lambda A,B: dyadic2scalar(_subtract,A,B),
     '×':        lambda A,B: dyadic2scalar(_multiply,A,B),
     '÷':        lambda A,B: dyadic2scalar(_divide,A,B),
-    '⌈':        lambda A,B: dyadic2scalar(maximum,A,B),
-    '⌊':        lambda A,B: dyadic2scalar(minimum,A,B),
-    '|':        lambda A,B: dyadic2scalar(residue,A,B),
+    '⌈':        lambda A,B: dyadic2scalar(_maximum,A,B),
+    '⌊':        lambda A,B: dyadic2scalar(_minimum,A,B),
+    '|':        lambda A,B: dyadic2scalar(_residue,A,B),
 
     # Algebraic
     '*':        lambda A,B: dyadic2scalar(exp,A,B),
