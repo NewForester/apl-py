@@ -217,8 +217,6 @@ def     _highest_common_factor (A,B):
     """
     Highest Common Factor by the Euclid method
 
-    scalar argument only
-
     Note: math.gcd() is Python 3.5 and later
     """
     if B == 0:
@@ -226,45 +224,41 @@ def     _highest_common_factor (A,B):
 
     return _highest_common_factor(B, A % B)
 
-def     or_gcd (A,B):
-    """
-    A or B (Boolean); GCD(A,B) otherwise
+# --------------
 
-    scalar arguments only
+def     _or_gcd (A,B):
+    """
+    A or B (Boolean); GCD(A,B) (otherwise)
     """
     try:
         return int(confirm_bool(A) + confirm_bool(B) != 0)
     except:
         return _highest_common_factor(A,B)
 
-def     and_lcm (A,B):
-    """
-    A and B (Boolean); LCM(A,B) otherwise
+# --------------
 
-    scalar arguments only
+def     _and_lcm (A,B):
+    """
+    A and B (Boolean); LCM(A,B) (otherwise)
     """
     try:
         return int(confirm_bool(A) + confirm_bool(B) == 2)
     except:
         return A * B / _highest_common_factor(A,B)
 
-def     nor (A,B):
+# --------------
+
+def     _nor (A,B):
     """
-    A nor B
-
-    scalar arguments only
-
-    throws DOMAIN ERROR (B is not 0 or 1)
+    A nor B - may raise DOMAIN ERROR
     """
     return int(confirm_bool(A) + confirm_bool(B) == 0)
 
-def     nand (A,B):
+# --------------
+
+def     _nand (A,B):
     """
-    A nand B
-
-    scalar arguments only
-
-    throws DOMAIN ERROR (B is not 0 or 1)
+    A nand B - may raise DOMAIN ERROR
     """
     return int(confirm_bool(A) + confirm_bool(B) != 2)
 
@@ -379,10 +373,10 @@ dyadic_functions = {
     '⌹':        to_be_implemented,      # matrix divide
 
     # Logical
-    '∨':        lambda A,B: dyadic2scalar(or_gcd,A,B),
-    '∧':        lambda A,B: dyadic2scalar(and_lcm,A,B),
-    '⍱':        lambda A,B: dyadic2scalar(nor,A,B),
-    '⍲':        lambda A,B: dyadic2scalar(nand,A,B),
+    '∨':        lambda A,B: dyadic2scalar(_or_gcd,A,B),
+    '∧':        lambda A,B: dyadic2scalar(_and_lcm,A,B),
+    '⍱':        lambda A,B: dyadic2scalar(_nor,A,B),
+    '⍲':        lambda A,B: dyadic2scalar(_nand,A,B),
 
     # Comparison
     '<':        lambda A,B: dyadic2scalar(lt,A,B),

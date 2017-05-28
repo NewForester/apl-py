@@ -151,13 +151,9 @@ def     pi (B):
 
 # ------------------------------
 
-def     logical_negation (B):
+def     _logical_negation (B):
     """
-    Boolean integer inverse of B
-
-    scalar argument only
-
-    throws DOMAIN ERROR (B is not 0 or 1)
+    Boolean integer inverse of B - may raise DOMAIN ERROR
     """
     B = integerCT(B)
 
@@ -197,7 +193,7 @@ monadic_functions = {
     '⌹':        to_be_implemented,      # matrix inverse
 
     # Logical
-    '~':        lambda B: monadic2scalar(logical_negation,B),
+    '~':        lambda B: monadic2scalar(_logical_negation,B),
 
 # Structural (aka manipulative)
     '⍳':        to_be_implemented,      # index generator

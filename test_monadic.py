@@ -154,6 +154,19 @@ def     monadic_magnitude ():
     """
     pass
 
+# --------------
+
+def     monadic_negation ():
+    """
+    >>> test('~ ¯1')
+    DOMAIN ERROR
+    >>> test('~ 0 1')
+    1 0
+    >>> test('~ 0.5')
+    DOMAIN ERROR
+    """
+    pass
+
 # ------------------------------
 
 from monadic import monadic_function
@@ -212,15 +225,6 @@ def     monadic_test (symbol,B):
     0
     >>> monadic_test ('○',-1)
     ¯3.141592654
-
-    # --
-
-    >>> monadic_test ('~',1)
-    0
-    >>> monadic_test ('~',0)
-    1
-    >>> monadic_test ('~',-1)
-    DOMAIN ERROR
 
     # --
 
