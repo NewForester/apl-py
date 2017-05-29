@@ -322,6 +322,58 @@ def     dyadic_nand ():
     """
     pass
 
+# --------------
+
+def     dyadic_compare ():
+    """
+    >>> test('AC ← ¯0.5 ¯0.5 0.5 0.5')
+    ¯0.5 ¯0.5 0.5 0.5
+    >>> test('BC ← ¯0.5 0.5 ¯0.5 0.5')
+    ¯0.5 0.5 ¯0.5 0.5
+
+    >>> test('AC < BC')
+    0 1 0 0
+    >>> test('AC ≤ BC')
+    1 1 0 1
+    >>> test('AC = BC')
+    1 0 0 1
+    >>> test('AC ≥ BC')
+    1 0 1 1
+    >>> test('AC > BC')
+    0 0 1 0
+    >>> test('AC ≠ BC')
+    0 1 1 0
+
+    >>> test('AC ← AC + ⎕CT')
+    ¯0.5 ¯0.5 0.5 0.5
+    >>> test('BC ← BC - ⎕CT')
+    ¯0.5 0.5 ¯0.5 0.5
+
+    >>> test('AC = BC')
+    0 0 0 0
+    >>> test('AC ≠ BC')
+    1 1 1 1
+
+    >>> test('AC ← AC + 10')
+    9.5 9.5 10.5 10.5
+    >>> test('BC ← BC + 10')
+    9.5 10.5 9.5 10.5
+
+    >>> test('AC < BC')
+    0 1 0 0
+    >>> test('AC ≤ BC')
+    1 1 0 1
+    >>> test('AC = BC')
+    1 0 0 1
+    >>> test('AC ≥ BC')
+    1 0 1 1
+    >>> test('AC > BC')
+    0 0 1 0
+    >>> test('AC ≠ BC')
+    0 1 1 0
+    """
+    pass
+
 # ------------------------------
 
 from dyadic import dyadic_function
@@ -418,74 +470,6 @@ def     dyadic_test (A,symbol,B):
     2.236067977
     >>> dyadic_test  (-4,'○',2)
     1.732050808
-
-    # --
-
-    >>> dyadic_test  (1,'<',0)
-    0
-    >>> dyadic_test  (0,'<',1)
-    1
-    >>> dyadic_test  (0,'<',0)
-    0
-    >>> dyadic_test  (-1,'<',0)
-    1
-    >>> dyadic_test  (0,'<',-1)
-    0
-
-    >>> dyadic_test  (1,'≤',0)
-    0
-    >>> dyadic_test  (0,'≤',1)
-    1
-    >>> dyadic_test  (0,'≤',0)
-    1
-    >>> dyadic_test  (-1,'≤',0)
-    1
-    >>> dyadic_test  (0,'≤',-1)
-    0
-
-    >>> dyadic_test  (1,'=',0)
-    0
-    >>> dyadic_test  (0,'=',1)
-    0
-    >>> dyadic_test  (0,'=',0)
-    1
-    >>> dyadic_test  (-1,'=',0)
-    0
-    >>> dyadic_test  (0,'=',-1)
-    0
-
-    >>> dyadic_test  (1,'≥',0)
-    1
-    >>> dyadic_test  (0,'≥',1)
-    0
-    >>> dyadic_test  (0,'≥',0)
-    1
-    >>> dyadic_test  (-1,'≥',0)
-    0
-    >>> dyadic_test  (0,'≥',-1)
-    1
-
-    >>> dyadic_test  (1,'>',0)
-    1
-    >>> dyadic_test  (0,'>',1)
-    0
-    >>> dyadic_test  (0,'>',0)
-    0
-    >>> dyadic_test  (-1,'>',0)
-    0
-    >>> dyadic_test  (0,'>',-1)
-    1
-
-    >>> dyadic_test  (1,'≠',0)
-    1
-    >>> dyadic_test  (0,'≠',1)
-    1
-    >>> dyadic_test  (0,'≠',0)
-    0
-    >>> dyadic_test  (-1,'≠',0)
-    1
-    >>> dyadic_test  (0,'≠',-1)
-    1
 
     # --
 

@@ -264,11 +264,9 @@ def     _nand (A,B):
 
 # ------------------------------
 
-def     lt (A,B):
+def     _lt (A,B):
     """
     A < B with comparison tolerance
-
-    scalar arguments only
     """
     if type(A) is int and type(B) is int:
         return int(operator.lt(A,B))
@@ -278,11 +276,11 @@ def     lt (A,B):
 
     return int(operator.lt(A,B))
 
-def     le (A,B):
+# --------------
+
+def     _le (A,B):
     """
     A <= B
-
-    scalar arguments only
     """
     if type(A) is int and type(B) is int:
         return int(operator.le(A,B))
@@ -292,22 +290,22 @@ def     le (A,B):
 
     return int(operator.le(A,B))
 
-def     eq (A,B):
+# --------------
+
+def     _eq (A,B):
     """
     A == B with comparison tolerance
-
-    scalar arguments only
     """
     if type(A) is int and type(B) is int:
         return int(operator.eq(A,B))
 
     return int(equalCT(A,B))
 
-def     ge (A,B):
+# --------------
+
+def     _ge (A,B):
     """
     A >= B with comparison tolerance
-
-    scalar arguments only
     """
     if type(A) is int and type(B) is int:
         return int(operator.ge(A,B))
@@ -317,11 +315,11 @@ def     ge (A,B):
 
     return int(operator.ge(A,B))
 
-def     gt (A,B):
+# --------------
+
+def     _gt (A,B):
     """
     A > B with comparison tolerance
-
-    scalar arguments only
     """
     if type(A) is int and type(B) is int:
         return int(operator.gt(A,B))
@@ -331,11 +329,11 @@ def     gt (A,B):
 
     return int(operator.gt(A,B))
 
-def     ne (A,B):
+# --------------
+
+def     _ne (A,B):
     """
     A != B with comparison tolerance
-
-    scalar arguments only
     """
     if type(A) is int and type(B) is int:
         return int(operator.ne(A,B))
@@ -379,12 +377,12 @@ dyadic_functions = {
     '⍲':        lambda A,B: dyadic2scalar(_nand,A,B),
 
     # Comparison
-    '<':        lambda A,B: dyadic2scalar(lt,A,B),
-    '≤':        lambda A,B: dyadic2scalar(le,A,B),
-    '=':        lambda A,B: dyadic2scalar(eq,A,B),
-    '≥':        lambda A,B: dyadic2scalar(ge,A,B),
-    '>':        lambda A,B: dyadic2scalar(gt,A,B),
-    '≠':        lambda A,B: dyadic2scalar(ne,A,B),
+    '<':        lambda A,B: dyadic2scalar(_lt,A,B),
+    '≤':        lambda A,B: dyadic2scalar(_le,A,B),
+    '=':        lambda A,B: dyadic2scalar(_eq,A,B),
+    '≥':        lambda A,B: dyadic2scalar(_ge,A,B),
+    '>':        lambda A,B: dyadic2scalar(_gt,A,B),
+    '≠':        lambda A,B: dyadic2scalar(_ne,A,B),
     '≡':        to_be_implemented,      # match (return 0/1 irrespective of rank etc)
 
 # Structural (aka manipulative)
