@@ -135,37 +135,42 @@ def     _residue (A,B):
 
 # ------------------------------
 
-def     exp (A,B):
+def     _exp (A,B):
     """
-    A to the power B
-
-    scalar arguments only
+    A to the power B - may raise DOMAIN ERROR
     """
     try:
         return math.pow(A,B)
     except ValueError:
         apl_error("DOMAIN ERROR")
 
-def     log (A,B):
-    """
-    log to base A of B
+# --------------
 
-    scalar arguments only
+def     _log (A,B):
+    """
+    log to base A of B - may raise DOMAIN ERROR
     """
     try:
         if A == 10: return math.log10(B)
         # Python 3.3 and later # if A == 2:  return math.log2(B)
-        if A == 0:  return 0.0
 
         return math.log(B,A)
+
     except ValueError:
-        apl_error("DOMAIN ERROR")
+        if equalCT(A,B):  return 1.0
+        if equalCT(A,0):  return 0.0
+        if equalCT(B,1):  return 0.0
 
-def     deal (A,B):
+    except ZeroDivisionError:
+        if equalCT(A,B):  return 1.0
+
+    apl_error("DOMAIN ERROR")
+
+# --------------
+
+def     _deal (A,B):
     """
-    random selection of A numbers from the range [1,B] without replacement
-
-    scalar arguments only
+    random selection of A numbers from the range [1,B] without replacement - may raise DOMAIN ERROR
     """
 
     A = confirm_int(A)
@@ -176,15 +181,15 @@ def     deal (A,B):
     except ValueError:
         apl_error("DOMAIN ERROR")
 
-def     combinations (A,B):
+# --------------
+
+def     _combinations (A,B):
     """
-    number of combinations of size A from a population of size B
+    number of combinations of size A from a population of size B - may raise DOMAIN ERROR
 
     for floating point numbers this is binomial(B,A)
 
     rules for negative integers and floating point are interesting
-
-    scalar arguments only
     """
 
     try:
@@ -194,6 +199,8 @@ def     combinations (A,B):
             return float(mpmath.binomial(B,A))
     except ValueError:
         apl_error("DOMAIN ERROR")
+
+# ------------------------------
 
 def     trigonometric (A,B):
     """
@@ -363,10 +370,10 @@ dyadic_functions = {
     '|':        lambda A,B: dyadic2scalar(_residue,A,B),
 
     # Algebraic
-    '*':        lambda A,B: dyadic2scalar(exp,A,B),
-    '⍟':        lambda A,B: dyadic2scalar(log,A,B),
-    '?':        lambda A,B: dyadic2vector(deal,A,B),
-    '!':        lambda A,B: dyadic2scalar(combinations,A,B),
+    '*':        lambda A,B: dyadic2scalar(_exp,A,B),
+    '⍟':        lambda A,B: dyadic2scalar(_log,A,B),
+    '?':        lambda A,B: dyadic2vector(_deal,A,B),
+    '!':        lambda A,B: dyadic2scalar(_combinations,A,B),
     '○':        lambda A,B: dyadic2scalar(trigonometric,A,B),
     '⌹':        to_be_implemented,      # matrix divide
 

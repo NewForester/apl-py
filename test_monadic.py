@@ -156,6 +156,76 @@ def     monadic_magnitude ():
 
 # --------------
 
+def     monadic_exp ():
+    """
+    >>> test('* 1 0 ¯1')
+    2.718281828 1 0.3678794412
+
+    >>> test('* 1 2 3 4 5')
+    2.718281828 7.389056099 20.08553692 54.59815003 148.4131591
+
+    >>> test('* ¯1 ¯2 ¯3 ¯4 ¯5')
+    0.3678794412 0.1353352832 0.04978706837 0.01831563889 0.006737946999
+
+    >>> test('* 0.125 0.25 0.5')
+    1.133148453 1.284025417 1.648721271
+    """
+    pass
+
+# --------------
+
+def     monadic_log ():
+    """
+    >>> test('⍟ 0')
+    DOMAIN ERROR
+    >>> test('⍟ -1')
+    DOMAIN ERROR
+
+    >>> test('⍟ 2.718281828459045 1.0 0.36787944117144233')
+    1 0 ¯1
+
+    >>> test('⍟ 1 2 3 4 5')
+    0 0.6931471806 1.098612289 1.386294361 1.609437912
+
+    >>> test('⍟ 0.125 0.25 0.5')
+    ¯2.079441542 ¯1.386294361 ¯0.6931471806
+    """
+    pass
+
+# --------------
+
+def     monadic_roll ():
+    """
+    randomness makes positive testing a little tricky
+
+    >>> test('? 0')
+    DOMAIN ERROR
+    >>> test('? -1')
+    DOMAIN ERROR
+    >>> test('? 1')
+    1
+    >>> test('? 1÷2')
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     monadic_factorial ():
+    """
+    >>> test('! -1')
+    DOMAIN ERROR
+    >>> test('! 0')
+    1
+    >>> test('! 1 2 3 4 5')
+    1 2 6 24 120
+    >>> test('! 0.125 0.25 0.5')
+    0.9417426998 0.9064024771 0.8862269255
+    """
+    pass
+
+# --------------
+
 def     monadic_negation ():
     """
     >>> test('~ ¯1')
@@ -177,47 +247,6 @@ from apl_quantity import APL_scalar as apl_scalar
 
 def     monadic_test (symbol,B):
     """
-    >>> monadic_test ('*',1)
-    2.718281828
-    >>> monadic_test ('*',0)
-    1
-    >>> monadic_test ('*',-1)
-    0.3678794412
-
-    >>> monadic_test ('⍟',2.718281828459045)
-    1
-    >>> monadic_test ('⍟',1.0)
-    0
-    >>> monadic_test ('⍟',0.36787944117144233)
-    ¯1
-    >>> monadic_test ('⍟',0)
-    DOMAIN ERROR
-
-    >>> monadic_test ('?',1)
-    1
-    >>> monadic_test ('?',0)
-    DOMAIN ERROR
-    >>> monadic_test ('?',-1)
-    DOMAIN ERROR
-
-    >>> monadic_test ('!',1)
-    1
-    >>> monadic_test ('!',0)
-    1
-    >>> monadic_test ('!',-1)
-    DOMAIN ERROR
-    >>> monadic_test ('!',2)
-    2
-    >>> monadic_test ('!',4)
-    24
-    >>> monadic_test ('!',8)
-    40320
-    >>> monadic_test ('!',0.5)
-    0.8862269255
-    >>> monadic_test ('!',0.25)
-    0.9064024771
-    >>> monadic_test ('!',0.125)
-    0.9417426998
 
     >>> monadic_test ('○',1)
     3.141592654

@@ -236,6 +236,132 @@ def     dyadic_residue ():
 
 # --------------
 
+def     dyadic_exp ():
+    """
+    >>> test('0 * ¯1')
+    DOMAIN ERROR
+    >>> test('¯2 ¯1 0 1 2 * 0')
+    1 1 1 1 1
+
+    >>> test('1 * P')
+    1 1 1 1
+    >>> test('N * 1')
+    0 ¯0.5 ¯1 ¯2
+
+    >>> test('P * P')
+    1 0.7071067812 1 4
+    >>> test('N * N')
+    DOMAIN ERROR
+    >>> test('P * N')
+    1 1.414213562 1 0.25
+    >>> test('N * P')
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     dyadic_log ():
+    """
+    >>> test('0 ⍟ ¯1 0 1')
+    0 1 0
+
+    >>> test('1 ⍟ ¯1')
+    DOMAIN ERROR
+    >>> test('1 ⍟ 0')
+    DOMAIN ERROR
+    >>> test('1 ⍟ 1')
+    1
+
+    >>> test('¯1 ⍟ 0')
+    DOMAIN ERROR
+    >>> test('¯1 ⍟ ¯1 1')
+    1 0
+
+    >>> test('1 ⍟ P')
+    DOMAIN ERROR
+    >>> test('N ⍟ 1')
+    0 0 0 0
+
+    >>> test('P ⍟ P')
+    1 1 1 1
+    >>> test('N ⍟ N')
+    1 1 1 1
+    >>> test('P ⍟ N')
+    DOMAIN ERROR
+    >>> test('N ⍟ P')
+    DOMAIN ERROR
+
+    >>> test('2 ⍟ 0.5 2 4 16 256 1024')
+    ¯1 1 2 4 8 10
+    >>> test('10 ⍟ 0.1 10 1000 1000000')
+    ¯1 1 3 6
+    """
+    pass
+
+# --------------
+
+def     dyadic_deal ():
+    """
+    randomness makes positive testing a little tricky
+
+    >>> test('1 ? ¯1')
+    DOMAIN ERROR
+    >>> test('1 ? 0')
+    DOMAIN ERROR
+    >>> test('1 ? 1')
+    1
+
+    >>> test('0.5 ? 2')
+    DOMAIN ERROR
+    >>> test('1 ? 1.5')
+    DOMAIN ERROR
+
+    >>> test('2 ? 1')
+    DOMAIN ERROR
+
+    >>> test('1 ? 10 10')
+    RANK ERROR
+    >>> test('1 1 ? 10')
+    RANK ERROR
+    """
+    pass
+
+# --------------
+
+def     dyadic_combinations ():
+    """
+    >>> test('¯1 ! ¯1 0 1')
+    1 0 0
+    >>> test('0 ! ¯1 0 1')
+    1 1 1
+    >>> test('1 ! ¯1 0 1')
+    ¯1 0 1
+
+    >>> test('1 ! P')
+    0 0.5 1 2
+
+    > >> test('N ! 1')
+    0 ¯0.5 ¯1 ¯2
+
+    >>> test('P ! P')
+    1 1 1 1
+    >>> test('N ! N')
+    1 1 1 1
+    >>> test('P ! N')
+    1 0 ¯1 3
+    >>> test('N ! P')
+    1 0.5 0 0
+
+    >>> test('0 1 2 3 4 ! 4')
+    1 4 6 4 1
+    >>> test('0 1 2 3 4 5 ! 5')
+    1 5 10 10 5 1
+    """
+    pass
+
+# --------------
+
 def     dyadic_or ():
     """
     >>> test('0 ∨ 0 1')
@@ -384,70 +510,6 @@ from apl_quantity import APL_scalar as apl_scalar
 
 def     dyadic_test (A,symbol,B):
     """
-    >>> dyadic_test  (1,'*',0)
-    1
-    >>> dyadic_test  (0,'*',1)
-    0
-    >>> dyadic_test  (-1,'*',0)
-    1
-    >>> dyadic_test  (0,'*',-1)
-    DOMAIN ERROR
-
-    >>> dyadic_test  (1,'⍟',0)
-    DOMAIN ERROR
-    >>> dyadic_test  (0,'⍟',1)
-    0
-    >>> dyadic_test  (-1,'⍟',0)
-    DOMAIN ERROR
-    >>> dyadic_test  (0,'⍟',-1)
-    0
-
-    >>> dyadic_test  (2,'⍟',4)
-    2
-    >>> dyadic_test  (2,'⍟',1024)
-    10
-    >>> dyadic_test  (10,'⍟',100)
-    2
-    >>> dyadic_test  (10,'⍟',1000000)
-    6
-
-    >>> dyadic_test  (1,'?',1)
-    1
-    >>> dyadic_test  (1,'?',0)
-    DOMAIN ERROR
-    >>> dyadic_test  (1,'?',-1)
-    DOMAIN ERROR
-    >>> dyadic_test  (1.5,'?',1)
-    DOMAIN ERROR
-    >>> dyadic_test  (1,'?',1.5)
-    DOMAIN ERROR
-    >>> dyadic_test  (2,'?',1)
-    DOMAIN ERROR
-
-    >>> dyadic_test  (1,'!',1)
-    1
-    >>> dyadic_test  (1,'!',0)
-    0
-    >>> dyadic_test  (1,'!',-1)
-    ¯1
-    >>> dyadic_test  (0,'!',1)
-    1
-    >>> dyadic_test  (0,'!',0)
-    1
-    >>> dyadic_test  (0,'!',-1)
-    1
-    >>> dyadic_test  (0,'!',5)
-    1
-    >>> dyadic_test  (1,'!',5)
-    5
-    >>> dyadic_test  (2,'!',5)
-    10
-    >>> dyadic_test  (3,'!',5)
-    10
-    >>> dyadic_test  (4,'!',5)
-    5
-    >>> dyadic_test  (5,'!',5)
-    1
 
     >>> dyadic_test  (1,'○',0)
     0

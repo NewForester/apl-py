@@ -94,30 +94,28 @@ def     _magnitude (B):
 
 # ------------------------------
 
-def     exp (B):
+def     _exp (B):
     """
-    e raised to the power
-
-    scalar argument only
+    e raised to the power B - may raise DOMAIN ERROR
     """
     return math.exp(B)
 
-def     log (B):
-    """
-    natural logarithm
+# --------------
 
-    scalar argument only
+def     _log (B):
+    """
+    natural logarithm of B
     """
     try:
         return math.log(B)
     except ValueError:
         apl_error("DOMAIN ERROR")
 
-def     roll (B):
-    """
-    random selection of a number from the range [1,B]
+# --------------
 
-    scalar argument only
+def     _roll (B):
+    """
+    random selection of a number from the range [1,B] - may raise DOMAIN ERROR
     """
 
     try:
@@ -125,11 +123,11 @@ def     roll (B):
     except ValueError:
         apl_error("DOMAIN ERROR")
 
-def     factorial (B):
-    """
-    factorial B also valid for floating point numbers
+# --------------
 
-    scalar argument only
+def     _factorial (B):
+    """
+    factorial B (also valid for floating point numbers) - may raise DOMAIN ERROR
     """
     B = integerCT(B)
 
@@ -140,6 +138,8 @@ def     factorial (B):
             return float(mpmath.factorial(B))
     except ValueError:
         apl_error("DOMAIN ERROR")
+
+# ------------------------------
 
 def     pi (B):
     """
@@ -185,10 +185,10 @@ monadic_functions = {
     '|':        lambda B: monadic2scalar(_magnitude,B),
 
     # Algebraic
-    '*':        lambda B: monadic2scalar(exp,B),
-    '⍟':        lambda B: monadic2scalar(log,B),
-    '?':        lambda B: monadic2scalar(roll,B),
-    '!':        lambda B: monadic2scalar(factorial,B),
+    '*':        lambda B: monadic2scalar(_exp,B),
+    '⍟':        lambda B: monadic2scalar(_log,B),
+    '?':        lambda B: monadic2scalar(_roll,B),
+    '!':        lambda B: monadic2scalar(_factorial,B),
     '○':        lambda B: monadic2scalar(pi,B),
     '⌹':        to_be_implemented,      # matrix inverse
 
