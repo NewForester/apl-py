@@ -236,6 +236,47 @@ for step in ${steps}; do
         note "... this test should terminate of its own accord";
         invoke ./test_7.apl '|&' tee -i case_7d.log;
         ;;
+
+      (9)
+        narrative <<- EOF
+	These test cases check recognition of flags including -h and --help.
+	Also redirection from a file that is not readable.
+	EOF
+
+        herald "Test Case 9a - Response to an unrecognised short form flag";
+        invoke "${APL}" -x;
+
+        herald "Test Case 9b - Response to an unrecognised long form flag";
+        invoke "${APL}" --extra;
+
+        herald "Test Case 9c - Check recognition of short form flags";
+        note "... you should need to exit the interpreter yourself";
+        invoke "${APL}" -s -v;
+
+        herald "Test Case 9d - Check recognition of long form flags";
+        note "... you should need to exit the interpreter yourself";
+        invoke "${APL}" --silent --verbose --script;
+
+        herald "Test Case 9e - Check recognition of short form help flag";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" -h;
+
+        herald "Test Case 9f - Check recognition of long form help flag";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" --help;
+
+        herald "Test Case 9g - Check recognition of short form version flag";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" -V;
+
+        herald "Test Case 9h - Check recognition of long form version flag";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" --Version;
+
+        herald "Test Case ih - Response to input redirection to a file that cannot be read";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" -f test_9.txt;
+        ;;
     esac
 done
 
