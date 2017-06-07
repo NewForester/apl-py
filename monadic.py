@@ -141,11 +141,9 @@ def     _factorial (B):
 
 # ------------------------------
 
-def     pi (B):
+def     _pi (B):
     """
-    identity
-
-    scalar argument only
+    pi times B (for conversion between Radians and degrees)
     """
     return math.pi * B
 
@@ -174,7 +172,7 @@ def     to_be_implemented (B):
 
 # ------------------------------
 
-monadic_functions = {
+_monadic_functions = {
     # Mathematical
     '+':        lambda B: monadic2scalar(_identity,B),
     '-':        lambda B: monadic2scalar(_negation,B),
@@ -189,8 +187,10 @@ monadic_functions = {
     '⍟':        lambda B: monadic2scalar(_log,B),
     '?':        lambda B: monadic2scalar(_roll,B),
     '!':        lambda B: monadic2scalar(_factorial,B),
-    '○':        lambda B: monadic2scalar(pi,B),
     '⌹':        to_be_implemented,      # matrix inverse
+
+    # Trigonometric
+    '○':        lambda B: monadic2scalar(_pi,B),
 
     # Logical
     '~':        lambda B: monadic2scalar(_logical_negation,B),
@@ -229,7 +229,7 @@ def     monadic_function (symbol):
     raises INVALID TOKEN if the symbol is not recognised
     """
     try:
-        return monadic_functions[symbol[0]]
+        return _monadic_functions[symbol[0]]
     except KeyError:
         apl_error("INVALID TOKEN", symbol)
 

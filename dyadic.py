@@ -24,36 +24,6 @@ from apl_error import apl_error
 
 # ------------------------------
 
-trigonometric_functions = (
-    None,               # -12
-    None,
-    None,
-    None,
-    None,               # -8
-    math.atanh,
-    math.acosh,
-    math.asinh,
-    lambda x: math.sqrt(x*x-1), # -4
-    math.atan,
-    math.acos,
-    math.asin,
-    lambda x: math.sqrt(1-x*x), # 0
-    math.sin,
-    math.cos,
-    math.tan,
-    lambda x: math.sqrt(x*x+1), # +4
-    math.sinh,
-    math.cosh,
-    math.tanh,
-    None,               # +8
-    None,
-    None,
-    None,
-    None,               # +12
-)
-
-# ------------------------------
-
 def     _add (A,B):
     """
     A plus B
@@ -202,21 +172,72 @@ def     _combinations (A,B):
 
 # ------------------------------
 
-def     trigonometric (A,B):
-    """
-    A plus B
+_trigonometric_functions = (
+    None,               # -12
+    None,
+    None,
+    None,
+    None,               # -8
+    math.atanh,
+    math.acosh,
+    math.asinh,
+    lambda x: math.sqrt(x*x-1), # -4
+    math.atan,
+    math.acos,
+    math.asin,
+    lambda x: math.sqrt(1-x*x), # 0
+    math.sin,
+    math.cos,
+    math.tan,
+    lambda x: math.sqrt(x*x+1), # +4
+    math.sinh,
+    math.cosh,
+    math.tanh,
+    None,               # +8
+    None,
+    None,
+    None,
+    None,               # +12
+)
 
-    scalar arguments only
-    """
-    if type(A) is int:
-        if abs(A) <= 12:
-            function = trigonometric_functions[A+12]
-            if function is None:
-                return to_be_implemented (A,B)
-            else:
-                return function(B)
+# --------------
 
-    apl_error("DOMAIN ERROR")
+def     _trigonometric (A,B):
+    """
+    A(B) where A is a trignometic function and B is an angle in Radians
+
+    A is valid in the range [-12,+12].  The following are implemented:
+
+    ¯7  atanh(B)
+    ¯6  acosh(B)
+    ¯5  asinh(B)
+    ¯4  sqrt(B**2-1)
+    ¯3  atan(B)
+    ¯2  acos(B)
+    ¯1  asin(B)
+     0  sqrt(1-B**2)
+     1  sin(B)
+     2  cos(B)
+     3  tan(B)
+     4  sqrt(B**2+1)
+     5  sinh(B)
+     6  cosh(B)
+     7  tanh(B)
+    """
+    A = confirm_int(A)
+
+    if A <= -12 or A >= 12:
+        apl_error("DOMAIN ERROR")
+
+    function = _trigonometric_functions[A+12]
+    if function is None:
+        return to_be_implemented(A,B)
+
+    try:
+        return function(B)
+    except ValueError:
+        apl_error("DOMAIN ERROR")
+
 
 # ------------------------------
 
@@ -359,7 +380,7 @@ def     to_be_implemented (A,B):
 
 # ------------------------------
 
-dyadic_functions = {
+_dyadic_functions = {
     # Mathematical
     '+':        lambda A,B: dyadic2scalar(_add,A,B),
     '-':        lambda A,B: dyadic2scalar(_subtract,A,B),
@@ -374,8 +395,10 @@ dyadic_functions = {
     '⍟':        lambda A,B: dyadic2scalar(_log,A,B),
     '?':        lambda A,B: dyadic2vector(_deal,A,B),
     '!':        lambda A,B: dyadic2scalar(_combinations,A,B),
-    '○':        lambda A,B: dyadic2scalar(trigonometric,A,B),
     '⌹':        to_be_implemented,      # matrix divide
+
+    # Trigonometric
+    '○':        lambda A,B: dyadic2scalar(_trigonometric,A,B),
 
     # Logical
     '∨':        lambda A,B: dyadic2scalar(_or_gcd,A,B),
@@ -444,7 +467,7 @@ def     dyadic_function (symbol):
     raises INVALID TOKEN if the symbol is not recognised
     """
     try:
-        return dyadic_functions[symbol[0]]
+        return _dyadic_functions[symbol[0]]
     except KeyError:
         apl_error("INVALID TOKEN", symbol)
 

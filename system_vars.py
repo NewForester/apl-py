@@ -33,7 +33,12 @@ def     equalCT (A,B):
 
 def     integerCT (B):
     if not type(B) is int:
-        integer = int(B+0.5)
+        if B > 0:
+            integer = int(B+0.5)
+        elif B < 0:
+            integer = int(B-0.5)
+        else:
+            integer = 0
 
         if equalCT(integer,B):
             return integer

@@ -226,6 +226,19 @@ def     monadic_factorial ():
 
 # --------------
 
+def     monadic_pi ():
+    """
+    >>> test('○ ¯1 0 1')
+    ¯3.141592654 0 3.141592654
+    >>> test('○ ¯0.5 0.5')
+    ¯1.570796327 1.570796327
+    >>> test('○ ¯2 2')
+    ¯6.283185307 6.283185307
+    """
+    pass
+
+# --------------
+
 def     monadic_negation ():
     """
     >>> test('~ ¯1')
@@ -247,16 +260,7 @@ from apl_quantity import APL_scalar as apl_scalar
 
 def     monadic_test (symbol,B):
     """
-
-    >>> monadic_test ('○',1)
-    3.141592654
-    >>> monadic_test ('○',0)
-    0
-    >>> monadic_test ('○',-1)
-    ¯3.141592654
-
     # --
-
     >>> monadic_test ('⍕',1)
     FUNCTION NOT YET IMPLEMENTED
     >>> monadic_test ('"',1)
