@@ -47,6 +47,23 @@ def     test_number (expr):
     except apl_exception as error:
         print (error.message)
 
+def     test_zilde (expr):
+    """
+    zilde - empty numeric vector - same as ⍳0 or 0⍴0
+
+    >>> test_zilde('⍬')
+    Quantity has dimension 0
+    ⍬
+    """
+    try:
+        quantity = evaluate(expr)
+
+        print("Quantity has dimension {0}".format(quantity.dimension()))
+
+        print_result(quantity)
+    except apl_exception as error:
+        print (error.message)
+
 # ------------------------------
 
 def     test_scalar (expr):

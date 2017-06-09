@@ -40,6 +40,8 @@ class APL_quantity (object):
     def __str__(self):
         if self.dim is None:
             return _format_element(self.value)
+        elif self.dim == 0:
+            return '⍬'
         else:
             return ' '.join(map(_format_element, self.value))
 

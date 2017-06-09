@@ -217,7 +217,6 @@ _monadic_functions = {
 # Miscellaneous
     '⍕':        to_be_implemented,      # monadic format
     '⍎':        to_be_implemented,      # execute
-    '⍬':        to_be_implemented,      # zilde - empty numeric vector - same as ⍳0 or 0⍴0
     };
 
 # ------------------------------

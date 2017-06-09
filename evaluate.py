@@ -186,6 +186,8 @@ def     parse(expr):
             value, consumed = extract_string(expr,leader)
         elif leader == '"':
             value, consumed = extract_string(expr,leader)
+        elif leader == '⍬':
+            value, consumed = apl_vector([]), 1
         else:
             value, consumed = extract_number(expr)
 
