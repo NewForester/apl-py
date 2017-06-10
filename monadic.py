@@ -19,7 +19,7 @@ import mpmath
 
 from system_vars import integerCT
 
-from apl_quantity import monadic2scalar, monadic2vector
+from apl_quantity import s2s
 from apl_error import apl_error
 
 # ------------------------------
@@ -174,26 +174,26 @@ def     to_be_implemented (B):
 
 _monadic_functions = {
     # Mathematical
-    '+':        lambda B: monadic2scalar(_identity,B),
-    '-':        lambda B: monadic2scalar(_negation,B),
-    '×':        lambda B: monadic2scalar(_signum,B),
-    '÷':        lambda B: monadic2scalar(_reciprocal,B),
-    '⌈':        lambda B: monadic2scalar(_ceil,B),
-    '⌊':        lambda B: monadic2scalar(_floor,B),
-    '|':        lambda B: monadic2scalar(_magnitude,B),
+    '+':        lambda B: s2s(_identity,B),
+    '-':        lambda B: s2s(_negation,B),
+    '×':        lambda B: s2s(_signum,B),
+    '÷':        lambda B: s2s(_reciprocal,B),
+    '⌈':        lambda B: s2s(_ceil,B),
+    '⌊':        lambda B: s2s(_floor,B),
+    '|':        lambda B: s2s(_magnitude,B),
 
     # Algebraic
-    '*':        lambda B: monadic2scalar(_exp,B),
-    '⍟':        lambda B: monadic2scalar(_log,B),
-    '?':        lambda B: monadic2scalar(_roll,B),
-    '!':        lambda B: monadic2scalar(_factorial,B),
+    '*':        lambda B: s2s(_exp,B),
+    '⍟':        lambda B: s2s(_log,B),
+    '?':        lambda B: s2s(_roll,B),
+    '!':        lambda B: s2s(_factorial,B),
     '⌹':        to_be_implemented,      # matrix inverse
 
     # Trigonometric
-    '○':        lambda B: monadic2scalar(_pi,B),
+    '○':        lambda B: s2s(_pi,B),
 
     # Logical
-    '~':        lambda B: monadic2scalar(_logical_negation,B),
+    '~':        lambda B: s2s(_logical_negation,B),
 
 # Structural (aka manipulative)
     '⍳':        to_be_implemented,      # index generator

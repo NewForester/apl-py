@@ -19,7 +19,7 @@ import mpmath
 
 from system_vars import confirm_bool, confirm_int, equalCT, integerCT
 
-from apl_quantity import dyadic2scalar, dyadic2vector
+from apl_quantity import ss2s, ss2v
 from apl_error import apl_error
 
 # ------------------------------
@@ -382,37 +382,37 @@ def     to_be_implemented (A,B):
 
 _dyadic_functions = {
     # Mathematical
-    '+':        lambda A,B: dyadic2scalar(_add,A,B),
-    '-':        lambda A,B: dyadic2scalar(_subtract,A,B),
-    '×':        lambda A,B: dyadic2scalar(_multiply,A,B),
-    '÷':        lambda A,B: dyadic2scalar(_divide,A,B),
-    '⌈':        lambda A,B: dyadic2scalar(_maximum,A,B),
-    '⌊':        lambda A,B: dyadic2scalar(_minimum,A,B),
-    '|':        lambda A,B: dyadic2scalar(_residue,A,B),
+    '+':        lambda A,B: ss2s(_add,A,B),
+    '-':        lambda A,B: ss2s(_subtract,A,B),
+    '×':        lambda A,B: ss2s(_multiply,A,B),
+    '÷':        lambda A,B: ss2s(_divide,A,B),
+    '⌈':        lambda A,B: ss2s(_maximum,A,B),
+    '⌊':        lambda A,B: ss2s(_minimum,A,B),
+    '|':        lambda A,B: ss2s(_residue,A,B),
 
     # Algebraic
-    '*':        lambda A,B: dyadic2scalar(_exp,A,B),
-    '⍟':        lambda A,B: dyadic2scalar(_log,A,B),
-    '?':        lambda A,B: dyadic2vector(_deal,A,B),
-    '!':        lambda A,B: dyadic2scalar(_combinations,A,B),
+    '*':        lambda A,B: ss2s(_exp,A,B),
+    '⍟':        lambda A,B: ss2s(_log,A,B),
+    '?':        lambda A,B: ss2v(_deal,A,B),
+    '!':        lambda A,B: ss2s(_combinations,A,B),
     '⌹':        to_be_implemented,      # matrix divide
 
     # Trigonometric
-    '○':        lambda A,B: dyadic2scalar(_trigonometric,A,B),
+    '○':        lambda A,B: ss2s(_trigonometric,A,B),
 
     # Logical
-    '∨':        lambda A,B: dyadic2scalar(_or_gcd,A,B),
-    '∧':        lambda A,B: dyadic2scalar(_and_lcm,A,B),
-    '⍱':        lambda A,B: dyadic2scalar(_nor,A,B),
-    '⍲':        lambda A,B: dyadic2scalar(_nand,A,B),
+    '∨':        lambda A,B: ss2s(_or_gcd,A,B),
+    '∧':        lambda A,B: ss2s(_and_lcm,A,B),
+    '⍱':        lambda A,B: ss2s(_nor,A,B),
+    '⍲':        lambda A,B: ss2s(_nand,A,B),
 
     # Comparison
-    '<':        lambda A,B: dyadic2scalar(_lt,A,B),
-    '≤':        lambda A,B: dyadic2scalar(_le,A,B),
-    '=':        lambda A,B: dyadic2scalar(_eq,A,B),
-    '≥':        lambda A,B: dyadic2scalar(_ge,A,B),
-    '>':        lambda A,B: dyadic2scalar(_gt,A,B),
-    '≠':        lambda A,B: dyadic2scalar(_ne,A,B),
+    '<':        lambda A,B: ss2s(_lt,A,B),
+    '≤':        lambda A,B: ss2s(_le,A,B),
+    '=':        lambda A,B: ss2s(_eq,A,B),
+    '≥':        lambda A,B: ss2s(_ge,A,B),
+    '>':        lambda A,B: ss2s(_gt,A,B),
+    '≠':        lambda A,B: ss2s(_ne,A,B),
     '≡':        to_be_implemented,      # match (return 0/1 irrespective of rank etc)
 
 # Structural (aka manipulative)

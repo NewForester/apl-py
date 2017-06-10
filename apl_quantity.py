@@ -32,30 +32,51 @@ class APL_quantity (object):
         self.dim = dimension
 
     def __iter__(self):
-        if self.dim is None:
+        if self.isScalar():
             return APL_scalar_iter(self.value)
         else:
             return self.value.__iter__()
 
     def __str__(self):
-        if self.dim is None:
+        if self.isScalar():
             return _format_element(self.value)
-        elif self.dim == 0:
-            return '⍬'
         else:
-            return ' '.join(map(_format_element, self.value))
+            if self.dimension() == 0:
+                return '⍬'
+            else:
+                return ' '.join(map(_format_element, self.value))
 
     def python(self):
         return self.value
 
     def resolve(self):
-        if self.dim is None:
+        if self.isScalar():
             return APL_scalar(self.value)
         else:
             return APL_vector(list(self.value))
 
+    def scalarToPy(self,error=None):
+        if self.dim is None:
+            return self.value
+        elif self.dim == 1:
+            return self.value[0]
+
+        apl_error(error if error else "RANK ERROR")
+
+    def vectorToPy(self):
+        if self.dim is None:
+            return [self.value]
+        else:
+            return self.value
+
     def dimension(self):
         return self.dim
+
+    def isScalar(self):
+        return self.dim is None
+
+    def isVector(self):
+        return self.dim is not None
 
 # ------------------------------
 
@@ -84,7 +105,7 @@ class APL_scalar (APL_quantity):
         APL_quantity.__init__(self,value,None)
 
     def resolve(self):
-        return (self)
+        return self
 
 # ------------------------------
 
@@ -96,7 +117,7 @@ class APL_vector (APL_quantity):
         APL_quantity.__init__(self,value,len(value))
 
     def resolve(self):
-        return (self)
+        return self
 
 # ------------------------------
 
@@ -104,69 +125,52 @@ def eval_monadic(Fn,B):
     """
     evaluate an monadic Python function that does not understand APL quantitites
     """
-    if B.dimension() == None:
-        return APL_scalar(Fn(B.python()))
-    else:
-        apl_error("LENGTH ERROR")
+    return APL_scalar(Fn(B.scalarToPy("LENGTH ERROR")))
 
 # ------------------------------
 
-def monadic2scalar (Fn,B):
+def s2s (Fn,B):
     """
-    evaluate a monadic function that, if given a scalar argument, returns a scalar
+    evaluate a numeric monadic function that, given a scalar argument, returns a scalar
     """
-    dim = B.dimension()
-
-    if dim is None:
+    if B.isScalar():
         return APL_scalar(Fn(B.python()))
 
-    return APL_quantity(map(Fn,B),dim)
+    return APL_quantity(map(Fn,B),B.dimension())
 
 # ------------------------------
 
-def monadic2vector (Fn,B):
+def s2v (Fn,B):
     """
-    evaluate a monadic function that, if given a scalar argument, returns a vector
+    evaluate a numeric monadic function that, given a scalar argument, returns a vector
     """
-    dim = B.dimension()
-
-    if dim is None:
-        return APL_vector(Fn(B.python()))
-
-    return APL_quantity(map(Fn,B),dim)
+    return APL_vector(Fn(B.scalarToPy()))
 
 # ------------------------------
 
-def dyadic2scalar (Fn,A,B):
+def ss2s (Fn,A,B):
     """
-    evaluate a dyadic function that, if given scalar arguments, returns a scalar
+    evaluate a numeric dyadic function that, given scalar arguments, returns a scalar
     """
-    aDim = A.dimension()
-    bDim = B.dimension()
 
-    if aDim is None:
-        if bDim is None:
-            return APL_scalar(Fn(A.python(),B.python()))
-        dim = bDim
-    else:
-        if bDim is not None:
-            if aDim != bDim:
-                apl_error("LENGTH ERROR")
-        dim = aDim
+    dims = tuple(filter(lambda X: X is not None, (A.dimension(), B.dimension())))
+    case = len(dims)
 
-    return APL_quantity(map(Fn,A,B),dim)
+    if case == 0:
+        return APL_scalar(Fn(A.python(),B.python()))
+
+    if case == 2:
+        if dims[0] != dims[1]:
+            apl_error("LENGTH ERROR")
+
+    return APL_quantity(map(Fn,A,B),dims[0])
 
 # ------------------------------
 
-def dyadic2vector (Fn,A,B):
+def ss2v (Fn,A,B):
     """
-    evaluate a dyadic function that, given scalar arguments, returns a vector
+    evaluate a numeric dyadic function that, given scalar arguments, returns a vector
     """
-    if A.dimension() != None:
-        apl_error("RANK ERROR")
-    if B.dimension() != None:
-        apl_error("RANK ERROR")
-
-    return APL_vector(Fn(A.python(),B.python()))
+    return APL_vector(Fn(A.scalarToPy(),B.scalarToPy()))
 
 # EOF
