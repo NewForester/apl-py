@@ -173,4 +173,17 @@ def ss2v (Fn,A,B):
     """
     return APL_vector(Fn(A.scalarToPy(),B.scalarToPy()))
 
+# ------------------------------
+
+def vv2s (Fn,A,B):
+    """
+    evaluate a dyadic function that returns a vector if B is a vector but a scalar if B is scalar
+    """
+    Rpy = Fn(A.vectorToPy(),B.vectorToPy())
+
+    if B.isScalar():
+        return APL_scalar(Rpy[0])
+    else:
+        return APL_vector(Rpy)
+
 # EOF

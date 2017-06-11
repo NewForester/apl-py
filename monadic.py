@@ -17,9 +17,9 @@ import math
 import random
 import mpmath
 
-from system_vars import integerCT
+from system_vars import integerCT, confirm_int, indexOrigin
 
-from apl_quantity import s2s
+from apl_quantity import s2s, s2v
 from apl_error import apl_error
 
 # ------------------------------
@@ -162,6 +162,18 @@ def     _logical_negation (B):
 
 # ------------------------------
 
+def     _range (B):
+    """
+    [1, B] or [0, B) depending on ⎕IO
+    """
+    B = confirm_int(B)
+
+    IO = indexOrigin()
+
+    return range (IO, B + IO)
+
+# ------------------------------
+
 def     to_be_implemented (B):
     """
     placeholder for functions not yet implemented
@@ -195,8 +207,8 @@ _monadic_functions = {
     # Logical
     '~':        lambda B: s2s(_logical_negation,B),
 
-# Structural (aka manipulative)
-    '⍳':        to_be_implemented,      # index generator
+    # Structural (aka manipulative)
+    '⍳':        lambda B: s2v(_range,B),
     '≡':        to_be_implemented,      # depth - reports on nesting
     '⍴':        to_be_implemented,      # shape - reports dimensions
     ',':        to_be_implemented,      # unravel - reshape into a vector

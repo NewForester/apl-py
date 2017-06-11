@@ -250,6 +250,23 @@ def     monadic_negation ():
     """
     pass
 
+# --------------
+
+def     monadic_iota ():
+    """
+    >>> test('⍳ 0')
+    ⍬
+    >>> test('⍳ 1')
+    1
+    >>> test('⍳ 2')
+    1 2
+    >>> test('⍳ 3.142')
+    DOMAIN ERROR
+    >>> test('⍳ 1 1')
+    RANK ERROR
+    """
+    pass
+
 # ------------------------------
 
 from monadic import monadic_function

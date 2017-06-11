@@ -17,9 +17,9 @@ import math
 import random
 import mpmath
 
-from system_vars import confirm_bool, confirm_int, equalCT, integerCT
+from system_vars import confirm_bool, confirm_int, equalCT, integerCT, indexOrigin
 
-from apl_quantity import ss2s, ss2v
+from apl_quantity import ss2s, ss2v, vv2s
 from apl_error import apl_error
 
 # ------------------------------
@@ -370,6 +370,25 @@ def     _ne (A,B):
 
 # ------------------------------
 
+def     _index (A,B):
+    """
+    index(es) of (elements of) B in (list) A
+    """
+    V = []
+    IO = indexOrigin()
+
+    A = list(A)
+
+    for X in B:
+        try:
+            V.append(A.index(X) + IO)
+        except ValueError:
+            V.append(len(A) + IO)
+
+    return V
+
+# ------------------------------
+
 def     to_be_implemented (A,B):
     """
     placeholder for functions not yet implemented
@@ -415,7 +434,7 @@ _dyadic_functions = {
     '≠':        lambda A,B: ss2s(_ne,A,B),
     '≡':        to_be_implemented,      # match (return 0/1 irrespective of rank etc)
 
-# Structural (aka manipulative)
+    # Structural (aka manipulative)
     '⍴':        to_be_implemented,      # (rho) reshape
     ',':        to_be_implemented,      # (comma) concatenation
     '⍪':        to_be_implemented,      #
@@ -425,7 +444,8 @@ _dyadic_functions = {
     '⊂':        to_be_implemented,      # (enclose) - creates an array of vectors (?!?)
     '⊃':        to_be_implemented,      # (disclose) = picks from an array (?!?)
 
-# Selection and Set Operations
+    # Selection and Set Operations
+    '⍳':        lambda A,B: vv2s(_index,A,B),
     '\\':       to_be_implemented,      # expansion
     '/':        to_be_implemented,      # compression
     '↑':        to_be_implemented,      # take
@@ -440,7 +460,6 @@ _dyadic_functions = {
     '⊢':        to_be_implemented,      #
 
 # Search
-    '⍳':        to_be_implemented,      # index of B in A
     '∈':        to_be_implemented,      # membership ... same as ?
     '∊':        to_be_implemented,      # membership - is A in B (also characters) - return a boolean
     '⍷':        to_be_implemented,      # find (look for a substring)
