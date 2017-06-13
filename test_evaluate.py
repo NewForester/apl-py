@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-    Unit test for rep.evaluate - doctest style
+    Unit test for evaluate.py - doctest style
 
     WIP - grows as evaluate is extended
 
@@ -133,24 +133,35 @@ def     test_string (expr):
     Implementation of string handling incomplete - parser test only
 
     >>> test_string("'Hello'")
-    'Hello'
-    0
+    Hello
     >>> test_string("'Hello\\"Jello'")
-    'Hello"Jello'
-    0
+    Hello"Jello
     >>> test_string("'Hello''Jello'")
-    'Hello'Jello'
-    0
+    Hello'Jello
+    >>> test_string("'H'")
+    H
+    >>> test_string("''")
+    <BLANKLINE>
 
     >>> test_string('"Hello"')
-    "Hello"
-    1
+    Hello
     >>> test_string('"Hello\\'Jello"')
-    "Hello'Jello"
-    1
+    Hello'Jello
     >>> test_string('"Hello""Jello"')
-    "Hello"Jello"
-    1
+    Hello"Jello
+    >>> test_string('"H"')
+    H
+    >>> test_string('""')
+    <BLANKLINE>
+
+    >>> test_string("'Hello'")
+    Hello
+    >>> test_string("'Hello' 'Paul'")
+    'Hello' 'Paul'
+    >>> test_string("1 'Hello' 2")
+    1 'Hello' 2
+    >>> test_string("'Hello' (19 20) 'Paul'")
+    'Hello' (19 20) 'Paul'
     """
     try:
         print_result(evaluate(expr))

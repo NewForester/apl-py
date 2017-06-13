@@ -20,7 +20,7 @@ from system_cmds import system_command
 
 from workspace_vars import workspace_variable
 
-from apl_quantity import APL_quantity as apl_value, APL_scalar as apl_scalar, APL_vector as apl_vector
+from apl_quantity import APL_quantity as apl_value, APL_scalar as apl_scalar, APL_vector as apl_vector, APL_string as apl_string
 from apl_error import APL_exception as apl_exception, apl_error
 
 # ------------------------------
@@ -138,8 +138,7 @@ def     extract_string (expr,delim):
     if match:
         string = match.group(0)
         if string:
-            print(string.replace(delim*2,delim))
-            return (lhs, len(string))
+            return (apl_string(string), len(string))
 
     return (None, 0)
 
