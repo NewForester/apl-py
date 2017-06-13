@@ -1,5 +1,5 @@
 """
-    a Python type that can hold APL scalar and vector quantities
+    a Python type that can hold APL scalar and vector quantities, both numeric and string
 
     UNDER DEVELOPMENT
 """
@@ -13,13 +13,19 @@ def _format_element (value):
     format a single element of an APL quantity
     """
     if isinstance(value,APL_quantity):
-        string = '({0})'.format(value)
+        if value.isString():
+            return "'{0}'".format(value)
+        else:
+            return "({0})".format(value)
     else:
-        string = '{0:.10g}'.format(value)
+        if type(value) == str:
+            return "'{0}'".format(value)
+        else:
+            string = "{0:.10g}".format(value)
 
-    if string == '-0':  return '0'
+            if string == "-0":  return "0"
 
-    return string
+            return string.replace('-','¯')
 
 # ------------------------------
 
@@ -27,9 +33,10 @@ class APL_quantity (object):
     """
     trivial class that holds an APL quantity
     """
-    def __init__(self,value,dimension):
+    def __init__(self,value,dimension,string=False):
         self.value = value
         self.dim = dimension
+        self.string = string
 
     def __iter__(self):
         if self.isScalar():
@@ -38,6 +45,9 @@ class APL_quantity (object):
             return self.value.__iter__()
 
     def __str__(self):
+        if self.isString():
+            return ''.join(self.value)
+
         if self.isScalar():
             return _format_element(self.value)
         else:
@@ -64,13 +74,16 @@ class APL_quantity (object):
         apl_error(error if error else "RANK ERROR")
 
     def vectorToPy(self):
-        if self.dim is None:
+        if self.dim is None and not self.string:
             return [self.value]
         else:
             return self.value
 
     def dimension(self):
         return self.dim
+
+    def isString(self):
+        return self.string
 
     def isScalar(self):
         return self.dim is None
@@ -115,6 +128,23 @@ class APL_vector (APL_quantity):
     """
     def __init__(self,value):
         APL_quantity.__init__(self,value,len(value))
+
+    def resolve(self):
+        return self
+
+# ------------------------------
+
+class APL_string (APL_quantity):
+    """
+    trivial class that holds an APL string quantity
+    """
+    def __init__(self,value):
+        delim = value[0];
+        value = value.replace(delim*2,delim)[1:-1]
+        length = len(value)
+        if length == 1 and delim == "'":   length = None
+
+        APL_quantity.__init__(self,value,length,True)
 
     def resolve(self):
         return self

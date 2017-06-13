@@ -129,7 +129,7 @@ def     print_result (result,prefix=""):
     """
     print the result when APL expression evaluation succeeds
     """
-    print("{0}{1}".format(prefix,result).replace('-','¯'))
+    print("{0}{1}".format(prefix,str(result)))
 
 # ------------------------------
 
