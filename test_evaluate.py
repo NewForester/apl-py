@@ -59,6 +59,9 @@ def     test_zilde (expr):
     >>> test_zilde('⍳0')
     Quantity has dimension 0
     ⍬
+    >>> test_zilde('1 ~ 1')
+    Quantity has dimension 0
+    ⍬
     """
     try:
         quantity = evaluate(expr)
