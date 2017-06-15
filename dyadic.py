@@ -19,7 +19,7 @@ import mpmath
 
 from system_vars import confirm_bool, confirm_int, equalCT, integerCT, indexOrigin
 
-from apl_quantity import ss2s, ss2v, vv2s
+from apl_quantity import ss2s, ss2v, vv2v, vv2s
 from apl_error import apl_error
 
 # ------------------------------
@@ -370,6 +370,23 @@ def     _ne (A,B):
 
 # ------------------------------
 
+def     _without (A,B):
+    """
+    remove (elements of B) from (list) A
+    """
+    A = list(A)
+
+    for X in B:
+        try:
+            while True:
+                A.remove(X)
+        except ValueError:
+            pass
+
+    return A
+
+# --------------
+
 def     _index (A,B):
     """
     index(es) of (elements of) B in (list) A
@@ -445,13 +462,13 @@ _dyadic_functions = {
     '⊃':        to_be_implemented,      # (disclose) = picks from an array (?!?)
 
     # Selection and Set Operations
+    '~':        lambda A,B: vv2v(_without,A,B),
     '⍳':        lambda A,B: vv2s(_index,A,B),
     '\\':       to_be_implemented,      # expansion
     '/':        to_be_implemented,      # compression
     '↑':        to_be_implemented,      # take
     '↓':        to_be_implemented,      # drop
     '⌷':        to_be_implemented,      # index
-    '~':        to_be_implemented,      # without - removes items
     '⌿':        to_be_implemented,      #
     '⍀':        to_be_implemented,      #
     '∪':        to_be_implemented,      #

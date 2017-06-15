@@ -126,8 +126,8 @@ class APL_vector (APL_quantity):
     """
     trivial class that holds an APL vector quantity
     """
-    def __init__(self,value):
-        APL_quantity.__init__(self,value,len(value))
+    def __init__(self,value,string=False):
+        APL_quantity.__init__(self,value,len(value),string)
 
     def resolve(self):
         return self
@@ -202,6 +202,20 @@ def ss2v (Fn,A,B):
     evaluate a numeric dyadic function that, given scalar arguments, returns a vector
     """
     return APL_vector(Fn(A.scalarToPy(),B.scalarToPy()))
+
+# ------------------------------
+
+def vv2v (Fn,A,B):
+    """
+    evaluate a dyadic function that returns a vector
+    """
+    case = A.isString() + B.isString()
+
+    if case == 1:   return A
+
+    Rpy = Fn(A.vectorToPy(),B.vectorToPy())
+
+    return APL_vector(Rpy,case == 2)
 
 # ------------------------------
 
