@@ -131,48 +131,6 @@ def     test_parentheses (expr):
 
 # ------------------------------
 
-def     test_string (expr):
-    """
-    Implementation of string handling incomplete - parser test only
-
-    >>> test_string("'Hello'")
-    Hello
-    >>> test_string("'Hello\\"Jello'")
-    Hello"Jello
-    >>> test_string("'Hello''Jello'")
-    Hello'Jello
-    >>> test_string("'H'")
-    H
-    >>> test_string("''")
-    <BLANKLINE>
-
-    >>> test_string('"Hello"')
-    Hello
-    >>> test_string('"Hello\\'Jello"')
-    Hello'Jello
-    >>> test_string('"Hello""Jello"')
-    Hello"Jello
-    >>> test_string('"H"')
-    H
-    >>> test_string('""')
-    <BLANKLINE>
-
-    >>> test_string("'Hello'")
-    Hello
-    >>> test_string("'Hello' 'Paul'")
-    'Hello' 'Paul'
-    >>> test_string("1 'Hello' 2")
-    1 'Hello' 2
-    >>> test_string("'Hello' (19 20) 'Paul'")
-    'Hello' (19 20) 'Paul'
-    """
-    try:
-        print_result(evaluate(expr))
-    except apl_exception as error:
-        print (error.message)
-
-# ------------------------------
-
 def     test_sys_vars (expr):
     """
     >>> test_sys_vars('⎕dummy')
