@@ -418,37 +418,37 @@ def     to_be_implemented (A,B):
 
 _dyadic_functions = {
     # Mathematical
-    '+':        lambda A,B: ss2s(_add,A,B),
-    '-':        lambda A,B: ss2s(_subtract,A,B),
-    '×':        lambda A,B: ss2s(_multiply,A,B),
-    '÷':        lambda A,B: ss2s(_divide,A,B),
-    '⌈':        lambda A,B: ss2s(_maximum,A,B),
-    '⌊':        lambda A,B: ss2s(_minimum,A,B),
-    '|':        lambda A,B: ss2s(_residue,A,B),
+    '+':        lambda A,B: ss2s(_add,A,B,True),
+    '-':        lambda A,B: ss2s(_subtract,A,B,True),
+    '×':        lambda A,B: ss2s(_multiply,A,B,True),
+    '÷':        lambda A,B: ss2s(_divide,A,B,True),
+    '⌈':        lambda A,B: ss2s(_maximum,A,B,True),
+    '⌊':        lambda A,B: ss2s(_minimum,A,B,True),
+    '|':        lambda A,B: ss2s(_residue,A,B,True),
 
     # Algebraic
-    '*':        lambda A,B: ss2s(_exp,A,B),
-    '⍟':        lambda A,B: ss2s(_log,A,B),
+    '*':        lambda A,B: ss2s(_exp,A,B,True),
+    '⍟':        lambda A,B: ss2s(_log,A,B,True),
     '?':        lambda A,B: ss2v(_deal,A,B),
-    '!':        lambda A,B: ss2s(_combinations,A,B),
+    '!':        lambda A,B: ss2s(_combinations,A,B,True),
     '⌹':        to_be_implemented,      # matrix divide
 
     # Trigonometric
-    '○':        lambda A,B: ss2s(_trigonometric,A,B),
+    '○':        lambda A,B: ss2s(_trigonometric,A,B,True),
 
     # Logical
-    '∨':        lambda A,B: ss2s(_or_gcd,A,B),
-    '∧':        lambda A,B: ss2s(_and_lcm,A,B),
-    '⍱':        lambda A,B: ss2s(_nor,A,B),
-    '⍲':        lambda A,B: ss2s(_nand,A,B),
+    '∨':        lambda A,B: ss2s(_or_gcd,A,B,True),
+    '∧':        lambda A,B: ss2s(_and_lcm,A,B,True),
+    '⍱':        lambda A,B: ss2s(_nor,A,B,True),
+    '⍲':        lambda A,B: ss2s(_nand,A,B,True),
 
     # Comparison
-    '<':        lambda A,B: ss2s(_lt,A,B),
-    '≤':        lambda A,B: ss2s(_le,A,B),
-    '=':        lambda A,B: ss2s(_eq,A,B),
-    '≥':        lambda A,B: ss2s(_ge,A,B),
-    '>':        lambda A,B: ss2s(_gt,A,B),
-    '≠':        lambda A,B: ss2s(_ne,A,B),
+    '<':        lambda A,B: ss2s(_lt,A,B,True),
+    '≤':        lambda A,B: ss2s(_le,A,B,True),
+    '=':        lambda A,B: ss2s(_eq,A,B,False),
+    '≥':        lambda A,B: ss2s(_ge,A,B,True),
+    '>':        lambda A,B: ss2s(_gt,A,B,True),
+    '≠':        lambda A,B: ss2s(_ne,A,B,False),
     '≡':        to_be_implemented,      # match (return 0/1 irrespective of rank etc)
 
     # Structural (aka manipulative)

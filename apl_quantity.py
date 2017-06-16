@@ -65,6 +65,19 @@ class APL_quantity (object):
         else:
             return APL_vector(list(self.value))
 
+    def noStringConfirm(self):
+        if self.isString():
+            apl_error("DOMAIN ERROR")
+
+    def noString(self):
+        if self.isString():
+            if self.isScalar():
+                return APL_scalar(ord(self.value))
+            else:
+                return APL_quantity(map(ord,self.value),self.dim)
+
+        return self
+
     def scalarToPy(self,error=None):
         if self.dim is None:
             return self.value
@@ -163,6 +176,8 @@ def s2s (Fn,B):
     """
     evaluate a numeric monadic function that, given a scalar argument, returns a scalar
     """
+    B.noStringConfirm()
+
     if B.isScalar():
         return APL_scalar(Fn(B.python()))
 
@@ -174,14 +189,22 @@ def s2v (Fn,B):
     """
     evaluate a numeric monadic function that, given a scalar argument, returns a vector
     """
+    B.noStringConfirm()
+
     return APL_vector(Fn(B.scalarToPy()))
 
 # ------------------------------
 
-def ss2s (Fn,A,B):
+def ss2s (Fn,A,B,numbersOnly):
     """
-    evaluate a numeric dyadic function that, given scalar arguments, returns a scalar
+    evaluate a dyadic function that, given scalar arguments, returns a scalar
     """
+    if (numbersOnly):
+        A.noStringConfirm()
+        B.noStringConfirm()
+    else:
+        A = A.noString()
+        B = B.noString()
 
     dims = tuple(filter(lambda X: X is not None, (A.dimension(), B.dimension())))
     case = len(dims)
