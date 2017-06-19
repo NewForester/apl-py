@@ -628,6 +628,34 @@ def     dyadic_iota ():
     """
     pass
 
+# --------------
+
+def     dyadic_rho ():
+    """
+    >>> test('1 ⍴ 0')
+    0
+    >>> test('⍴ 1 ⍴ 0')
+    1
+
+    >>> test('8 ⍴ ⍳ 4')
+    1 2 3 4 1 2 3 4
+    >>> test('8 ⍴ ⍳ 8')
+    1 2 3 4 5 6 7 8
+    >>> test('8 ⍴ ⍳ 16')
+    1 2 3 4 5 6 7 8
+
+    >>> test('3 ⍴ ⍳ 4')
+    1 2 3
+    >>> test('4 ⍴ ⍳ 4')
+    1 2 3 4
+    >>> test('5 ⍴ ⍳ 4')
+    1 2 3 4 1
+
+    >>> test('1 2 ⍴ 1 2 ')
+    RANK ERROR
+    """
+    pass
+
 # ------------------------------
 
 from dyadic import dyadic_function

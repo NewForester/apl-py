@@ -210,6 +210,32 @@ def     test_iota (expr):
 
 # ------------------------------
 
+def     test_rho (expr):
+    """
+    >>> test_string("⍴ 'Hello'")
+    5
+    >>> test_string("⍴ 'Hello' 'Paul'")
+    2
+    >>> test_string("⍴ 1 'Hello' 2")
+    3
+
+    >>> test_string("⍴ 'H'")
+    ⍬
+    >>> test_string('⍴ "H"')
+    1
+
+
+    >>> test_string("4 ⍴ 'Hello'")
+    Hell
+    >>> test_string("5 ⍴ 'Hello'")
+    Hello
+    >>> test_string("6 ⍴ 'Hello'")
+    HelloH
+    """
+    pass
+
+# ------------------------------
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
