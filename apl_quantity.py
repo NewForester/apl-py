@@ -195,6 +195,18 @@ def s2v (Fn,B):
 
 # ------------------------------
 
+def s_rho (Fn,B):
+    """
+    scalar rho - return dimension/rank of B - does not operate on B
+    """
+    if B.isScalar():    return APL_vector([])
+
+    if B.isVector():    return APL_scalar(B.dimension())
+
+    apl_error("RANK ERROR")
+
+# ------------------------------
+
 def ss2s (Fn,A,B,numbersOnly):
     """
     evaluate a dyadic function that, given scalar arguments, returns a scalar
@@ -252,5 +264,19 @@ def vv2s (Fn,A,B):
         return APL_scalar(Rpy[0])
     else:
         return APL_vector(Rpy)
+
+# ------------------------------
+
+def sv_rho (Fn,A,B):
+    """
+    evaluate a dyadic function that may take a scalar/vector and a vector and return a vector
+
+    well, this is for ⍴ and probably will not work for anything else
+    """
+    A.noStringConfirm()
+
+    Rpy = Fn(A.scalarToPy(),B.vectorToPy())
+
+    return APL_vector(Rpy,B.isString())
 
 # EOF

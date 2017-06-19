@@ -19,7 +19,7 @@ import mpmath
 
 from system_vars import confirm_bool, confirm_int, equalCT, integerCT, indexOrigin
 
-from apl_quantity import ss2s, ss2v, vv2v, vv2s
+from apl_quantity import ss2s, ss2v, sv_rho, vv2v, vv2s
 from apl_error import apl_error
 
 # ------------------------------
@@ -406,6 +406,23 @@ def     _index (A,B):
 
 # ------------------------------
 
+def     _reshape (A,B):
+    """
+    reshape (list) B to have length A by replication and/or truncation
+    """
+    A = confirm_int(A)
+    B = list(B)
+
+    length = len(B)
+
+    tail = A % length
+
+    count = int((A - tail) / length)
+
+    return B * count + B [:tail]
+
+# ------------------------------
+
 def     to_be_implemented (A,B):
     """
     placeholder for functions not yet implemented
@@ -452,7 +469,7 @@ _dyadic_functions = {
     '≡':        to_be_implemented,      # match (return 0/1 irrespective of rank etc)
 
     # Structural (aka manipulative)
-    '⍴':        to_be_implemented,      # (rho) reshape
+    '⍴':        lambda A,B: sv_rho(_reshape,A,B),
     ',':        to_be_implemented,      # (comma) concatenation
     '⍪':        to_be_implemented,      #
     '⌽':        to_be_implemented,      # rotation, last axis

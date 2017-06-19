@@ -267,6 +267,19 @@ def     monadic_iota ():
     """
     pass
 
+# --------------
+
+def     monadic_rho ():
+    """
+    >>> test('⍴ 7')
+    ⍬
+    >>> test('⍴ 1 2 3')
+    3
+    >>> test('⍴ ⍬')
+    0
+    """
+    pass
+
 # ------------------------------
 
 from monadic import monadic_function

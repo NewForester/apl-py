@@ -19,7 +19,7 @@ import mpmath
 
 from system_vars import integerCT, confirm_int, indexOrigin
 
-from apl_quantity import s2s, s2v
+from apl_quantity import s2s, s2v, s_rho
 from apl_error import apl_error
 
 # ------------------------------
@@ -209,8 +209,8 @@ _monadic_functions = {
 
     # Structural (aka manipulative)
     '⍳':        lambda B: s2v(_range,B),
+    '⍴':        lambda B: s_rho(None,B),
     '≡':        to_be_implemented,      # depth - reports on nesting
-    '⍴':        to_be_implemented,      # shape - reports dimensions
     ',':        to_be_implemented,      # unravel - reshape into a vector
     '∊':        to_be_implemented,      # enlist - ditto but also nested arrays
     '⌽':        to_be_implemented,      # reversal, last axis

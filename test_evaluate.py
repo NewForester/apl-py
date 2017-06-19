@@ -51,22 +51,25 @@ def     test_number (expr):
 
 def     test_zilde (expr):
     """
-    zilde - empty numeric vector - same as 0⍴0
+    zilde - empty numeric vector
 
     >>> test_zilde('⍬')
-    Quantity has dimension 0
     ⍬
-    >>> test_zilde('⍳0')
-    Quantity has dimension 0
-    ⍬
-    >>> test_zilde('1 ~ 1')
-    Quantity has dimension 0
-    ⍬
+    >>> test_zilde('⍴ ⍬')
+    0
+    >>> test_zilde('⍴ ⍳0')
+    0
+    >>> test_zilde('⍴ 1 ~ 1')
+    0
+    >>> test_zilde('⍴ 1 2 3 ~ 1 2 3')
+    0
+    >>> test_zilde('⍴ ⍴0')
+    0
+    >>> test_zilde('⍴ 0 ⍴ 1 2 3 4 5')
+    0
     """
     try:
         quantity = evaluate(expr)
-
-        print("Quantity has dimension {0}".format(quantity.dimension()))
 
         print_result(quantity)
     except apl_exception as error:
