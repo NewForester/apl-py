@@ -30,10 +30,12 @@
 import sys
 import readline
 
+from functools import reduce
+
 from evaluate import evaluate
 
 from apl_quantity import APL_scalar as apl_scalar, APL_vector as apl_vector
-from apl_error import APL_exception as apl_exception, apl_exit, apl_quit
+from apl_error import APL_exception as apl_exception, apl_error, apl_exit, apl_quit
 
 # ------------------------------
 
@@ -137,8 +139,40 @@ def     print_error (error,expr,prompt="",where=""):
     """
     print the error response when APL expression evaluation fails
     """
-    print(' '*(len(prompt)+len(expr)-len(error.expr.lstrip())),end="^\n")
+    print('\r' + ' '*(len(prompt)+expr.find(error.expr)),end="^\n")
     print(error.message,where)
+
+# ------------------------------
+
+def     evaluate_and_print_expression (expr,prefix=""):
+    """
+    evaluate and print an expression
+    """
+    expr = expr.lstrip()
+
+    if expr:
+        print_result(evaluate(expr),prefix)
+
+# ------------------------------
+
+def     _findUnquoted(expr,char,spos=0):
+    """
+    find the first occurrence in char that is not in a string literal
+    """
+    cpos = expr.find(char,spos)
+    if cpos == -1:
+        return cpos
+
+    mpos = reduce(lambda a, x: x if x < a and x != -1 else a, map(lambda x: expr.find(x,spos), ('"',"'")),cpos)
+
+    if mpos == cpos:
+        return cpos
+
+    spos = expr.find(expr[mpos],mpos+1)
+    if spos == -1:
+        apl_error("SYNTAX ERROR",expr[mpos:])
+
+    return _findUnquoted(expr,char,spos+1)
 
 # ------------------------------
 
@@ -146,12 +180,30 @@ def     _strip_comment (line):
     """
     strip end-of-line comment
     """
-    pos = line.find('⍝')
+    pos = _findUnquoted(line,'⍝')
 
     if pos != -1:
         line = line[:pos]
 
     return line.rstrip()
+
+# ------------------------------
+
+def     _evaluate_and_print_line (line,prefix=""):
+    """
+    evaluate and print possibly more than one expression
+    """
+    pos = _findUnquoted(line,'⋄')
+
+    if pos == -1:
+        evaluate_and_print_expression(line,prefix)
+        return
+
+    evaluate_and_print_expression(line[:pos],prefix)
+
+    line = line[pos + 1:].lstrip()
+    if line:
+        _evaluate_and_print_line(line,"")
 
 # ------------------------------
 
@@ -178,7 +230,7 @@ def     rep_from_file (prompt,path,inputFile,silent):
         expr = _strip_comment(line)
         if expr:
             try:
-                print_result(evaluate(expr),prefix)
+                _evaluate_and_print_line(expr,prefix)
             except apl_exception as error:
                 if silent:
                     print("{0}{1}".format(prompt,line),end="")
@@ -197,7 +249,7 @@ def     rep_from_tty (prompt):
         expr = _strip_comment(line)
         if expr:
             try:
-                print_result(evaluate(expr),"⎕")
+                _evaluate_and_print_line(expr,"⎕")
             except apl_exception as e:
                 print_error (e,expr,prompt)
 
@@ -273,7 +325,7 @@ if __name__ == '__main__':
             expr = _strip_comment(line)
             if expr:
                 try:
-                    print_result(evaluate(expr))
+                    _evaluate_and_print_line(expr)
                     apl_exit(0)
                 except apl_exception as error:
                     print(line)

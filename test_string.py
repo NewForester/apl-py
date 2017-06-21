@@ -1,13 +1,15 @@
 #!/usr/bin/python3
 """
-    Unit test for strings - doctest style
+    doctest style unit tests for strings
 
     WIP - grows as operators are implemented
+
+    Each test passes a APL expression to the evaluate function.
+
+    Each expression has one or two string operand.
 """
 
-from evaluate import evaluate
-
-from apl import print_result
+from apl import evaluate_and_print_expression
 
 from apl_error import APL_exception as apl_exception
 
@@ -47,9 +49,9 @@ def     test_string (expr):
     'Hello' (19 20) 'Paul'
     """
     try:
-        print_result(evaluate(expr))
+        evaluate_and_print_expression(expr)
     except apl_exception as error:
-        print (error.message)
+        print(error.message)
 
 # ------------------------------
 

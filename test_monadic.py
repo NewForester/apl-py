@@ -2,29 +2,32 @@
 """
     doctest style unit tests for monadic.py
 
-    Each test passes a string to the evaluate function.
+    WIP - grows as operators are implemented monadic.py.
 
-    Each string represnts an APL expression involving a monadic function.
+    Each test passes a APL expression to the evaluate function.
+
+    Both positive and negative (e.g. DOMAIN ERROR) cases are tested.
 
     Many of these expressions exercise the vector calculator.
-
-    WIP - grows as monadic.py grows.
 """
 
-from evaluate import evaluate
-
-from apl import print_result
+from apl import evaluate_and_print_expression
 
 from apl_error import APL_exception as apl_exception
 
 # ------------------------------
 
-def     test (expression):
+def     test (expr):
     """
     test both positive and negative outcomes
+
+    >>> test ('⍕ 1')
+    FUNCTION NOT YET IMPLEMENTED
+    >>> test ('" 1')
+    INVALID TOKEN
     """
     try:
-        print_result(evaluate(expression))
+        evaluate_and_print_expression(expr)
     except apl_exception as error:
         print(error.message)
 
@@ -281,25 +284,6 @@ def     monadic_rho ():
     pass
 
 # ------------------------------
-
-from monadic import monadic_function
-
-from apl_quantity import APL_scalar as apl_scalar
-
-# ------------------------------
-
-def     monadic_test (symbol,B):
-    """
-    # --
-    >>> monadic_test ('⍕',1)
-    FUNCTION NOT YET IMPLEMENTED
-    >>> monadic_test ('"',1)
-    INVALID TOKEN
-    """
-    try:
-        print_result(monadic_function(symbol)(apl_scalar(B)))
-    except apl_exception as error:
-        print(error.message)
 
 if __name__ == "__main__":
     import doctest
