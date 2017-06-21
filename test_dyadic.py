@@ -2,29 +2,32 @@
 """
     doctest style unit tests for dyadic.py
 
-    Each test passes a string to the evaluate function.
+    WIP - grows as operators are implemented in dyadic.py.
 
-    Each string represnts an APL expression involving a dyadic function.
+    Each test passes a APL expression to the evaluate function.
+
+    Both positive and negative (e.g. DOMAIN ERROR) cases are tested.
 
     Many of these expressions exercise the vector calculator.
-
-    WIP - grows as dyadic.py grows.
 """
 
-from evaluate import evaluate
-
-from apl import print_result
+from apl import evaluate_and_print_expression
 
 from apl_error import APL_exception as apl_exception
 
 # ------------------------------
 
-def     test (expression):
+def     test (expr):
     """
     test both positive and negative outcomes
+
+    >>> test ('1 ⍕ 1')
+    FUNCTION NOT YET IMPLEMENTED
+    >>> test ('1 " 1')
+    INVALID TOKEN
     """
     try:
-        print_result(evaluate(expression))
+        evaluate_and_print_expression(expr)
     except apl_exception as error:
         print(error.message)
 
@@ -657,24 +660,6 @@ def     dyadic_rho ():
     pass
 
 # ------------------------------
-
-from dyadic import dyadic_function
-
-from apl_quantity import APL_scalar as apl_scalar
-
-# ------------------------------
-
-def     dyadic_test (A,symbol,B):
-    """
-    >>> dyadic_test (1,'⍕',1)
-    FUNCTION NOT YET IMPLEMENTED
-    >>> dyadic_test (1,'"',1)
-    INVALID TOKEN
-    """
-    try:
-        print_result(dyadic_function(symbol)(apl_scalar(A),apl_scalar(B)))
-    except apl_exception as error:
-        print(error.message)
 
 if __name__ == "__main__":
     import doctest

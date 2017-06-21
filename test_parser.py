@@ -8,18 +8,18 @@
 
     Tests include recognition of:
       - recognition of numbers
-      - zilde as a result
-      - invocation of monadic and dyadic functions
-      - parentheses to alter order of execution
-      - parsing of scalar and vector quantities
       - recognition of names
+      - zilde as a result
+      - scalar invocation of monadic and dyadic functions
+      - parsing of vector quantities
+      - parentheses to alter order of execution
       - system variables
       - system commands
 """
 
 from evaluate import evaluate
 
-from apl import print_result
+from apl import evaluate_and_print_expression, _evaluate_and_print_line as evaluate_and_print_line, _strip_comment as strip_comment
 
 from apl_error import APL_exception as apl_exception
 
@@ -30,9 +30,9 @@ def     test (expr):
     test both positive and negative outcomes
     """
     try:
-        print_result(evaluate(expr))
+        evaluate_and_print_expression(expr)
     except apl_exception as error:
-        print (error.message)
+        print(error.message)
 
 # ------------------------------
 
@@ -58,6 +58,35 @@ def     test_number (expr):
     0.001
     >>> test('3.142e-0')
     3.142
+    """
+    pass
+
+# ------------------------------
+
+def     test_name (expr):
+    """
+    >>> test('A')
+    UNKNOWN VARIABLE
+    >>> test('A←2.5')
+    2.5
+    >>> test('A')
+    2.5
+
+    >>> test('Banana←3.5')
+    3.5
+    >>> test('M27←4.5')
+    4.5
+    >>> test('27M←5.5')
+    INVALID TOKEN
+
+    >>> test('A')
+    2.5
+    >>> test('A-1')
+    1.5
+    >>> test('1-A')
+    ¯1.5
+    >>> test('÷A')
+    0.4
     """
     pass
 
@@ -114,99 +143,6 @@ def     test_scalar (expr):
 
 # ------------------------------
 
-def     test_parentheses (expr):
-    """
-    >>> test('(0)')
-    0
-    >>> test('1 + 2 × 2 + 1')
-    7
-    >>> test('(1 + 2) × (2 + 1)')
-    9
-    >>> test('(1 + 2) × 2 + 1')
-    9
-    >>> test('1 - 2 - 3 - 4')
-    ¯2
-    >>> test('((1 - 2) - 3) - 4')
-    ¯8
-    >>> test('1 - (2 - 3) - 4')
-    6
-    >>> test('1 - (2 - 3 - 4')
-    SYNTAX ERROR
-    """
-    pass
-
-# ------------------------------
-
-def     test_sys_vars (expr):
-    """
-    >>> test_sys_vars('⎕dummy')
-    UNKNOWN SYSTEM VARIABLE
-
-    >>> test_sys_vars('⎕IO')
-    1
-    >>> test_sys_vars('⎕Io←0')
-    0
-    >>> test_sys_vars('⎕io')
-    0
-    >>> test_sys_vars('⎕iO←0')
-    0
-    >>> test_sys_vars('⎕IO←2')
-    DOMAIN ERROR
-    >>> test_sys_vars('⎕io')
-    0
-    >>> test_sys_vars('⎕IO←1')
-    1
-    >>> test_sys_vars('⎕io')
-    1
-    """
-    try:
-        print_result(evaluate(expr))
-    except apl_exception as error:
-        print (error.message)
-
-# ------------------------------
-
-def     test_sys_cmds (expr):
-    """
-    >>> test_sys_cmds(')dummy')
-    UNKNOWN SYSTEM COMMAND
-    """
-    try:
-        return evaluate(expr)
-    except apl_exception as error:
-        print (error.message)
-
-# ------------------------------
-
-def     test_name (expr):
-    """
-    >>> test('A')
-    UNKNOWN VARIABLE
-    >>> test('A←2.5')
-    2.5
-    >>> test('A')
-    2.5
-
-    >>> test('Banana←3.5')
-    3.5
-    >>> test('M27←4.5')
-    4.5
-    >>> test('27M←5.5')
-    INVALID TOKEN
-
-    >>> test('A')
-    2.5
-    >>> test('A-1')
-    1.5
-    >>> test('1-A')
-    ¯1.5
-    >>> test('÷A')
-    0.4
-    """
-    pass
-
-# ------------------------------
-
 def     test_parse_vector (expr):
     """
     >>> test('1 2 3')
@@ -257,6 +193,97 @@ def     test_parse_vector (expr):
     1 (10 20) 3
     """
     pass
+
+# ------------------------------
+
+def     test_parentheses (expr):
+    """
+    >>> test('(0)')
+    0
+    >>> test('1 + 2 × 2 + 1')
+    7
+    >>> test('(1 + 2) × (2 + 1)')
+    9
+    >>> test('(1 + 2) × 2 + 1')
+    9
+    >>> test('1 - 2 - 3 - 4')
+    ¯2
+    >>> test('((1 - 2) - 3) - 4')
+    ¯8
+    >>> test('1 - (2 - 3) - 4')
+    6
+    >>> test('1 - (2 - 3 - 4')
+    SYNTAX ERROR
+    """
+    pass
+
+# ------------------------------
+
+def     test_input_output (expr):
+    """
+    >>> test_input_output('"Hello" ⍝ end of line comments are ignored')
+    Hello
+
+    >>> test_input_output('"Hello ⍝ in a string is not a comment" ⍝ end of line comments are ignored')
+    Hello ⍝ in a string is not a comment
+
+    >>> test_input_output('"Hello" ⋄ "Paul"')
+    Hello
+    Paul
+
+    >>> test_input_output('"Hello ⋄ Paul"')
+    Hello ⋄ Paul
+
+    >>> test_input_output('1 + 2 ⋄ 3 + 4 ⋄ 5 + 6')
+    3
+    7
+    11
+    """
+    try:
+        evaluate_and_print_line(strip_comment(expr))
+    except apl_exception as error:
+        print(error.message)
+
+# ------------------------------
+
+def     test_sys_vars (expr):
+    """
+    >>> test_sys_vars('⎕dummy')
+    UNKNOWN SYSTEM VARIABLE
+
+    >>> test_sys_vars('⎕IO')
+    1
+    >>> test_sys_vars('⎕Io←0')
+    0
+    >>> test_sys_vars('⎕io')
+    0
+    >>> test_sys_vars('⎕iO←0')
+    0
+    >>> test_sys_vars('⎕IO←2')
+    DOMAIN ERROR
+    >>> test_sys_vars('⎕io')
+    0
+    >>> test_sys_vars('⎕IO←1')
+    1
+    >>> test_sys_vars('⎕io')
+    1
+    """
+    try:
+        evaluate_and_print_expression(expr)
+    except apl_exception as error:
+        print(error.message)
+
+# ------------------------------
+
+def     test_sys_cmds (expr):
+    """
+    >>> test_sys_cmds(')dummy')
+    UNKNOWN SYSTEM COMMAND
+    """
+    try:
+        return evaluate(expr)
+    except apl_exception as error:
+        print(error.message)
 
 # ------------------------------
 
