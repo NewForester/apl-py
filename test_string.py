@@ -238,6 +238,41 @@ def     test_rho (expr):
 
 # ------------------------------
 
+def     test_comma (expr):
+    """
+    >>> test_string(", 'Hello'")
+    Hello
+    >>> test_string(", 'Hello' 'Paul'")
+    'Hello' 'Paul'
+    >>> test_string(", 1 'Hello' 2")
+    1 'Hello' 2
+
+    >>> test_string(", 'H'")
+    H
+    >>> test_string(', "H"')
+    H
+
+    >>> test_string("⍴, 'H'")
+    1
+    >>> test_string('⍴, "H"')
+    1
+
+    >>> test_string("'Hello' , ' ' , 'Paul'")
+    Hello Paul
+
+    >>> test_string("1 2 3 , 'Hello'")
+    1 2 3 'Hello'
+    >>> test_string("'Hello' , 1 2 3")
+    'Hello' 1 2 3
+    >>> test_string("1 2 3 , 'H'")
+    1 2 3 'H'
+    >>> test_string('1 2 3 , "H"')
+    1 2 3 'H'
+    """
+    pass
+
+# ------------------------------
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

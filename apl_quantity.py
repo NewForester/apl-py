@@ -207,6 +207,20 @@ def s_rho (Fn,B):
 
 # ------------------------------
 
+def s_comma (Fn,B):
+    """
+    scalar comma - unravel B and return a vector
+    """
+
+    if B.isScalar():
+        return APL_vector(B.vectorToPy(),B.isString())
+
+    if B.isVector():    return B
+
+    apl_error("RANK ERROR")
+
+# ------------------------------
+
 def ss2s (Fn,A,B,numbersOnly):
     """
     evaluate a dyadic function that, given scalar arguments, returns a scalar
@@ -278,5 +292,21 @@ def sv_rho (Fn,A,B):
     Rpy = Fn(A.scalarToPy(),B.vectorToPy())
 
     return APL_vector(Rpy,B.isString())
+
+# ------------------------------
+
+def vv_comma (Fn,A,B):
+    """
+    evaluate a dyadic function that returns a vector
+    """
+    case = A.isString() + B.isString()
+
+    Apy = [A] if A.isString() and case == 1 else A.vectorToPy()
+    Bpy = [B] if B.isString() and case == 1 else B.vectorToPy()
+
+#    Apy = list(A.vectorToPy()) if A.isString() and case == 1 else A.vectorToPy()
+#    Bpy = list(B.vectorToPy()) if B.isString() and case == 1 else B.vectorToPy()
+
+    return APL_vector(Fn(Apy,Bpy),case == 2)
 
 # EOF

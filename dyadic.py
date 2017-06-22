@@ -19,7 +19,7 @@ import mpmath
 
 from system_vars import confirm_bool, confirm_int, equalCT, integerCT, indexOrigin
 
-from apl_quantity import ss2s, ss2v, sv_rho, vv2v, vv2s
+from apl_quantity import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s
 from apl_error import apl_error
 
 # ------------------------------
@@ -423,6 +423,14 @@ def     _reshape (A,B):
 
 # ------------------------------
 
+def     _concatenation (A,B):
+    """
+    concatenate (list) B onto the end of (list) A
+    """
+    return A + B
+
+# ------------------------------
+
 def     to_be_implemented (A,B):
     """
     placeholder for functions not yet implemented
@@ -470,7 +478,7 @@ _dyadic_functions = {
 
     # Structural (aka manipulative)
     '⍴':        lambda A,B: sv_rho(_reshape,A,B),
-    ',':        to_be_implemented,      # (comma) concatenation
+    ',':        lambda A,B: vv_comma(_concatenation,A,B),
     '⍪':        to_be_implemented,      #
     '⌽':        to_be_implemented,      # rotation, last axis
     '⊖':        to_be_implemented,      # rotation, first axis
