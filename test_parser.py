@@ -19,7 +19,7 @@
 
 from evaluate import evaluate
 
-from apl import evaluate_and_print_expression, _evaluate_and_print_line as evaluate_and_print_line, _strip_comment as strip_comment
+from apl import evaluate_and_print_expression, _evaluate_and_print_line as evaluate_and_print_line
 
 from apl_error import APL_exception as apl_exception
 
@@ -219,28 +219,28 @@ def     test_parentheses (expr):
 
 # ------------------------------
 
-def     test_input_output (expr):
+def     test_output (expr):
     """
-    >>> test_input_output('"Hello" ⍝ end of line comments are ignored')
+    >>> test_output('"Hello" ⍝ end of line comments are ignored')
     Hello
 
-    >>> test_input_output('"Hello ⍝ in a string is not a comment" ⍝ end of line comments are ignored')
+    >>> test_output('"Hello ⍝ in a string is not a comment" ⍝ end of line comments are ignored')
     Hello ⍝ in a string is not a comment
 
-    >>> test_input_output('"Hello" ⋄ "Paul"')
+    >>> test_output('"Hello" ⋄ "Paul"')
     Hello
     Paul
 
-    >>> test_input_output('"Hello ⋄ Paul"')
+    >>> test_output('"Hello ⋄ Paul"')
     Hello ⋄ Paul
 
-    >>> test_input_output('1 + 2 ⋄ 3 + 4 ⋄ 5 + 6')
+    >>> test_output('1 + 2 ⋄ 3 + 4 ⋄ 5 + 6')
     3
     7
     11
     """
     try:
-        evaluate_and_print_line(strip_comment(expr))
+        evaluate_and_print_line(expr)
     except apl_exception as error:
         print(error.message)
 
@@ -281,7 +281,7 @@ def     test_sys_cmds (expr):
     UNKNOWN SYSTEM COMMAND
     """
     try:
-        return evaluate(expr)
+        evaluate(expr)
     except apl_exception as error:
         print(error.message)
 
