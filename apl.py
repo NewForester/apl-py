@@ -127,11 +127,11 @@ Your curiosity is much appreciated. Thank you.
 
 # ------------------------------
 
-def     print_result (result,prefix=""):
+def     print_result (result):
     """
     print the result when APL expression evaluation succeeds
     """
-    print("{0}{1}".format(prefix,str(result)))
+    print(str(result))
 
 # ------------------------------
 
@@ -144,14 +144,14 @@ def     print_error (error,expr,prompt="",where=""):
 
 # ------------------------------
 
-def     evaluate_and_print_expression (expr,prefix=""):
+def     evaluate_and_print_expression (expr):
     """
     evaluate and print an expression
     """
     expr = expr.lstrip()
 
     if expr:
-        print_result(evaluate(expr),prefix)
+        print_result(evaluate(expr))
 
 # ------------------------------
 
@@ -176,46 +176,28 @@ def     _findUnquoted(expr,char,spos=0):
 
 # ------------------------------
 
-def     _strip_comment (line):
-    """
-    strip end-of-line comment
-    """
-    pos = _findUnquoted(line,'⍝')
-
-    if pos != -1:
-        line = line[:pos]
-
-    return line.rstrip()
-
-# ------------------------------
-
-def     _evaluate_and_print_line (line,prefix=""):
+def     _evaluate_and_print_line (line):
     """
     evaluate and print possibly more than one expression
     """
     pos = _findUnquoted(line,'⋄')
 
     if pos == -1:
-        evaluate_and_print_expression(line,prefix)
+        evaluate_and_print_expression(line)
         return
 
-    evaluate_and_print_expression(line[:pos],prefix)
+    evaluate_and_print_expression(line[:pos])
 
     line = line[pos + 1:].lstrip()
     if line:
-        _evaluate_and_print_line(line,"")
+        _evaluate_and_print_line(line)
 
 # ------------------------------
 
 def     rep_from_file (prompt,path,inputFile,silent):
     """
-    read an input line from a file, evaluate it and print the result
+    read input lines from a file, evaluate them and print the results
     """
-    if silent:
-        prefix = ""
-    else:
-        prefix = "⎕"
-
     lineCount = 0
     for line in inputFile:
         lineCount += 1
@@ -224,38 +206,41 @@ def     rep_from_file (prompt,path,inputFile,silent):
             if line.startswith("#!"):
                 continue
 
-        if not silent:
-            print("{0}{1}".format(prompt,line),end="")
+        line = line.rstrip()
 
-        expr = _strip_comment(line)
-        if expr:
-            try:
-                _evaluate_and_print_line(expr,prefix)
-            except apl_exception as error:
-                if silent:
-                    print("{0}{1}".format(prompt,line),end="")
-                print_error(error,expr,prompt,"in {0} on line {1}".format(path,lineCount))
-                apl_exit(1)
+        if not silent:
+            print("{0}{1}".format(prompt,line))
+
+        try:
+            if not silent:
+                print("□",end="")
+            _evaluate_and_print_line(line)
+        except apl_exception as error:
+            if silent:
+                print("{0}{1}".format(prompt,line))
+            print_error(error,line,prompt,"in {0} on line {1}".format(path,lineCount))
+            apl_exit(1)
 
 # ------------------------------
 
 def     rep_from_tty (prompt):
     """
-    read an input line from a tty, evaluate it and print the result
+    read input lines from a tty, evaluate them and print the results
     """
     while True:
         line = input(prompt)
 
-        expr = _strip_comment(line)
-        if expr:
-            try:
-                _evaluate_and_print_line(expr,"⎕")
-            except apl_exception as e:
-                print_error (e,expr,prompt)
+        try:
+            print("□",end="")
+            _evaluate_and_print_line(line)
+        except apl_exception as error:
+            print_error(error,line,prompt)
 
 # ------------------------------
 
 if __name__ == '__main__':
+    prompt = 6 * ' '
+
     try:
         if len(sys.argv) == 1:
             flags, args = [], []
@@ -296,7 +281,7 @@ if __name__ == '__main__':
                 except:
                     apl_quit(3,"unable to open '{0}' for input".format(path))
 
-                rep_from_file('       ',path,inputFile,silent)
+                rep_from_file(prompt,path,inputFile,silent)
                 inputFile.close()
 
             else:
@@ -309,28 +294,26 @@ if __name__ == '__main__':
                 print(_banner)
 
                 try:
-                    rep_from_tty('       ')
+                    rep_from_tty(prompt)
                 except EOFError:
-                    apl_exit(0,"")
+                    apl_exit(0,"^D")
         else:
             # stdin redirected
 
-            rep_from_file('       ',"<stdin>",sys.stdin,silent)
+            rep_from_file(prompt,"<stdin>",sys.stdin,silent)
 
         if len(args):
             # evaluate command line expression
 
             line = ' '.join(args)
 
-            expr = _strip_comment(line)
-            if expr:
-                try:
-                    _evaluate_and_print_line(expr)
-                    apl_exit(0)
-                except apl_exception as error:
-                    print(line)
-                    print_error(error,expr)
-                    apl_exit(1)
+            try:
+                _evaluate_and_print_line(line)
+                apl_exit(0)
+            except apl_exception as error:
+                print(line)
+                print_error(error,line)
+                apl_exit(1)
 
     except KeyboardInterrupt:
         apl_quit(2,"^C")
