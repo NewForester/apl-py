@@ -17,9 +17,7 @@
       - system commands
 """
 
-from evaluate import evaluate
-
-from apl import evaluate_and_print_expression, _evaluate_and_print_line as evaluate_and_print_line
+from evaluate import evaluate, evaluate_and_print, evaluate_and_print_line
 
 from apl_error import APL_exception as apl_exception
 
@@ -30,7 +28,7 @@ def     test (expr):
     test both positive and negative outcomes
     """
     try:
-        evaluate_and_print_expression(expr)
+        evaluate_and_print(expr)
     except apl_exception as error:
         print(error.message)
 
@@ -269,7 +267,7 @@ def     test_sys_vars (expr):
     1
     """
     try:
-        evaluate_and_print_expression(expr)
+        evaluate_and_print(expr)
     except apl_exception as error:
         print(error.message)
 

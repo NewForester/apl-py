@@ -11,6 +11,8 @@
 
 import re
 
+from functools import reduce
+
 from monadic import monadic_function
 from dyadic import dyadic_function
 
@@ -29,6 +31,73 @@ _reName   = re.compile(r'[A-Za-z][A-Z_a-z0-9]*')
 
 _reAposString = re.compile(r"'([^']|'')*'")
 _reQuotString = re.compile(r'"([^"]|"")*"')
+
+# ------------------------------
+
+def     _print_result (result):
+    """
+    print the result when APL expression evaluation succeeds
+    """
+    print(str(result))
+
+# ------------------------------
+
+def     print_error (error,expr,prompt="",where=""):
+    """
+    print the error response when APL expression evaluation fails
+    """
+    print('\r' + ' '*(len(prompt)+expr.find(error.expr)),end="^\n")
+    print(error.message,where)
+
+# ------------------------------
+
+def     _findUnquoted(expr,char,spos=0):
+    """
+    find the first occurrence in char that is not in a string literal
+    """
+    cpos = expr.find(char,spos)
+    if cpos == -1:
+        return cpos
+
+    mpos = reduce(lambda a, x: x if x < a and x != -1 else a, map(lambda x: expr.find(x,spos), ('"',"'")),cpos)
+
+    if mpos == cpos:
+        return cpos
+
+    spos = expr.find(expr[mpos],mpos+1)
+    if spos == -1:
+        apl_error("SYNTAX ERROR",expr[mpos:])
+
+    return _findUnquoted(expr,char,spos+1)
+
+# ------------------------------
+
+def     evaluate_and_print_line (line):
+    """
+    evaluate and print possibly more than one expression
+    """
+    pos = _findUnquoted(line,'⋄')
+
+    if pos == -1:
+        evaluate_and_print(line)
+        return
+
+    evaluate_and_print(line[:pos])
+
+    line = line[pos + 1:].lstrip()
+    if line:
+        evaluate_and_print_line(line)
+
+# ------------------------------
+
+def     evaluate_and_print (expr):
+    """
+    evaluate and print an expression
+    """
+    expr = expr.lstrip()
+
+    if expr:
+        _print_result(evaluate(expr))
 
 # ------------------------------
 
@@ -152,17 +221,21 @@ def     extract_number (expr):
     if match:
         number = match.group(0)
         if number:
-            return (float(number.replace('¯','-')), len(number))
+            try:
+                return (float(number.replace('¯','-')), len(number))
+            except ValueError as e:
+                if not reduce (lambda a,x: a or x == number,('.', '¯', "¯."),False):
+                    raise(e)
 
     return (None, 0)
 
 # ------------------------------
 
-def     parse(expr):
+def     parse (expr):
     """
     Extract and evaluate the next token in a APL expression (left to right)
 
-    Beware indirection recursion
+    Beware indirect recursion
     """
     lhs = []
 
@@ -222,13 +295,12 @@ def     parse(expr):
 
 # ------------------------------
 
-def     evaluate(expression):
+def     evaluate (expression):
     """
     Evaluate an APL expression
 
     this routine is recursive
     """
-
     try:
         expr = expression.lstrip()
 
@@ -241,14 +313,10 @@ def     evaluate(expression):
             return lhs
 
         if lhs is None:
-            # try a monadic function
-
             function = monadic_function(expr)
             rhs = evaluate(expr[1:])
             return function(rhs)
         else:
-            # try a dyadic function
-
             function = dyadic_function(expr)
             rhs = evaluate(expr[1:])
             return function(lhs,rhs)
@@ -256,6 +324,6 @@ def     evaluate(expression):
     except apl_exception as error:
         if not error.expr:
            error.expr = expr
-        raise (error)
+        raise(error)
 
 # EOF
