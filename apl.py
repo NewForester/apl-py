@@ -32,7 +32,7 @@ import readline
 
 from functools import reduce
 
-from evaluate import evaluate
+from evaluate import evaluate_and_print_line, print_error
 
 from apl_quantity import APL_scalar as apl_scalar, APL_vector as apl_vector
 from apl_error import APL_exception as apl_exception, apl_error, apl_exit, apl_quit
@@ -127,73 +127,6 @@ Your curiosity is much appreciated. Thank you.
 
 # ------------------------------
 
-def     print_result (result):
-    """
-    print the result when APL expression evaluation succeeds
-    """
-    print(str(result))
-
-# ------------------------------
-
-def     print_error (error,expr,prompt="",where=""):
-    """
-    print the error response when APL expression evaluation fails
-    """
-    print('\r' + ' '*(len(prompt)+expr.find(error.expr)),end="^\n")
-    print(error.message,where)
-
-# ------------------------------
-
-def     evaluate_and_print_expression (expr):
-    """
-    evaluate and print an expression
-    """
-    expr = expr.lstrip()
-
-    if expr:
-        print_result(evaluate(expr))
-
-# ------------------------------
-
-def     _findUnquoted(expr,char,spos=0):
-    """
-    find the first occurrence in char that is not in a string literal
-    """
-    cpos = expr.find(char,spos)
-    if cpos == -1:
-        return cpos
-
-    mpos = reduce(lambda a, x: x if x < a and x != -1 else a, map(lambda x: expr.find(x,spos), ('"',"'")),cpos)
-
-    if mpos == cpos:
-        return cpos
-
-    spos = expr.find(expr[mpos],mpos+1)
-    if spos == -1:
-        apl_error("SYNTAX ERROR",expr[mpos:])
-
-    return _findUnquoted(expr,char,spos+1)
-
-# ------------------------------
-
-def     _evaluate_and_print_line (line):
-    """
-    evaluate and print possibly more than one expression
-    """
-    pos = _findUnquoted(line,'⋄')
-
-    if pos == -1:
-        evaluate_and_print_expression(line)
-        return
-
-    evaluate_and_print_expression(line[:pos])
-
-    line = line[pos + 1:].lstrip()
-    if line:
-        _evaluate_and_print_line(line)
-
-# ------------------------------
-
 def     rep_from_file (prompt,path,inputFile,silent):
     """
     read input lines from a file, evaluate them and print the results
@@ -211,10 +144,13 @@ def     rep_from_file (prompt,path,inputFile,silent):
         if not silent:
             print("{0}{1}".format(prompt,line))
 
+        if not line.lstrip():
+            continue
+
         try:
             if not silent:
                 print("□",end="")
-            _evaluate_and_print_line(line)
+            evaluate_and_print_line(line)
         except apl_exception as error:
             if silent:
                 print("{0}{1}".format(prompt,line))
@@ -230,9 +166,12 @@ def     rep_from_tty (prompt):
     while True:
         line = input(prompt)
 
+        if not line.lstrip():
+            continue
+
         try:
             print("□",end="")
-            _evaluate_and_print_line(line)
+            evaluate_and_print_line(line)
         except apl_exception as error:
             print_error(error,line,prompt)
 
@@ -308,7 +247,7 @@ if __name__ == '__main__':
             line = ' '.join(args)
 
             try:
-                _evaluate_and_print_line(line)
+                evaluate_and_print_line(line)
                 apl_exit(0)
             except apl_exception as error:
                 print(line)
