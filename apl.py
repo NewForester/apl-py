@@ -150,7 +150,7 @@ def     rep_from_file (prompt,path,inputFile,silent):
         try:
             if not silent:
                 print("□",end="")
-            evaluate_and_print_line(line)
+            evaluate_and_print_line(line,silent)
         except apl_exception as error:
             if silent:
                 print("{0}{1}".format(prompt,line))
