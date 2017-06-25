@@ -6,6 +6,10 @@
 error() { echo -e "\e[31m$@\e[0m"; }
 note()  { echo -e "\e[32m$@\e[0m"; }
 
+# change directory to that containing this script
+
+cd ${0%/*};
+
 # do not assume the intepreter is on the PATH
 
 for APL in apl.py ./apl.py ../apl.py "error APL intepreter not found"; do
@@ -27,7 +31,7 @@ function invoke
 
 function narrative
 {
-    plus="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+    plus="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
 
     echo;
     echo -e "\e[34m${plus}\e[0m";
@@ -39,9 +43,9 @@ function narrative
 
 function herald
 {
-    echo "--------------------------------------------------------------------";
+    echo "------------------------------------------------------------------------";
     echo -e "\e[33m$@\e[0m";
-    echo "--------------------------------------------------------------------";
+    echo "------------------------------------------------------------------------";
 }
 
 if [[ $# == 0 ]]; then
@@ -69,9 +73,9 @@ if [[ $# == 0 ]]; then
 	before the test can move on to the next test case.  This is disconcerting since
 	the prompt is six innocent spaces.  Watch out for the copyright banner.
 	EOF
-    steps="1 2 3 4 5 6"
+    steps="1 2 3 4 5 6 7 8 9";
 else
-    steps="$*"
+    steps="$@";
 fi
 
 for step in ${steps}; do
@@ -171,19 +175,23 @@ for step in ${steps}; do
 
         herald "Test Case 5a - Execute script from stdin redirected using '<'";
         note "... this test should terminate of its own accord";
-        invoke "${APL}" -s -- 16 ÷ 4 '<' test_5.txt;
+        invoke "${APL}" -s -- 16 ÷ 4 '<' test_5.txt '&>' "case_5a.log";
+        invoke diff case_5a.log test_5.ref;
 
         herald "Test Case 5b - Execute script from stdin redirected using '|'";
         note "... this test should terminate of its own accord";
-        invoke cat test_5.txt '|' "${APL}" -s -- 16 ÷ 4;
+        invoke cat test_5.txt '|' "${APL}" -s -- 16 ÷ 4 '&>' "case_5b.log";
+        invoke diff case_5b.log test_5.ref;
 
         herald "Test Case 5c - Execute script using command line flag";
         note "... this test should terminate of its own accord";
-        invoke "${APL}" -s -f test_5.txt -- 16 ÷ 4;
+        invoke "${APL}" -s -f test_5.txt -- 16 ÷ 4 '&>' "case_5c.log";
+        invoke diff case_5c.log test_5.ref;
 
         herald "Test Case 5d - Execute implicit script using #!";
         note "... this test should terminate of its own accord";
-        invoke ./test_5.apl -- 16 ÷ 4 ;
+        invoke ./test_5.apl -- 16 ÷ 4 '&>' "case_5d.log";
+        invoke diff case_5d.log test_5.ref;
         ;;
 
       (6)
@@ -217,7 +225,7 @@ for step in ${steps}; do
       (7)
         narrative <<- EOF
 	The following test cases check output redirection through tee will
-	capture a session log, including a Python stack trace if necessary.
+	capture a session log (including a Python stack trace if necessary).
 	EOF
 
         herald "Test Case 7a - Execute script from stdin redirected using '<'";
@@ -229,12 +237,39 @@ for step in ${steps}; do
         invoke cat test_7.txt '|' "${APL}" '|&' tee -i case_7b.log;
 
         herald "Test Case 7c - Execute script using command line flag";
-        note "... this test should terminate of its own accord";
+        note "... you should need to exit the interpreter yourself";
         invoke "${APL}" -f test_7.txt '|&' tee -i case_7c.log;
 
         herald "Test Case 7d - Execute implicit script using #!";
-        note "... this test should terminate of its own accord";
+        note "... you should need to exit the interpreter yourself";
         invoke ./test_7.apl '|&' tee -i case_7d.log;
+        ;;
+
+      (8)
+        narrative <<- EOF
+	The following test cases check that explicit output occurs even
+	when script or silent mode as been requested.
+	EOF
+
+        herald "Test Case 8a - Execute script from stdin redirected using '<'";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" -s '<' test_8.txt '&>' case_8a.log;
+        invoke diff case_8a.log test_8.ref;
+
+        herald "Test Case 8b - Execute script from stdin redirected using '|'";
+        note "... this test should terminate of its own accord";
+        invoke cat test_8.txt '|' "${APL}" -s '&>' case_8b.log;
+        invoke diff case_8b.log test_8.ref;
+
+        herald "Test Case 8c - Execute script using command line flag";
+        note "... this test should terminate of its own accord";
+        invoke "${APL}" -s -f test_8.txt '&>' case_8c.log;
+        invoke diff case_8c.log test_8.ref;
+
+        herald "Test Case 8d - Execute implicit script using #!";
+        note "... this test should terminate of its own accord";
+        invoke ./test_8.apl '&>' case_8d.log;
+        invoke diff case_8d.log test_8.ref;
         ;;
 
       (9)
@@ -273,7 +308,7 @@ for step in ${steps}; do
         note "... this test should terminate of its own accord";
         invoke "${APL}" --Version;
 
-        herald "Test Case ih - Response to input redirection to a file that cannot be read";
+        herald "Test Case 9i - Response to input redirection to a file that cannot be read";
         note "... this test should terminate of its own accord";
         invoke "${APL}" -f test_9.txt;
         ;;

@@ -1,3 +1,2 @@
-# Byte-compiled / optimized / DLL files
-
+*.log
 __pycache__/
