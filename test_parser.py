@@ -228,7 +228,6 @@ def     test_output (expr):
     >>> test_output('"Hello" ⋄ "Paul"')
     Hello
     Paul
-
     >>> test_output('"Hello ⋄ Paul"')
     Hello ⋄ Paul
 
@@ -236,6 +235,50 @@ def     test_output (expr):
     3
     7
     11
+    >>> test_output('1 + 2 ⋄ 3 + 4 ⋄')
+    3
+    7
+    >>> test_output('⋄ 3 + 4')
+    7
+
+    >>> test_output('⎕ ← 1 + 2')
+    3
+    >>> test_output('⍞ ← 1 + 2')
+    3
+
+    >>> test_output('6 + ⎕ ← 1 + 2')
+    3
+    9
+    >>> test_output('6 + ⍞ ← 1 + 2')
+    39
+
+    >>> test_output('⎕ ← "Hello" ⋄ "Paul"')
+    Hello
+    Paul
+    >>> test_output('⍞ ← "Hello " ⋄ "Paul"')
+    Hello Paul
+
+    >>> test_output('1 + 2 ⋄ ⎕ ← 3 + 4 ⋄ 5 + 6')
+    3
+    7
+    11
+    >>> test_output('1 + 2 ⋄ ⍞ ← 3 + 4 ⋄ 5 + 6')
+    3
+    711
+
+    >>> test_output('1 2 3')
+    1 2 3
+    >>> test_output('1 ⎕ ← 2 3')
+    2 3
+    1 (2 3)
+    >>> test_output('"Hello" 2 3')
+    'Hello' 2 3
+    >>> test_output('"Hello" ⎕ ← 2 3')
+    2 3
+    'Hello' (2 3)
+
+    >>> test_output('1 ⍞ ← 2 3')
+    (2 3)1 (2 3)
     """
     try:
         evaluate_and_print_line(expr)
