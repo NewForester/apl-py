@@ -1,0 +1,13 @@
+#!../apl.py -f
+'Test ⍞← (output operator)'
+
+"Hello"
+"Hello ", "World"
+⍞ ← "Hello"
+⍞ ← "Hello ", "World"
+"Hello ", ⍞ ← "World"
+"Hello ", ⍞ ← "World", "!"
+⍞ ← ⍞ ← "Hello"
+"Hello ", ⍞ ← ⍞ ← "World"
+
+)OFF

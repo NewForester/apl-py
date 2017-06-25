@@ -1,0 +1,22 @@
+      'Test ⍞← (output operator)'
+□Test ⍞← (output operator)
+      
+      "Hello"
+□Hello
+      "Hello ", "World"
+□Hello World
+      ⍞ ← "Hello"
+□Hello
+      ⍞ ← "Hello ", "World"
+□Hello World
+      "Hello ", ⍞ ← "World"
+□WorldHello World
+      "Hello ", ⍞ ← "World", "!"
+□World!Hello World!
+      ⍞ ← ⍞ ← "Hello"
+□HelloHello
+      "Hello ", ⍞ ← ⍞ ← "World"
+□WorldWorldHello World
+      
+      )OFF
+Bye bye
