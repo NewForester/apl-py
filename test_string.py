@@ -271,6 +271,42 @@ def     test_comma (expr):
     """
     pass
 
+# --------------
+
+def     test_drop_take ():
+    """
+    >>> test_string('¯9 ↓ "abcdef"')
+    <BLANKLINE>
+    >>> test_string('¯6 ↓ "abcdef"')
+    <BLANKLINE>
+    >>> test_string('¯3 ↓ "abcdef"')
+    abc
+    >>> test_string('0 ↓ "abcdef"')
+    abcdef
+    >>> test_string('3 ↓ "abcdef"')
+    def
+    >>> test_string('6 ↓ "abcdef"')
+    <BLANKLINE>
+    >>> test_string('9 ↓ "abcdef"')
+    <BLANKLINE>
+
+    >>> test_string('¯9 ↑ "abcdef"')
+       abcdef
+    >>> test_string('¯6 ↑ "abcdef"')
+    abcdef
+    >>> test_string('¯3 ↑ "abcdef"')
+    def
+    >>> test_string('0 ↑ "abcdef"')
+    <BLANKLINE>
+    >>> test_string('3 ↑ "abcdef"')
+    abc
+    >>> test_string('6 ↑ "abcdef"')
+    abcdef
+    >>> test_string('(9 ↑ "abcdef"), "!"')
+    abcdef   !
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":
