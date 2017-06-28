@@ -299,6 +299,26 @@ def     monadic_comma ():
     """
     pass
 
+# --------------
+
+def     monadic_drop_take ():
+    """
+    >>> test('↓ 1 2 3')
+    VALENCE ERROR
+    >>> test('↓ 0.1 0.2 0.3')
+    VALENCE ERROR
+    >>> test('↓ ¯1 ¯2 ¯3')
+    VALENCE ERROR
+
+    >>> test('↑ 1 2 3')
+    1
+    >>> test('↑ 0.1 0.2 0.3')
+    0.1
+    >>> test('↑ ¯1 ¯2 ¯3')
+    ¯1
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

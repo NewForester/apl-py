@@ -19,7 +19,7 @@ import mpmath
 
 from system_vars import integerCT, confirm_int, indexOrigin
 
-from apl_quantity import s2s, s2v, s_rho, s_comma
+from apl_quantity import s2s, s2v, s_rho, s_comma, v2s
 from apl_error import apl_error
 
 # ------------------------------
@@ -174,6 +174,22 @@ def     _range (B):
 
 # ------------------------------
 
+def     _take (B):
+    """
+    return the first element of B
+    """
+    return B[0]
+
+# ------------------------------
+
+def     _drop (B):
+    """
+    return the first element of B
+    """
+    apl_error("VALENCE ERROR")
+
+# ------------------------------
+
 def     to_be_implemented (B):
     """
     placeholder for functions not yet implemented
@@ -219,8 +235,9 @@ _monadic_functions = {
     '⊂':        to_be_implemented,      # (enclose) - turn array into nested scalar (?!?)
     '⊃':        to_be_implemented,      # (disclose) - the inverse
 
-# Selection
-    '↑':        to_be_implemented,      # take - first element of an array
+    # Selection
+    '↑':        lambda B: v2s(_take,B),
+    '↓':        lambda B: v2s(_drop,B),
 
 # Sort
     '⍋':        to_be_implemented,      # grade up (ascending sort indicies)

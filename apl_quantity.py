@@ -195,6 +195,14 @@ def s2v (Fn,B):
 
 # ------------------------------
 
+def v2s (Fn,B):
+    """
+    evaluate a numeric function that, given a vector argument, returns a scalarr
+    """
+    return APL_scalar(Fn(B.vectorToPy()))
+
+# ------------------------------
+
 def s_rho (Fn,B):
     """
     scalar rho - return dimension/rank of B - does not operate on B
@@ -308,5 +316,15 @@ def vv_comma (Fn,A,B):
 #    Bpy = list(B.vectorToPy()) if B.isString() and case == 1 else B.vectorToPy()
 
     return APL_vector(Fn(Apy,Bpy),case == 2)
+
+# ------------------------------
+
+def sv2v (Fn,A,B):
+    """
+    evaluate a dyadic function that returns a vector given A is a scalar and B is a vector
+    """
+    Rpy = Fn(A.scalarToPy("LENGTH ERROR"),B.vectorToPy())
+
+    return APL_vector(Rpy,B.isString())
 
 # EOF

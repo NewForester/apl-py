@@ -19,7 +19,7 @@ import mpmath
 
 from system_vars import confirm_bool, confirm_int, equalCT, integerCT, indexOrigin
 
-from apl_quantity import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s
+from apl_quantity import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s, sv2v
 from apl_error import apl_error
 
 # ------------------------------
@@ -404,6 +404,51 @@ def     _index (A,B):
 
     return V
 
+# --------------
+
+def     _take (A,B):
+    """
+    take A elements from B
+    """
+    A = confirm_int(A)
+    if type(B) != str:  B = list(B)
+    LB = len(B)
+
+    if A < 0:
+        if (0 > LB + A):
+            if type(B) == str:
+                return (' ' * (0 - (LB + A))) + B
+            else:
+                return ([0] * (0 - (LB + A))) + B
+        else:
+            return B[LB + A:]
+    else:
+        if (0 > LB - A):
+            if type(B) == str:
+                return B + (' ' * (0 - (LB - A)))
+            else:
+                return B + ([0] * (0 - (LB - A)))
+        else:
+            return B[:A]
+
+# --------------
+
+def     _drop (A,B):
+    """
+    drop A elements from B
+    """
+    A = confirm_int(A)
+    if type(B) != str:  B = list(B)
+    LB = len(B)
+
+    if A < 0:
+        if (0 > LB + A):
+            return ''
+        else:
+            return B[:LB + A]
+    else:
+        return B[A:]
+
 # ------------------------------
 
 def     _reshape (A,B):
@@ -489,10 +534,10 @@ _dyadic_functions = {
     # Selection and Set Operations
     '~':        lambda A,B: vv2v(_without,A,B),
     '⍳':        lambda A,B: vv2s(_index,A,B),
+    '↑':        lambda A,B: sv2v(_take,A,B),
+    '↓':        lambda A,B: sv2v(_drop,A,B),
     '\\':       to_be_implemented,      # expansion
     '/':        to_be_implemented,      # compression
-    '↑':        to_be_implemented,      # take
-    '↓':        to_be_implemented,      # drop
     '⌷':        to_be_implemented,      # index
     '⌿':        to_be_implemented,      #
     '⍀':        to_be_implemented,      #
