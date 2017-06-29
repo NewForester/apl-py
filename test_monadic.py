@@ -11,7 +11,7 @@
     Many of these expressions exercise the vector calculator.
 """
 
-from evaluate import evaluate_and_print
+from evaluate import evaluate
 
 from apl_cio import APL_cio as apl_cio
 from apl_error import APL_exception as apl_exception
@@ -28,7 +28,8 @@ def     test (expr):
     INVALID TOKEN
     """
     try:
-        evaluate_and_print(expr,apl_cio())
+        cio = apl_cio()
+        cio.printResult(evaluate(expr,cio))
     except apl_exception as error:
         print(error.message)
 
