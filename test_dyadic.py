@@ -13,6 +13,7 @@
 
 from evaluate import evaluate_and_print
 
+from apl_print import APL_print as apl_print
 from apl_error import APL_exception as apl_exception
 
 # ------------------------------
@@ -27,7 +28,7 @@ def     test (expr):
     INVALID TOKEN
     """
     try:
-        evaluate_and_print(expr)
+        evaluate_and_print(expr,apl_print())
     except apl_exception as error:
         print(error.message)
 
