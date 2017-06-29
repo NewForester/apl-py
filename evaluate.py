@@ -57,7 +57,7 @@ def     _findUnquoted(expr,char,spos=0):
 
 # ------------------------------
 
-def     evaluate_and_print_line (line,cio):
+def     evaluate_and_print_line (line,cio,hushLast=False):
     """
     evaluate and print possibly more than one expression
     """
@@ -67,8 +67,12 @@ def     evaluate_and_print_line (line,cio):
         expr = line.lstrip()
         if expr:
             result = evaluate(expr,cio)
-            cio.newline = True
-            cio.printImplicit(result)
+
+            if not hushLast:
+                cio.newline = True
+                cio.printImplicit(result)
+
+            return result
 
     else:
         expr = line[:pos].lstrip()
@@ -79,7 +83,7 @@ def     evaluate_and_print_line (line,cio):
         line = line[pos + 1:].lstrip()
         if line:
             cio.hushExplicit = True
-            evaluate_and_print_line(line,cio)
+            return evaluate_and_print_line(line,cio,hushLast)
 
 # ------------------------------
 
@@ -136,7 +140,7 @@ def     evaluate_name (expr,_,cio):
 
 # ------------------------------
 
-def     evaluate_with_output (expr,leader,cio):
+def     evaluate_input_output (expr,leader,cio):
     """
     evaluate, print (possibly) and return an intermediary result
     """
@@ -148,6 +152,9 @@ def     evaluate_with_output (expr,leader,cio):
         cio.hushExplicit = False
 
         rhs = evaluate(texpr[1:],cio)
+
+        if leader == '⍞' and rhs.isString():
+            cio.userPromptLength = rhs.dimension()
 
         cio.newline = leader == '⎕' or (cio.silent and hush)
 
@@ -161,7 +168,31 @@ def     evaluate_with_output (expr,leader,cio):
     else:
         # input operator
 
-        apl_error("NOT YET IMPLEMENTED")
+        if leader == '⍞':
+            expr = input("")
+            if cio.fileInput:
+                print (expr)
+
+            value = apl_vector(cio.userPromptLength * ' ' + expr,True)
+
+            cio.hushImplicit = cio.userPromptLength != 0
+        else:
+            save = cio.prompt
+            cio.prompt = "⎕:    "
+
+            expr = input(cio.prompt)
+            if cio.fileInput:
+                print (expr)
+
+            try:
+                value = evaluate_and_print_line(expr,cio,True)
+            except apl_exception as error:
+                cio.printError(error,expr)
+                apl_error(None)
+
+            cio.prompt = save
+
+        return (value, 1)
 
 # ------------------------------
 
@@ -265,8 +296,8 @@ parser_functions = (
     extract_string,
     handle_system_command,
     evaluate_subexpression,
-    evaluate_with_output,
-    evaluate_with_output,
+    evaluate_input_output,
+    evaluate_input_output,
     lambda e,l,c: (apl_vector([]), 1),
     lambda e,l,c: (None, len(e)),
 )
