@@ -142,7 +142,7 @@ def     rep_from_file (prompt,path,inputFile,silent):
 
         line = line.rstrip()
 
-        control = apl_print(prompt,"□",silent)
+        control = apl_print(prompt,"□",True,silent)
 
         if not silent:
             print("{0}{1}".format(prompt,line))

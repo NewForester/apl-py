@@ -57,7 +57,7 @@ def     _findUnquoted(expr,char,spos=0):
 
 # ------------------------------
 
-def     evaluate_and_print_line (line,control):
+def     evaluate_and_print_line (line,control,hushLast=False):
     """
     evaluate and print possibly more than one expression
     """
@@ -67,8 +67,12 @@ def     evaluate_and_print_line (line,control):
         expr = line.lstrip()
         if expr:
             result = evaluate(expr,control)
-            control.newline = True
-            control.printImplicit(result)
+
+            if not hushLast:
+                control.newline = True
+                control.printImplicit(result)
+
+            return result
 
     else:
         expr = line[:pos].lstrip()
@@ -79,7 +83,7 @@ def     evaluate_and_print_line (line,control):
         line = line[pos + 1:].lstrip()
         if line:
             control.hushExplicit = True
-            evaluate_and_print_line(line,control)
+            return evaluate_and_print_line(line,control,hushLast)
 
 # ------------------------------
 
@@ -136,7 +140,7 @@ def     evaluate_name (expr,_,control):
 
 # ------------------------------
 
-def     evaluate_with_output (expr,leader,control):
+def     evaluate_input_output (expr,leader,control):
     """
     evaluate, print (possibly) and return an intermediary result
     """
@@ -148,6 +152,9 @@ def     evaluate_with_output (expr,leader,control):
         control.hushExplicit = False
 
         rhs = evaluate(texpr[1:],control)
+
+        if leader == '⍞' and rhs.isString():
+            control.userPromptLength = rhs.dimension()
 
         control.newline = leader == '⎕' or (control.silent and hush)
 
@@ -161,7 +168,31 @@ def     evaluate_with_output (expr,leader,control):
     else:
         # input operator
 
-        apl_error("NOT YET IMPLEMENTED")
+        if leader == '⍞':
+            expr = input("")
+            if control.fileInput:
+                print (expr)
+
+            value = apl_vector(control.userPromptLength * ' ' + expr,True)
+
+            control.hushImplicit = control.userPromptLength != 0
+        else:
+            save = control.prompt
+            control.prompt = "⎕:    "
+
+            expr = input(control.prompt)
+            if control.fileInput:
+                print (expr)
+
+            try:
+                value = evaluate_and_print_line(expr,control,True)
+            except apl_exception as error:
+                control.printError(error,expr)
+                apl_error(None)
+
+            control.prompt = save
+
+        return (value, 1)
 
 # ------------------------------
 
@@ -265,8 +296,8 @@ parser_functions = (
     extract_string,
     handle_system_command,
     evaluate_subexpression,
-    evaluate_with_output,
-    evaluate_with_output,
+    evaluate_input_output,
+    evaluate_input_output,
     lambda e,l,c: (apl_vector([]), 1),
     lambda e,l,c: (None, len(e)),
 )
