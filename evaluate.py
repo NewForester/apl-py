@@ -78,7 +78,7 @@ def     evaluate_and_print_line (line,control):
 
         line = line[pos + 1:].lstrip()
         if line:
-            control.hush = True
+            control.hushExplicit = True
             evaluate_and_print_line(line,control)
 
 # ------------------------------
@@ -103,7 +103,7 @@ def     expression_within_parentheses (expr,opos,cpos):
 
 # ------------------------------
 
-def     evaluate_subexpression (expr,control):
+def     evaluate_subexpression (expr,_,control):
     """
     Extract and evaluate a leading subexpression in parentheses
     """
@@ -113,7 +113,7 @@ def     evaluate_subexpression (expr,control):
 
 # ------------------------------
 
-def     evaluate_name (expr,control):
+def     evaluate_name (expr,_,control):
     """
     Evaluate, assign to or create a workspace variable
 
@@ -136,28 +136,36 @@ def     evaluate_name (expr,control):
 
 # ------------------------------
 
-def     evaluate_with_output (expr,consumed,control):
+def     evaluate_with_output (expr,leader,control):
     """
-    evaluate, print and return an intermediary result
+    evaluate, print (possibly) and return an intermediary result
     """
-    hush = control.hush
+    texpr = expr[1:].lstrip()
+    if texpr and texpr[0] == '←':
+        # output operator
 
-    control.hush = False
-    rhs = evaluate(expr[consumed:],control)
+        hush = control.hushExplicit
+        control.hushExplicit = False
 
-    control.newline = expr[0] == '⎕' or (control.silent and hush)
+        rhs = evaluate(texpr[1:],control)
 
-    if control.silent or not hush:
-        if expr[0] == '⍞' and not rhs.isString() and rhs.isVector():
-            control.printExplicit(apl_vector([rhs]))
-        else:
-            control.printExplicit(rhs)
+        control.newline = leader == '⎕' or (control.silent and hush)
 
-    return (rhs, len(expr))
+        if control.silent or not hush:
+            if leader == '⍞' and not rhs.isString() and rhs.isVector():
+                control.printExplicit(apl_vector([rhs]))
+            else:
+                control.printExplicit(rhs)
+
+        return (rhs, len(expr))
+    else:
+        # input operator
+
+        apl_error("NOT YET IMPLEMENTED")
 
 # ------------------------------
 
-def     evaluate_system_variable (expr,control):
+def     evaluate_system_variable (expr,_,control):
     """
     Evaluate or assign to a system variable
     """
@@ -178,7 +186,7 @@ def     evaluate_system_variable (expr,control):
 
 # ------------------------------
 
-def     handle_system_command (expr,control):
+def     handle_system_command (expr,_,control):
     """
     Invoke a system command
     """
@@ -193,7 +201,7 @@ def     handle_system_command (expr,control):
 
 # ------------------------------
 
-def     extract_string (expr,delim):
+def     extract_string (expr,delim,_):
     """
     Extract leading string from expression
     """
@@ -215,7 +223,7 @@ def     extract_string (expr,delim):
 
 # ------------------------------
 
-def     extract_number (expr):
+def     extract_number (expr,_,__):
     """
     Extract leading number from expression
     """
@@ -251,6 +259,18 @@ def     _isCompoundOperator (operator,expr):
 
 # ------------------------------
 
+parser_functions = (
+    extract_number,
+    extract_string,
+    extract_string,
+    handle_system_command,
+    evaluate_subexpression,
+    evaluate_with_output,
+    evaluate_with_output,
+    lambda e,l,c: (apl_vector([]), 1),
+    lambda e,l,c: (None, len(e)),
+)
+
 def     parse (expr,control):
     """
     Extract and evaluate the next token in a APL expression (left to right)
@@ -261,45 +281,24 @@ def     parse (expr,control):
 
     while True:
         leader = expr[0]
-        consumed = 0
 
-        if leader == '(':
-            value, consumed = evaluate_subexpression(expr,control)
-        elif leader.isalpha():
-            value, consumed = evaluate_name(expr,control)
-        elif leader == '⎕':
-            consumed = _isCompoundOperator("⎕←",expr)
-            if consumed:
-                value, consumed = evaluate_with_output(expr,consumed,control)
-            else:
-                value, consumed = evaluate_system_variable(expr,control)
-        elif leader == '⍞':
-            consumed = _isCompoundOperator("⍞←",expr)
-            if consumed:
-                value, consumed = evaluate_with_output(expr,consumed,control)
-            else:
-                apl_error("SYNTAX ERROR")
-        elif leader == ')':
-            if len(lhs):
-                apl_error("SYNTAX ERROR")
-            value, consumed = handle_system_command(expr,control)
-        elif leader == "'":
-            value, consumed = extract_string(expr,leader)
-        elif leader == '"':
-            value, consumed = extract_string(expr,leader)
-        elif leader == '⍬':
-            value, consumed = apl_vector([]), 1
-        elif leader == '⍝':
-            value, consumed = None, len(expr)
+        if leader.isalpha():
+            function = evaluate_name
+        elif leader == '⎕' and len(expr) > 1 and expr[1].isalpha():
+            function = evaluate_system_variable
+        elif leader == ')' and lhs != []:
+            apl_error("SYNTAX ERROR")
         else:
-            value, consumed = extract_number(expr)
+            function = parser_functions["'\")(⎕⍞⍬⍝".find(leader)+1]
+
+        value, consumed = function(expr,leader,control)
 
         if value is not None:
             if type(value) == apl_scalar:
                 value = value.python()
             lhs.append(value)
 
-            control.hush = False
+            control.hushExplicit = False
 
         if consumed == 0:
             break
