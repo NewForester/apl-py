@@ -68,15 +68,13 @@ def     evaluate_and_print_line (line,control):
         if expr:
             result = evaluate(expr,control)
             control.newline = True
-            if not control.silent:
-                control.printResult(result)
+            control.printImplicit(result)
 
     else:
         expr = line[:pos].lstrip()
         if expr:
             result = evaluate(expr,control)
-            if not control.silent:
-                control.printResult(result)
+            control.printImplicit(result)
 
         line = line[pos + 1:].lstrip()
         if line:
@@ -151,9 +149,9 @@ def     evaluate_with_output (expr,consumed,control):
 
     if control.silent or not hush:
         if expr[0] == '⍞' and not rhs.isString() and rhs.isVector():
-            control.printResult(apl_vector([rhs]))
+            control.printExplicit(apl_vector([rhs]))
         else:
-            control.printResult(rhs)
+            control.printExplicit(rhs)
 
     return (rhs, len(expr))
 
