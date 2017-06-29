@@ -142,22 +142,17 @@ def     rep_from_file (prompt,path,inputFile,silent):
 
         line = line.rstrip()
 
-        cio = apl_cio(silent)
+        cio = apl_cio(prompt,"□",silent)
 
         if not silent:
             print("{0}{1}".format(prompt,line))
 
-        if not line.lstrip():
-            continue
-
         try:
-            if not silent:
-                print("□",end="")
             evaluate_and_print_line(line,cio)
         except apl_exception as error:
             if silent:
                 print("{0}{1}".format(prompt,line))
-            cio.printError(error,line,prompt,"in {0} on line {1}".format(path,lineCount))
+            cio.printError(error,line,"in {0} on line {1}".format(path,lineCount))
             apl_exit(1)
 
 # ------------------------------
@@ -167,18 +162,14 @@ def     rep_from_tty (prompt):
     read input lines from a tty, evaluate them and print the results
     """
     while True:
-        cio = apl_cio()
+        cio = apl_cio(prompt,"□")
 
         line = input(prompt)
 
-        if not line.lstrip():
-            continue
-
         try:
-            print("□",end="")
             evaluate_and_print_line(line,cio)
         except apl_exception as error:
-            cio.printError(error,line,prompt)
+            cio.printError(error,line)
 
 # ------------------------------
 
