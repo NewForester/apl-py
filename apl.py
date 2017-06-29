@@ -142,6 +142,8 @@ def     rep_from_file (prompt,path,inputFile,silent):
 
         line = line.rstrip()
 
+        cio = apl_cio(silent)
+
         if not silent:
             print("{0}{1}".format(prompt,line))
 
@@ -151,11 +153,11 @@ def     rep_from_file (prompt,path,inputFile,silent):
         try:
             if not silent:
                 print("□",end="")
-            evaluate_and_print_line(line,apl_cio(),silent)
+            evaluate_and_print_line(line,cio)
         except apl_exception as error:
             if silent:
                 print("{0}{1}".format(prompt,line))
-            control.printError(error,line,prompt,"in {0} on line {1}".format(path,lineCount))
+            cio.printError(error,line,prompt,"in {0} on line {1}".format(path,lineCount))
             apl_exit(1)
 
 # ------------------------------
@@ -165,6 +167,8 @@ def     rep_from_tty (prompt):
     read input lines from a tty, evaluate them and print the results
     """
     while True:
+        cio = apl_cio()
+
         line = input(prompt)
 
         if not line.lstrip():
@@ -172,9 +176,9 @@ def     rep_from_tty (prompt):
 
         try:
             print("□",end="")
-            evaluate_and_print_line(line,apl_cio())
+            evaluate_and_print_line(line,cio)
         except apl_exception as error:
-            control.printError(error,line,prompt)
+            cio.printError(error,line,prompt)
 
 # ------------------------------
 
@@ -247,12 +251,14 @@ if __name__ == '__main__':
 
             line = ' '.join(args)
 
+            cio = apl_cio()
+
             try:
-                evaluate_and_print_line(line,apl_cio())
+                evaluate_and_print_line(line,cio)
                 apl_exit(0)
             except apl_exception as error:
                 print(line)
-                control.printError(error,line)
+                cio.printError(error,line)
                 apl_exit(1)
 
     except KeyboardInterrupt:
