@@ -26,9 +26,9 @@ class   APL_cio (object):
         self.prompt = prompt
         self.prefix = prefix
         self.silent = silent
-        self.hush = True
         self.newline = True
         self.prefixDone = False
+        self.hushExplicit = True
 
     def printResult (self,value):
         if value is None:
