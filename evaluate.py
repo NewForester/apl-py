@@ -57,34 +57,42 @@ def     _findUnquoted(expr,char,spos=0):
 
 # ------------------------------
 
-def     evaluate_and_print_line (line,cio,silent=False):
+def     evaluate_and_print_line (line,cio):
     """
     evaluate and print possibly more than one expression
     """
     pos = _findUnquoted(line,'⋄')
 
     if pos == -1:
-        evaluate_and_print(line,cio,True,True,silent)
-        return
+        expr = line.lstrip()
+        if expr:
+            cio.eol = True
+            evaluate_and_print(expr,cio)
 
-    evaluate_and_print(line[:pos],cio,True,False,silent)
+    else:
+        expr = line[:pos].lstrip()
+        if expr:
+            evaluate_and_print(expr,cio)
 
-    line = line[pos + 1:].lstrip()
-    if line:
-        evaluate_and_print_line(line,cio,silent)
+        line = line[pos + 1:].lstrip()
+        if line:
+            cio.hush = True
+            evaluate_and_print_line(line,cio)
 
 # ------------------------------
 
-def     evaluate_and_print (expr,cio,bol=False,eol=True,silent=False):
+def     evaluate_and_print (expr,cio):
     """
     evaluate and print an expression
     """
     expr = expr.lstrip()
 
     if expr:
-        result = evaluate(expr,cio,bol,eol)
-        if result is not None and not silent:
-            cio.printResult(result)
+        result = evaluate(expr,cio)
+        if cio.eol:
+            cio.newline = True
+        if result is not None and not cio.silent:
+            cio.printResult(result,cio.newline)
 
 # ------------------------------
 
@@ -141,21 +149,27 @@ def     evaluate_name (expr,cio):
 
 # ------------------------------
 
-def     evaluate_with_output (expr,consumed,cio,bol,newline):
+def     evaluate_with_output (expr,consumed,cio):
     """
     evaluate, print and return an intermediary result
     """
+    hush = cio.hush
+
+    cio.hush = False
     rhs = evaluate(expr[consumed:],cio)
 
-    if newline:
-        cio.printResult(rhs)
-    else:
-        if rhs.isVector() and not rhs.isString():
-            cio.printResult(apl_vector([rhs]),False)
-        else:
-            cio.printResult(rhs,False)
+    cio.newline = expr[0] == '⎕' or (cio.silent and hush)
 
-    return rhs if not bol else None, len(expr)
+    if cio.silent or not hush:
+        if expr[0] == '⎕':
+            cio.printResult(rhs)
+        else:
+            if rhs.isVector() and not rhs.isString():
+                cio.printResult(apl_vector([rhs]),cio.newline)
+            else:
+                cio.printResult(rhs,cio.newline)
+
+    return (rhs, len(expr))
 
 # ------------------------------
 
@@ -253,7 +267,7 @@ def     _isCompoundOperator (operator,expr):
 
 # ------------------------------
 
-def     parse (expr,cio,bol,eol):
+def     parse (expr,cio):
     """
     Extract and evaluate the next token in a APL expression (left to right)
 
@@ -272,13 +286,13 @@ def     parse (expr,cio,bol,eol):
         elif leader == '⎕':
             consumed = _isCompoundOperator("⎕←",expr)
             if consumed:
-                value, consumed = evaluate_with_output(expr,consumed,cio,bol,True)
+                value, consumed = evaluate_with_output(expr,consumed,cio)
             else:
                 value, consumed = evaluate_system_variable(expr,cio)
         elif leader == '⍞':
             consumed = _isCompoundOperator("⍞←",expr)
             if consumed:
-                value, consumed = evaluate_with_output(expr,consumed,cio,bol,bol and eol)
+                value, consumed = evaluate_with_output(expr,consumed,cio)
             else:
                 apl_error("SYNTAX ERROR")
         elif leader == ')':
@@ -301,7 +315,7 @@ def     parse (expr,cio,bol,eol):
                 value = value.python()
             lhs.append(value)
 
-            bol = False
+            cio.hush = False
 
         if consumed == 0:
             break
@@ -329,7 +343,7 @@ def     parse (expr,cio,bol,eol):
 
 # ------------------------------
 
-def     evaluate (expression,cio,bol=False,eol=True):
+def     evaluate (expression,cio):
     """
     Evaluate an APL expression
 
@@ -341,7 +355,7 @@ def     evaluate (expression,cio,bol=False,eol=True):
         if not expr:
             apl_error("SYNTAX ERROR")
 
-        lhs, expr = parse(expr,cio,bol,eol)
+        lhs, expr = parse(expr,cio)
 
         if not expr:
             return lhs
