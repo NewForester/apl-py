@@ -17,7 +17,7 @@
       - system commands
 """
 
-from evaluate import evaluate, evaluate_and_print, evaluate_and_print_line
+from evaluate import evaluate, evaluate_and_print_line
 
 from apl_cio import APL_cio as apl_cio
 from apl_error import APL_exception as apl_exception
@@ -29,7 +29,8 @@ def     test (expr):
     test both positive and negative outcomes
     """
     try:
-        evaluate_and_print(expr,apl_cio())
+        cio = apl_cio()
+        cio.printResult(evaluate(expr,cio))
     except apl_exception as error:
         print(error.message)
 
@@ -286,7 +287,8 @@ def     test_output (expr):
     (2 3)1 (2 3)
     """
     try:
-        evaluate_and_print_line(expr,apl_cio())
+        cio = apl_cio()
+        evaluate_and_print_line(expr,cio)
     except apl_exception as error:
         print(error.message)
 
@@ -315,7 +317,8 @@ def     test_sys_vars (expr):
     1
     """
     try:
-        evaluate_and_print(expr,apl_cio())
+        cio = apl_cio()
+        cio.printResult(evaluate(expr,cio))
     except apl_exception as error:
         print(error.message)
 

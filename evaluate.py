@@ -66,33 +66,22 @@ def     evaluate_and_print_line (line,cio):
     if pos == -1:
         expr = line.lstrip()
         if expr:
-            cio.eol = True
-            evaluate_and_print(expr,cio)
+            result = evaluate(expr,cio)
+            cio.newline = True
+            if not cio.silent:
+                cio.printResult(result)
 
     else:
         expr = line[:pos].lstrip()
         if expr:
-            evaluate_and_print(expr,cio)
+            result = evaluate(expr,cio)
+            if not cio.silent:
+                cio.printResult(result)
 
         line = line[pos + 1:].lstrip()
         if line:
             cio.hush = True
             evaluate_and_print_line(line,cio)
-
-# ------------------------------
-
-def     evaluate_and_print (expr,cio):
-    """
-    evaluate and print an expression
-    """
-    expr = expr.lstrip()
-
-    if expr:
-        result = evaluate(expr,cio)
-        if cio.eol:
-            cio.newline = True
-        if result is not None and not cio.silent:
-            cio.printResult(result,cio.newline)
 
 # ------------------------------
 
@@ -161,13 +150,10 @@ def     evaluate_with_output (expr,consumed,cio):
     cio.newline = expr[0] == '⎕' or (cio.silent and hush)
 
     if cio.silent or not hush:
-        if expr[0] == '⎕':
-            cio.printResult(rhs)
+        if expr[0] == '⍞' and rhs.isVector() and not rhs.isString():
+            cio.printResult(apl_vector([rhs]))
         else:
-            if rhs.isVector() and not rhs.isString():
-                cio.printResult(apl_vector([rhs]),cio.newline)
-            else:
-                cio.printResult(rhs,cio.newline)
+            cio.printResult(rhs)
 
     return (rhs, len(expr))
 
