@@ -142,22 +142,17 @@ def     rep_from_file (prompt,path,inputFile,silent):
 
         line = line.rstrip()
 
-        control = apl_print(silent)
+        control = apl_print(prompt,"□",silent)
 
         if not silent:
             print("{0}{1}".format(prompt,line))
 
-        if not line.lstrip():
-            continue
-
         try:
-            if not silent:
-                print("□",end="")
             evaluate_and_print_line(line,control)
         except apl_exception as error:
             if silent:
                 print("{0}{1}".format(prompt,line))
-            control.printError(error,line,prompt,"in {0} on line {1}".format(path,lineCount))
+            control.printError(error,line,"in {0} on line {1}".format(path,lineCount))
             apl_exit(1)
 
 # ------------------------------
@@ -167,18 +162,14 @@ def     rep_from_tty (prompt):
     read input lines from a tty, evaluate them and print the results
     """
     while True:
-        control = apl_print()
+        control = apl_print(prompt,"□")
 
         line = input(prompt)
 
-        if not line.lstrip():
-            continue
-
         try:
-            print("□",end="")
             evaluate_and_print_line(line,control)
         except apl_exception as error:
-            control.printError(error,line,prompt)
+            control.printError(error,line)
 
 # ------------------------------
 

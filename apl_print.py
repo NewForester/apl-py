@@ -3,12 +3,12 @@
 
     UNDER DEVELOPMENT
 
-    This is the fourth step of the transition.
+    This is the fifth step of the transition.
 
-    This step simplified calling code by removing the optional parameter to
-    printResult() and using the self.newline state instead.
-
-    Refactor of calling code also led to the elimination of the self.eol state.
+    This step is an incrementation improvement.  The interactive prompt and
+    prefix strings are added to the object during construction.  The print
+    methods are altered to use them allowing a little simplification of the
+    calling code.
 
     The intention is that the complexities of output (and input) will be
     delegated to this module as and when it becomes advantageous to do so.
@@ -17,20 +17,26 @@
 # ------------------------------
 
 class   APL_print (object):
-    def __init__(self,silent=False):
+    def __init__(self,prompt="",prefix="",silent=False):
+        self.prompt = prompt
+        self.prefix = prefix
         self.silent = silent
         self.hush = True
         self.newline = True
+        self.prefixDone = False
 
     def printResult (self,result):
         if result is None:
             print(None)
         else:
+            if not self.prefixDone and not self.silent:
+                print(self.prefix,end="")
+                self.prefixDone = True
             print(str(result),end='\n' if self.newline else '')
 
-    def printError (self,error,expr,prompt="",where=""):
+    def printError (self,error,expr,where=""):
         if error.message:
-            print('\r'+' '*(len(prompt)+expr.rfind(error.expr)),end="^\n")
+            print('\r'+' '*(len(self.prompt)+expr.rfind(error.expr)),end="^\n")
             print(error.message,where)
 
 # EOF
