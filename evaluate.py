@@ -23,7 +23,7 @@ from system_cmds import system_command
 from workspace_vars import workspace_variable
 
 from apl_quantity import APL_quantity as apl_value, APL_scalar as apl_scalar, APL_vector as apl_vector, APL_string as apl_string
-from apl_print import APL_print as apl_print, print_result
+from apl_print import APL_print as apl_print
 from apl_error import APL_exception as apl_exception, apl_error
 
 # ------------------------------
@@ -84,7 +84,7 @@ def     evaluate_and_print (expr,control,bol=False,eol=True,silent=False):
     if expr:
         result = evaluate(expr,control,bol,eol)
         if result is not None and not silent:
-            print_result(result)
+            control.printResult(result)
 
 # ------------------------------
 
@@ -148,12 +148,12 @@ def     evaluate_with_output (expr,consumed,control,bol,newline):
     rhs = evaluate(expr[consumed:],control)
 
     if newline:
-        print_result(rhs)
+        control.printResult(rhs)
     else:
         if rhs.isVector() and not rhs.isString():
-            print_result(apl_vector([rhs]),False)
+            control.printResult(apl_vector([rhs]),False)
         else:
-            print_result(rhs,False)
+            control.printResult(rhs,False)
 
     return rhs if not bol else None, len(expr)
 

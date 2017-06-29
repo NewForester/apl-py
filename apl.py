@@ -35,7 +35,7 @@ from functools import reduce
 from evaluate import evaluate_and_print_line
 
 from apl_quantity import APL_scalar as apl_scalar, APL_vector as apl_vector
-from apl_print import APL_print as apl_print, print_error
+from apl_print import APL_print as apl_print
 from apl_error import APL_exception as apl_exception, apl_error, apl_exit, apl_quit
 
 # ------------------------------
@@ -155,7 +155,7 @@ def     rep_from_file (prompt,path,inputFile,silent):
         except apl_exception as error:
             if silent:
                 print("{0}{1}".format(prompt,line))
-            print_error(error,line,prompt,"in {0} on line {1}".format(path,lineCount))
+            control.printError(error,line,prompt,"in {0} on line {1}".format(path,lineCount))
             apl_exit(1)
 
 # ------------------------------
@@ -174,7 +174,7 @@ def     rep_from_tty (prompt):
             print("□",end="")
             evaluate_and_print_line(line,apl_print())
         except apl_exception as error:
-            print_error(error,line,prompt)
+            control.printError(error,line,prompt)
 
 # ------------------------------
 
@@ -252,7 +252,7 @@ if __name__ == '__main__':
                 apl_exit(0)
             except apl_exception as error:
                 print(line)
-                print_error(error,line)
+                control.printError(error,line)
                 apl_exit(1)
 
     except KeyboardInterrupt:
