@@ -9,7 +9,7 @@
     Each expression has one or two string operand.
 """
 
-from evaluate import evaluate_and_print
+from evaluate import evaluate
 
 from apl_print import APL_print as apl_print
 from apl_error import APL_exception as apl_exception
@@ -50,7 +50,8 @@ def     test_string (expr):
     'Hello' (19 20) 'Paul'
     """
     try:
-        evaluate_and_print(expr,apl_print())
+        control = apl_print()
+        control.printResult(evaluate(expr,control))
     except apl_exception as error:
         print(error.message)
 

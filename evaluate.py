@@ -66,33 +66,22 @@ def     evaluate_and_print_line (line,control):
     if pos == -1:
         expr = line.lstrip()
         if expr:
-            control.eol = True
-            evaluate_and_print(expr,control)
+            result = evaluate(expr,control)
+            control.newline = True
+            if not control.silent:
+                control.printResult(result)
 
     else:
         expr = line[:pos].lstrip()
         if expr:
-            evaluate_and_print(expr,control)
+            result = evaluate(expr,control)
+            if not control.silent:
+                control.printResult(result)
 
         line = line[pos + 1:].lstrip()
         if line:
             control.hush = True
             evaluate_and_print_line(line,control)
-
-# ------------------------------
-
-def     evaluate_and_print (expr,control):
-    """
-    evaluate and print an expression
-    """
-    expr = expr.lstrip()
-
-    if expr:
-        result = evaluate(expr,control)
-        if control.eol:
-            control.newline = True
-        if result is not None and not control.silent:
-            control.printResult(result,control.newline)
 
 # ------------------------------
 
@@ -161,13 +150,10 @@ def     evaluate_with_output (expr,consumed,control):
     control.newline = expr[0] == '⎕' or (control.silent and hush)
 
     if control.silent or not hush:
-        if expr[0] == '⎕':
-            control.printResult(rhs)
+        if expr[0] == '⍞' and rhs.isVector() and not rhs.isString():
+            control.printResult(apl_vector([rhs]))
         else:
-            if rhs.isVector() and not rhs.isString():
-                control.printResult(apl_vector([rhs]),control.newline)
-            else:
-                control.printResult(rhs,control.newline)
+            control.printResult(rhs)
 
     return (rhs, len(expr))
 
