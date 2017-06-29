@@ -68,15 +68,13 @@ def     evaluate_and_print_line (line,cio):
         if expr:
             result = evaluate(expr,cio)
             cio.newline = True
-            if not cio.silent:
-                cio.printResult(result)
+            cio.printImplicit(result)
 
     else:
         expr = line[:pos].lstrip()
         if expr:
             result = evaluate(expr,cio)
-            if not cio.silent:
-                cio.printResult(result)
+            cio.printImplicit(result)
 
         line = line[pos + 1:].lstrip()
         if line:
@@ -151,9 +149,9 @@ def     evaluate_with_output (expr,consumed,cio):
 
     if cio.silent or not hush:
         if expr[0] == '⍞' and not rhs.isString() and rhs.isVector():
-            cio.printResult(apl_vector([rhs]))
+            cio.printExplicit(apl_vector([rhs]))
         else:
-            cio.printResult(rhs)
+            cio.printExplicit(rhs)
 
     return (rhs, len(expr))
 
@@ -180,7 +178,7 @@ def     evaluate_system_variable (expr,cio):
 
 # ------------------------------
 
-def     handle_system_command (expr,control):
+def     handle_system_command (expr,cio):
     """
     Invoke a system command
     """
@@ -188,7 +186,7 @@ def     handle_system_command (expr,control):
     if match:
         name = match.group(0)
         if name:
-            system_command(name,expr[len(name)+1:],control)
+            system_command(name,expr[len(name)+1:],cio)
             return (None, len(expr))
 
     return (None, 0)
@@ -284,7 +282,7 @@ def     parse (expr,cio):
         elif leader == ')':
             if len(lhs):
                 apl_error("SYNTAX ERROR")
-            value, consumed = handle_system_command(expr,control)
+            value, consumed = handle_system_command(expr,cio)
         elif leader == "'":
             value, consumed = extract_string(expr,leader)
         elif leader == '"':
