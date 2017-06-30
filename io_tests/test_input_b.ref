@@ -1,0 +1,51 @@
+      'Test ←⍞ (input operator)'
+□Test ←⍞ (input operator)
+      
+      S←⍞
+Hello
+□Hello
+      S
+□Hello
+      ⍞
+Hello
+□Hello
+      ⍞
+6 + 6
+□6 + 6
+      ⍞
+6 × 6 ⍝ a lovely day
+□6 × 6 ⍝ a lovely day
+      ⍞
+'Hello', ' ', 'World'
+□'Hello', ' ', 'World'
+      
+      "Hello " , ⍞
+world
+□Hello world
+      ⍞, " world"
+Hello
+□Hello world
+      "Goodbye " , ⍞, " world"
+cruel
+□Goodbye cruel world
+      "Hello ", (name ← ⍞), ". Have a nice day"
+Heather
+□Hello Heather. Have a nice day
+      name
+□Heather
+      
+      ⍞ ← "What day is it ? "
+□What day is it ? 
+      Day ← ⍞
+Wednesday
+□Wednesday
+      Day
+□Wednesday
+      
+      ⍞ ← "What day is it ? " ⋄ Day ← ⍞
+□What day is it ? Wednesday
+      Day
+□                 Wednesday
+      
+      )OFF
+Bye bye
