@@ -309,6 +309,32 @@ def     test_drop_take ():
     """
     pass
 
+# --------------
+
+def     test_reverse_rotate ():
+    """
+    >>> test_string('⌽ "niagara"')
+    aragain
+    >>> test_string('⊖ "nigeria"')
+    airegin
+
+    >>> test_string('1 ⌽ "nope"')
+    open
+    >>> test_string('2 ⊖ "anna"')
+    naan
+
+    >>> test_string('1 ⌽ "a"')
+    a
+    >>> test_string('2 ⊖ "b"')
+    b
+
+    >>> test_string('"H" ⌽ "nope"')
+    DOMAIN ERROR
+    >>> test_string('"Hi" ⊖ "anna"')
+    DOMAIN ERROR
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

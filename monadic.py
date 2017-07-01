@@ -19,7 +19,7 @@ import mpmath
 
 from system_vars import integerCT, confirm_int, indexOrigin
 
-from apl_quantity import s2s, s2v, s_rho, s_comma, v2s
+from apl_quantity import s2s, s2v, s_rho, s_comma, v2s, v2v
 from apl_error import apl_error
 
 # ------------------------------
@@ -190,6 +190,32 @@ def     _drop (B):
 
 # ------------------------------
 
+def     _reverselast (B):
+    """
+    return B reversed along its last axis
+    """
+    V = []
+
+    for X in B:
+        V = [X] + V
+
+    return V
+
+# ------------------------------
+
+def     _reversefirst (B):
+    """
+    return B reversed along its first axis
+    """
+    V = []
+
+    for X in B:
+        V = [X] + V
+
+    return V
+
+# ------------------------------
+
 def     to_be_implemented (B):
     """
     placeholder for functions not yet implemented
@@ -227,10 +253,10 @@ _monadic_functions = {
     '⍳':        lambda B: s2v(_range,B),
     '⍴':        lambda B: s_rho(None,B),
     ',':        lambda B: s_comma(None,B),
+    '⌽':        lambda B: v2v(_reverselast,B),
+    '⊖':        lambda B: v2v(_reversefirst,B),
     '≡':        to_be_implemented,      # depth - reports on nesting
     '∊':        to_be_implemented,      # enlist - ditto but also nested arrays
-    '⌽':        to_be_implemented,      # reversal, last axis
-    '⊖':        to_be_implemented,      # reversal, first axis
     '⍉':        to_be_implemented,      # transpose
     '⊂':        to_be_implemented,      # (enclose) - turn array into nested scalar (?!?)
     '⊃':        to_be_implemented,      # (disclose) - the inverse

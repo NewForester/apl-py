@@ -197,9 +197,22 @@ def s2v (Fn,B):
 
 def v2s (Fn,B):
     """
-    evaluate a numeric function that, given a vector argument, returns a scalarr
+    evaluate a numeric function that, given a vector argument, returns a scalar
     """
     return APL_scalar(Fn(B.vectorToPy()))
+
+# ------------------------------
+
+def v2v (Fn,B):
+    """
+    evaluate a function that, given a vector argument, returns a vector
+    """
+    Rpy = Fn(B.vectorToPy())
+
+    if B.isScalar():
+        return APL_quantity(Rpy[0],B.dimension(),B.isString())
+    else:
+        return APL_quantity(Rpy,B.dimension(),B.isString())
 
 # ------------------------------
 
@@ -319,12 +332,17 @@ def vv_comma (Fn,A,B):
 
 # ------------------------------
 
-def sv2v (Fn,A,B):
+def sv2v (Fn,A,B,error):
     """
-    evaluate a dyadic function that returns a vector given A is a scalar and B is a vector
+    evaluate a dyadic function that returns a vector if B is a vector but a scalar if B is scalar
     """
-    Rpy = Fn(A.scalarToPy("LENGTH ERROR"),B.vectorToPy())
+    A.noStringConfirm()
 
-    return APL_vector(Rpy,B.isString())
+    Rpy = Fn(A.scalarToPy(error),B.vectorToPy())
+
+    if B.isScalar():
+        return APL_quantity(Rpy[0],B.dimension(),B.isString())
+    else:
+        return APL_vector(Rpy,B.isString())
 
 # EOF
