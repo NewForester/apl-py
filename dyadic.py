@@ -449,6 +449,26 @@ def     _drop (A,B):
     else:
         return B[A:]
 
+# --------------
+
+def     _rotatelast (A,B):
+    """
+    rotate (vector) B by A elements
+    """
+    A = confirm_int(A) % len(B)
+
+    return B[A:] + B[:A]
+
+# --------------
+
+def     _rotatefirst (A,B):
+    """
+    rotate (vector) B by A elements
+    """
+    A = confirm_int(A) % len(B)
+
+    return B[A:] + B[:A]
+
 # ------------------------------
 
 def     _reshape (A,B):
@@ -524,9 +544,9 @@ _dyadic_functions = {
     # Structural (aka manipulative)
     '⍴':        lambda A,B: sv_rho(_reshape,A,B),
     ',':        lambda A,B: vv_comma(_concatenation,A,B),
+    '⌽':        lambda A,B: sv2v(_rotatelast,A,B,"RANK ERROR"),
+    '⊖':        lambda A,B: sv2v(_rotatefirst,A,B,"RANK ERROR"),
     '⍪':        to_be_implemented,      #
-    '⌽':        to_be_implemented,      # rotation, last axis
-    '⊖':        to_be_implemented,      # rotation, first axis
     '⍉':        to_be_implemented,      # transpose
     '⊂':        to_be_implemented,      # (enclose) - creates an array of vectors (?!?)
     '⊃':        to_be_implemented,      # (disclose) = picks from an array (?!?)
@@ -534,8 +554,8 @@ _dyadic_functions = {
     # Selection and Set Operations
     '~':        lambda A,B: vv2v(_without,A,B),
     '⍳':        lambda A,B: vv2s(_index,A,B),
-    '↑':        lambda A,B: sv2v(_take,A,B),
-    '↓':        lambda A,B: sv2v(_drop,A,B),
+    '↑':        lambda A,B: sv2v(_take,A,B,"LENGTH ERROR"),
+    '↓':        lambda A,B: sv2v(_drop,A,B,"LENGTH ERROR"),
     '\\':       to_be_implemented,      # expansion
     '/':        to_be_implemented,      # compression
     '⌷':        to_be_implemented,      # index
