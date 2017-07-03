@@ -87,11 +87,10 @@ for step in ${steps}; do
 	EOF
 
         herald "Test Case 1a - Invoke interactive mode - no script";
-        note "... you should need to exit the interpreter yourself";
+        note "... type ^D to exit the APL interpreter";
         invoke "${APL}";
 
         herald "Test Case 1b - Evaluate a command line expression - no script";
-        note "... this test should terminate of its own accord";
         invoke "${APL}" 1 2 3 × 3 2 1
         ;;
 
@@ -102,20 +101,20 @@ for step in ${steps}; do
 	EOF
 
         herald "Test Case 2a - Execute script from stdin redirected using '<'";
-        note "... this test should terminate of its own accord";
-        invoke "${APL}" '<' test_2.txt;
+        invoke "${APL}" '<' test_2.txt '&>' "case_2a.log";
+        invoke diff case_2a.log test_2.ref;
 
         herald "Test Case 2b - Execute script from stdin redirected using '|'";
-        note "... this test should terminate of its own accord";
-        invoke cat test_2.txt '|' "${APL}";
+        invoke cat test_2.txt '|' "${APL}" '&>' "case_2b.log";
+        invoke diff case_2b.log test_2.ref;
 
         herald "Test Case 2c - Execute script using command line flag";
-        note "... this test should terminate of its own accord";
-        invoke "${APL}" -f test_2.txt;
+        invoke "${APL}" -f test_2.txt '&>' "case_2c.log";
+        invoke diff case_2c.log test_2.ref;
 
         herald "Test Case 2d - Execute implicit script using #!";
-        note "... this test should terminate of its own accord";
-        invoke ./test_2.apl;
+        invoke ./test_2.apl '&>' "case_2d.log";
+        invoke diff case_2d.log test_2.ref;
         ;;
 
       (3)
@@ -126,44 +125,45 @@ for step in ${steps}; do
 	EOF
 
         herald "Test Case 3a - Execute script from stdin redirected using '<'";
-        note "... this test should terminate of its own accord";
-        invoke "${APL}" '<' test_3.txt;
+        invoke "${APL}" '<' test_3.txt '&>' "case_3a.log";
+        invoke diff case_3a.log test_3.ref;
 
         herald "Test Case 3b - Execute script from stdin redirected using '|'";
-        note "... this test should terminate of its own accord";
-        invoke cat test_3.txt '|' "${APL}";
+        invoke cat test_3.txt '|' "${APL}" '&>' "case_3b.log";
+        invoke diff case_3b.log test_3.ref;
 
         herald "Test Case 3c - Execute script using command line flag";
-        note "... you should need to exit the interpreter yourself";
-        invoke "${APL}" -f test_3.txt;
+        note "... type ^D to exit the APL interpreter";
+        invoke "${APL}" -f test_3.txt '&>' "case_3c.log";
+        invoke diff case_3c.log test_3i.ref;
 
         herald "Test Case 3d - Execute implicit script using #!";
-        note "... you should need to exit the interpreter yourself";
-        invoke ./test_3.apl;
+        note "... type ^D to exit the APL interpreter";
+        invoke ./test_3.apl '&>' "case_3d.log";
+        invoke diff case_3d.log test_3i.ref;
         ;;
 
       (4)
-
         narrative <<- EOF
 	The following test cases check what happens when a script is used
 	in conjunction with a command line expression.
 	EOF
 
         herald "Test Case 4a - Execute script from stdin redirected using '<'";
-        note "... this test should terminate of its own accord";
-        invoke "${APL}" 16 ÷ 4 '<' test_4.txt;
+        invoke "${APL}" 16 ÷ 4 '<' test_4.txt '&>' "case_4a.log";
+        invoke diff case_4a.log test_4.ref;
 
         herald "Test Case 4b - Execute script from stdin redirected using '|'";
-        note "... this test should terminate of its own accord";
-        invoke cat test_4.txt '|' "${APL}" 16 ÷ 4;
+        invoke cat test_4.txt '|' "${APL}" 16 ÷ 4 '&>' "case_4b.log";
+        invoke diff case_4b.log test_4.ref;
 
         herald "Test Case 4c - Execute script using command line flag";
-        note "... this test should terminate of its own accord";
-        invoke "${APL}" -f test_4.txt -- 16 ÷ 4;
+        invoke "${APL}" -f test_4.txt -- 16 ÷ 4 '&>' "case_4c.log";
+        invoke diff case_4c.log test_4.ref;
 
         herald "Test Case 4d - Execute implicit script using #!";
-        note "... this test should terminate of its own accord";
-        invoke ./test_4.apl -- 16 ÷ 4 ;
+        invoke ./test_4.apl -- 16 ÷ 4  '&>' "case_4d.log";
+        invoke diff case_4d.log test_4.ref;
         ;;
 
       (5)
@@ -174,22 +174,18 @@ for step in ${steps}; do
 	EOF
 
         herald "Test Case 5a - Execute script from stdin redirected using '<'";
-        note "... this test should terminate of its own accord";
         invoke "${APL}" -s -- 16 ÷ 4 '<' test_5.txt '&>' "case_5a.log";
         invoke diff case_5a.log test_5.ref;
 
         herald "Test Case 5b - Execute script from stdin redirected using '|'";
-        note "... this test should terminate of its own accord";
         invoke cat test_5.txt '|' "${APL}" -s -- 16 ÷ 4 '&>' "case_5b.log";
         invoke diff case_5b.log test_5.ref;
 
         herald "Test Case 5c - Execute script using command line flag";
-        note "... this test should terminate of its own accord";
         invoke "${APL}" -s -f test_5.txt -- 16 ÷ 4 '&>' "case_5c.log";
         invoke diff case_5c.log test_5.ref;
 
         herald "Test Case 5d - Execute implicit script using #!";
-        note "... this test should terminate of its own accord";
         invoke ./test_5.apl -- 16 ÷ 4 '&>' "case_5d.log";
         invoke diff case_5d.log test_5.ref;
         ;;
@@ -206,43 +202,45 @@ for step in ${steps}; do
 	EOF
 
         herald "Test Case 6a - Execute script from stdin redirected using '<'";
-        note "... this test should terminate of its own accord";
-        invoke "${APL}" -s -- 16 ÷ 4 '<' test_6.txt;
+        invoke "${APL}" -s -- 16 ÷ 4 '<' test_6.txt '&>' "case_6a.log" '||' true;
+        invoke diff case_6a.log test_6.ref;
 
         herald "Test Case 6b - Execute script from stdin redirected using '|'";
-        note "... this test should terminate of its own accord";
-        invoke cat test_6.txt '|' "${APL}" -s -- 16 ÷ 4;
+        invoke cat test_6.txt '|' "${APL}" -s -- 16 ÷ 4 '&>' "case_6b.log" '||' true;
+        invoke diff case_6b.log test_6.ref;
 
         herald "Test Case 6c - Execute script using command line flag";
-        note "... this test should terminate of its own accord";
-        invoke "${APL}" -s -f test_6.txt -- 16 ÷ 4;
+        invoke "${APL}" -s -f test_6.txt -- 16 ÷ 4 '&>' "case_6c.log" '||' true;
+        invoke diff case_6c.log test_6c.ref;
 
         herald "Test Case 6d - Execute implicit script using #!";
-        note "... this test should terminate of its own accord";
-        invoke ./test_6.apl -- 16 ÷ 4;
+        invoke ./test_6.apl -- 16 ÷ 4 '&>' "case_6d.log" '||' true;
+        invoke diff case_6d.log test_6d.ref;
         ;;
 
       (7)
         narrative <<- EOF
 	The following test cases check output redirection through tee will
-	capture a session log (including a Python stack trace if necessary).
+	capture a session log (including a mv Python stack trace if necessary).
 	EOF
 
         herald "Test Case 7a - Execute script from stdin redirected using '<'";
-        note "... this test should terminate of its own accord";
-        invoke "${APL}" '<' test_7.txt '|&' tee -i case_7a.log;
+        invoke "${APL}" '<' test_7.txt '|&' tee -i case_7a.log
+        invoke diff case_7a.log test_7.ref;
 
         herald "Test Case 7b - Execute script from stdin redirected using '|'";
-        note "... this test should terminate of its own accord";
         invoke cat test_7.txt '|' "${APL}" '|&' tee -i case_7b.log;
+        invoke diff case_7b.log test_7.ref;
 
         herald "Test Case 7c - Execute script using command line flag";
-        note "... you should need to exit the interpreter yourself";
+        note "... type ^D to exit the APL interpreter";
         invoke "${APL}" -f test_7.txt '|&' tee -i case_7c.log;
+        invoke diff case_7c.log test_7i.ref;
 
         herald "Test Case 7d - Execute implicit script using #!";
-        note "... you should need to exit the interpreter yourself";
+        note "... type ^D to exit the APL interpreter";
         invoke ./test_7.apl '|&' tee -i case_7d.log;
+        invoke diff case_7d.log test_7i.ref;
         ;;
 
       (8)
@@ -252,22 +250,18 @@ for step in ${steps}; do
 	EOF
 
         herald "Test Case 8a - Execute script from stdin redirected using '<'";
-        note "... this test should terminate of its own accord";
         invoke "${APL}" -s '<' test_8.txt '&>' case_8a.log;
         invoke diff case_8a.log test_8.ref;
 
         herald "Test Case 8b - Execute script from stdin redirected using '|'";
-        note "... this test should terminate of its own accord";
         invoke cat test_8.txt '|' "${APL}" -s '&>' case_8b.log;
         invoke diff case_8b.log test_8.ref;
 
         herald "Test Case 8c - Execute script using command line flag";
-        note "... this test should terminate of its own accord";
         invoke "${APL}" -s -f test_8.txt '&>' case_8c.log;
         invoke diff case_8c.log test_8.ref;
 
         herald "Test Case 8d - Execute implicit script using #!";
-        note "... this test should terminate of its own accord";
         invoke ./test_8.apl '&>' case_8d.log;
         invoke diff case_8d.log test_8.ref;
         ;;
@@ -279,38 +273,35 @@ for step in ${steps}; do
 	EOF
 
         herald "Test Case 9a - Response to an unrecognised short form flag";
-        invoke "${APL}" -x;
+        invoke "${APL}" -x '||' true;
 
         herald "Test Case 9b - Response to an unrecognised long form flag";
-        invoke "${APL}" --extra;
+        invoke "${APL}" --extra '||' true;
 
         herald "Test Case 9c - Check recognition of short form flags";
-        note "... you should need to exit the interpreter yourself";
+        note "... type ^D to exit the APL interpreter";
         invoke "${APL}" -s -v;
 
         herald "Test Case 9d - Check recognition of long form flags";
-        note "... you should need to exit the interpreter yourself";
+        note "... type ^D to exit the APL interpreter";
         invoke "${APL}" --silent --verbose --script;
 
         herald "Test Case 9e - Check recognition of short form help flag";
-        note "... this test should terminate of its own accord";
-        invoke "${APL}" -h;
+        invoke "${APL}" -h '&>' case_9e.log;
+        invoke diff case_9e.log test_9.ref;
 
         herald "Test Case 9f - Check recognition of long form help flag";
-        note "... this test should terminate of its own accord";
-        invoke "${APL}" --help;
+        invoke "${APL}" --help '&>' case_9f.log;
+        invoke diff case_9f.log test_9.ref;
 
         herald "Test Case 9g - Check recognition of short form version flag";
-        note "... this test should terminate of its own accord";
         invoke "${APL}" -V;
 
         herald "Test Case 9h - Check recognition of long form version flag";
-        note "... this test should terminate of its own accord";
         invoke "${APL}" --Version;
 
         herald "Test Case 9i - Response to input redirection to a file that cannot be read";
-        note "... this test should terminate of its own accord";
-        invoke "${APL}" -f test_9.txt;
+        invoke "${APL}" -f test_9.txt '||' true;
         ;;
     esac
 done

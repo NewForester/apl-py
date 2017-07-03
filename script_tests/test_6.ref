@@ -1,0 +1,3 @@
+      ⎕IO + ⎕OI	⍝ raises an APL error
+             ^
+UNKNOWN SYSTEM VARIABLE in <stdin> on line 3

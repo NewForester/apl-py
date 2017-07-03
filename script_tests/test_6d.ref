@@ -1,0 +1,3 @@
+      ⎕IO + ⎕OI	⍝ raises an APL error
+             ^
+UNKNOWN SYSTEM VARIABLE in ./test_6.apl on line 4
