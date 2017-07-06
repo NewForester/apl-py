@@ -16,6 +16,24 @@ for APL in apl.py ./apl.py ../apl.py "error APL intepreter not found"; do
     which ${APL} > /dev/null && break;
 done
 
+# process options
+
+while [[ "${1::1}" == "-" ]]; do
+    case $1 in
+      (-a)
+        noprompt=$1; shift;
+        ;;
+      (--help)
+        usage "I hope that was helpful";
+        exit 1;
+        ;;
+      (*)
+        usage "bad option \"$1\"";
+        exit 1;
+        ;;
+    esac
+done
+
 # helper functions
 
 exec 8<&0;
@@ -26,17 +44,18 @@ function invoke
   echo;
   echo "bash $" "$@" >&9;
   eval "$@" <&8;
+  [[ $? -ne 0 ]] && allok=$1;
   echo;
 }
 
+plus="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+
 function narrative
 {
-    plus="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
-
     echo;
     echo -e "\e[34m${plus}\e[0m";
     cat;
-    read -p "Press enter to continue " junk <&8;
+    [[ -z "${noprompt}" ]] && read -p "Press enter to continue " junk <&8;
     echo -e "\e[34m${plus}\e[0m";
     echo;
 }
@@ -46,6 +65,15 @@ function herald
     echo "------------------------------------------------------------------------";
     echo -e "\e[33m$@\e[0m";
     echo "------------------------------------------------------------------------";
+}
+
+function summary
+{
+    echo;
+    echo -e "\e[34m${plus}\e[0m";
+    [[ -z "${allok}" ]] && note "ALL OK" || error "Something went awry";
+    echo -e "\e[34m${plus}\e[0m";
+    echo;
 }
 
 if [[ $# == 0 ]]; then
@@ -118,5 +146,7 @@ for step in ${steps}; do
         ;;
     esac
 done
+
+summary;
 
 # EOF

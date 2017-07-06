@@ -16,6 +16,28 @@ for APL in apl.py ./apl.py ../apl.py "error APL intepreter not found"; do
     which ${APL} > /dev/null && break;
 done
 
+# process options
+
+while [[ "${1::1}" == "-" ]]; do
+    case $1 in
+      (-aa)
+        nopause=$1;
+        noprompt=$1; shift;
+        ;;
+      (-a)
+        noprompt=$1; shift;
+        ;;
+      (--help)
+        usage "I hope that was helpful";
+        exit 1;
+        ;;
+      (*)
+        usage "bad option \"$1\"";
+        exit 1;
+        ;;
+    esac
+done
+
 # helper functions
 
 exec 8<&0;
@@ -26,17 +48,18 @@ function invoke
   echo;
   echo "bash $" "$@" >&9;
   eval "$@" <&8;
+  [[ $? -ne 0 ]] && allok=$1;
   echo;
 }
 
+plus="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+
 function narrative
 {
-    plus="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
-
     echo;
     echo -e "\e[34m${plus}\e[0m";
     cat;
-    read -p "Press enter to continue " junk <&8;
+    [[ -z "${noprompt}" ]] && read -p "Press enter to continue " junk <&8;
     echo -e "\e[34m${plus}\e[0m";
     echo;
 }
@@ -46,6 +69,15 @@ function herald
     echo "------------------------------------------------------------------------";
     echo -e "\e[33m$@\e[0m";
     echo "------------------------------------------------------------------------";
+}
+
+function summary
+{
+    echo;
+    echo -e "\e[34m${plus}\e[0m";
+    [[ -z "${allok}" ]] && note "ALL OK" || error "Something went awry";
+    echo -e "\e[34m${plus}\e[0m";
+    echo;
 }
 
 if [[ $# == 0 ]]; then
@@ -87,8 +119,12 @@ for step in ${steps}; do
 	EOF
 
         herald "Test Case 1a - Invoke interactive mode - no script";
-        note "... type ^D to exit the APL interpreter";
-        invoke "${APL}";
+        if [[ -n "${nopause}" ]]; then
+            note "\n... skipping\n";
+        else
+            note "... type ^D to exit the APL interpreter";
+            invoke "${APL}";
+        fi
 
         herald "Test Case 1b - Evaluate a command line expression - no script";
         invoke "${APL}" 1 2 3 × 3 2 1
@@ -133,14 +169,22 @@ for step in ${steps}; do
         invoke diff case_3b.log test_3.ref;
 
         herald "Test Case 3c - Execute script using command line flag";
-        note "... type ^D to exit the APL interpreter";
-        invoke "${APL}" -f test_3.txt '&>' "case_3c.log";
-        invoke diff case_3c.log test_3i.ref;
+        if [[ -n "${nopause}" ]]; then
+            note "\n... skipping\n";
+        else
+            note "... type ^D to exit the APL interpreter";
+            invoke "${APL}" -f test_3.txt '&>' "case_3c.log";
+            invoke diff case_3c.log test_3i.ref;
+        fi
 
         herald "Test Case 3d - Execute implicit script using #!";
-        note "... type ^D to exit the APL interpreter";
-        invoke ./test_3.apl '&>' "case_3d.log";
-        invoke diff case_3d.log test_3i.ref;
+        if [[ -n "${nopause}" ]]; then
+            note "\n... skipping\n";
+        else
+            note "... type ^D to exit the APL interpreter";
+            invoke ./test_3.apl '&>' "case_3d.log";
+            invoke diff case_3d.log test_3i.ref;
+        fi
         ;;
 
       (4)
@@ -233,14 +277,22 @@ for step in ${steps}; do
         invoke diff case_7b.log test_7.ref;
 
         herald "Test Case 7c - Execute script using command line flag";
-        note "... type ^D to exit the APL interpreter";
-        invoke "${APL}" -f test_7.txt '|&' tee -i case_7c.log;
-        invoke diff case_7c.log test_7i.ref;
+        if [[ -n "${nopause}" ]]; then
+            note "\n... skipping\n";
+        else
+            note "... type ^D to exit the APL interpreter";
+            invoke "${APL}" -f test_7.txt '|&' tee -i case_7c.log;
+            invoke diff case_7c.log test_7i.ref;
+        fi
 
         herald "Test Case 7d - Execute implicit script using #!";
-        note "... type ^D to exit the APL interpreter";
-        invoke ./test_7.apl '|&' tee -i case_7d.log;
-        invoke diff case_7d.log test_7i.ref;
+        if [[ -n "${nopause}" ]]; then
+            note "\n... skipping\n";
+        else
+            note "... type ^D to exit the APL interpreter";
+            invoke ./test_7.apl '|&' tee -i case_7d.log;
+            invoke diff case_7d.log test_7i.ref;
+        fi
         ;;
 
       (8)
@@ -279,12 +331,20 @@ for step in ${steps}; do
         invoke "${APL}" --extra '||' true;
 
         herald "Test Case 9c - Check recognition of short form flags";
-        note "... type ^D to exit the APL interpreter";
-        invoke "${APL}" -s -v;
+        if [[ -n "${nopause}" ]]; then
+            note "\n... skipping\n";
+        else
+            note "... type ^D to exit the APL interpreter";
+            invoke "${APL}" -s -v;
+        fi
 
         herald "Test Case 9d - Check recognition of long form flags";
-        note "... type ^D to exit the APL interpreter";
-        invoke "${APL}" --silent --verbose --script;
+        if [[ -n "${nopause}" ]]; then
+            note "\n... skipping\n";
+        else
+            note "... type ^D to exit the APL interpreter";
+            invoke "${APL}" --silent --verbose --script;
+        fi
 
         herald "Test Case 9e - Check recognition of short form help flag";
         invoke "${APL}" -h '&>' case_9e.log;
@@ -305,5 +365,7 @@ for step in ${steps}; do
         ;;
     esac
 done
+
+summary;
 
 # EOF
