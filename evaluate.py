@@ -22,7 +22,7 @@ from system_cmds import system_command
 
 from workspace_vars import workspace_variable
 
-from apl_quantity import APL_quantity as apl_value, APL_scalar as apl_scalar, APL_vector as apl_vector, APL_string as apl_string
+from apl_quantity import APL_quantity as apl_value, make_scalar, make_vector, make_string
 from apl_cio import APL_cio as apl_cio
 from apl_error import APL_exception as apl_exception, apl_error
 
@@ -160,7 +160,7 @@ def     evaluate_input_output (expr,leader,cio):
 
         if cio.silent or not hush:
             if leader == '⍞' and not rhs.isString() and rhs.isVector():
-                cio.printExplicit(apl_vector([rhs]))
+                cio.printExplicit(make_vector([rhs]))
             else:
                 cio.printExplicit(rhs)
 
@@ -173,7 +173,7 @@ def     evaluate_input_output (expr,leader,cio):
             if cio.fileInput:
                 print (expr)
 
-            value = apl_vector(cio.userPromptLength * ' ' + expr,True)
+            value = make_vector(cio.userPromptLength * ' ' + expr,True)
 
             cio.hushImplicit = cio.userPromptLength != 0
         else:
@@ -248,7 +248,7 @@ def     extract_string (expr,delim,_):
     if match:
         string = match.group(0)
         if string:
-            return (apl_string(string), len(string))
+            return (make_string(string), len(string))
 
     return (None, 0)
 
@@ -298,7 +298,7 @@ parser_functions = (
     evaluate_subexpression,
     evaluate_input_output,
     evaluate_input_output,
-    lambda e,l,c: (apl_vector([]), 1),
+    lambda e,l,c: (make_vector([]), 1),
     lambda e,l,c: (None, len(e)),
 )
 
@@ -325,9 +325,10 @@ def     parse (expr,cio):
         value, consumed = function(expr,leader,cio)
 
         if value is not None:
-            if type(value) == apl_scalar:
-                value = value.python()
-            lhs.append(value)
+            if isinstance(value,apl_value) and value.isScalar() and not value.isString():
+                lhs.append(value.python())
+            else:
+                lhs.append(value)
 
             cio.hushExplicit = False
 
@@ -347,11 +348,11 @@ def     parse (expr,cio):
     if len(lhs) == 0:
         lhs = None
     elif len(lhs) > 1:
-        lhs = apl_vector(lhs)
+        lhs = make_vector(lhs)
     else:
         lhs = lhs[0]
         if not isinstance(lhs,apl_value):
-            lhs = apl_scalar(lhs)
+            lhs = make_scalar(lhs)
 
     return (lhs, expr)
 

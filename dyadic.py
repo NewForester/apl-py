@@ -19,7 +19,7 @@ import mpmath
 
 from system_vars import confirm_bool, confirm_int, equalCT, integerCT, indexOrigin
 
-from apl_quantity import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s, sv2v
+from apl_quantity import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s, sv2vr, sv2vl
 from apl_error import apl_error
 
 # ------------------------------
@@ -544,8 +544,8 @@ _dyadic_functions = {
     # Structural (aka manipulative)
     '⍴':        lambda A,B: sv_rho(_reshape,A,B),
     ',':        lambda A,B: vv_comma(_concatenation,A,B),
-    '⌽':        lambda A,B: sv2v(_rotatelast,A,B,"RANK ERROR"),
-    '⊖':        lambda A,B: sv2v(_rotatefirst,A,B,"RANK ERROR"),
+    '⌽':        lambda A,B: sv2vr(_rotatelast,A,B),
+    '⊖':        lambda A,B: sv2vr(_rotatefirst,A,B),
     '⍪':        to_be_implemented,      #
     '⍉':        to_be_implemented,      # transpose
     '⊂':        to_be_implemented,      # (enclose) - creates an array of vectors (?!?)
@@ -554,8 +554,8 @@ _dyadic_functions = {
     # Selection and Set Operations
     '~':        lambda A,B: vv2v(_without,A,B),
     '⍳':        lambda A,B: vv2s(_index,A,B),
-    '↑':        lambda A,B: sv2v(_take,A,B,"LENGTH ERROR"),
-    '↓':        lambda A,B: sv2v(_drop,A,B,"LENGTH ERROR"),
+    '↑':        lambda A,B: sv2vl(_take,A,B),
+    '↓':        lambda A,B: sv2vl(_drop,A,B),
     '\\':       to_be_implemented,      # expansion
     '/':        to_be_implemented,      # compression
     '⌷':        to_be_implemented,      # index

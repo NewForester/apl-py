@@ -2,6 +2,13 @@
     a Python type that can hold APL scalar and vector quantities, both numeric and string
 
     UNDER DEVELOPMENT
+
+    Routines to handle vector quantities are work-in-progress.  They will
+    eventually all use lazy evaluation techniques.
+
+    This version drops the derived classes APL_scalar etc and replaces them
+    with the routines make_scalar() etc.  They are not used by this module.
+    The intention is that these are external routines used by evaluate.py.
 """
 
 from apl_error import apl_error
@@ -60,10 +67,10 @@ class APL_quantity (object):
         return self.value
 
     def resolve(self):
-        if self.isScalar():
-            return APL_scalar(self.value)
+        if self.isString() or self.isScalar():
+            return self
         else:
-            return APL_vector(list(self.value))
+            return APL_quantity(list(self.value),self.dim,self.string)
 
     def noStringConfirm(self):
         if self.isString():
@@ -72,7 +79,7 @@ class APL_quantity (object):
     def noString(self):
         if self.isString():
             if self.isScalar():
-                return APL_scalar(ord(self.value))
+                return APL_quantity(ord(self.value),None)
             else:
                 return APL_quantity(map(ord,self.value),self.dim)
 
@@ -123,44 +130,34 @@ class APL_scalar_iter (object):
 
 # ------------------------------
 
-class APL_scalar (APL_quantity):
+def     make_scalar(value):
     """
-    trivial class that holds an APL scalar quantity
+    make an APL scalar quantity from a numeric Python value
     """
-    def __init__(self,value):
-        APL_quantity.__init__(self,value,None)
-
-    def resolve(self):
-        return self
+    return APL_quantity(value,None)
 
 # ------------------------------
 
-class APL_vector (APL_quantity):
+def     make_vector(value,string=False):
     """
-    trivial class that holds an APL vector quantity
+    make an APL vector quantity from a numeric Python list
     """
-    def __init__(self,value,string=False):
-        APL_quantity.__init__(self,value,len(value),string)
-
-    def resolve(self):
-        return self
+    return APL_quantity(value,len(value),string)
 
 # ------------------------------
 
-class APL_string (APL_quantity):
+def     make_string(value):
     """
-    trivial class that holds an APL string quantity
+    make an APL string quantity from a Python str
     """
-    def __init__(self,value):
-        delim = value[0];
-        value = value.replace(delim*2,delim)[1:-1]
-        length = len(value)
-        if length == 1 and delim == "'":   length = None
+    delim = value[0]
+    value = value.replace(delim*2,delim)[1:-1]
+    length = len(value)
 
-        APL_quantity.__init__(self,value,length,True)
-
-    def resolve(self):
-        return self
+    if length == 1 and delim == "'":
+        return APL_quantity(value,None,True)
+    else:
+        return APL_quantity(value,length,True)
 
 # ------------------------------
 
@@ -168,7 +165,7 @@ def eval_monadic(Fn,B):
     """
     evaluate an monadic Python function that does not understand APL quantitites
     """
-    return APL_scalar(Fn(B.scalarToPy("LENGTH ERROR")))
+    return make_scalar(Fn(B.scalarToPy("LENGTH ERROR")))
 
 # ------------------------------
 
@@ -179,9 +176,9 @@ def s2s (Fn,B):
     B.noStringConfirm()
 
     if B.isScalar():
-        return APL_scalar(Fn(B.python()))
-
-    return APL_quantity(map(Fn,B),B.dimension())
+        return APL_quantity(Fn(B.python()),None)
+    else:
+        return APL_quantity(map(Fn,B),B.dimension())
 
 # ------------------------------
 
@@ -191,7 +188,9 @@ def s2v (Fn,B):
     """
     B.noStringConfirm()
 
-    return APL_vector(Fn(B.scalarToPy()))
+    Bpy = B.scalarToPy()
+
+    return APL_quantity(Fn(Bpy),Bpy)
 
 # ------------------------------
 
@@ -199,7 +198,7 @@ def v2s (Fn,B):
     """
     evaluate a numeric function that, given a vector argument, returns a scalar
     """
-    return APL_scalar(Fn(B.vectorToPy()))
+    return APL_quantity(Fn(B.vectorToPy()),None)
 
 # ------------------------------
 
@@ -220,9 +219,9 @@ def s_rho (Fn,B):
     """
     scalar rho - return dimension/rank of B - does not operate on B
     """
-    if B.isScalar():    return APL_vector([])
+    if B.isScalar():    return APL_quantity([],0)
 
-    if B.isVector():    return APL_scalar(B.dimension())
+    if B.isVector():    return APL_quantity([B.dimension()],1)
 
     apl_error("RANK ERROR")
 
@@ -233,8 +232,7 @@ def s_comma (Fn,B):
     scalar comma - unravel B and return a vector
     """
 
-    if B.isScalar():
-        return APL_vector(B.vectorToPy(),B.isString())
+    if B.isScalar():    return APL_quantity(B.vectorToPy(),1,B.isString())
 
     if B.isVector():    return B
 
@@ -257,7 +255,7 @@ def ss2s (Fn,A,B,numbersOnly):
     case = len(dims)
 
     if case == 0:
-        return APL_scalar(Fn(A.python(),B.python()))
+        return APL_quantity(Fn(A.python(),B.python()),None)
 
     if case == 2:
         if dims[0] != dims[1]:
@@ -271,7 +269,7 @@ def ss2v (Fn,A,B):
     """
     evaluate a numeric dyadic function that, given scalar arguments, returns a vector
     """
-    return APL_vector(Fn(A.scalarToPy(),B.scalarToPy()))
+    return APL_quantity(Fn(A.scalarToPy(),B.scalarToPy()),A)
 
 # ------------------------------
 
@@ -285,7 +283,7 @@ def vv2v (Fn,A,B):
 
     Rpy = Fn(A.vectorToPy(),B.vectorToPy())
 
-    return APL_vector(Rpy,case == 2)
+    return APL_quantity(Rpy,len(Rpy),case == 2)
 
 # ------------------------------
 
@@ -296,9 +294,9 @@ def vv2s (Fn,A,B):
     Rpy = Fn(A.vectorToPy(),B.vectorToPy())
 
     if B.isScalar():
-        return APL_scalar(Rpy[0])
+        return APL_quantity(Rpy[0],None)
     else:
-        return APL_vector(Rpy)
+        return APL_quantity(Rpy,B.dimension())
 
 # ------------------------------
 
@@ -312,7 +310,7 @@ def sv_rho (Fn,A,B):
 
     Rpy = Fn(A.scalarToPy(),B.vectorToPy())
 
-    return APL_vector(Rpy,B.isString())
+    return APL_quantity(Rpy,A.scalarToPy(),B.isString())
 
 # ------------------------------
 
@@ -325,24 +323,38 @@ def vv_comma (Fn,A,B):
     Apy = [A] if A.isString() and case == 1 else A.vectorToPy()
     Bpy = [B] if B.isString() and case == 1 else B.vectorToPy()
 
-#    Apy = list(A.vectorToPy()) if A.isString() and case == 1 else A.vectorToPy()
-#    Bpy = list(B.vectorToPy()) if B.isString() and case == 1 else B.vectorToPy()
+    Rpy = Fn(Apy,Bpy)
 
-    return APL_vector(Fn(Apy,Bpy),case == 2)
+    return APL_quantity(Rpy,len(Rpy),case == 2)
 
 # ------------------------------
 
-def sv2v (Fn,A,B,error):
+def sv2vr (Fn,A,B):
     """
     evaluate a dyadic function that returns a vector if B is a vector but a scalar if B is scalar
     """
     A.noStringConfirm()
 
-    Rpy = Fn(A.scalarToPy(error),B.vectorToPy())
+    Rpy = Fn(A.scalarToPy("RANK ERROR"),B.vectorToPy())
+
+    if B.isScalar():
+        return APL_quantity(Rpy[0],None,B.isString())
+    else:
+        return APL_quantity(Rpy,B.dimension(),B.isString())
+
+# ------------------------------
+
+def sv2vl (Fn,A,B):
+    """
+    evaluate a dyadic function that returns a vector if B is a vector but a scalar if B is scalar
+    """
+    A.noStringConfirm()
+
+    Rpy = Fn(A.scalarToPy("LENGTH ERROR"),B.vectorToPy())
 
     if B.isScalar():
         return APL_quantity(Rpy[0],B.dimension(),B.isString())
     else:
-        return APL_vector(Rpy,B.isString())
+        return APL_quantity(Rpy,len(Rpy),B.isString())
 
 # EOF

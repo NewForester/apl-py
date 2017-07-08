@@ -34,7 +34,6 @@ from functools import reduce
 
 from evaluate import evaluate_and_print_line
 
-from apl_quantity import APL_scalar as apl_scalar, APL_vector as apl_vector
 from apl_cio import APL_cio as apl_cio
 from apl_error import APL_exception as apl_exception, apl_error, apl_exit, apl_quit
 

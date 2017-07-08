@@ -11,7 +11,7 @@
 import  math
 import  operator
 
-from apl_quantity import eval_monadic, APL_scalar as apl_scalar
+from apl_quantity import eval_monadic, make_scalar
 from apl_error import apl_error
 
 # ------------------------------
@@ -28,8 +28,8 @@ class   APL_system_variable(object):
 
 # ------------------------------
 
-_indexOrigin =           APL_system_variable(apl_scalar(1),      lambda B: eval_monadic(confirm_bool,B))
-_comparisonTolerance =   APL_system_variable(apl_scalar(1e-13),  lambda B: eval_monadic(confirm_real,B))
+_indexOrigin =           APL_system_variable(make_scalar(1),      lambda B: eval_monadic(confirm_bool,B))
+_comparisonTolerance =   APL_system_variable(make_scalar(1e-13),  lambda B: eval_monadic(confirm_real,B))
 
 _system_variables = {
     "IO":       _indexOrigin,

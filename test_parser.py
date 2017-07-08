@@ -87,6 +87,9 @@ def     test_name (expr):
     ¯1.5
     >>> test('÷A')
     0.4
+
+    >>> test('name←"Heather"')
+    Heather
     """
     pass
 
