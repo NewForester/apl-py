@@ -1,0 +1,193 @@
+#!/bin/bash --posix
+##
+##  Goal:       exercise the recognition of shell command line flags
+##
+##  Most tests require simple visual inspection.
+##
+##  Use:        ./flag_tests/run [-a | -as] [nn ... ]
+##
+##  where   nn is in the range [9] and designates which test cases to run
+##          if omitted, defaults to all test cases
+##
+##  Flags:  -a      more automation - no prompting to inform the tester of
+##                  what is going on
+##          -aa     even more automation - scripts that require manual
+##                  intervention (if any) are skipped
+##
+
+# print out header comment &c
+
+usage() { (sed -e "/^###/d" -e "/^##/!d" $0 && echo -e "\e[35m${0##*/}: \e[31m$@\e[0m") >&2; }
+error() { echo -e "\e[31m$@\e[0m"; }
+note()  { echo -e "\e[32m$@\e[0m"; }
+
+# process options
+
+while [[ "${1::1}" == "-" ]]; do
+    case $1 in
+      (-aa)
+        nopause=$1;
+        noprompt=$1; shift;
+        ;;
+      (-a)
+        noprompt=$1; shift;
+        ;;
+      (--help)
+        usage "I hope that was helpful";
+        exit 1;
+        ;;
+      (*)
+        usage "bad option \"$1\"";
+        exit 1;
+        ;;
+    esac
+done
+
+# change directory to that containing this script
+
+cd ${0%/*};
+
+# do not assume the intepreter is on the PATH
+
+for APL in apl.py ./apl.py ../apl.py "error APL intepreter not found"; do
+    which ${APL} > /dev/null && break;
+done
+
+# helper functions
+
+exec 8<&0;
+exec 9<&1;
+
+function invoke
+{
+  echo;
+  echo "bash $" "$@" >&9;
+  eval "$@" <&8;
+  [[ $? -ne 0 ]] && allok=$1;
+  echo;
+}
+
+plus="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+
+function narrative
+{
+    echo;
+    echo -e "\e[34m${plus}\e[0m";
+    cat;
+    [[ -z "${noprompt}" ]] && read -p "Press enter to continue " junk <&8;
+    echo -e "\e[34m${plus}\e[0m";
+    echo;
+}
+
+function herald
+{
+    echo "------------------------------------------------------------------------";
+    echo -e "\e[33m$@\e[0m";
+    echo "------------------------------------------------------------------------";
+}
+
+function summary
+{
+    echo;
+    echo -e "\e[34m${plus}\e[0m";
+    [[ -z "${allok}" ]] && note "ALL OK" || error "Something went awry";
+    echo -e "\e[34m${plus}\e[0m";
+    echo;
+}
+
+if [[ $# == 0 ]]; then
+	narrative <<- EOF
+	These are tests of apl-py's handling of command line flags that do not
+	belong in any of the other test groups.
+
+	The emphasis is on the recognition and rejection of flags but the final
+	section checks the correct handling of exceptions arising from opening
+	and closing files.
+
+	The test cases for help output compare against a reference file but the others
+	merit simple visual inspection to determine pass/fail.
+	EOF
+    steps="1 2 3 4";
+else
+    steps="$@";
+fi
+
+for step in ${steps}; do
+    case ${step} in
+      (1)
+        narrative <<- EOF
+	Test cases to check recognition and rejection of command line flags.
+	EOF
+
+        nn=1a;
+        herald "Test Case ${nn} - Response to an unrecognised short form flag";
+        invoke "${APL}" -x '||' true;
+
+        nn=1b;
+        herald "Test Case ${nn} - Response to an unrecognised long form flag";
+        invoke "${APL}" --extra '||' true;
+
+        nn=1c;
+        herald "Test Case ${nn} - Check recognition of short form flags";
+        if [[ -n "${nopause}" ]]; then
+            note "\n... skipping\n";
+        else
+            note "... type ^D to complete the test";
+            invoke "${APL}" -s -v;
+        fi
+
+        nn=1d;
+        herald "Test Case ${nn} - Check recognition of long form flags";
+        if [[ -n "${nopause}" ]]; then
+            note "\n... skipping\n";
+        else
+            note "... type ^D to complete the test";
+            invoke "${APL}" --silent --verbose --script;
+        fi
+      ;;
+
+      (2)
+        narrative <<- EOF
+	Test cases check the short and long forms of the help flag.
+	EOF
+
+        nn=2a;
+        herald "Test Case ${nn} - Check recognition of short form help flag";
+        invoke "${APL}" -h '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "help.ref";
+
+        nn=2b;
+        herald "Test Case ${nn} - Check recognition of long form help flag";
+        invoke "${APL}" --help '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "help.ref";
+      ;;
+
+      (3)
+        narrative <<- EOF
+	Test cases check the short and long forms of the version flag.
+	EOF
+
+        nn=3a;
+        herald "Test Case ${nn} - Check recognition of short form version flag";
+        invoke "${APL}" -V;
+
+        nn=3b;
+        herald "Test Case ${nn} - Check recognition of long form version flag";
+        invoke "${APL}" --Version;
+      ;;
+
+      (4)
+        narrative <<- EOF
+	Test cases check behaviour when files cannot be opened or created.
+	EOF
+
+        nn=4a;
+        herald "Test Case ${nn} - Response to input redirection to a file that cannot be read";
+        invoke "${APL}" -f "test_${nn::1}.txt" '||' true;
+        ;;
+    esac
+done
+
+summary;
+
+# EOF

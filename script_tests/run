@@ -1,20 +1,27 @@
 #!/bin/bash --posix
-#
-# exercise the scripting ability of the APL Python intepreter
-#
+##
+##  Goal:       exercise the scripting ability of the APL shell
+##
+##  All tests record their output and compare it with a reference file.  There
+##  should be no differences.  At the end, the script reports either "ALL OK"
+##  or "Something went awry".
+##
+##  Use:        ./io_tests/run [-a | -as] [nn ... ]
+##
+##  where   nn is in the range [1,9] and designates which test cases to run
+##          if omitted, defaults to all test cases
+##
+##  Flags:  -a      more automation - no prompting to inform the tester of
+##                  what is going on
+##          -aa     even more automation - scripts that require manual
+##                  intervention (if any) are skipped
+##
 
+# print out header comment &c
+
+usage() { (sed -e "/^###/d" -e "/^##/!d" $0 && echo -e "\e[35m${0##*/}: \e[31m$@\e[0m") >&2; }
 error() { echo -e "\e[31m$@\e[0m"; }
 note()  { echo -e "\e[32m$@\e[0m"; }
-
-# change directory to that containing this script
-
-cd ${0%/*};
-
-# do not assume the intepreter is on the PATH
-
-for APL in apl.py ./apl.py ../apl.py "error APL intepreter not found"; do
-    which ${APL} > /dev/null && break;
-done
 
 # process options
 
@@ -36,6 +43,16 @@ while [[ "${1::1}" == "-" ]]; do
         exit 1;
         ;;
     esac
+done
+
+# change directory to that containing this script
+
+cd ${0%/*};
+
+# do not assume the intepreter is on the PATH
+
+for APL in apl.py ./apl.py ../apl.py "error APL intepreter not found"; do
+    which ${APL} > /dev/null && break;
 done
 
 # helper functions
@@ -86,7 +103,7 @@ if [[ $# == 0 ]]; then
 
 	The emphasis is less on 'are expressions evaluated the same way' but on:
 	    - are command line flags handled properly
-	    - do the echoing of input and suppression on prompts work are expected ?
+	    - do the echoing of input and suppression on prompts work as expected ?
 	    - does the redirection of input work correctly ?
 
 	Three cases are recognised:
@@ -102,8 +119,7 @@ if [[ $# == 0 ]]; then
 	interpret the remaining command line arguments as an expression.
 
 	Entering interactive mode requires tester intervention to exit the interpreter
-	before the test can move on to the next test case.  This is disconcerting since
-	the prompt is six innocent spaces.  Watch out for the copyright banner.
+	before the test can move on to the next test case.
 	EOF
     steps="1 2 3 4 5 6 7 8 9";
 else
@@ -118,7 +134,8 @@ for step in ${steps}; do
 	operation still works.
 	EOF
 
-        herald "Test Case 1a - Invoke interactive mode - no script";
+        nn=1a;
+        herald "Test Case ${nn} - Invoke interactive mode - no script";
         if [[ -n "${nopause}" ]]; then
             note "\n... skipping\n";
         else
@@ -126,7 +143,8 @@ for step in ${steps}; do
             invoke "${APL}";
         fi
 
-        herald "Test Case 1b - Evaluate a command line expression - no script";
+        nn=1b;
+        herald "Test Case ${nn} - Evaluate a command line expression - no script";
         invoke "${APL}" 1 2 3 × 3 2 1
         ;;
 
@@ -136,21 +154,25 @@ for step in ${steps}; do
 	'self-terminate' as each contains the )OFF system command.
 	EOF
 
-        herald "Test Case 2a - Execute script from stdin redirected using '<'";
-        invoke "${APL}" '<' test_2.txt '&>' "case_2a.log";
-        invoke diff case_2a.log test_2.ref;
+        nn=2a;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '<'";
+        invoke "${APL}" '<' "test_${nn::1}.txt" '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
-        herald "Test Case 2b - Execute script from stdin redirected using '|'";
-        invoke cat test_2.txt '|' "${APL}" '&>' "case_2b.log";
-        invoke diff case_2b.log test_2.ref;
+        nn=2b;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '|'";
+        invoke cat "test_${nn::1}.txt" '|' "${APL}" '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
-        herald "Test Case 2c - Execute script using command line flag";
-        invoke "${APL}" -f test_2.txt '&>' "case_2c.log";
-        invoke diff case_2c.log test_2.ref;
+        nn=2c;
+        herald "Test Case ${nn} - Execute script using command line flag";
+        invoke "${APL}" -f "test_${nn::1}.txt" '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
-        herald "Test Case 2d - Execute implicit script using #!";
-        invoke ./test_2.apl '&>' "case_2d.log";
-        invoke diff case_2d.log test_2.ref;
+        nn=2d;
+        herald "Test Case ${nn} - Execute implicit script using #!";
+        invoke ./"test_${nn::1}.apl" '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
         ;;
 
       (3)
@@ -160,30 +182,34 @@ for step in ${steps}; do
 	had been commented out.
 	EOF
 
-        herald "Test Case 3a - Execute script from stdin redirected using '<'";
-        invoke "${APL}" '<' test_3.txt '&>' "case_3a.log";
-        invoke diff case_3a.log test_3.ref;
+        nn=3a;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '<'";
+        invoke "${APL}" '<' "test_${nn::1}.txt" '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
-        herald "Test Case 3b - Execute script from stdin redirected using '|'";
-        invoke cat test_3.txt '|' "${APL}" '&>' "case_3b.log";
-        invoke diff case_3b.log test_3.ref;
+        nn=3b;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '|'";
+        invoke cat "test_${nn::1}.txt" '|' "${APL}" '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
-        herald "Test Case 3c - Execute script using command line flag";
+        nn=3c;
+        herald "Test Case ${nn} - Execute script using command line flag";
         if [[ -n "${nopause}" ]]; then
             note "\n... skipping\n";
         else
-            note "... type ^D to exit the APL interpreter";
-            invoke "${APL}" -f test_3.txt '&>' "case_3c.log";
-            invoke diff case_3c.log test_3i.ref;
+            note "... type ^D to complete the test";
+            invoke "${APL}" -f "test_${nn::1}.txt" '&>' "case_${nn}.out";
+            invoke diff "case_${nn}.out" test_3i.ref;
         fi
 
-        herald "Test Case 3d - Execute implicit script using #!";
+        nn=3d;
+        herald "Test Case ${nn} - Execute implicit script using #!";
         if [[ -n "${nopause}" ]]; then
             note "\n... skipping\n";
         else
-            note "... type ^D to exit the APL interpreter";
-            invoke ./test_3.apl '&>' "case_3d.log";
-            invoke diff case_3d.log test_3i.ref;
+            note "... type ^D to complete the test";
+            invoke ./"test_${nn::1}.apl" '&>' "case_${nn}.out";
+            invoke diff "case_${nn}.out" test_3i.ref;
         fi
         ;;
 
@@ -193,21 +219,25 @@ for step in ${steps}; do
 	in conjunction with a command line expression.
 	EOF
 
-        herald "Test Case 4a - Execute script from stdin redirected using '<'";
-        invoke "${APL}" 16 ÷ 4 '<' test_4.txt '&>' "case_4a.log";
-        invoke diff case_4a.log test_4.ref;
+        nn=4a;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '<'";
+        invoke "${APL}" 16 ÷ 4 '<' "test_${nn::1}.txt" '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
-        herald "Test Case 4b - Execute script from stdin redirected using '|'";
-        invoke cat test_4.txt '|' "${APL}" 16 ÷ 4 '&>' "case_4b.log";
-        invoke diff case_4b.log test_4.ref;
+        nn=4b;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '|'";
+        invoke cat "test_${nn::1}.txt" '|' "${APL}" 16 ÷ 4 '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
-        herald "Test Case 4c - Execute script using command line flag";
-        invoke "${APL}" -f test_4.txt -- 16 ÷ 4 '&>' "case_4c.log";
-        invoke diff case_4c.log test_4.ref;
+        nn=4c;
+        herald "Test Case ${nn} - Execute script using command line flag";
+        invoke "${APL}" -f "test_${nn::1}.txt" -- 16 ÷ 4 '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
-        herald "Test Case 4d - Execute implicit script using #!";
-        invoke ./test_4.apl -- 16 ÷ 4  '&>' "case_4d.log";
-        invoke diff case_4d.log test_4.ref;
+        nn=4d;
+        herald "Test Case ${nn} - Execute implicit script using #!";
+        invoke ./"test_${nn::1}.apl" -- 16 ÷ 4  '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
         ;;
 
       (5)
@@ -217,21 +247,25 @@ for step in ${steps}; do
 	used to run in silent mode
 	EOF
 
-        herald "Test Case 5a - Execute script from stdin redirected using '<'";
-        invoke "${APL}" -s -- 16 ÷ 4 '<' test_5.txt '&>' "case_5a.log";
-        invoke diff case_5a.log test_5.ref;
+        nn=5a;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '<'";
+        invoke "${APL}" -s -- 16 ÷ 4 '<' "test_${nn::1}.txt" '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
-        herald "Test Case 5b - Execute script from stdin redirected using '|'";
-        invoke cat test_5.txt '|' "${APL}" -s -- 16 ÷ 4 '&>' "case_5b.log";
-        invoke diff case_5b.log test_5.ref;
+        nn=5b;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '|'";
+        invoke cat "test_${nn::1}.txt" '|' "${APL}" -s -- 16 ÷ 4 '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
-        herald "Test Case 5c - Execute script using command line flag";
-        invoke "${APL}" -s -f test_5.txt -- 16 ÷ 4 '&>' "case_5c.log";
-        invoke diff case_5c.log test_5.ref;
+        nn=5c;
+        herald "Test Case ${nn} - Execute script using command line flag";
+        invoke "${APL}" -s -f "test_${nn::1}.txt" -- 16 ÷ 4 '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
-        herald "Test Case 5d - Execute implicit script using #!";
-        invoke ./test_5.apl -- 16 ÷ 4 '&>' "case_5d.log";
-        invoke diff case_5d.log test_5.ref;
+        nn=5d;
+        herald "Test Case ${nn} - Execute implicit script using #!";
+        invoke ./"test_${nn::1}.apl" -- 16 ÷ 4 '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
         ;;
 
       (6)
@@ -242,56 +276,64 @@ for step in ${steps}; do
 	In all cases:
 	    a) the offending line should be output as if -s had not been specified
 	    b) the file name and line number should also be output
-	    c) execution of the scripts stops and the interpreter exists
+	    c) execution of the scripts stops and the interpreter exits
 	EOF
 
-        herald "Test Case 6a - Execute script from stdin redirected using '<'";
-        invoke "${APL}" -s -- 16 ÷ 4 '<' test_6.txt '&>' "case_6a.log" '||' true;
-        invoke diff case_6a.log test_6.ref;
+        nn=6a;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '<'";
+        invoke "${APL}" -s -- 16 ÷ 4 '<' "test_${nn::1}.txt" '&>' "case_${nn}.out" '||' true;
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
-        herald "Test Case 6b - Execute script from stdin redirected using '|'";
-        invoke cat test_6.txt '|' "${APL}" -s -- 16 ÷ 4 '&>' "case_6b.log" '||' true;
-        invoke diff case_6b.log test_6.ref;
+        nn=6b;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '|'";
+        invoke cat "test_${nn::1}.txt" '|' "${APL}" -s -- 16 ÷ 4 '&>' "case_${nn}.out" '||' true;
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
-        herald "Test Case 6c - Execute script using command line flag";
-        invoke "${APL}" -s -f test_6.txt -- 16 ÷ 4 '&>' "case_6c.log" '||' true;
-        invoke diff case_6c.log test_6c.ref;
+        nn=6c;
+        herald "Test Case ${nn} - Execute script using command line flag";
+        invoke "${APL}" -s -f "test_${nn::1}.txt" -- 16 ÷ 4 '&>' "case_${nn}.out" '||' true;
+        invoke diff "case_${nn}.out" test_6c.ref;
 
-        herald "Test Case 6d - Execute implicit script using #!";
-        invoke ./test_6.apl -- 16 ÷ 4 '&>' "case_6d.log" '||' true;
-        invoke diff case_6d.log test_6d.ref;
+        nn=6d;
+        herald "Test Case ${nn} - Execute implicit script using #!";
+        invoke ./"test_${nn::1}.apl" -- 16 ÷ 4 '&>' "case_${nn}.out" '||' true;
+        invoke diff "case_${nn}.out" test_6d.ref;
         ;;
 
       (7)
         narrative <<- EOF
 	The following test cases check output redirection through tee will
-	capture a session log (including a mv Python stack trace if necessary).
+	capture a session log (including a Python stack trace if necessary).
 	EOF
 
-        herald "Test Case 7a - Execute script from stdin redirected using '<'";
-        invoke "${APL}" '<' test_7.txt '|&' tee -i case_7a.log
-        invoke diff case_7a.log test_7.ref;
+        nn=7a;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '<'";
+        invoke "${APL}" '<' "test_${nn::1}.txt" '|&' tee -i "case_${nn}.tee";
+        invoke diff "case_${nn}.tee" "test_${nn::1}.ref";
 
-        herald "Test Case 7b - Execute script from stdin redirected using '|'";
-        invoke cat test_7.txt '|' "${APL}" '|&' tee -i case_7b.log;
-        invoke diff case_7b.log test_7.ref;
+        nn=7b;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '|'";
+        invoke cat "test_${nn::1}.txt" '|' "${APL}" '|&' tee -i "case_${nn}.tee";
+        invoke diff "case_${nn}.tee" "test_${nn::1}.ref";
 
-        herald "Test Case 7c - Execute script using command line flag";
+        nn=7c;
+        herald "Test Case ${nn} - Execute script using command line flag";
         if [[ -n "${nopause}" ]]; then
             note "\n... skipping\n";
         else
-            note "... type ^D to exit the APL interpreter";
-            invoke "${APL}" -f test_7.txt '|&' tee -i case_7c.log;
-            invoke diff case_7c.log test_7i.ref;
+            note "... type ^D to complete the test";
+            invoke "${APL}" -f "test_${nn::1}.txt" '|&' tee -i "case_${nn}.tee";
+            invoke diff "case_${nn}.tee" test_7i.ref;
         fi
 
-        herald "Test Case 7d - Execute implicit script using #!";
+        nn=7d;
+        herald "Test Case ${nn} - Execute implicit script using #!";
         if [[ -n "${nopause}" ]]; then
             note "\n... skipping\n";
         else
-            note "... type ^D to exit the APL interpreter";
-            invoke ./test_7.apl '|&' tee -i case_7d.log;
-            invoke diff case_7d.log test_7i.ref;
+            note "... type ^D to complete the test";
+            invoke ./"test_${nn::1}.apl" '|&' tee -i "case_${nn}.tee";
+            invoke diff "case_${nn}.tee" test_7i.ref;
         fi
         ;;
 
@@ -301,67 +343,25 @@ for step in ${steps}; do
 	when script or silent mode as been requested.
 	EOF
 
-        herald "Test Case 8a - Execute script from stdin redirected using '<'";
-        invoke "${APL}" -s '<' test_8.txt '&>' case_8a.log;
-        invoke diff case_8a.log test_8.ref;
+        nn=8a;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '<'";
+        invoke "${APL}" -s '<' "test_${nn::1}.txt" '&>' case_${nn}.out;
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
-        herald "Test Case 8b - Execute script from stdin redirected using '|'";
-        invoke cat test_8.txt '|' "${APL}" -s '&>' case_8b.log;
-        invoke diff case_8b.log test_8.ref;
+        nn=8b;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '|'";
+        invoke cat "test_${nn::1}.txt" '|' "${APL}" -s '&>' case_${nn}.out;
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
-        herald "Test Case 8c - Execute script using command line flag";
-        invoke "${APL}" -s -f test_8.txt '&>' case_8c.log;
-        invoke diff case_8c.log test_8.ref;
+        nn=8c;
+        herald "Test Case ${nn} - Execute script using command line flag";
+        invoke "${APL}" -s -f "test_${nn::1}.txt" '&>' case_${nn}.out;
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
-        herald "Test Case 8d - Execute implicit script using #!";
-        invoke ./test_8.apl '&>' case_8d.log;
-        invoke diff case_8d.log test_8.ref;
-        ;;
-
-      (9)
-        narrative <<- EOF
-	These test cases check recognition of flags including -h and --help.
-	Also redirection from a file that is not readable.
-	EOF
-
-        herald "Test Case 9a - Response to an unrecognised short form flag";
-        invoke "${APL}" -x '||' true;
-
-        herald "Test Case 9b - Response to an unrecognised long form flag";
-        invoke "${APL}" --extra '||' true;
-
-        herald "Test Case 9c - Check recognition of short form flags";
-        if [[ -n "${nopause}" ]]; then
-            note "\n... skipping\n";
-        else
-            note "... type ^D to exit the APL interpreter";
-            invoke "${APL}" -s -v;
-        fi
-
-        herald "Test Case 9d - Check recognition of long form flags";
-        if [[ -n "${nopause}" ]]; then
-            note "\n... skipping\n";
-        else
-            note "... type ^D to exit the APL interpreter";
-            invoke "${APL}" --silent --verbose --script;
-        fi
-
-        herald "Test Case 9e - Check recognition of short form help flag";
-        invoke "${APL}" -h '&>' case_9e.log;
-        invoke diff case_9e.log test_9.ref;
-
-        herald "Test Case 9f - Check recognition of long form help flag";
-        invoke "${APL}" --help '&>' case_9f.log;
-        invoke diff case_9f.log test_9.ref;
-
-        herald "Test Case 9g - Check recognition of short form version flag";
-        invoke "${APL}" -V;
-
-        herald "Test Case 9h - Check recognition of long form version flag";
-        invoke "${APL}" --Version;
-
-        herald "Test Case 9i - Response to input redirection to a file that cannot be read";
-        invoke "${APL}" -f test_9.txt '||' true;
+        nn=8d;
+        herald "Test Case ${nn} - Execute implicit script using #!";
+        invoke ./"test_${nn::1}.apl" '&>' case_${nn}.out;
+        invoke diff "case_${nn}.out" "test_${nn::1}.ref";
         ;;
     esac
 done
