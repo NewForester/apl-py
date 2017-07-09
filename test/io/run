@@ -1,101 +1,26 @@
 #!/bin/bash --posix
+
 ##
-##  Goal:       exercise the input and output operators of the APL shell
+##  Goal:       exercise the apl.py implementation of input and output operators
 ##
 ##  All tests record their output and compare it with a reference file.  There
 ##  should be no differences.  At the end, the script reports either "ALL OK"
 ##  or "Something went awry".
 ##
-##  Use:        ./io_tests/run [-a | -as] [nn ... ]
+##  Use:        ./test/io/run [-a | -aa] [nn ... ]
 ##
 ##  where   nn is in the range [1,3] and designates which test cases to run
-##          if omitted, defaults to all test cases
+##          if nn is not given, all test cases are run
 ##
-##  Flags:  -a      more automation - no prompting to inform the tester of
-##                  what is going on
-##          -aa     even more automation - scripts that require manual
-##                  intervention (if any) are skipped
+##  Flags:  -a      more automation -
+##                  no prompting to inform the tester of what is going on
+##          -aa     even more automation -
+##                  any scripts that require manual are skipped
 ##
-
-# print out header comment &C
-
-usage() { (sed -e "/^###/d" -e "/^##/!d" $0 && echo -e "\e[35m${0##*/}: \e[31m$@\e[0m") >&2; }
-error() { echo -e "\e[31m$@\e[0m"; }
-note()  { echo -e "\e[32m$@\e[0m"; }
-
-# process options
-
-while [[ "${1::1}" == "-" ]]; do
-    case $1 in
-      (-aa)
-        nopause=$1;
-        noprompt=$1; shift;
-        ;;
-      (-a)
-        noprompt=$1; shift;
-        ;;
-      (--help)
-        usage "I hope that was helpful";
-        exit 1;
-        ;;
-      (*)
-        usage "bad option \"$1\"";
-        exit 1;
-        ;;
-    esac
-done
-
-# change directory to that containing this script
 
 cd ${0%/*};
 
-# do not assume the intepreter is on the PATH
-
-for APL in apl.py ./apl.py ../apl.py "error APL intepreter not found"; do
-    which ${APL} > /dev/null && break;
-done
-
-# helper functions
-
-exec 8<&0;
-exec 9<&1;
-
-function invoke
-{
-  echo;
-  echo "bash $" "$@" >&9;
-  eval "$@" <&8;
-  [[ $? -ne 0 ]] && allok=$1;
-  echo;
-}
-
-plus="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
-
-function narrative
-{
-    echo;
-    echo -e "\e[34m${plus}\e[0m";
-    cat;
-    [[ -z "${noprompt}" ]] && read -p "Press enter to continue " junk <&8;
-    echo -e "\e[34m${plus}\e[0m";
-    echo;
-}
-
-function herald
-{
-    echo "------------------------------------------------------------------------";
-    echo -e "\e[33m$@\e[0m";
-    echo "------------------------------------------------------------------------";
-}
-
-function summary
-{
-    echo;
-    echo -e "\e[34m${plus}\e[0m";
-    [[ -z "${allok}" ]] && note "ALL OK" || error "Something went awry";
-    echo -e "\e[34m${plus}\e[0m";
-    echo;
-}
+source ../../test/framework;
 
 if [[ $# == 0 ]]; then
 	narrative <<- EOF
@@ -113,6 +38,7 @@ if [[ $# == 0 ]]; then
 	the same way so the comparison of log file with reference is reliable.
 	EOF
     steps="1 2 3";
+    rm case*;
 else
     steps="$@";
 fi
@@ -126,7 +52,7 @@ for step in ${steps}; do
 
         nn=1;
         herald "Test Case ${nn} - Test ⋄ (expression separator)";
-        invoke ./"test_${nn}.apl" '&>' "case_${nn}.out";
+        invoke "test_${nn}.apl" '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn}.ref";
         ;;
 
@@ -137,12 +63,12 @@ for step in ${steps}; do
 
         nn=2a;
         herald "Test Case ${nn} - Test ⎕← (output operator)";
-        invoke ./"test_${nn}.apl" '&>' "case_${nn}.out";
+        invoke "test_${nn}.apl" '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn}.ref";
 
         nn=2b;
         herald "Test Case ${nn} - Test ⍞← (output operator)";
-        invoke ./"test_${nn}.apl" '&>' "case_${nn}.out";
+        invoke "test_${nn}.apl" '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn}.ref";
         ;;
 
@@ -154,12 +80,12 @@ for step in ${steps}; do
 
         nn=3a;
         herald "Test Case ${nn} - Test ⎕ (input operator)";
-        invoke ./"test_${nn}.apl" '<' "test_${nn}.inp" '&>' "case_${nn}.out";
+        invoke "test_${nn}.apl" '<' "test_${nn}.inp" '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn}.ref";
 
         nn=3b;
         herald "Test Case ${nn} - Test ⍞ (input operator)";
-        invoke ./"test_${nn}.apl" '<' "test_${nn}.inp" '&>' "case_${nn}.out";
+        invoke "test_${nn}.apl" '<' "test_${nn}.inp" '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn}.ref";
         ;;
     esac

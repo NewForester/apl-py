@@ -1,99 +1,22 @@
 #!/bin/bash --posix
-##
-##  Goal:       exercise the recognition of shell command line flags
-##
-##  Most tests require simple visual inspection.
-##
-##  Use:        ./flag_tests/run [-a | -as] [nn ... ]
-##
-##  where   nn is in the range [9] and designates which test cases to run
-##          if omitted, defaults to all test cases
-##
-##  Flags:  -a      more automation - no prompting to inform the tester of
-##                  what is going on
-##          -aa     even more automation - scripts that require manual
-##                  intervention (if any) are skipped
-##
 
-# print out header comment &c
-
-usage() { (sed -e "/^###/d" -e "/^##/!d" $0 && echo -e "\e[35m${0##*/}: \e[31m$@\e[0m") >&2; }
-error() { echo -e "\e[31m$@\e[0m"; }
-note()  { echo -e "\e[32m$@\e[0m"; }
-
-# process options
-
-while [[ "${1::1}" == "-" ]]; do
-    case $1 in
-      (-aa)
-        nopause=$1;
-        noprompt=$1; shift;
-        ;;
-      (-a)
-        noprompt=$1; shift;
-        ;;
-      (--help)
-        usage "I hope that was helpful";
-        exit 1;
-        ;;
-      (*)
-        usage "bad option \"$1\"";
-        exit 1;
-        ;;
-    esac
-done
-
-# change directory to that containing this script
+##
+##  Goal:       exercise the recognition of command line flags by apl.py
+##
+##  Use:        ./test/flags/run [-a | -aa] [nn ... ]
+##
+##  where   nn is in the range [1,4] and designates which test cases to run
+##          if nn is not given, all test cases are run
+##
+##  Flags:  -a      more automation -
+##                  no prompting to inform the tester of what is going on
+##          -aa     even more automation -
+##                  any scripts that require manual are skipped
+##
 
 cd ${0%/*};
 
-# do not assume the intepreter is on the PATH
-
-for APL in apl.py ./apl.py ../apl.py "error APL intepreter not found"; do
-    which ${APL} > /dev/null && break;
-done
-
-# helper functions
-
-exec 8<&0;
-exec 9<&1;
-
-function invoke
-{
-  echo;
-  echo "bash $" "$@" >&9;
-  eval "$@" <&8;
-  [[ $? -ne 0 ]] && allok=$1;
-  echo;
-}
-
-plus="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
-
-function narrative
-{
-    echo;
-    echo -e "\e[34m${plus}\e[0m";
-    cat;
-    [[ -z "${noprompt}" ]] && read -p "Press enter to continue " junk <&8;
-    echo -e "\e[34m${plus}\e[0m";
-    echo;
-}
-
-function herald
-{
-    echo "------------------------------------------------------------------------";
-    echo -e "\e[33m$@\e[0m";
-    echo "------------------------------------------------------------------------";
-}
-
-function summary
-{
-    echo;
-    echo -e "\e[34m${plus}\e[0m";
-    [[ -z "${allok}" ]] && note "ALL OK" || error "Something went awry";
-    echo -e "\e[34m${plus}\e[0m";
-    echo;
-}
+source ../../test/framework;
 
 if [[ $# == 0 ]]; then
 	narrative <<- EOF
@@ -108,6 +31,7 @@ if [[ $# == 0 ]]; then
 	merit simple visual inspection to determine pass/fail.
 	EOF
     steps="1 2 3 4";
+    rm case*;
 else
     steps="$@";
 fi
@@ -121,11 +45,11 @@ for step in ${steps}; do
 
         nn=1a;
         herald "Test Case ${nn} - Response to an unrecognised short form flag";
-        invoke "${APL}" -x '||' true;
+        invoke apl.py -x '||' true;
 
         nn=1b;
         herald "Test Case ${nn} - Response to an unrecognised long form flag";
-        invoke "${APL}" --extra '||' true;
+        invoke apl.py --extra '||' true;
 
         nn=1c;
         herald "Test Case ${nn} - Check recognition of short form flags";
@@ -133,7 +57,7 @@ for step in ${steps}; do
             note "\n... skipping\n";
         else
             note "... type ^D to complete the test";
-            invoke "${APL}" -s -v;
+            invoke apl.py -s -v;
         fi
 
         nn=1d;
@@ -142,7 +66,7 @@ for step in ${steps}; do
             note "\n... skipping\n";
         else
             note "... type ^D to complete the test";
-            invoke "${APL}" --silent --verbose --script;
+            invoke apl.py --silent --verbose --script;
         fi
       ;;
 
@@ -153,12 +77,12 @@ for step in ${steps}; do
 
         nn=2a;
         herald "Test Case ${nn} - Check recognition of short form help flag";
-        invoke "${APL}" -h '&>' "case_${nn}.out";
+        invoke apl.py -h '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "help.ref";
 
         nn=2b;
         herald "Test Case ${nn} - Check recognition of long form help flag";
-        invoke "${APL}" --help '&>' "case_${nn}.out";
+        invoke apl.py --help '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "help.ref";
       ;;
 
@@ -169,11 +93,11 @@ for step in ${steps}; do
 
         nn=3a;
         herald "Test Case ${nn} - Check recognition of short form version flag";
-        invoke "${APL}" -V;
+        invoke apl.py -V;
 
         nn=3b;
         herald "Test Case ${nn} - Check recognition of long form version flag";
-        invoke "${APL}" --Version;
+        invoke apl.py --Version;
       ;;
 
       (4)
@@ -183,7 +107,7 @@ for step in ${steps}; do
 
         nn=4a;
         herald "Test Case ${nn} - Response to input redirection to a file that cannot be read";
-        invoke "${APL}" -f "test_${nn::1}.txt" '||' true;
+        invoke apl.py -f "test_${nn::1}.txt" '||' true;
         ;;
     esac
 done

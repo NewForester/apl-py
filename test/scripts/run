@@ -1,101 +1,26 @@
 #!/bin/bash --posix
+
 ##
-##  Goal:       exercise the scripting ability of the APL shell
+##  Goal:       exercise the scripting ability of the apl.py shell
 ##
 ##  All tests record their output and compare it with a reference file.  There
 ##  should be no differences.  At the end, the script reports either "ALL OK"
 ##  or "Something went awry".
 ##
-##  Use:        ./io_tests/run [-a | -as] [nn ... ]
+##  Use:        ./test/scripts/run [-a | -aa] [nn ... ]
 ##
-##  where   nn is in the range [1,9] and designates which test cases to run
-##          if omitted, defaults to all test cases
+##  where   nn is in the range [1,8] and designates which test cases to run
+##          if nn is not given, all test cases are run
 ##
-##  Flags:  -a      more automation - no prompting to inform the tester of
-##                  what is going on
-##          -aa     even more automation - scripts that require manual
-##                  intervention (if any) are skipped
+##  Flags:  -a      more automation -
+##                  no prompting to inform the tester of what is going on
+##          -aa     even more automation -
+##                  any scripts that require manual are skipped
 ##
-
-# print out header comment &c
-
-usage() { (sed -e "/^###/d" -e "/^##/!d" $0 && echo -e "\e[35m${0##*/}: \e[31m$@\e[0m") >&2; }
-error() { echo -e "\e[31m$@\e[0m"; }
-note()  { echo -e "\e[32m$@\e[0m"; }
-
-# process options
-
-while [[ "${1::1}" == "-" ]]; do
-    case $1 in
-      (-aa)
-        nopause=$1;
-        noprompt=$1; shift;
-        ;;
-      (-a)
-        noprompt=$1; shift;
-        ;;
-      (--help)
-        usage "I hope that was helpful";
-        exit 1;
-        ;;
-      (*)
-        usage "bad option \"$1\"";
-        exit 1;
-        ;;
-    esac
-done
-
-# change directory to that containing this script
 
 cd ${0%/*};
 
-# do not assume the intepreter is on the PATH
-
-for APL in apl.py ./apl.py ../apl.py "error APL intepreter not found"; do
-    which ${APL} > /dev/null && break;
-done
-
-# helper functions
-
-exec 8<&0;
-exec 9<&1;
-
-function invoke
-{
-  echo;
-  echo "bash $" "$@" >&9;
-  eval "$@" <&8;
-  [[ $? -ne 0 ]] && allok=$1;
-  echo;
-}
-
-plus="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
-
-function narrative
-{
-    echo;
-    echo -e "\e[34m${plus}\e[0m";
-    cat;
-    [[ -z "${noprompt}" ]] && read -p "Press enter to continue " junk <&8;
-    echo -e "\e[34m${plus}\e[0m";
-    echo;
-}
-
-function herald
-{
-    echo "------------------------------------------------------------------------";
-    echo -e "\e[33m$@\e[0m";
-    echo "------------------------------------------------------------------------";
-}
-
-function summary
-{
-    echo;
-    echo -e "\e[34m${plus}\e[0m";
-    [[ -z "${allok}" ]] && note "ALL OK" || error "Something went awry";
-    echo -e "\e[34m${plus}\e[0m";
-    echo;
-}
+source ../../test/framework;
 
 if [[ $# == 0 ]]; then
 	narrative <<- EOF
@@ -122,6 +47,7 @@ if [[ $# == 0 ]]; then
 	before the test can move on to the next test case.
 	EOF
     steps="1 2 3 4 5 6 7 8 9";
+    rm case*;
 else
     steps="$@";
 fi
@@ -140,12 +66,12 @@ for step in ${steps}; do
             note "\n... skipping\n";
         else
             note "... type ^D to exit the APL interpreter";
-            invoke "${APL}";
+            invoke apl.py;
         fi
 
         nn=1b;
         herald "Test Case ${nn} - Evaluate a command line expression - no script";
-        invoke "${APL}" 1 2 3 × 3 2 1
+        invoke apl.py 1 2 3 × 3 2 1
         ;;
 
       (2)
@@ -156,17 +82,17 @@ for step in ${steps}; do
 
         nn=2a;
         herald "Test Case ${nn} - Execute script from stdin redirected using '<'";
-        invoke "${APL}" '<' "test_${nn::1}.txt" '&>' "case_${nn}.out";
+        invoke apl.py '<' "test_${nn::1}.txt" '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
         nn=2b;
         herald "Test Case ${nn} - Execute script from stdin redirected using '|'";
-        invoke cat "test_${nn::1}.txt" '|' "${APL}" '&>' "case_${nn}.out";
+        invoke cat "test_${nn::1}.txt" '|' apl.py '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
         nn=2c;
         herald "Test Case ${nn} - Execute script using command line flag";
-        invoke "${APL}" -f "test_${nn::1}.txt" '&>' "case_${nn}.out";
+        invoke apl.py -f "test_${nn::1}.txt" '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
         nn=2d;
@@ -184,12 +110,12 @@ for step in ${steps}; do
 
         nn=3a;
         herald "Test Case ${nn} - Execute script from stdin redirected using '<'";
-        invoke "${APL}" '<' "test_${nn::1}.txt" '&>' "case_${nn}.out";
+        invoke apl.py '<' "test_${nn::1}.txt" '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
         nn=3b;
         herald "Test Case ${nn} - Execute script from stdin redirected using '|'";
-        invoke cat "test_${nn::1}.txt" '|' "${APL}" '&>' "case_${nn}.out";
+        invoke cat "test_${nn::1}.txt" '|' apl.py '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
         nn=3c;
@@ -198,7 +124,7 @@ for step in ${steps}; do
             note "\n... skipping\n";
         else
             note "... type ^D to complete the test";
-            invoke "${APL}" -f "test_${nn::1}.txt" '&>' "case_${nn}.out";
+            invoke apl.py -f "test_${nn::1}.txt" '&>' "case_${nn}.out";
             invoke diff "case_${nn}.out" test_3i.ref;
         fi
 
@@ -221,17 +147,17 @@ for step in ${steps}; do
 
         nn=4a;
         herald "Test Case ${nn} - Execute script from stdin redirected using '<'";
-        invoke "${APL}" 16 ÷ 4 '<' "test_${nn::1}.txt" '&>' "case_${nn}.out";
+        invoke apl.py 16 ÷ 4 '<' "test_${nn::1}.txt" '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
         nn=4b;
         herald "Test Case ${nn} - Execute script from stdin redirected using '|'";
-        invoke cat "test_${nn::1}.txt" '|' "${APL}" 16 ÷ 4 '&>' "case_${nn}.out";
+        invoke cat "test_${nn::1}.txt" '|' apl.py 16 ÷ 4 '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
         nn=4c;
         herald "Test Case ${nn} - Execute script using command line flag";
-        invoke "${APL}" -f "test_${nn::1}.txt" -- 16 ÷ 4 '&>' "case_${nn}.out";
+        invoke apl.py -f "test_${nn::1}.txt" -- 16 ÷ 4 '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
         nn=4d;
@@ -249,17 +175,17 @@ for step in ${steps}; do
 
         nn=5a;
         herald "Test Case ${nn} - Execute script from stdin redirected using '<'";
-        invoke "${APL}" -s -- 16 ÷ 4 '<' "test_${nn::1}.txt" '&>' "case_${nn}.out";
+        invoke apl.py -s -- 16 ÷ 4 '<' "test_${nn::1}.txt" '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
         nn=5b;
         herald "Test Case ${nn} - Execute script from stdin redirected using '|'";
-        invoke cat "test_${nn::1}.txt" '|' "${APL}" -s -- 16 ÷ 4 '&>' "case_${nn}.out";
+        invoke cat "test_${nn::1}.txt" '|' apl.py -s -- 16 ÷ 4 '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
         nn=5c;
         herald "Test Case ${nn} - Execute script using command line flag";
-        invoke "${APL}" -s -f "test_${nn::1}.txt" -- 16 ÷ 4 '&>' "case_${nn}.out";
+        invoke apl.py -s -f "test_${nn::1}.txt" -- 16 ÷ 4 '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
         nn=5d;
@@ -281,17 +207,17 @@ for step in ${steps}; do
 
         nn=6a;
         herald "Test Case ${nn} - Execute script from stdin redirected using '<'";
-        invoke "${APL}" -s -- 16 ÷ 4 '<' "test_${nn::1}.txt" '&>' "case_${nn}.out" '||' true;
+        invoke apl.py -s -- 16 ÷ 4 '<' "test_${nn::1}.txt" '&>' "case_${nn}.out" '||' true;
         invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
         nn=6b;
         herald "Test Case ${nn} - Execute script from stdin redirected using '|'";
-        invoke cat "test_${nn::1}.txt" '|' "${APL}" -s -- 16 ÷ 4 '&>' "case_${nn}.out" '||' true;
+        invoke cat "test_${nn::1}.txt" '|' apl.py -s -- 16 ÷ 4 '&>' "case_${nn}.out" '||' true;
         invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
         nn=6c;
         herald "Test Case ${nn} - Execute script using command line flag";
-        invoke "${APL}" -s -f "test_${nn::1}.txt" -- 16 ÷ 4 '&>' "case_${nn}.out" '||' true;
+        invoke apl.py -s -f "test_${nn::1}.txt" -- 16 ÷ 4 '&>' "case_${nn}.out" '||' true;
         invoke diff "case_${nn}.out" test_6c.ref;
 
         nn=6d;
@@ -308,12 +234,12 @@ for step in ${steps}; do
 
         nn=7a;
         herald "Test Case ${nn} - Execute script from stdin redirected using '<'";
-        invoke "${APL}" '<' "test_${nn::1}.txt" '|&' tee -i "case_${nn}.tee";
+        invoke apl.py '<' "test_${nn::1}.txt" '|&' tee -i "case_${nn}.tee";
         invoke diff "case_${nn}.tee" "test_${nn::1}.ref";
 
         nn=7b;
         herald "Test Case ${nn} - Execute script from stdin redirected using '|'";
-        invoke cat "test_${nn::1}.txt" '|' "${APL}" '|&' tee -i "case_${nn}.tee";
+        invoke cat "test_${nn::1}.txt" '|' apl.py '|&' tee -i "case_${nn}.tee";
         invoke diff "case_${nn}.tee" "test_${nn::1}.ref";
 
         nn=7c;
@@ -322,7 +248,7 @@ for step in ${steps}; do
             note "\n... skipping\n";
         else
             note "... type ^D to complete the test";
-            invoke "${APL}" -f "test_${nn::1}.txt" '|&' tee -i "case_${nn}.tee";
+            invoke apl.py -f "test_${nn::1}.txt" '|&' tee -i "case_${nn}.tee";
             invoke diff "case_${nn}.tee" test_7i.ref;
         fi
 
@@ -345,17 +271,17 @@ for step in ${steps}; do
 
         nn=8a;
         herald "Test Case ${nn} - Execute script from stdin redirected using '<'";
-        invoke "${APL}" -s '<' "test_${nn::1}.txt" '&>' case_${nn}.out;
+        invoke apl.py -s '<' "test_${nn::1}.txt" '&>' case_${nn}.out;
         invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
         nn=8b;
         herald "Test Case ${nn} - Execute script from stdin redirected using '|'";
-        invoke cat "test_${nn::1}.txt" '|' "${APL}" -s '&>' case_${nn}.out;
+        invoke cat "test_${nn::1}.txt" '|' apl.py -s '&>' case_${nn}.out;
         invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
         nn=8c;
         herald "Test Case ${nn} - Execute script using command line flag";
-        invoke "${APL}" -s -f "test_${nn::1}.txt" '&>' case_${nn}.out;
+        invoke apl.py -s -f "test_${nn::1}.txt" '&>' case_${nn}.out;
         invoke diff "case_${nn}.out" "test_${nn::1}.ref";
 
         nn=8d;

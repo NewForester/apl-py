@@ -1,0 +1,83 @@
+#!/bin/bash --posix
+
+##
+##  Goal:       ensure bash test scripts for apl.py share a common framework
+##
+##  Use:        source framework
+##
+
+# print out header comment &c
+
+usage() { (sed -e "/^###/d" -e "/^##/!d" ${0##*/} && echo -e "\e[35m${0##*/}: \e[31m$@\e[0m") >&2; }
+error() { echo -e "\e[31m$@\e[0m"; }
+note()  { echo -e "\e[32m$@\e[0m"; }
+
+# process options
+
+while [[ "${1::1}" == "-" ]]; do
+    case $1 in
+      (-aa)
+        nopause=$1;
+        noprompt=$1; shift;
+        ;;
+      (-a)
+        noprompt=$1; shift;
+        ;;
+      (--help)
+        usage "I hope that was helpful";
+        exit 1;
+        ;;
+      (*)
+        usage "bad option \"$1\"";
+        exit 1;
+        ;;
+    esac
+done
+
+# fudge path
+
+PATH=$PATH:.:..;
+
+# helper functions
+
+exec 8<&0;
+exec 9<&1;
+
+function invoke
+{
+  echo;
+  echo "bash $" "$@" >&9;
+  eval "$@" <&8;
+  [[ $? -ne 0 ]] && allok=$1;
+  echo;
+}
+
+plus="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+
+function narrative
+{
+    echo;
+    echo -e "\e[34m${plus}\e[0m";
+    cat;
+    [[ -z "${noprompt}" ]] && read -p "Press enter to continue " junk <&8;
+    echo -e "\e[34m${plus}\e[0m";
+    echo;
+}
+
+function herald
+{
+    echo "------------------------------------------------------------------------";
+    echo -e "\e[33m$@\e[0m";
+    echo "------------------------------------------------------------------------";
+}
+
+function summary
+{
+    echo;
+    echo -e "\e[34m${plus}\e[0m";
+    [[ -z "${allok}" ]] && note "ALL OK" || error "Something went awry";
+    echo -e "\e[34m${plus}\e[0m";
+    echo;
+}
+
+# EOF
