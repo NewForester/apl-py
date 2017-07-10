@@ -4,23 +4,7 @@
 
     UNDER DEVELOPMENT
 
-    This Python module is the command-line executable.
-
-    With no flags/arguments, the module enters a read-evaluate-print loop.
-    Each line of input read from the terminal is interpreted as an APL
-    expression.  The expression is evaluated and the result printed to the
-    terminal.
-
-    With flags, the interpreter may be directed to read input from a file
-    (scripting) before or instead of entering the read-evaluate-print loop.
-
-    The interpreter will treat arguments as a single APL expression.  It will
-    evaluate the expression, print the result and then exit without entering
-    the read-evaluate-print loop.
-
-    When flags and arguments are both used, -- (the end-of-flags flag) must
-    also be used.  Flags and arguments must appear on the command line to the
-    left and of the end-of-flags flag.
+    This Python module is the executable command-line intepreter.
 
     For more information try:
 
@@ -52,6 +36,16 @@ an APL expression, print the result and exit.  Eg:
     $ apl.py 4 8 16 ÷ 2
     2 4 8
 
+It is possible to log the entire interactive session to file:
+
+    $ apl.py -l log_file
+
+has the same effect as:
+
+    $ apl.py |& tee -i log_file
+
+except the second disables readline editing.
+
 Non-interactive (or scripted) use is supported:
 
     $ apl.py < script_file
@@ -69,14 +63,6 @@ be executable and its first line should read something like:
 
 Use the path appropriate for your installation.  The -f flag must appear to the
 right of any other flags.
-
-There is no flag to redirect output to a file.  Should you need this it is
-suggested you try:
-
-    $ apl.py -f script_file |& tee -i log_file
-
-This will record output to both stdout and stderr in log_file and print it to
-the terminal.  It is also record the Python stack in the event of a crash.
 
 There is no mechanism for script files to include other script files but they
 may be chained together:
@@ -118,8 +104,8 @@ Note that at present in the interactive interpreter:
     ^D  (end of input)  is equivalent to )OFF
     ^C  (interrupt)     will abort execution and quit the interpreter
 
-This program is still under active development:  any and all features
-are 'as is' and subject to change.
+This program is still under active development:  any and all features are
+'as is' and subject to change.
 
 Your curiosity is much appreciated. Thank you.
 """
