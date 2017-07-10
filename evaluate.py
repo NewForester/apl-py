@@ -12,6 +12,7 @@
 
 import re
 
+from copy import copy as shallowcopy
 from functools import reduce
 
 from monadic import monadic_function
@@ -23,7 +24,6 @@ from system_cmds import system_command
 from workspace_vars import workspace_variable
 
 from apl_quantity import APL_quantity as apl_value, make_scalar, make_vector, make_string
-from apl_cio import APL_cio as apl_cio
 from apl_error import APL_exception as apl_exception, apl_error
 
 # ------------------------------
@@ -165,32 +165,34 @@ def     evaluate_input_output (expr,leader,cio):
                 cio.printExplicit(rhs)
 
         return (rhs, len(expr))
+
     else:
         # input operator
 
+        lcio = shallowcopy(cio)
+        lcio.reset()
+        lcio.prefixDone = cio.prefixDone
+
         if leader == '⍞':
-            expr = input("")
-            if cio.fileInput:
+            lcio.prompt = ""
+            expr = lcio.inputAndLog()
+            if lcio.fileInput:
                 print (expr)
 
             value = make_vector(cio.userPromptLength * ' ' + expr,True)
 
             cio.hushImplicit = cio.userPromptLength != 0
         else:
-            save = cio.prompt
-            cio.prompt = "⎕:    "
-
-            expr = input(cio.prompt)
-            if cio.fileInput:
+            lcio.prompt = "⎕:    "
+            expr = lcio.inputAndLog()
+            if lcio.fileInput:
                 print (expr)
 
             try:
                 value = evaluate_and_print_line(expr,cio,True)
             except apl_exception as error:
-                cio.printError(error,expr)
+                lcio.printError(error,expr)
                 apl_error(None)
-
-            cio.prompt = save
 
         return (value, 1)
 

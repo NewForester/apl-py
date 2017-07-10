@@ -14,10 +14,9 @@ def     sys_cmd_off (arguments,cio):
     """
     time to go ...
     """
-    if cio.silent:
-        apl_exit(0)
-    else:
-        apl_exit(0,"Bye bye")
+    if not cio.silent:
+        cio.printThis("Bye bye")
+    apl_exit(0)
 
 # ------------------------------
 

@@ -28,7 +28,6 @@
 """
 
 import sys
-import readline
 
 from functools import reduce
 
@@ -127,10 +126,12 @@ Your curiosity is much appreciated. Thank you.
 
 # ------------------------------
 
-def     rep_from_file (prompt,path,inputFile,silent):
+def     rep_from_file (cio,path,inputFile):
     """
     read input lines from a file, evaluate them and print the results
     """
+    cio.fileInput = True
+
     lineCount = 0
     for line in inputFile:
         lineCount += 1
@@ -139,31 +140,30 @@ def     rep_from_file (prompt,path,inputFile,silent):
             if line.startswith("#!"):
                 continue
 
+        cio.reset()
         line = line.rstrip()
 
-        cio = apl_cio(prompt,"□",True,silent)
-
-        if not silent:
-            print("{0}{1}".format(prompt,line))
-
         try:
+            if not cio.silent:
+                cio.printThis(cio.prompt + line)
             evaluate_and_print_line(line,cio)
         except apl_exception as error:
-            if silent:
-                print("{0}{1}".format(prompt,line))
-            cio.printError(error,line,"in {0} on line {1}".format(path,lineCount))
+            if cio.silent:
+                cio.printThis(cio.prompt + line)
+            cio.printError(error,line," in {0} on line {1}".format(path,lineCount))
             apl_exit(1)
 
 # ------------------------------
 
-def     rep_from_tty (prompt):
+def     rep_from_tty (cio):
     """
     read input lines from a tty, evaluate them and print the results
     """
-    while True:
-        cio = apl_cio(prompt,"□")
+    cio.fileInput = False
 
-        line = input(prompt)
+    while True:
+        cio.reset()
+        line = cio.inputAndLog()
 
         try:
             evaluate_and_print_line(line,cio)
@@ -173,68 +173,78 @@ def     rep_from_tty (prompt):
 # ------------------------------
 
 if __name__ == '__main__':
-    prompt = 6 * ' '
+    if len(sys.argv) == 1:
+        flags, args = [], []
+    elif '--' in sys.argv:
+        ii = sys.argv.index("--")
+        flags, args = sys.argv[1:ii], sys.argv[ii + 1:]
+    elif sys.argv[1][0] == '-':
+        flags, args = sys.argv[1:], []
+    else:
+        flags, args = [], sys.argv[1:]
+
+    if len(flags):
+        flags = ' '.join(flags).replace(' -',':-').split(':')
 
     try:
-        if len(sys.argv) == 1:
-            flags, args = [], []
-        elif '--' in sys.argv:
-            ii = sys.argv.index("--")
-            flags, args = sys.argv[1:ii], sys.argv[ii + 1:]
-        elif sys.argv[1][0] == '-':
-            flags, args = sys.argv[1:], []
-        else:
-            flags, args = [], sys.argv[1:]
+        with apl_cio(6 * ' ',"□") as cio:
 
-        if len(flags):
-            flags = ' '.join(flags).replace(' -',':-').split(':')
+            for flag in flags:
+                if flag in ("-h", "--help"):
+                    print(_banner)
+                    apl_quit(0,_helpText)
 
-        silent = False
+                elif flag in ("-V", "--Version"):
+                    print(_banner)
+                    print(_version)
+                    print(_milestone)
+                    apl_quit(0)
 
-        for flag in flags:
-            if flag in ("-h", "--help"):
-                print(_banner)
-                apl_quit(0,_helpText)
+                elif flag.startswith(("-l ", "--log ")):
+                    path = flag.split()[1];
 
-            elif flag in ("-V", "--Version"):
-                print(_banner)
-                print(_version)
-                print(_milestone)
-                apl_quit(0)
+                    try:
+                        cio.logFile(path)
+                    except:
+                        apl_quit(3,"unable to open '{0}' for output".format(path))
 
-            elif flag in ("-s", "--silent", "--script"):
-                silent = True
+                    flags.remove(flag)
 
-            elif flag in ("-v", "--verbose"):
-                silent = False
+            for flag in flags:
+                if flag in ("-s", "--silent", "--script"):
+                    cio.silent = True
 
-            elif flag.startswith(("-f ", "--file ")):
-                path = flag.split()[1];
-                try:
-                    inputFile = open(path, "r")
-                except:
-                    apl_quit(3,"unable to open '{0}' for input".format(path))
+                elif flag in ("-v", "--verbose"):
+                    cio.silent = False
 
-                rep_from_file(prompt,path,inputFile,silent)
-                inputFile.close()
+                elif flag.startswith(("-f ", "--file ")):
+                    path = flag.split()[1];
+                    try:
+                        inputFile = open(path,"r")
+                    except:
+                        apl_quit(3,"unable to open '{0}' for input".format(path))
 
+                    rep_from_file(cio,path,inputFile)
+                    inputFile.close()
+
+                else:
+                    apl_quit(3,"{0} not recognised: perhaps try --help".format(flag))
+
+            if sys.stdin.isatty():
+                # enter interactive shell iff there are is no command line expression
+
+                if not len(args):
+                    cio.printThis(_banner)
+
+                    try:
+                        rep_from_tty(cio)
+                    except EOFError:
+                        cio.printThis("^D")
+                        apl_exit(0)
             else:
-                apl_quit(3,"{0} not recognised: perhaps try --help".format(flag))
+                # stdin redirected
 
-        if sys.stdin.isatty():
-            # enter interactive shell iff there are is no command line expression
-
-            if not len(args):
-                print(_banner)
-
-                try:
-                    rep_from_tty(prompt)
-                except EOFError:
-                    apl_exit(0,"^D")
-        else:
-            # stdin redirected
-
-            rep_from_file(prompt,"<stdin>",sys.stdin,silent)
+                rep_from_file(cio,"<stdin>",sys.stdin)
 
         if len(args):
             # evaluate command line expression
@@ -247,7 +257,7 @@ if __name__ == '__main__':
                 evaluate_and_print_line(line,cio)
                 apl_exit(0)
             except apl_exception as error:
-                print(line)
+                cio.printThis(line)
                 cio.printError(error,line)
                 apl_exit(1)
 
