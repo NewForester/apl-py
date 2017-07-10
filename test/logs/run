@@ -1,0 +1,147 @@
+#!/bin/bash --posix
+
+##
+##  Goal:       exercise the logging facilities of apl.py
+##
+##  All tests record their output and compare it with the log file.  There
+##  should be no differences.  At the end, the script reports either "ALL OK"
+##  or "Something went awry".
+##
+##  Use:        ./test/logs/run [-a | -aa] [nn ... ]
+##
+##  where   nn is in the range [1,4] and designates which test cases to run
+##          if nn is not given, all test cases are run
+##
+##  Flags:  -a      more automation -
+##                  no prompting to inform the tester of what is going on
+##          -aa     even more automation -
+##                  any scripts that require manual are skipped
+##
+
+cd ${0%/*};
+
+source ../../test/framework;
+
+if [[ $# == 0 ]]; then
+	narrative <<- EOF
+	These are tests of apl-py's logging facility.
+
+	Essentially everything is logged:
+	    - all output to both stdout and stderr
+	    - all console and file input
+	    - all input and output using ⎕ and ⍞
+
+	The logging facility should also log the Python stack trace should the
+	program crash.  There is no test case for this.  There are probably no
+	end of corner cases that it is not reasonable to handle.
+	EOF
+    steps="1 2 3 4";
+    rm case*;
+else
+    steps="$@";
+fi
+
+for step in ${steps}; do
+    case ${step} in
+      (1)
+        narrative <<- EOF
+	The first test cases check that normal console output is logged correctly.
+	They confirm that input from a file is logged correctly but cannot confirm
+	that input from a tty is logged.
+	EOF
+
+        nn=1a;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '<'";
+        invoke apl.py -l "case_${nn}.log" '<' "test_${nn::1}.txt" '&>' "case_${nn}.out";
+        invoke diff "case_${nn}".{log,out};
+
+        nn=1b;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '|'";
+        invoke cat "test_${nn::1}.txt" '|' apl.py -l "case_${nn}.log" '&>' "case_${nn}.out";
+        invoke diff "case_${nn}".{log,out};
+
+        nn=1c;
+        herald "Test Case ${nn} - Execute script using command line flag";
+        if [[ -n "${nopause}" ]]; then
+            note "\n... skipping\n";
+        else
+            note "... type ^D to complete the test";
+            invoke apl.py -l "case_${nn}.log" -f "test_${nn::1}.txt" '&>' "case_${nn}.out";
+            invoke diff "case_${nn}".{log,out};
+        fi
+
+        nn=1d;
+        herald "Test Case ${nn} - Execute implicit script using #!";
+        if [[ -n "${nopause}" ]]; then
+            note "\n... skipping\n";
+        else
+            note "... type ^D to complete the test";
+            invoke "test_${nn::1}.apl" -l "case_${nn}.log" '&>' "case_${nn}.out";
+            invoke diff "case_${nn}".{log,out};
+        fi
+        ;;
+
+      (2)
+        narrative <<- EOF
+	The next four test cases check that APL errors are logged correctly.
+	EOF
+
+        nn=2a;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '<'";
+        invoke apl.py -l "case_${nn}.log" -s -- 16 ÷ 4 '<' "test_${nn::1}.txt" '&>' "case_${nn}.out" '||' true;
+        invoke diff "case_${nn}".{log,out};
+
+        nn=2b;
+        herald "Test Case ${nn} - Execute script from stdin redirected using '|'";
+        invoke cat "test_${nn::1}.txt" '|' apl.py -l "case_${nn}.log" -s -- 16 ÷ 4 '&>' "case_${nn}.out" '||' true;
+        invoke diff "case_${nn}".{log,out};
+
+        nn=2c;
+        herald "Test Case ${nn} - Execute script using command line flag";
+        invoke apl.py -s -l "case_${nn}.log" -f "test_${nn::1}.txt" -- 16 ÷ 4 '&>' "case_${nn}.out" '||' true;
+        invoke diff "case_${nn}".{log,out};
+
+        nn=2d;
+        herald "Test Case ${nn} - Execute implicit script using #!";
+        invoke "test_${nn::1}.apl" -l "case_${nn}.log" -- 16 ÷ 4 '&>' "case_${nn}.out" '||' true;
+        invoke diff "case_${nn}".{log,out};
+        ;;
+
+      (3)
+        narrative <<- EOF
+	The next two test cases check ⎕← and ⍞← for output is logged correctly.
+	EOF
+
+        nn=3a;
+        herald "Test Case ${nn} - Test ⎕← (output operator)";
+        invoke "test_${nn}.apl" -l "case_${nn}.log" '&>' "case_${nn}.out";
+        invoke diff "case_${nn}".{log,out};
+
+        nn=3b;
+        herald "Test Case ${nn} - Test ⍞← (output operator)";
+        invoke "test_${nn}.apl" -l "case_${nn}.log" '&>' "case_${nn}.out";
+        invoke diff "case_${nn}".{log,out};
+        ;;
+
+      (4)
+        narrative <<- EOF
+	The next two test cases check ⎕ and ⍞ for input are logged correctly.
+	The 'user input' is taken from a file.
+	EOF
+
+        nn=4a;
+        herald "Test Case ${nn} - Test ⎕ (input operator)";
+        invoke "test_${nn}.apl" -l "case_${nn}.log" '<' "test_${nn}.inp" '&>' "case_${nn}.out";
+        invoke diff "case_${nn}".{log,out};
+
+        nn=4b;
+        herald "Test Case ${nn} - Test ⍞ (input operator)";
+        invoke "test_${nn}.apl" -l "case_${nn}.log" '<' "test_${nn}.inp" '&>' "case_${nn}.out";
+        invoke diff "case_${nn}".{log,out};
+        ;;
+    esac
+done
+
+summary;
+
+# EOF
