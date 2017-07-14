@@ -763,6 +763,49 @@ def     dyadic_rotate ():
     """
     pass
 
+# --------------
+
+def     dyadic_union_intersection ():
+    """
+    >>> test('1 2 3 ∩ 3 2 1')
+    1 2 3
+    >>> test('1 2 3 ∩ 6 5 4')
+    ⍬
+    >>> test('1 1 1 ∩ 1')
+    1 1 1
+    >>> test('1 ∩ 1 1 1')
+    1
+
+    >>> test('1 2 3 ∪ 6 5 4')
+    1 2 3 6 5 4
+    >>> test('1 2 3 ∪ 3 2 1')
+    1 2 3
+    >>> test('1 1 1 ∪ 1')
+    1 1 1
+    >>> test('1 ∪ 1 1 1')
+    1
+
+    >>> test('"Hi" ∩ "Hello"')
+    H
+    >>> test('"Hi" ∪ "Hello"')
+    Hiello
+    >>> test('"ll" ∩ "Hello"')
+    ll
+    >>> test('"ll" ∪ "Hello"')
+    llHeo
+    >>> test('"l" ∩ "Hello"')
+    l
+    >>> test('"l" ∪ "Hello"')
+    lHeo
+
+    !!! test('"Hi" ∩ 1 2 3')
+    ⍬
+    !!! test('"Hi" ∪ 1 2 3')
+    "Hi" 1 2 3
+
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

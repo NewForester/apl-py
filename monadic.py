@@ -182,14 +182,6 @@ def     _take (B):
 
 # ------------------------------
 
-def     _drop (B):
-    """
-    return the first element of B
-    """
-    apl_error("VALENCE ERROR")
-
-# ------------------------------
-
 def     _reverselast (B):
     """
     return B reversed along its last axis
@@ -211,6 +203,20 @@ def     _reversefirst (B):
 
     for X in B:
         V = [X] + V
+
+    return V
+
+# ------------------------------
+
+def     _unique (B):
+    """
+    return B with duplicate values removed
+    """
+    V = []
+
+    for X in B:
+        if X not in V:
+            V.append(X)
 
     return V
 
@@ -263,7 +269,9 @@ _monadic_functions = {
 
     # Selection
     '↑':        lambda B: v2s(_take,B),
-    '↓':        lambda B: v2s(_drop,B),
+    '↓':        lambda B: apl_error("VALENCE ERROR"),
+    '∪':        lambda B: v2v(_unique,B),
+    '∩':        lambda B: apl_error("VALENCE ERROR"),
 
 # Sort
     '⍋':        to_be_implemented,      # grade up (ascending sort indicies)

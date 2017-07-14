@@ -496,6 +496,38 @@ def     _concatenation (A,B):
 
 # ------------------------------
 
+def     _union (A,B):
+    """
+    return union of B with A
+
+    NB  only good for homogeneous operands
+    """
+    V = list(A)
+
+    for X in B:
+        if X not in A:
+            V.append(X)
+
+    return V
+
+# ------------------------------
+
+def     _intersection (A,B):
+    """
+    return intersection of of B with A
+
+    NB  only good for homogeneous operands
+    """
+    V = []
+
+    for X in A:
+        if X in B:
+            V.append(X)
+
+    return V
+
+# ------------------------------
+
 def     to_be_implemented (A,B):
     """
     placeholder for functions not yet implemented
@@ -556,13 +588,13 @@ _dyadic_functions = {
     '⍳':        lambda A,B: vv2s(_index,A,B),
     '↑':        lambda A,B: sv2vl(_take,A,B),
     '↓':        lambda A,B: sv2vl(_drop,A,B),
+    '∪':        lambda A,B: vv2v(_union,A,B),
+    '∩':        lambda A,B: vv2v(_intersection,A,B),
     '\\':       to_be_implemented,      # expansion
     '/':        to_be_implemented,      # compression
     '⌷':        to_be_implemented,      # index
     '⌿':        to_be_implemented,      #
     '⍀':        to_be_implemented,      #
-    '∪':        to_be_implemented,      #
-    '∩':        to_be_implemented,      #
     '⊣':        to_be_implemented,      #
     '⊢':        to_be_implemented,      #
 

@@ -337,6 +337,21 @@ def     monadic_reverse ():
     """
     pass
 
+# --------------
+
+def     monadic_unique ():
+    """
+    >>> test('∩ 0')
+    VALENCE ERROR
+
+    >>> test('∪ 0')
+    0
+
+    >>> test('∪ 0 1 0 1 0 1')
+    0 1
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":
