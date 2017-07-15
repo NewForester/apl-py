@@ -17,7 +17,7 @@
       - system commands
 """
 
-from evaluate import evaluate, evaluate_and_print_line
+from evaluate import evaluate, evaluate_and_print
 
 from apl_cio import APL_cio as apl_cio
 from apl_error import APL_exception as apl_exception
@@ -303,7 +303,7 @@ def     test_output (expr):
     """
     try:
         cio = apl_cio()
-        evaluate_and_print_line(expr,cio)
+        evaluate_and_print(expr,cio)
     except apl_exception as error:
         print(error.message)
 

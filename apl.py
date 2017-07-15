@@ -15,7 +15,7 @@ import sys
 
 from functools import reduce
 
-from evaluate import evaluate_and_print_line
+from evaluate import evaluate_and_print
 
 from apl_cio import APL_cio as apl_cio
 from apl_error import APL_exception as apl_exception, apl_error, apl_exit, apl_quit
@@ -112,49 +112,24 @@ Your curiosity is much appreciated. Thank you.
 
 # ------------------------------
 
-def     rep_from_file (cio,path,inputFile):
+def     read_evaluate_print (cio):
     """
-    read input lines from a file, evaluate them and print the results
+    read lines from a tty or a file, evaluate them and print the results
     """
-    cio.fileInput = True
-
-    lineCount = 0
-    for line in inputFile:
-        lineCount += 1
-
-        if lineCount == 1:
-            if line.startswith("#!"):
-                continue
-
-        cio.reset()
-        line = line.rstrip()
-
-        try:
-            if not cio.silent:
-                cio.printThis(cio.prompt + line)
-            evaluate_and_print_line(line,cio)
-        except apl_exception as error:
-            if cio.silent:
-                cio.printThis(cio.prompt + line)
-            cio.printError(error,line," in {0} on line {1}".format(path,lineCount))
-            apl_exit(1)
-
-# ------------------------------
-
-def     rep_from_tty (cio):
-    """
-    read input lines from a tty, evaluate them and print the results
-    """
-    cio.fileInput = False
-
     while True:
         cio.reset()
-        line = cio.inputAndLog()
 
         try:
-            evaluate_and_print_line(line,cio)
+            line = cio.read(cio.scriptFile)
+        except EOFError:
+            return
+
+        try:
+            evaluate_and_print(line,cio)
         except apl_exception as error:
-            cio.printError(error,line)
+            cio.printError(cio.scriptFile,error,line)
+            if cio.scriptFile is not None:
+                apl_exit(1)
 
 # ------------------------------
 
@@ -187,13 +162,7 @@ if __name__ == '__main__':
                     apl_quit(0)
 
                 elif flag.startswith(("-l ", "--log ")):
-                    path = flag.split()[1];
-
-                    try:
-                        cio.logFile(path)
-                    except:
-                        apl_quit(3,"unable to open '{0}' for output".format(path))
-
+                    cio.logFile.setPath(flag.split()[1])
                     flags.remove(flag)
 
             for flag in flags:
@@ -203,48 +172,44 @@ if __name__ == '__main__':
                 elif flag in ("-v", "--verbose"):
                     cio.silent = False
 
-                elif flag.startswith(("-f ", "--file ")):
-                    path = flag.split()[1];
-                    try:
-                        inputFile = open(path,"r")
-                    except:
-                        apl_quit(3,"unable to open '{0}' for input".format(path))
+                elif flag.startswith(("-o ", "--output ")):
+                    cio.outFile.setPath(flag.split()[1])
 
-                    rep_from_file(cio,path,inputFile)
-                    inputFile.close()
+                elif flag.startswith(("-i ", "--input ")):
+                    cio.inFile.setPath(flag.split()[1])
+
+                elif flag.startswith(("-f ", "--file ")):
+                    cio.scriptFile.setPath(flag.split()[1])
+                    read_evaluate_print(cio)
 
                 else:
                     apl_quit(3,"{0} not recognised: perhaps try --help".format(flag))
 
-            if sys.stdin.isatty():
-                # enter interactive shell iff there are is no command line expression
-
-                if not len(args):
-                    cio.printThis(_banner)
-
-                    try:
-                        rep_from_tty(cio)
-                    except EOFError:
-                        cio.printThis("^D")
-                        apl_exit(0)
-            else:
+            if not sys.stdin.isatty():
                 # stdin redirected
 
-                rep_from_file(cio,"<stdin>",sys.stdin)
+                read_evaluate_print(cio)
+
+            elif not len(args):
+                # enter interactive shell as there are is no command line expression
+
+                cio.printThis(_banner)
+                read_evaluate_print(cio)
+                cio.printThis("^D")
+                apl_exit(0)
 
         if len(args):
             # evaluate command line expression
 
+            cio = apl_cio()
             line = ' '.join(args)
 
-            cio = apl_cio()
-
             try:
-                evaluate_and_print_line(line,cio)
+                evaluate_and_print(line,cio)
                 apl_exit(0)
             except apl_exception as error:
                 cio.printThis(line)
-                cio.printError(error,line)
+                cio.printError(None,error,line)
                 apl_exit(1)
 
     except KeyboardInterrupt:

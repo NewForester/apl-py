@@ -57,7 +57,7 @@ def     _findUnquoted(expr,char,spos=0):
 
 # ------------------------------
 
-def     evaluate_and_print_line (line,cio,hushLast=False):
+def     evaluate_and_print (line,cio,hushLast=False):
     """
     evaluate and print possibly more than one expression
     """
@@ -67,10 +67,16 @@ def     evaluate_and_print_line (line,cio,hushLast=False):
         expr = line.lstrip()
         if expr:
             result = evaluate(expr,cio)
-
             if not hushLast:
+                newlinePending = not cio.newline
                 cio.newline = True
-                cio.printImplicit(result)
+
+                if cio.explicitPending:
+                    cio.printExplicit(result)
+                else:
+                    cio.printImplicit(result)
+                    if newlinePending:
+                        cio.printNewline()
 
             return result
 
@@ -78,12 +84,13 @@ def     evaluate_and_print_line (line,cio,hushLast=False):
         expr = line[:pos].lstrip()
         if expr:
             result = evaluate(expr,cio)
+            cio.explicitPending = False
             cio.printImplicit(result)
 
         line = line[pos + 1:].lstrip()
         if line:
             cio.hushExplicit = True
-            return evaluate_and_print_line(line,cio,hushLast)
+            return evaluate_and_print(line,cio,hushLast)
 
 # ------------------------------
 
@@ -156,13 +163,14 @@ def     evaluate_input_output (expr,leader,cio):
         if leader == '⍞' and rhs.isString():
             cio.userPromptLength = rhs.dimension()
 
-        cio.newline = leader == '⎕' or (cio.silent and hush)
+        cio.newline = leader == '⎕'
 
-        if cio.silent or not hush:
-            if leader == '⍞' and not rhs.isString() and rhs.isVector():
-                cio.printExplicit(make_vector([rhs]))
-            else:
-                cio.printExplicit(rhs)
+        if hush and not cio.silent:
+            cio.explicitPending = True
+        elif leader == '⍞' and not rhs.isString() and rhs.isVector():
+            cio.printExplicit(make_vector([rhs]))
+        else:
+            cio.printExplicit(rhs)
 
         return (rhs, len(expr))
 
@@ -171,28 +179,33 @@ def     evaluate_input_output (expr,leader,cio):
 
         lcio = shallowcopy(cio)
         lcio.reset()
-        lcio.prefixDone = cio.prefixDone
 
         if leader == '⍞':
             lcio.prompt = ""
-            expr = lcio.inputAndLog()
-            if lcio.fileInput:
-                print (expr)
+            try:
+                expr = lcio.read(lcio.inFile)
+            except EOFError:
+                apl_error("EOF_ERROR")
 
             value = make_vector(cio.userPromptLength * ' ' + expr,True)
 
             cio.hushImplicit = cio.userPromptLength != 0
+            cio.newline = True
         else:
             lcio.prompt = "⎕:    "
-            expr = lcio.inputAndLog()
-            if lcio.fileInput:
-                print (expr)
+            lcio.prefixDone = cio.prefixDone
+            try:
+                expr = lcio.read(lcio.inFile)
+            except EOFError:
+                apl_error("EOF_ERROR")
 
             try:
-                value = evaluate_and_print_line(expr,cio,True)
+                value = evaluate_and_print(expr,lcio,True)
             except apl_exception as error:
-                lcio.printError(error,expr)
+                lcio.printError(lcio.inFile,error,expr)
                 apl_error(None)
+
+            cio.prefixDone = lcio.prefixDone
 
         return (value, 1)
 
