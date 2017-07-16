@@ -24,20 +24,23 @@ source ../../test/framework;
 
 if [[ $# == 0 ]]; then
 	narrative <<- EOF
-	These are tests of apl-py's implementation of those APL operations that
-	output more that one result.
+	The  first three sets of test cases test apl-py's implementation of
+	those APL operations that output more that one result.
 
 	That is ⋄, ⎕←, ⍞←, ⎕, ⍞ and combinations thereof.
 
 	Not only do the tests check the correct values are output but also
-	that newlines do or not appear between values, as appropriate.
-
-	The tests check the implementation of the input and output operators.
+	that newlines do or do not appear between values, as appropriate.
 
 	Input is redirected to a file to ensure the same data is always input
-	the same way so the comparison of log file with reference is reliable.
+	the same way so that comparison with a reference is reliable.
+
+	The remaining sets of test cases exercise apl-py's -o (--output) and -i
+	(--input) flags.  Their operation in conjunction with the -s (--silent)
+	flags is checked and the final test checking that -o, -i and -f may be
+	used more than once.
 	EOF
-    steps="1 2 3";
+    steps="1 2 3 4 5 6 7 8";
     rm case*;
 else
     steps="$@";
@@ -45,7 +48,7 @@ fi
 
 for step in ${steps}; do
     case ${step} in
-      (1 | test_separator)
+      (1)
         narrative <<- EOF
 	The first test case is a simple test of the expresssion separator (⋄).
 	EOF
@@ -56,7 +59,7 @@ for step in ${steps}; do
         invoke diff "case_${nn}.out" "test_${nn}.ref";
         ;;
 
-      (2 | test_output)
+      (2)
         narrative <<- EOF
 	The next two test cases check the use of ⎕← and ⍞← for output.
 	EOF
@@ -72,7 +75,7 @@ for step in ${steps}; do
         invoke diff "case_${nn}.out" "test_${nn}.ref";
         ;;
 
-      (3 | test_input)
+      (3)
         narrative <<- EOF
 	The next two test cases check the use of ⎕ and ⍞ for input.
 	The 'user input' is taken from a file.
@@ -87,6 +90,84 @@ for step in ${steps}; do
         herald "Test Case ${nn} - Test ⍞ (input operator)";
         invoke "test_${nn}.apl" '<' "test_${nn}.inp" '&>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "test_${nn}.ref";
+        ;;
+
+      (4)
+        narrative <<- EOF
+	The next two test cases check the -o flag with ⎕← and ⍞← used for output.
+	EOF
+
+        nn=4a;
+        herald "Test Case ${nn} - Test ⎕← (output operator)";
+        invoke apl.py -o "case_${nn}.out" -f "test_${nn}.txt" -l "case_${nn}.log" '>' /dev/null;
+        invoke diff "case_${nn}.out" "test_${nn}.ref";
+
+        nn=4b;
+        herald "Test Case ${nn} - Test ⍞← (output operator)";
+        invoke apl.py -o "case_${nn}.out" -f "test_${nn}.txt" -l "case_${nn}.log" '>' /dev/null;
+        invoke diff "case_${nn}.out" "test_${nn}.ref";
+        ;;
+
+      (5)
+        narrative <<- EOF
+	The next two test cases check the -i flag with ⎕ and ⍞ used for input.
+	EOF
+
+        nn=5a;
+        herald "Test Case ${nn} - Test ⎕ (input operator)";
+        invoke apl.py -i "test_${nn}.inp" -f "test_${nn}.txt" -l "case_${nn}.log" '>' /dev/null;
+        invoke diff "case_${nn}.log" "test_${nn}.ref";
+
+        nn=5b;
+        herald "Test Case ${nn} - Test ⍞ (input operator)";
+        invoke apl.py -i "test_${nn}.inp" -f "test_${nn}.txt" -l "case_${nn}.log" '>' /dev/null;
+        invoke diff "case_${nn}.log" "test_${nn}.ref";
+        ;;
+
+      (6)
+        narrative <<- EOF
+	The next two test cases check that -s does not affect the -o flag.
+	EOF
+
+        nn=6a;
+        herald "Test Case ${nn} - Test ⎕← (output operator)";
+        invoke apl.py -s -o "case_${nn}.out" -f "test_${nn}.txt" -l "case_${nn}.log" '>' /dev/null;
+        invoke diff "case_${nn}.out" "test_${nn}.ref";
+
+        nn=6b;
+        herald "Test Case ${nn} - Test ⍞← (output operator)";
+        invoke apl.py -s -o "case_${nn}.out" -f "test_${nn}.txt" -l "case_${nn}.log" '>' /dev/null;
+        invoke diff "case_${nn}.out" "test_${nn}.ref";
+        ;;
+
+      (7)
+        narrative <<- EOF
+	The next two test cases check that explicit input (e.g. -i) is echoed to the output (i.e. -o).
+	EOF
+
+        nn=7a;
+        herald "Test Case ${nn} - Test -i and the ⎕ (input operator)";
+        invoke apl.py -s -i "test_${nn}.inp" -o "case_${nn}.out" -f "test_${nn}.txt" '>' /dev/null;
+        invoke diff "case_${nn}.out" "test_${nn}.ref";
+
+        nn=7b;
+        herald "Test Case ${nn} - Test - and the ⍞ (input operator)";
+        invoke apl.py -s -i "test_${nn}.inp" -o "case_${nn}.out" -f "test_${nn}.txt" '>' /dev/null;
+        invoke diff "case_${nn}.out" "test_${nn}.ref";
+        ;;
+
+      (8)
+        narrative <<- EOF
+	The next test case checks that multiple sets of -i, -o and -f flags work as expected.
+	EOF
+
+        nn=8;
+        rm -f case_${nn}*.out;
+        herald "Test Case ${nn} - Test running two scripts with their own input and output";
+        invoke apl.py -s -i "test_${nn}a.inp" -o "case_${nn}a.out" -f "test_${nn}a.txt" \
+                         -i "test_${nn}b.inp" -o "case_${nn}b.out" -f "test_${nn}b.txt" '>' /dev/null;
+        invoke diff "case_${nn}a.out" "test_${nn}a.ref";
+        invoke diff "case_${nn}b.out" "test_${nn}b.ref";
         ;;
     esac
 done
