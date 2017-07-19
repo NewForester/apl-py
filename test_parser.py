@@ -129,6 +129,12 @@ def     test_zilde (expr):
     0
     >>> test('⍴ 1 ∪ 1')
     1
+    >>> test('⍴ ⍉ 1')
+    ⍬
+    >>> test('⍴ ⍉ ⍬')
+    0
+    >>> test('⍴ ⍉ ,1')
+    1
     """
     pass
 

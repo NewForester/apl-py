@@ -806,6 +806,29 @@ def     dyadic_union_intersection ():
     """
     pass
 
+# --------------
+
+def     dyadic_transpose ():
+    """
+    >>> test('1 ⍉ 1 2 3')
+    1 2 3
+
+    >>> test('2 ⍉ 1 2 3')
+    DOMAIN ERROR
+    >>> test('0 ⍉ 1 2 3')
+    DOMAIN ERROR
+
+    >>> test('1 1 ⍉ 1 2 3')
+    LENGTH ERROR
+    >>> test('1 2 3 ⍉ 1 2 3')
+    LENGTH ERROR
+    >>> test('1 ⍉ 10')
+    LENGTH ERROR
+    >>> test('1 ⍉ ,10')
+    10
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

@@ -222,6 +222,14 @@ def     _unique (B):
 
 # ------------------------------
 
+def     _transpose (B):
+    """
+    transpose B about its major axis
+    """
+    return B
+
+# ------------------------------
+
 def     to_be_implemented (B):
     """
     placeholder for functions not yet implemented
@@ -261,9 +269,9 @@ _monadic_functions = {
     ',':        lambda B: s_comma(None,B),
     '⌽':        lambda B: v2v(_reverselast,B),
     '⊖':        lambda B: v2v(_reversefirst,B),
+    '⍉':        lambda B: v2v(_transpose,B),
     '≡':        to_be_implemented,      # depth - reports on nesting
     '∊':        to_be_implemented,      # enlist - ditto but also nested arrays
-    '⍉':        to_be_implemented,      # transpose
     '⊂':        to_be_implemented,      # (enclose) - turn array into nested scalar (?!?)
     '⊃':        to_be_implemented,      # (disclose) - the inverse
 

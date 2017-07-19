@@ -352,6 +352,17 @@ def     monadic_unique ():
     """
     pass
 
+# --------------
+
+def     monadic_transpose ():
+    """
+    >>> test('⍉ 0')
+    0
+    >>> test('⍉ 1 2 3')
+    1 2 3
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

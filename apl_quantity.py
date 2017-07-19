@@ -329,6 +329,26 @@ def vv_comma (Fn,A,B):
 
 # ------------------------------
 
+def sv_transpose (Fn,A,B):
+    """
+    evaluate dyadic transpose (a degenerate function for vectors)
+    """
+    A.noStringConfirm()
+
+    Apy = A.scalarToPy("LENGTH ERROR")
+
+    if Apy != 1:
+        apl_error("DOMAIN ERROR")
+
+    if B.isScalar():
+        apl_error("LENGTH ERROR")
+
+    Bpy = B.vectorToPy()
+
+    return APL_quantity(Fn(Apy,Bpy),B.dimension(),B.isString())
+
+# ------------------------------
+
 def sv2vr (Fn,A,B):
     """
     evaluate a dyadic function that returns a vector if B is a vector but a scalar if B is scalar

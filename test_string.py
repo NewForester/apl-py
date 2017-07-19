@@ -335,6 +335,21 @@ def     test_reverse_rotate ():
     """
     pass
 
+# --------------
+
+def     transpose ():
+    """
+    >>> test_string("'H' ⍉ 1 2 3")
+    DOMAIN ERROR
+
+    >>> test_string('⍉ "Hello"')
+    Hello
+
+    >>> test_string('1 ⍉ "Hello"')
+    Hello
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":
