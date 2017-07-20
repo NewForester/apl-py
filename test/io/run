@@ -115,12 +115,12 @@ for step in ${steps}; do
 
         nn=5a;
         herald "Test Case ${nn} - Test ⎕ (input operator)";
-        invoke apl.py -i "test_${nn}.inp" -f "test_${nn}.txt" -l "case_${nn}.log" '>' /dev/null;
+        invoke apl.py -l "case_${nn}.log" -i "test_${nn}.inp" -f "test_${nn}.txt" '>' /dev/null;
         invoke diff "case_${nn}.log" "test_${nn}.ref";
 
         nn=5b;
         herald "Test Case ${nn} - Test ⍞ (input operator)";
-        invoke apl.py -i "test_${nn}.inp" -f "test_${nn}.txt" -l "case_${nn}.log" '>' /dev/null;
+        invoke apl.py -l "case_${nn}.log" -i "test_${nn}.inp" -f "test_${nn}.txt" '>' /dev/null;
         invoke diff "case_${nn}.log" "test_${nn}.ref";
         ;;
 

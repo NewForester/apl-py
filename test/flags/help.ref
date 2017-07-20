@@ -26,13 +26,13 @@ Non-interactive (or scripted) use is supported:
     $ apl.py -f script_file
 
 will all interpret script_file as a sequence of APL expressions.  Interactive
-output may be suppressed using the --script flag.  In response to an error,
+output may be suppressed using the --silent flag.  In response to an error,
 the interpreter will print the offending line (and line number) and then exit.
 
 To be able to run a script directly from a Linux command line, the file must
 be executable and its first line should read something like:
 
-    # !/usr/bin/apl.py --script -f
+    # !/usr/bin/apl.py --silent -f
 
 Use the path appropriate for your installation.  The -f flag must appear to the
 right of any other flags.
@@ -66,8 +66,7 @@ Summary of the command line flags recognised by the interpreter:
     -h --help           print this help text and exit
     -V --Version        print version information and exit
 
-    --script            suppress interactive output
-    -s --silent         as for --script
+    -s --silent         suppress interactive output
     -v --verbose        resume interactive output
 
     --                  ends of flags

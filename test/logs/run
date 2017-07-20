@@ -76,7 +76,7 @@ for step in ${steps}; do
             note "\n... skipping\n";
         else
             note "... type ^D to complete the test";
-            invoke "test_${nn::1}.apl" -l "case_${nn}.log" '&>' "case_${nn}.out";
+            invoke "test_${nn::1}.apl" '&>' "case_${nn}.out";
             invoke diff "case_${nn}".{log,out};
         fi
         ;;
@@ -103,7 +103,7 @@ for step in ${steps}; do
 
         nn=2d;
         herald "Test Case ${nn} - Execute implicit script using #!";
-        invoke "test_${nn::1}.apl" -l "case_${nn}.log" -- 16 ÷ 4 '&>' "case_${nn}.out" '||' true;
+        invoke "test_${nn::1}.apl" -- 16 ÷ 4 '&>' "case_${nn}.out" '||' true;
         invoke diff "case_${nn}".{log,out};
         ;;
 
@@ -114,12 +114,12 @@ for step in ${steps}; do
 
         nn=3a;
         herald "Test Case ${nn} - Test ⎕← (output operator)";
-        invoke "test_${nn}.apl" -l "case_${nn}.log" '&>' "case_${nn}.out";
+        invoke apl.py -l "case_${nn}.log" -f "test_${nn}.txt" '&>' "case_${nn}.out";
         invoke diff "case_${nn}".{log,out};
 
         nn=3b;
         herald "Test Case ${nn} - Test ⍞← (output operator)";
-        invoke "test_${nn}.apl" -l "case_${nn}.log" '&>' "case_${nn}.out";
+        invoke apl.py -l "case_${nn}.log" -f "test_${nn}.txt" '&>' "case_${nn}.out";
         invoke diff "case_${nn}".{log,out};
         ;;
 
@@ -131,12 +131,12 @@ for step in ${steps}; do
 
         nn=4a;
         herald "Test Case ${nn} - Test ⎕ (input operator)";
-        invoke "test_${nn}.apl" -l "case_${nn}.log" '<' "test_${nn}.inp" '&>' "case_${nn}.out";
+        invoke apl.py -l "case_${nn}.log" -f "test_${nn}.txt" '<' "test_${nn}.inp" '&>' "case_${nn}.out";
         invoke diff "case_${nn}".{log,out};
 
         nn=4b;
         herald "Test Case ${nn} - Test ⍞ (input operator)";
-        invoke "test_${nn}.apl" -l "case_${nn}.log" '<' "test_${nn}.inp" '&>' "case_${nn}.out";
+        invoke apl.py -l "case_${nn}.log" -f "test_${nn}.txt" '<' "test_${nn}.inp" '&>' "case_${nn}.out";
         invoke diff "case_${nn}".{log,out};
         ;;
     esac

@@ -66,7 +66,7 @@ for step in ${steps}; do
             note "\n... skipping\n";
         else
             note "... type ^D to complete the test";
-            invoke apl.py --silent --verbose --script;
+            invoke apl.py --silent --verbose;
         fi
       ;;
 

@@ -1,4 +1,3 @@
-#!../apl.py -f
 'Test ⍞← (output operator)'
 
 "Hello"

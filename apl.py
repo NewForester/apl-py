@@ -53,13 +53,13 @@ Non-interactive (or scripted) use is supported:
     $ apl.py -f script_file
 
 will all interpret script_file as a sequence of APL expressions.  Interactive
-output may be suppressed using the --script flag.  In response to an error,
+output may be suppressed using the --silent flag.  In response to an error,
 the interpreter will print the offending line (and line number) and then exit.
 
 To be able to run a script directly from a Linux command line, the file must
 be executable and its first line should read something like:
 
-    # !/usr/bin/apl.py --script -f
+    # !/usr/bin/apl.py --silent -f
 
 Use the path appropriate for your installation.  The -f flag must appear to the
 right of any other flags.
@@ -93,8 +93,7 @@ Summary of the command line flags recognised by the interpreter:
     -h --help           print this help text and exit
     -V --Version        print version information and exit
 
-    --script            suppress interactive output
-    -s --silent         as for --script
+    -s --silent         suppress interactive output
     -v --verbose        resume interactive output
 
     --                  ends of flags
@@ -161,16 +160,15 @@ if __name__ == '__main__':
                     print(_milestone)
                     apl_quit(0)
 
-                elif flag.startswith(("-l ", "--log ")):
-                    cio.logFile.setPath(flag.split()[1])
-                    flags.remove(flag)
-
             for flag in flags:
-                if flag in ("-s", "--silent", "--script"):
+                if flag in ("-s", "--silent"):
                     cio.silent = True
 
                 elif flag in ("-v", "--verbose"):
                     cio.silent = False
+
+                elif flag.startswith(("-l ", "--log ")):
+                    cio.logFile.setPath(flag.split()[1])
 
                 elif flag.startswith(("-o ", "--output ")):
                     cio.outFile.setPath(flag.split()[1])
@@ -198,19 +196,22 @@ if __name__ == '__main__':
                 cio.printThis("^D")
                 apl_exit(0)
 
-        if len(args):
-            # evaluate command line expression
+            if len(args):
+                # evaluate command line expression
 
-            cio = apl_cio()
-            line = ' '.join(args)
+                cio.prompt=""
+                cio.prefix=""
+                cio.silent=False
+                cio.reset()
+                line = ' '.join(args)
 
-            try:
-                evaluate_and_print(line,cio)
-                apl_exit(0)
-            except apl_exception as error:
-                cio.printThis(line)
-                cio.printError(None,error,line)
-                apl_exit(1)
+                try:
+                    evaluate_and_print(line,cio)
+                    apl_exit(0)
+                except apl_exception as error:
+                    cio.printThis(line)
+                    cio.printError(None,error,line)
+                    apl_exit(1)
 
     except KeyboardInterrupt:
         apl_quit(2,"^C")

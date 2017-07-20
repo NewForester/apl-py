@@ -1,4 +1,4 @@
-#!../apl.py -s -f
+#!../apl.py -l case_2d.log -s -f
 1 2 3 × 4 5 6
 ⍝)OFF
 ⎕IO + ⎕OI	⍝ raises an APL error
