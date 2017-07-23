@@ -26,7 +26,50 @@ def     test (expr):
     FUNCTION NOT YET IMPLEMENTED
     >>> test ('" 1')
     INVALID TOKEN
-    """
+
+    >>> test('∨ 0')
+    VALENCE ERROR
+    >>> test('∧ 0')
+    VALENCE ERROR
+    >>> test('⍱ 0')
+    VALENCE ERROR
+    >>> test('⍲ 0')
+    VALENCE ERROR
+
+    >>> test('< 0')
+    VALENCE ERROR
+    >>> test('≤ 0')
+    VALENCE ERROR
+    >>> test('= 0')
+    VALENCE ERROR
+    >>> test('≥ 0')
+    VALENCE ERROR
+    >>> test('> 0')
+    VALENCE ERROR
+    >>> test('≠ 0')
+    VALENCE ERROR
+
+    >>> test('⍪ 0')
+    VALENCE ERROR
+    >>> test('⍷ 0')
+    VALENCE ERROR
+    >>> test('∩ 0')
+    VALENCE ERROR
+
+    >>> test('\\ 0')
+    VALENCE ERROR
+    >>> test('/ 0')
+    VALENCE ERROR
+    >>> test('⍀ 0')
+    VALENCE ERROR
+    >>> test('⌿ 0')
+    VALENCE ERROR
+
+    >>> test('⊤ 0')
+    VALENCE ERROR
+    >>> test('⊥ 0')
+    VALENCE ERROR
+"""
     try:
         cio = apl_cio()
         cio.printResult(evaluate(expr,cio))
@@ -341,9 +384,6 @@ def     monadic_reverse ():
 
 def     monadic_unique ():
     """
-    >>> test('∩ 0')
-    VALENCE ERROR
-
     >>> test('∪ 0')
     0
 

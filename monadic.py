@@ -270,30 +270,54 @@ _monadic_functions = {
 
     # Logical
     '~':        lambda B: s2s(_logical_negation,B),
+    '∨':        lambda B: apl_error("VALENCE ERROR"),
+    '∧':        lambda B: apl_error("VALENCE ERROR"),
+    '⍱':        lambda B: apl_error("VALENCE ERROR"),
+    '⍲':        lambda B: apl_error("VALENCE ERROR"),
+
+    # Comparison
+    '<':        lambda B: apl_error("VALENCE ERROR"),
+    '≤':        lambda B: apl_error("VALENCE ERROR"),
+    '=':        lambda B: apl_error("VALENCE ERROR"),
+    '≥':        lambda B: apl_error("VALENCE ERROR"),
+    '>':        lambda B: apl_error("VALENCE ERROR"),
+    '≠':        lambda B: apl_error("VALENCE ERROR"),
 
     # Structural (aka manipulative)
     '⍳':        lambda B: s2v(_range,B),
     '⍴':        lambda B: s_rho(None,B),
+    '≡':        to_be_implemented,      # depth - reports on nesting
+    '≢':        to_be_implemented,      # tally
     ',':        lambda B: s_comma(None,B),
+    '⍪':        lambda B: apl_error("VALENCE ERROR"),
     '⌽':        lambda B: v2v(_reverselast,B),
     '⊖':        lambda B: v2v(_reversefirst,B),
     '⍉':        lambda B: v2v(_transpose,B),
-    '≡':        to_be_implemented,      # depth - reports on nesting
     '∊':        to_be_implemented,      # enlist - ditto but also nested arrays
+    '⍷':        lambda B: apl_error("VALENCE ERROR"),
+    '⊃':        to_be_implemented,      # (disclose) - turn nested scalar into vector (?!?) - mix ?
     '⊂':        to_be_implemented,      # (enclose) - turn array into nested scalar (?!?)
-    '⊃':        to_be_implemented,      # (disclose) - the inverse
 
-    # Selection
+    # Selection and Set Operations
     '↑':        lambda B: v_head(_head,B),
     '↓':        lambda B: v_tail(_tail,B),
     '∪':        lambda B: v2v(_unique,B),
     '∩':        lambda B: apl_error("VALENCE ERROR"),
+    '\\':       lambda B: apl_error("VALENCE ERROR"),
+    '/':        lambda B: apl_error("VALENCE ERROR"),
+    '⍀':        lambda B: apl_error("VALENCE ERROR"),
+    '⌿':        lambda B: apl_error("VALENCE ERROR"),
 
 # Sort
     '⍋':        to_be_implemented,      # grade up (ascending sort indicies)
     '⍒':        to_be_implemented,      # grade down (descending sort indicies)
 
 # Miscellaneous
+    '⊣':        to_be_implemented,      # stop - discards argument and always return zilde
+    '⊢':        to_be_implemented,      # pass - passes argument along (beware printing)
+    '⊤':        lambda B: apl_error("VALENCE ERROR"),
+    '⊥':        lambda B: apl_error("VALENCE ERROR"),
+    '⌷':        to_be_implemented,      # materialise
     '⍕':        to_be_implemented,      # monadic format
     '⍎':        to_be_implemented,      # execute
     };

@@ -580,16 +580,17 @@ _dyadic_functions = {
     '>':        lambda A,B: ss2s(_gt,A,B,True),
     '≠':        lambda A,B: ss2s(_ne,A,B,False),
     '≡':        to_be_implemented,      # match (return 0/1 irrespective of rank etc)
+    '≢':        to_be_implemented,      # not match
 
     # Structural (aka manipulative)
     '⍴':        lambda A,B: sv_rho(_reshape,A,B),
     ',':        lambda A,B: vv_comma(_concatenation,A,B),
+    '⍪':        lambda A,B: vv_comma(_concatenation,A,B),
     '⌽':        lambda A,B: sv2vr(_rotatelast,A,B),
     '⊖':        lambda A,B: sv2vr(_rotatefirst,A,B),
     '⍉':        lambda A,B: sv_transpose(_transpose,A,B),
-    '⍪':        to_be_implemented,      # concatentate / latimate first
-    '⊂':        to_be_implemented,      # partitioned (enclose) - creates an array of vectors (?!?)
     '⊃':        to_be_implemented,      # pick (disclose) = picks from an array (?!?)
+    '⊂':        to_be_implemented,      # partitioned enclose - creates an array of vectors (?!?)
 
     # Selection and Set Operations
     '~':        lambda A,B: vv2v(_without,A,B),
@@ -598,17 +599,16 @@ _dyadic_functions = {
     '↓':        lambda A,B: sv2vl(_drop,A,B),
     '∪':        lambda A,B: vv2v(_union,A,B),
     '∩':        lambda A,B: vv2v(_intersection,A,B),
-    '\\':       to_be_implemented,      # scan
-    '/':        to_be_implemented,      # replicate / compress
-    '⍀':        to_be_implemented,      # scan first
-    '⌿':        to_be_implemented,      # replicate / compress first
+    '\\':       to_be_implemented,      # expand (last axis)
+    '/':        to_be_implemented,      # compress (last axis)
+    '⍀':        to_be_implemented,      # expand first axis
+    '⌿':        to_be_implemented,      # compress first axis
     '⌷':        to_be_implemented,      # index
-    '⊣':        to_be_implemented,      # left (?)
-    '⊢':        to_be_implemented,      # right (?)
+    '⊣':        to_be_implemented,      # left (discard right hand argument)
+    '⊢':        to_be_implemented,      # right (discard left hand argument)
 
 # Search
-    '∈':        to_be_implemented,      # membership ... same as ?
-    '∊':        to_be_implemented,      # membership - is A in B (also characters) - return a boolean
+    '∊':        to_be_implemented,      # membership - is A in B (also characters) - returns a boolean
     '⍷':        to_be_implemented,      # find (look for a substring)
 
 # Sorting
@@ -621,6 +621,7 @@ _dyadic_functions = {
 
 # Formatting
     '⍕':        to_be_implemented,      # Format data for display
+    '⍎':        to_be_implemented,      # dyadic execute
     '⍺':        to_be_implemented,      # Use picture to format data for display
 };
 
