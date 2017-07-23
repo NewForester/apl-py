@@ -19,7 +19,7 @@ import mpmath
 
 from system_vars import integerCT, confirm_int, indexOrigin
 
-from apl_quantity import s2s, s2v, s_rho, s_comma, v2s, v2v
+from apl_quantity import s2s, s2v, s_rho, s_comma, v_head, v_tail, v2v
 from apl_error import apl_error
 
 # ------------------------------
@@ -174,11 +174,19 @@ def     _range (B):
 
 # ------------------------------
 
-def     _take (B):
+def     _head (B):
     """
     return the first element of B
     """
     return B[0]
+
+# ------------------------------
+
+def     _tail (B):
+    """
+    return everything but the first element of B
+    """
+    return B[1:]
 
 # ------------------------------
 
@@ -276,8 +284,8 @@ _monadic_functions = {
     '⊃':        to_be_implemented,      # (disclose) - the inverse
 
     # Selection
-    '↑':        lambda B: v2s(_take,B),
-    '↓':        lambda B: apl_error("VALENCE ERROR"),
+    '↑':        lambda B: v_head(_head,B),
+    '↓':        lambda B: v_tail(_tail,B),
     '∪':        lambda B: v2v(_unique,B),
     '∩':        lambda B: apl_error("VALENCE ERROR"),
 

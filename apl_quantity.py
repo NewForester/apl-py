@@ -194,11 +194,35 @@ def s2v (Fn,B):
 
 # ------------------------------
 
-def v2s (Fn,B):
+def v_head (Fn,B):
     """
     evaluate a numeric function that, given a vector argument, returns a scalar
     """
-    return APL_quantity(Fn(B.vectorToPy()),None)
+    if B.isScalar():
+        return APL_quantity(Fn(B.scalarToPy()),None,B.isString())
+
+    # assert B.isVector()
+
+    if B.dimension() < 1:
+        return APL_quantity([],0,B.isString())
+    else:
+        return APL_quantity(Fn(B.vectorToPy()),None,B.isString())
+
+# ------------------------------
+
+def v_tail (Fn,B):
+    """
+    evaluate a function that, given a vector argument, returns a vector (probably)
+    """
+    if B.isScalar():
+        return APL_quantity([],0,B.isString())
+
+    # assert B.isVector()
+
+    if B.dimension() <= 1:
+        return APL_quantity([],0,B.isString())
+
+    return APL_quantity(Fn(B.vectorToPy()),B.dimension()-1,B.isString())
 
 # ------------------------------
 

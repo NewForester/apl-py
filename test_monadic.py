@@ -306,11 +306,11 @@ def     monadic_comma ():
 def     monadic_drop_take ():
     """
     >>> test('↓ 1 2 3')
-    VALENCE ERROR
+    2 3
     >>> test('↓ 0.1 0.2 0.3')
-    VALENCE ERROR
+    0.2 0.3
     >>> test('↓ ¯1 ¯2 ¯3')
-    VALENCE ERROR
+    ¯2 ¯3
 
     >>> test('↑ 1 2 3')
     1

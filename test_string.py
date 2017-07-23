@@ -306,6 +306,15 @@ def     test_drop_take ():
     abcdef
     >>> test_string('(9 ↑ "abcdef"), "!"')
     abcdef   !
+
+    >>> test_string('↓ ""')
+    <BLANKLINE>
+    >>> test_string('↑ ""')
+    <BLANKLINE>
+    >>> test_string('1 ↑ "Hello"')
+    H
+    >>> test_string('↑ "Hello"')
+    H
     """
     pass
 
