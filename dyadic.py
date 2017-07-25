@@ -19,7 +19,7 @@ import mpmath
 
 from system_vars import confirm_bool, confirm_int, equalCT, integerCT, indexOrigin
 
-from apl_quantity import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s, sv2vr, sv2vl, sv_transpose
+from apl_quantity import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s, sv2vr, sv2vl, sv_transpose, ce2v
 from apl_error import apl_error
 
 # ------------------------------
@@ -536,6 +536,81 @@ def     _transpose (A,B):
 
 # ------------------------------
 
+def     _compress (A,B,pad):
+    """
+    compress/replicate B using A as the template
+    """
+
+    R = []
+
+    I = B.__iter__()
+
+    try:
+        for X in A:
+            X = confirm_int(X)
+
+            V = I.__next__()
+
+            if X > 0:
+                for Y in range(X):
+                    R.append(V)
+            elif X < 0:
+                for Y in range(-X):
+                    R.append(pad)
+            else:
+                pass
+
+    except StopIteration:
+        if len(B) != 0:
+            apl_error ("LENGTH ERROR")
+
+    try:
+        V = I.__next__()
+    except StopIteration:
+        pass
+    else:
+        apl_error ("LENGTH ERROR")
+
+    return R
+
+# ------------------------------
+
+def     _expand (A,B,pad):
+    """
+    expand B using A as the template
+    """
+    R = []
+
+    I = B.__iter__()
+
+    try:
+        for X in A:
+            X = confirm_int(X)
+
+            if X > 0:
+                V = I.__next__()
+                for Y in range(X):
+                    R.append(V)
+            elif X < 0:
+                for Y in range(-X):
+                    R.append(pad)
+            else:
+                R.append(pad)
+
+    except StopIteration:
+        apl_error ("LENGTH ERROR")
+
+    try:
+        V = I.__next__()
+    except StopIteration:
+        pass
+    else:
+        apl_error ("LENGTH ERROR")
+
+    return R
+
+# ------------------------------
+
 def     to_be_implemented (A,B):
     """
     placeholder for functions not yet implemented
@@ -599,10 +674,10 @@ _dyadic_functions = {
     '↓':        lambda A,B: sv2vl(_drop,A,B),
     '∪':        lambda A,B: vv2v(_union,A,B),
     '∩':        lambda A,B: vv2v(_intersection,A,B),
-    '\\':       to_be_implemented,      # expand (last axis)
-    '/':        to_be_implemented,      # compress (last axis)
-    '⍀':        to_be_implemented,      # expand first axis
-    '⌿':        to_be_implemented,      # compress first axis
+    '/':        lambda A,B: ce2v(_compress,A,B),
+    '⌿':        lambda A,B: ce2v(_compress,A,B),
+    '\\':       lambda A,B: ce2v(_expand,A,B),
+    '⍀':        lambda A,B: ce2v(_expand,A,B),
     '⌷':        to_be_implemented,      # index
     '⊣':        to_be_implemented,      # left (discard right hand argument)
     '⊢':        to_be_implemented,      # right (discard left hand argument)

@@ -359,6 +359,26 @@ def     transpose ():
     """
     pass
 
+# --------------
+
+def     compress_expand ():
+    """
+    >>> test_string('1 0 1 / "ABC"')
+    AC
+    >>> test_string('1 2 3 / "ABC"')
+    ABBCCC
+    >>> test_string('1 ¯2 3 / "ABC"')
+    A  CCC
+
+    >>> test_string('1 0 1 0 1 \ "ABC"')
+    A B C
+    >>> test_string('1 0 2 0 3 \ "ABC"')
+    A BB CCC
+    >>> test_string('¯1 1 ¯2 1 ¯3 1 \ "ABC"')
+     A  B   C
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

@@ -401,4 +401,21 @@ def sv2vl (Fn,A,B):
     else:
         return APL_quantity(Rpy,len(Rpy),B.isString())
 
+# ------------------------------
+
+def ce2v (Fn,A,B):
+    """
+    compress or expand a vector yielding another
+    """
+    A.noStringConfirm()
+
+    if B.isString():
+        Rpy = Fn(A.vectorToPy(),B.vectorToPy(),' ')
+
+        return APL_quantity(Rpy,len(Rpy),True)
+    else:
+        Rpy = Fn(A.vectorToPy(),B.vectorToPy(),0)
+
+        return APL_quantity(Rpy,len(Rpy),False)
+
 # EOF

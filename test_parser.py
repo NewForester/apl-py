@@ -141,6 +141,12 @@ def     test_zilde (expr):
     0
     >>> test('⍴ ⍉ ,1')
     1
+    >>> test('0 0 0 / 1 2 3')
+    ⍬
+    >>> test('⍴ 0 / ⍬')
+    0
+    >>> test('⍴ 0 \ ⍬')
+    1
     """
     pass
 
