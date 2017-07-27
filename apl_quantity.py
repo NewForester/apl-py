@@ -418,4 +418,68 @@ def ce2v (Fn,A,B):
 
         return APL_quantity(Rpy,len(Rpy),False)
 
+# ------------------------------
+
+def vv_match (Fn,A,B,noMatch):
+    R = 0
+
+    if A.isString() != B.isString():
+        R = False
+
+    elif A.dimension() != B.dimension():
+        R = False
+
+    elif A.isScalar():
+        R = A.scalarToPy() == B.scalarToPy()
+
+    elif A.isVector():
+        R =  not next(filter(None,ss2s(Fn,A,B,False)), False)
+
+    else:
+        apl_error ("RANK ERROR")
+
+    return APL_quantity(int(R ^ noMatch),None)
+
+# ------------------------------
+
+def v_nest (B):
+    R = 0
+
+    if B.isScalar():
+        R = 0
+
+    elif B.isString():
+        R = 1
+
+    elif B.isVector():
+        R = 1
+        for X in B:
+            if isinstance(X,APL_quantity):
+                R = 2
+                break
+
+    else:
+        apl_error ("RANK ERROR")
+
+    return APL_quantity(R,None)
+
+# ------------------------------
+
+def v_tally (B):
+    R = 0
+
+    if B.isScalar():
+        R = 1
+
+    elif B.isString():
+        R = B.dimension()
+
+    elif B.isVector():
+        R = B.dimension()
+
+    else:
+        apl_error ("RANK ERROR")
+
+    return APL_quantity(R,None)
+
 # EOF

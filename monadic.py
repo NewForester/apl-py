@@ -19,7 +19,7 @@ import mpmath
 
 from system_vars import integerCT, confirm_int, indexOrigin
 
-from apl_quantity import s2s, s2v, s_rho, s_comma, v_head, v_tail, v2v
+from apl_quantity import s2s, s2v, s_rho, s_comma, v_head, v_tail, v2v, v_nest, v_tally
 from apl_error import apl_error
 
 # ------------------------------
@@ -286,8 +286,8 @@ _monadic_functions = {
     # Structural (aka manipulative)
     '⍳':        lambda B: s2v(_range,B),
     '⍴':        lambda B: s_rho(None,B),
-    '≡':        to_be_implemented,      # depth - reports on nesting
-    '≢':        to_be_implemented,      # tally
+    '≡':        lambda B: v_nest(B),
+    '≢':        lambda B: v_tally(B),
     ',':        lambda B: s_comma(None,B),
     '⍪':        lambda B: apl_error("VALENCE ERROR"),
     '⌽':        lambda B: v2v(_reverselast,B),

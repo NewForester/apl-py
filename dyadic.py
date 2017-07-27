@@ -19,7 +19,8 @@ import mpmath
 
 from system_vars import confirm_bool, confirm_int, equalCT, integerCT, indexOrigin
 
-from apl_quantity import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s, sv2vr, sv2vl, sv_transpose, ce2v
+from apl_quantity import APL_quantity as apl_quantity
+from apl_quantity import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s, sv2vr, sv2vl, sv_transpose, ce2v, vv_match
 from apl_error import apl_error
 
 # ------------------------------
@@ -366,6 +367,9 @@ def     _ne (A,B):
     if type(A) is int and type(B) is int:
         return int(operator.ne(A,B))
 
+    if isinstance(A,apl_quantity) or isinstance(B,apl_quantity):
+        return True
+
     return int(not equalCT(A,B))
 
 # ------------------------------
@@ -654,8 +658,8 @@ _dyadic_functions = {
     '≥':        lambda A,B: ss2s(_ge,A,B,True),
     '>':        lambda A,B: ss2s(_gt,A,B,True),
     '≠':        lambda A,B: ss2s(_ne,A,B,False),
-    '≡':        to_be_implemented,      # match (return 0/1 irrespective of rank etc)
-    '≢':        to_be_implemented,      # not match
+    '≡':        lambda A,B: vv_match(_ne,A,B,False),
+    '≢':        lambda A,B: vv_match(_ne,A,B,True),
 
     # Structural (aka manipulative)
     '⍴':        lambda A,B: sv_rho(_reshape,A,B),

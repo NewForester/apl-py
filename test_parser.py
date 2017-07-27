@@ -147,6 +147,10 @@ def     test_zilde (expr):
     0
     >>> test('⍴ 0 \ ⍬')
     1
+    >>> test('⍬ ≡ ⍳ 0')
+    1
+    >>> test('⍬ ≡ 0 ⍴ ⍳ 3')
+    1
     """
     pass
 

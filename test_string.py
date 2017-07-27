@@ -168,9 +168,6 @@ def     test_dyadic_arithmetic (expr):
     LENGTH ERROR
     >>> test_string("'Hello' ≠ 'Goodbye'")
     LENGTH ERROR
-
-    >>> test_string("1 ≡ 'Hello'")
-    FUNCTION NOT YET IMPLEMENTED
     """
     pass
 
@@ -376,6 +373,42 @@ def     compress_expand ():
     A BB CCC
     >>> test_string('¯1 1 ¯2 1 ¯3 1 \ "ABC"')
      A  B   C
+    """
+    pass
+
+# --------------
+
+def     depth_tally ():
+    """
+    >>> test_string('≡ "Hello"')
+    1
+
+    >>> test_string('≡ 1 "Hello" 3')
+    2
+
+    >>> test_string('≢ "Hello"')
+    5
+
+    >>> test_string('≢ 1 "Hello" 3')
+    3
+    """
+    pass
+
+# --------------
+
+def     match_unmatch ():
+    """
+    >>> test_string('"Hello" ≡ "H", "ello"')
+    1
+
+    >>> test_string('"Hello" ≡ "Hello"')
+    1
+
+    !>>> test_string('(1 "Hello" 3) ≡ 1 "Jello" 3')
+    0
+
+    !>>> test_string('(1 "Hello" 3) ≡ 1 "Hello" 3')
+    1
     """
     pass
 
