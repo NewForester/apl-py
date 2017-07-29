@@ -482,4 +482,36 @@ def v_tally (B):
 
     return APL_quantity(R,None)
 
+# ------------------------------
+
+def     vs2v_encode (Fn,A,B):
+    """
+    encode B to base A
+    """
+    A.noStringConfirm()
+    B.noStringConfirm()
+
+    Rpy = Fn(A.vectorToPy(),B.scalarToPy())
+
+    if A.isScalar():
+        return APL_quantity(Rpy[0],None,False)
+    else:
+        return APL_quantity(Rpy,A.dimension(),False)
+
+# ------------------------------
+
+def     vv2s_decode (Fn,A,B):
+    """
+    decode B from base A
+    """
+    A.noStringConfirm()
+    B.noStringConfirm()
+
+    if A.isScalar():
+        Rpy = Fn(iter(A),B.vectorToPy())
+    else:
+        Rpy = Fn(A.vectorToPy()[-B.dimension():],B.vectorToPy())
+
+    return APL_quantity(Rpy,None,False)
+
 # EOF

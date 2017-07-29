@@ -20,7 +20,8 @@ import mpmath
 from system_vars import confirm_bool, confirm_int, equalCT, integerCT, indexOrigin
 
 from apl_quantity import APL_quantity as apl_quantity
-from apl_quantity import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s, sv2vr, sv2vl, sv_transpose, ce2v, vv_match
+from apl_quantity import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s, sv2vr, sv2vl, sv_transpose, ce2v, vv_match, vv2s_decode, vs2v_encode
+
 from apl_error import apl_error
 
 # ------------------------------
@@ -615,6 +616,43 @@ def     _expand (A,B,pad):
 
 # ------------------------------
 
+def     _encode (A,B):
+    """
+    encode (scalar) B using (vector) A as base
+    """
+    V = []
+
+    for X in reversed(A):
+        if X != 0:
+            M = operator.mod(B,X)
+            V = [M] + V
+            B = operator.floordiv(B,X)
+        else:
+            V = [B] + V
+            B = 0
+
+    return V
+
+# ------------------------------
+
+def     _decode (A,B):
+    """
+    decode (vector) B using (vector) A as base
+    """
+    S = 0
+
+    I = B.__iter__()
+
+    try:
+        for X in A:
+            S = S * X + next(I)
+    except StopIteration:
+        pass
+
+    return S
+
+# ------------------------------
+
 def     to_be_implemented (A,B):
     """
     placeholder for functions not yet implemented
@@ -694,9 +732,9 @@ _dyadic_functions = {
     '⍋':        to_be_implemented,      # Sort ascending with specified collating sequence
     '⍒':        to_be_implemented,      # Sort descending with specified collating sequence
 
-# Encode/decode
-    '⊤':        to_be_implemented,      # (encode) Convert to a new number system
-    '⊥':        to_be_implemented,      # (decode) Convert back to units
+    # Encode/decode
+    '⊤':        lambda A,B: vs2v_encode(_encode,A,B),
+    '⊥':        lambda A,B: vv2s_decode(_decode,A,B),
 
 # Formatting
     '⍕':        to_be_implemented,      # Format data for display

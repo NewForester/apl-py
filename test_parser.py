@@ -151,6 +151,14 @@ def     test_zilde (expr):
     1
     >>> test('⍬ ≡ 0 ⍴ ⍳ 3')
     1
+    >>> test('⍬ ⊤ 17')
+    ⍬
+    >>> test('16 16 ⊤ ⍬')
+    RANK ERROR
+    >>> test('⍬ ⊥ 1 1')
+    0
+    >>> test('16 16 ⊥ ⍬')
+    0
     """
     pass
 

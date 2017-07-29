@@ -412,6 +412,21 @@ def     match_unmatch ():
     """
     pass
 
+# --------------
+
+def     encode_decode ():
+    """
+    >>> test_string('"Hello" ⊤ 17')
+    DOMAIN ERROR
+    >>> test_string('16 16 ⊤ "Hello"')
+    DOMAIN ERROR
+    >>> test_string('"Hello" ⊥ 1 1')
+    DOMAIN ERROR
+    >>> test_string('16 16 ⊥ "Hello"')
+    DOMAIN ERROR
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":
