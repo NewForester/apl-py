@@ -19,7 +19,7 @@ import mpmath
 
 from system_vars import integerCT, confirm_int, indexOrigin
 
-from apl_quantity import s2s, s2v, s_rho, s_comma, v_head, v_tail, v2v, v_nest, v_tally
+from apl_quantity import APL_quantity as apl_quantity, s2s, s2v, s_rho, s_comma, v_head, v_tail, v2v, v_nest, v_tally
 from apl_error import apl_error
 
 # ------------------------------
@@ -312,9 +312,9 @@ _monadic_functions = {
     '⍋':        to_be_implemented,      # grade up (ascending sort indicies)
     '⍒':        to_be_implemented,      # grade down (descending sort indicies)
 
-# Miscellaneous
-    '⊣':        to_be_implemented,      # stop - discards argument and always return zilde
-    '⊢':        to_be_implemented,      # pass - passes argument along (beware printing)
+    # Miscellaneous
+    '⊣':        lambda B: apl_quantity(0,None),
+    '⊢':        lambda B: B,
     '⊤':        lambda B: apl_error("VALENCE ERROR"),
     '⊥':        lambda B: apl_error("VALENCE ERROR"),
     '⌷':        to_be_implemented,      # materialise

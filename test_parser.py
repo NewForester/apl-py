@@ -268,6 +268,22 @@ def     test_parentheses (expr):
 
 # ------------------------------
 
+def     test_tacks (expr):
+    """
+    >>> test('⊣ 2')
+    0
+    >>> test('⊢ 2')
+    2
+
+    >>> test('6 ⊣ 2')
+    6
+    >>> test('6 ⊢ 2')
+    2
+    """
+    pass
+
+# ------------------------------
+
 def     test_output (expr):
     """
     >>> test_output('"Hello" ⍝ end of line comments are ignored')

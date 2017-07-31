@@ -721,8 +721,6 @@ _dyadic_functions = {
     '\\':       lambda A,B: ce2v(_expand,A,B),
     '⍀':        lambda A,B: ce2v(_expand,A,B),
     '⌷':        to_be_implemented,      # index
-    '⊣':        to_be_implemented,      # left (discard right hand argument)
-    '⊢':        to_be_implemented,      # right (discard left hand argument)
 
 # Search
     '∊':        to_be_implemented,      # membership - is A in B (also characters) - returns a boolean
@@ -740,7 +738,11 @@ _dyadic_functions = {
     '⍕':        to_be_implemented,      # Format data for display
     '⍎':        to_be_implemented,      # dyadic execute
     '⍺':        to_be_implemented,      # Use picture to format data for display
-};
+
+    # Miscellaneous
+    '⊣':        lambda A,B: A,
+    '⊢':        lambda A,B: B,
+    };
 
 # ------------------------------
 
