@@ -3,7 +3,6 @@
       
       S←⍞
 Hello
-□Hello
       S
 □Hello
       ⍞
@@ -38,7 +37,6 @@ Heather
 □What day is it ? 
       Day ← ⍞
 Wednesday
-□Wednesday
       Day
 □Wednesday
       
