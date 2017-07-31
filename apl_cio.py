@@ -3,26 +3,22 @@
 
     UNDER DEVELOPMENT
 
-    This is the ninth step of the transition.
+    The classes in this module handle most of the complexity of `console i/o'.
 
-    This step introduces the APL_fio class - a wrapper for a Python file handle.
-
-    It also represents the first attempt to document the mess.
+    The complexity arises from the decision to implement logging and scripting
+    in apl-py as well as the definition of APL's ⎕ and ⍞ functions.
 """
 """
-    The classes declared in this module handle most of the complexities of
-    `console i/o'.  The complexity arises partly from the decision to implement
-    logging/scripting capabilities in apl-py and partly from the definition of
-    APL's ⎕ and ⍞ functions.
+    The behaviour is 'encapsulated' in a single object of type APL_cio passed
+    up, as well as down, the recursive call tree that is the parser implemented
+    in evaluate.py.
 
-    The behaviour is 'encapsulated' in a single object of type APL_cio that is
-    passed up as well as down the recursive call tree in the parser implemented
-    in evaluate.py.  The flags passed to apl-py on invocation determine the
-    initial (static) state of the object and other state variables are set and
-    cleared at different points in evaluate.py ('side-effects').
+    The flags passed to apl-py on invocation determine the initial and largely
+    static state of the object and other state variables are set and reset at
+    different points in evaluate.py ('side-effects').
 
-    The object is passed to system_cmds.py to determine whether or not to print
-    messages such "Bye bye" as part of processing the )OFF command.
+    The object is passed to system_cmds.py but solely to determine whether or
+    not to print messages such "Bye bye" as part of the )OFF command.
 
     The ⎕ input operator involves invoking the parser from the top-level.  The
     APL_cio object is cloned and the clone passed to this second 'instance' of
@@ -35,12 +31,12 @@
         - out - ⎕← and ⍞← explicit prompts and results
         - in - ⎕ and ⍞ data and responses in
 
-    For normal interactive use, these degenerate into sysin and sysout.
+    For normal interactive use, these default to sysin and sysout.
 
     These six streams are represented by members of the APL_cio object that are
-    represented by objects of class APL_fio.  Output is an 'and' - potentially
+    themselves objects of class APL_fio.  Output is an 'and' - potentially
     sysout and logFile and outFile while input is an 'or' - either scriptFile
-    or inFile, if defined, otherwise sysin.
+    or inFile, if defined, or sysin otherwise.
 
     The main complication on input streams is ensuring input and prompts are
     echoed to output streams appropriately.  The main complication for output
@@ -50,8 +46,7 @@
     The complications for dealing with edge cases that arise with ⎕ and ⍞ are
     less straight forward (aka ugly and not easy to 'reason about').
 
-    It seems that most, if not all, of the complications arise from the need to
-    support lines of the form:
+    It seems most arise from the need to support lines of the form:
 
         ⍞← "What is your name ? " ⋄ NAME ←⍞
 
@@ -75,36 +70,37 @@
 
         ⎕← A
 
-    prints the value of A once, not twice.  It would seem sensible in such
-    circumstances to print the explicit, intermediary result and suppress
-    the printing of the final result but the opposite has been implemented.
-    Look for the hushExplicit and explicitPending.
+    prints the value of A once, not twice.  The explicit, intermediary result
+    is printed and the printing of the final result is suppressed.  Look for
+    the hushImplicit flag.
 
-    This may have been the inferior choice.  The choice was made in order to
-    handle a further complication.  The ⍞← operator prints without a new line
-    but the interpreter has to ensure newlines are printed between each line of
-    of input.  See the newline (and newlinePending) flags.
+    The final result is also not printed when the left hand end of the
+    expression is an assignment or the stop function:
+
+        A← 1
+        ⊣ 2
+
+    The ⍞← operator prints without a new line but the interpreter has to ensure
+    a new line is printed at the end of the final result before printing the
+    prompt for the next line of input.  See the endOfLine member variable.
 
     The final Byzantine element in all this is userPromptLength.  The width of
     "What is your name ? " is remembered and NAME is prefixed with a string of
     this length.  Some implementations prefix the prompt, others prefix spaces.
-    This implementation prefixes spaces.
+    The apl-py implementation prefixes spaces.
 
     The need to support userPromptLength forces state to be carried forward
     between expressions on the same line.  It was the straw that led the camel
     to implement APL_cio.
 """
 """
-    The current implementation is stable but fragile.  One of the reasons may
-    be in the names:
+    The current implementation is stable and less fragile that its predecessor.
+    One of the reasons may be in the names:
 
-        prefixDone and userPromptLength record past state ('what has happened')
+        endOfLine, prefixDone, userPromptLength, newStmt record current state
+        ('what has happened')
 
-        newline, explicitPending, hushExplicit, hushImplicit record future
-        state ('what must be done')
-
-    Changing the state variable to record what has happened may yield a more
-    reasonable implementation.
+        hushImplicit records future state ('what must be done')
 """
 
 import sys, readline, traceback
@@ -165,7 +161,6 @@ class   APL_cio (object):
         self.prompt = prompt
         self.prefix = prefix
         self.silent = False
-        self.reset()
         self.scriptFile = APL_fio("r")
         self.inFile = APL_fio("r")
         self.outFile = APL_fio("w")
@@ -176,14 +171,17 @@ class   APL_cio (object):
         if not sys.stdin.isatty():
             self.sysin.path = "<stdin>"
             self.sysin.handle = sys.stdin
+        self.startNewLine()
 
-    def reset (self):
-        self.newline = True
+    def startNewLine(self):
+        self.endOfLine = '\n'
         self.prefixDone = False
-        self.explicitPending = False
-        self.hushExplicit = True
-        self.hushImplicit = False
         self.userPromptLength = 0
+        self.startNewStmt()
+
+    def startNewStmt(self):
+        self.newStmt = True;
+        self.hushImplicit = self.silent
 
     def __enter__(self):
         return self
@@ -205,29 +203,30 @@ class   APL_cio (object):
     def printThis (self,value,end=None):
         self.printStreams((self.sysout,self.logFile),value,end)
 
-    def printNewline (self):
-        if self.outFile.handle is not None:
-            self.printStreams((self.outFile,),"")
-        elif self.silent:
-            self.printThis("")
+    def printEndOfLine (self):
+        if self.endOfLine != '\n':
+            if self.hushImplicit:
+                self.printStreams((self.sysout,self.logFile,self.outFile),"")
+            else:
+                self.printStreams((self.outFile,),"")
 
     def printImplicit (self,value):
-        if self.hushImplicit:
-            self.hushImplicit = False
-        elif value is not None and not self.silent:
+        if value is not None and not self.hushImplicit:
             if not self.prefixDone:
                 self.printThis(self.prefix,end="")
                 self.prefixDone = True
 
-            self.printThis(value.resolve(),end='\n' if self.newline else '')
+            self.printThis(value.resolve())
+            self.endOfLine = '\n'
 
-    def printExplicit (self,value):
+    def printExplicit (self,value,end='\n'):
         if value is not None:
             if not self.prefixDone and not self.silent:
                 self.printThis(self.prefix,end="")
                 self.prefixDone = True
 
-            self.printStreams((self.sysout,self.logFile,self.outFile),value.resolve(),end='\n' if self.newline else '')
+            self.printStreams((self.sysout,self.logFile,self.outFile),value.resolve(),end=end)
+            self.endOfLine = end
 
     def _errorInFile (self,fio,expr):
         if self.silent:

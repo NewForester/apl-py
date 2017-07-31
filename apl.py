@@ -187,7 +187,7 @@ def     read_evaluate_print (cio):
     read lines from a tty or a file, evaluate them and print the results
     """
     while True:
-        cio.reset()
+        cio.startNewLine()
 
         try:
             line = cio.read(cio.scriptFile)
@@ -273,7 +273,7 @@ if __name__ == '__main__':
                 cio.prompt=""
                 cio.prefix=""
                 cio.silent=False
-                cio.reset()
+                cio.startNewLine()
                 line = ' '.join(args)
 
                 try:

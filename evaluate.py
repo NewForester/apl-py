@@ -61,6 +61,8 @@ def     evaluate_and_print (line,cio,hushLast=False):
     """
     evaluate and print possibly more than one expression
     """
+    cio.startNewStmt()
+
     pos = _findUnquoted(line,'⋄')
 
     if pos == -1:
@@ -68,15 +70,8 @@ def     evaluate_and_print (line,cio,hushLast=False):
         if expr:
             result = evaluate(expr,cio)
             if not hushLast:
-                newlinePending = not cio.newline
-                cio.newline = True
-
-                if cio.explicitPending:
-                    cio.printExplicit(result)
-                else:
-                    cio.printImplicit(result)
-                    if newlinePending:
-                        cio.printNewline()
+                cio.printEndOfLine()
+                cio.printImplicit(result)
 
             return result
 
@@ -84,12 +79,10 @@ def     evaluate_and_print (line,cio,hushLast=False):
         expr = line[:pos].lstrip()
         if expr:
             result = evaluate(expr,cio)
-            cio.explicitPending = False
             cio.printImplicit(result)
 
         line = line[pos + 1:].lstrip()
         if line:
-            cio.hushExplicit = True
             return evaluate_and_print(line,cio,hushLast)
 
 # ------------------------------
@@ -136,6 +129,8 @@ def     evaluate_name (expr,_,cio):
         if name:
             rhs_expr = expr[len(name):].lstrip()
             if rhs_expr and rhs_expr[0] == '←':
+                if cio.newStmt:
+                    cio.hushImplicit = True
                 rhs = evaluate(rhs_expr[1:].lstrip(),cio)
                 lhs = workspace_variable(name,rhs.resolve())
                 return (lhs, len(expr))
@@ -155,22 +150,20 @@ def     evaluate_input_output (expr,leader,cio):
     if texpr and texpr[0] == '←':
         # output operator
 
-        hush = cio.hushExplicit
-        cio.hushExplicit = False
+        if cio.newStmt:
+            cio.hushImplicit = True
 
         rhs = evaluate(texpr[1:],cio)
 
-        if leader == '⍞' and rhs.isString():
-            cio.userPromptLength = rhs.dimension()
-
-        cio.newline = leader == '⎕'
-
-        if hush and not cio.silent:
-            cio.explicitPending = True
-        elif leader == '⍞' and not rhs.isString() and rhs.isVector():
-            cio.printExplicit(make_vector([rhs]))
-        else:
+        if leader == '⎕':
             cio.printExplicit(rhs)
+        elif rhs.isString():
+            cio.userPromptLength = rhs.dimension()
+            cio.printExplicit(rhs,'')
+        elif rhs.isVector():
+            cio.printExplicit(make_vector([rhs]),'')
+        else:
+            cio.printExplicit(rhs,'')
 
         return (rhs, len(expr))
 
@@ -178,7 +171,7 @@ def     evaluate_input_output (expr,leader,cio):
         # input operator
 
         lcio = shallowcopy(cio)
-        lcio.reset()
+        lcio.startNewLine()
 
         if leader == '⍞':
             lcio.prompt = ""
@@ -189,8 +182,7 @@ def     evaluate_input_output (expr,leader,cio):
 
             value = make_vector(cio.userPromptLength * ' ' + expr,True)
 
-            cio.hushImplicit = cio.userPromptLength != 0
-            cio.newline = True
+            cio.endOfLine = '\n'
         else:
             lcio.prompt = "⎕:    "
             lcio.prefixDone = cio.prefixDone
@@ -345,12 +337,12 @@ def     parse (expr,cio):
             else:
                 lhs.append(value)
 
-            cio.hushExplicit = False
-
         if consumed == 0:
             break
         else:
             expr = expr[consumed:]
+
+        cio.newStmt = False
 
         if not expr or expr[0] != ' ':
             break
@@ -391,10 +383,14 @@ def     evaluate (expression,cio):
             return lhs
 
         if lhs is None:
+            if cio.newStmt and expr[0] == '⊣':
+                cio.hushImplicit = True
+            cio.newStmt = False
             function = monadic_function(expr)
             rhs = evaluate(expr[1:],cio)
             return function(rhs)
         else:
+            cio.newStmt = False
             function = dyadic_function(expr)
             rhs = evaluate(expr[1:],cio)
             return function(lhs,rhs)
