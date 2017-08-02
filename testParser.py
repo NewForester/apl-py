@@ -18,7 +18,7 @@
 """
 
 from evaluate import evaluate, evaluate_and_print
-0
+
 from apl_cio import APL_cio as apl_cio
 from apl_error import APL_exception as apl_exception
 
@@ -38,25 +38,25 @@ def     test(expr):
 
 def     parseNumber():
     """
-    >>> test('0')
+    >>> test(r"0")
     0
-    >>> test('¯1')
+    >>> test(r"¯1")
     ¯1
-    >>> test('3.142')
+    >>> test(r"3.142")
     3.142
-    >>> test('.5')
+    >>> test(r".5")
     0.5
-    >>> test('1e3')
+    >>> test(r"1e3")
     1000
-    >>> test('1E3')
+    >>> test(r"1E3")
     1000
-    >>> test('1e-3')
+    >>> test(r"1e-3")
     0.001
-    >>> test('1e+3')
+    >>> test(r"1e+3")
     1000
-    >>> test('1e¯3')
+    >>> test(r"1e¯3")
     0.001
-    >>> test('3.142e-0')
+    >>> test(r"3.142e-0")
     3.142
     """
     pass
@@ -65,30 +65,30 @@ def     parseNumber():
 
 def     parseName():
     """
-    >>> test('A')
+    >>> test(r"A")
     UNKNOWN VARIABLE
-    >>> test('A←2.5')
+    >>> test(r"A←2.5")
     2.5
-    >>> test('A')
+    >>> test(r"A")
     2.5
 
-    >>> test('Banana←3.5')
+    >>> test(r"Banana←3.5")
     3.5
-    >>> test('M27←4.5')
+    >>> test(r"M27←4.5")
     4.5
-    >>> test('27M←5.5')
+    >>> test(r"27M←5.5")
     INVALID TOKEN
 
-    >>> test('A')
+    >>> test(r"A")
     2.5
-    >>> test('A-1')
+    >>> test(r"A-1")
     1.5
-    >>> test('1-A')
+    >>> test(r"1-A")
     ¯1.5
-    >>> test('÷A')
+    >>> test(r"÷A")
     0.4
 
-    >>> test('name←"Heather"')
+    >>> test(r"name←'Heather'")
     Heather
     """
     pass
@@ -99,65 +99,65 @@ def     testZilde():
     """
     zilde - empty numeric vector
 
-    >>> test('⍬')
+    >>> test(r"⍬")
     ⍬
-    >>> test('⍴ ⍬')
+    >>> test(r"⍴ ⍬")
     0
-    >>> test('⍴ ⍳0')
+    >>> test(r"⍴ ⍳0")
     0
-    >>> test('⍴ 1 ~ 1')
+    >>> test(r"⍴ 1 ~ 1")
     0
-    >>> test('⍴ 1 2 3 ~ 1 2 3')
+    >>> test(r"⍴ 1 2 3 ~ 1 2 3")
     0
-    >>> test('⍴ ⍴0')
+    >>> test(r"⍴ ⍴0")
     0
-    >>> test('⍴ 0 ⍴ 1 2 3 4 5')
+    >>> test(r"⍴ 0 ⍴ 1 2 3 4 5")
     0
-    >>> test('⍴ 0 ↑ 1 2 3 4 5')
+    >>> test(r"⍴ 0 ↑ 1 2 3 4 5")
     0
-    >>> test('⍴ 10 ↓ 1 2 3 4 5')
+    >>> test(r"⍴ 10 ↓ 1 2 3 4 5")
     0
-    >>> test('↓ 1')
+    >>> test(r"↓ 1")
     ⍬
-    >>> test('↓ ,1')
+    >>> test(r"↓ ,1")
     ⍬
-    >>> test('↓ ⍬')
+    >>> test(r"↓ ⍬")
     ⍬
-    >>> test('⍴ ⌽ 1')
+    >>> test(r"⍴ ⌽ 1")
     ⍬
-    >>> test('⍴ ⊖ 1')
+    >>> test(r"⍴ ⊖ 1")
     ⍬
-    >>> test('⍴ 6 ⌽ 1')
+    >>> test(r"⍴ 6 ⌽ 1")
     ⍬
-    >>> test('⍴ 1 ∩ 1')
+    >>> test(r"⍴ 1 ∩ 1")
     1
-    >>> test('⍴ 6 ∩ 1')
+    >>> test(r"⍴ 6 ∩ 1")
     0
-    >>> test('⍴ 1 ∪ 1')
+    >>> test(r"⍴ 1 ∪ 1")
     1
-    >>> test('⍴ ⍉ 1')
+    >>> test(r"⍴ ⍉ 1")
     ⍬
-    >>> test('⍴ ⍉ ⍬')
+    >>> test(r"⍴ ⍉ ⍬")
     0
-    >>> test('⍴ ⍉ ,1')
+    >>> test(r"⍴ ⍉ ,1")
     1
-    >>> test('0 0 0 / 1 2 3')
+    >>> test(r"0 0 0 / 1 2 3")
     ⍬
-    >>> test('⍴ 0 / ⍬')
+    >>> test(r"⍴ 0 / ⍬")
     0
-    >>> test('⍴ 0 \ ⍬')
+    >>> test(r"⍴ 0 \\ ⍬")
     1
-    >>> test('⍬ ≡ ⍳ 0')
+    >>> test(r"⍬ ≡ ⍳ 0")
     1
-    >>> test('⍬ ≡ 0 ⍴ ⍳ 3')
+    >>> test(r"⍬ ≡ 0 ⍴ ⍳ 3")
     1
-    >>> test('⍬ ⊤ 17')
+    >>> test(r"⍬ ⊤ 17")
     ⍬
-    >>> test('16 16 ⊤ ⍬')
+    >>> test(r"16 16 ⊤ ⍬")
     RANK ERROR
-    >>> test('⍬ ⊥ 1 1')
+    >>> test(r"⍬ ⊥ 1 1")
     0
-    >>> test('16 16 ⊥ ⍬')
+    >>> test(r"16 16 ⊥ ⍬")
     0
     """
     pass
@@ -166,26 +166,26 @@ def     testZilde():
 
 def     parseScalar():
     """
-    >>> test('+2')
+    >>> test(r"+2")
     2
-    >>> test('-¯2')
+    >>> test(r"-¯2")
     2
-    >>> test('×2')
+    >>> test(r"×2")
     1
-    >>> test('÷2')
+    >>> test(r"÷2")
     0.5
-    >>> test('+-×÷2')
+    >>> test(r"+-×÷2")
     ¯1
 
-    >>> test('1 + 2')
+    >>> test(r"1 + 2")
     3
-    >>> test('1 - 2')
+    >>> test(r"1 - 2")
     ¯1
-    >>> test('1 × 2')
+    >>> test(r"1 × 2")
     2
-    >>> test('1 ÷ 2')
+    >>> test(r"1 ÷ 2")
     0.5
-    >>> test('1 + 2 - 3 ÷ 4')
+    >>> test(r"1 + 2 - 3 ÷ 4")
     2.25
     """
     pass
@@ -194,51 +194,51 @@ def     parseScalar():
 
 def     parseVector():
     """
-    >>> test('1 2 3')
+    >>> test(r"1 2 3")
     1 2 3
-    >>> test('¯1 ¯2 ¯3')
+    >>> test(r"¯1 ¯2 ¯3")
     ¯1 ¯2 ¯3
-    >>> test('0.5 (1.5+2.5) 3.5')
+    >>> test(r"0.5 (1.5+2.5) 3.5")
     0.5 4 3.5
-    >>> test('0.5 (1.5+2.5) 3.5')
+    >>> test(r"0.5 (1.5+2.5) 3.5")
     0.5 4 3.5
 
-    >>> test('1 2 3 4')
+    >>> test(r"1 2 3 4")
     1 2 3 4
-    >>> test('1 (2 3) 4')
+    >>> test(r"1 (2 3) 4")
     1 (2 3) 4
-    >>> test('(1 2 3) 4')
+    >>> test(r"(1 2 3) 4")
     (1 2 3) 4
-    >>> test('1 (2 3 4)')
+    >>> test(r"1 (2 3 4)")
     1 (2 3 4)
 
-    >>> test('1 2 + 3 4')
+    >>> test(r"1 2 + 3 4")
     4 6
-    >>> test('(1 2) + 3 4')
+    >>> test(r"(1 2) + 3 4")
     4 6
-    >>> test('1 2 + (3 4)')
+    >>> test(r"1 2 + (3 4)")
     4 6
-    >>> test('(1 2) + (3 4)')
+    >>> test(r"(1 2) + (3 4)")
     4 6
-    >>> test('1 (2 + 3) 4')
+    >>> test(r"1 (2 + 3) 4")
     1 5 4
-    >>> test('1 2 + 3')
+    >>> test(r"1 2 + 3")
     4 5
-    >>> test('1 + 2 3')
+    >>> test(r"1 + 2 3")
     3 4
 
-    >>> test('A ← 10')
+    >>> test(r"A ← 10")
     10
-    >>> test('1 A 3')
+    >>> test(r"1 A 3")
     1 10 3
-    >>> test('1 (A÷2) 3')
+    >>> test(r"1 (A÷2) 3")
     1 5 3
-    >>> test('1 ⎕IO 3')
+    >>> test(r"1 ⎕IO 3")
     1 1 3
 
-    >>> test('A ← 10 20')
+    >>> test(r"A ← 10 20")
     10 20
-    >>> test('1 A 3')
+    >>> test(r"1 A 3")
     1 (10 20) 3
     """
     pass
@@ -247,21 +247,21 @@ def     parseVector():
 
 def     parseParentheses():
     """
-    >>> test('(0)')
+    >>> test(r"(0)")
     0
-    >>> test('1 + 2 × 2 + 1')
+    >>> test(r"1 + 2 × 2 + 1")
     7
-    >>> test('(1 + 2) × (2 + 1)')
+    >>> test(r"(1 + 2) × (2 + 1)")
     9
-    >>> test('(1 + 2) × 2 + 1')
+    >>> test(r"(1 + 2) × 2 + 1")
     9
-    >>> test('1 - 2 - 3 - 4')
+    >>> test(r"1 - 2 - 3 - 4")
     ¯2
-    >>> test('((1 - 2) - 3) - 4')
+    >>> test(r"((1 - 2) - 3) - 4")
     ¯8
-    >>> test('1 - (2 - 3) - 4')
+    >>> test(r"1 - (2 - 3) - 4")
     6
-    >>> test('1 - (2 - 3 - 4')
+    >>> test(r"1 - (2 - 3 - 4")
     SYNTAX ERROR
     """
     pass
@@ -270,14 +270,14 @@ def     parseParentheses():
 
 def     parseTacks():
     """
-    >>> test('⊣ 2')
+    >>> test(r"⊣ 2")
     0
-    >>> test('⊢ 2')
+    >>> test(r"⊢ 2")
     2
 
-    >>> test('6 ⊣ 2')
+    >>> test(r"6 ⊣ 2")
     6
-    >>> test('6 ⊢ 2')
+    >>> test(r"6 ⊢ 2")
     2
     """
     pass
@@ -286,65 +286,65 @@ def     parseTacks():
 
 def     parseOutput(expr):
     """
-    >>> parseOutput('"Hello" ⍝ end of line comments are ignored')
+    >>> parseOutput(r"'Hello' ⍝ end of line comments are ignored")
     Hello
 
-    >>> parseOutput('"Hello ⍝ in a string is not a comment" ⍝ end of line comments are ignored')
+    >>> parseOutput(r"'Hello ⍝ in a string is not a comment' ⍝ end of line comments are ignored")
     Hello ⍝ in a string is not a comment
 
-    >>> parseOutput('"Hello" ⋄ "Paul"')
+    >>> parseOutput(r"'Hello' ⋄ 'Paul'")
     Hello
     Paul
-    >>> parseOutput('"Hello ⋄ Paul"')
+    >>> parseOutput(r"'Hello ⋄ Paul'")
     Hello ⋄ Paul
 
-    >>> parseOutput('1 + 2 ⋄ 3 + 4 ⋄ 5 + 6')
+    >>> parseOutput(r"1 + 2 ⋄ 3 + 4 ⋄ 5 + 6")
     3
     7
     11
-    >>> parseOutput('1 + 2 ⋄ 3 + 4 ⋄')
+    >>> parseOutput(r"1 + 2 ⋄ 3 + 4 ⋄")
     3
     7
-    >>> parseOutput('⋄ 3 + 4')
+    >>> parseOutput(r"⋄ 3 + 4")
     7
 
-    >>> parseOutput('⎕ ← 1 + 2')
+    >>> parseOutput(r"⎕ ← 1 + 2")
     3
-    >>> parseOutput('⍞ ← 1 + 2')
+    >>> parseOutput(r"⍞ ← 1 + 2")
     3
 
-    >>> parseOutput('6 + ⎕ ← 1 + 2')
+    >>> parseOutput(r"6 + ⎕ ← 1 + 2")
     3
     9
-    >>> parseOutput('6 + ⍞ ← 1 + 2')
+    >>> parseOutput(r"6 + ⍞ ← 1 + 2")
     39
 
-    >>> parseOutput('⎕ ← "Hello" ⋄ "Paul"')
+    >>> parseOutput(r"⎕ ← 'Hello' ⋄ 'Paul'")
     Hello
     Paul
-    >>> parseOutput('⍞ ← "Hello " ⋄ "Paul"')
+    >>> parseOutput(r"⍞ ← 'Hello ' ⋄ 'Paul'")
     Hello Paul
 
-    >>> parseOutput('1 + 2 ⋄ ⎕ ← 3 + 4 ⋄ 5 + 6')
+    >>> parseOutput(r"1 + 2 ⋄ ⎕ ← 3 + 4 ⋄ 5 + 6")
     3
     7
     11
-    >>> parseOutput('1 + 2 ⋄ ⍞ ← 3 + 4 ⋄ 5 + 6')
+    >>> parseOutput(r"1 + 2 ⋄ ⍞ ← 3 + 4 ⋄ 5 + 6")
     3
     711
 
-    >>> parseOutput('1 2 3')
+    >>> parseOutput(r"1 2 3")
     1 2 3
-    >>> parseOutput('1 ⎕ ← 2 3')
+    >>> parseOutput(r"1 ⎕ ← 2 3")
     2 3
     1 (2 3)
-    >>> parseOutput('"Hello" 2 3')
+    >>> parseOutput(r"'Hello' 2 3")
     'Hello' 2 3
-    >>> parseOutput('"Hello" ⎕ ← 2 3')
+    >>> parseOutput(r"'Hello' ⎕ ← 2 3")
     2 3
     'Hello' (2 3)
 
-    >>> parseOutput('1 ⍞ ← 2 3')
+    >>> parseOutput(r"1 ⍞ ← 2 3")
     (2 3)1 (2 3)
     """
     try:
@@ -357,24 +357,24 @@ def     parseOutput(expr):
 
 def     systemVariable(expr):
     """
-    >>> systemVariable('⎕dummy')
+    >>> systemVariable(r"⎕dummy")
     UNKNOWN SYSTEM VARIABLE
 
-    >>> systemVariable('⎕IO')
+    >>> systemVariable(r"⎕IO")
     1
-    >>> systemVariable('⎕Io←0')
+    >>> systemVariable(r"⎕Io←0")
     0
-    >>> systemVariable('⎕io')
+    >>> systemVariable(r"⎕io")
     0
-    >>> systemVariable('⎕iO←0')
+    >>> systemVariable(r"⎕iO←0")
     0
-    >>> systemVariable('⎕IO←2')
+    >>> systemVariable(r"⎕IO←2")
     DOMAIN ERROR
-    >>> systemVariable('⎕io')
+    >>> systemVariable(r"⎕io")
     0
-    >>> systemVariable('⎕IO←1')
+    >>> systemVariable(r"⎕IO←1")
     1
-    >>> systemVariable('⎕io')
+    >>> systemVariable(r"⎕io")
     1
     """
     try:
@@ -387,7 +387,7 @@ def     systemVariable(expr):
 
 def     systemCommand(expr):
     """
-    >>> systemCommand(')dummy')
+    >>> systemCommand(")dummy")
     UNKNOWN SYSTEM COMMAND
     """
     try:

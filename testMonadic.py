@@ -22,52 +22,52 @@ def     test(expr):
     """
     test both positive and negative outcomes
 
-    >>> test ('⍕ 1')
+    >>> test(r"⍕ 1")
     FUNCTION NOT YET IMPLEMENTED
-    >>> test ('" 1')
+    >>> test(r"' 1")
     INVALID TOKEN
 
-    >>> test('∨ 0')
+    >>> test(r"∨ 0")
     VALENCE ERROR
-    >>> test('∧ 0')
+    >>> test(r"∧ 0")
     VALENCE ERROR
-    >>> test('⍱ 0')
+    >>> test(r"⍱ 0")
     VALENCE ERROR
-    >>> test('⍲ 0')
-    VALENCE ERROR
-
-    >>> test('< 0')
-    VALENCE ERROR
-    >>> test('≤ 0')
-    VALENCE ERROR
-    >>> test('= 0')
-    VALENCE ERROR
-    >>> test('≥ 0')
-    VALENCE ERROR
-    >>> test('> 0')
-    VALENCE ERROR
-    >>> test('≠ 0')
+    >>> test(r"⍲ 0")
     VALENCE ERROR
 
-    >>> test('⍪ 0')
+    >>> test(r"< 0")
     VALENCE ERROR
-    >>> test('⍷ 0')
+    >>> test(r"≤ 0")
     VALENCE ERROR
-    >>> test('∩ 0')
+    >>> test(r"= 0")
     VALENCE ERROR
-
-    >>> test('\\ 0')
+    >>> test(r"≥ 0")
     VALENCE ERROR
-    >>> test('/ 0')
+    >>> test(r"> 0")
     VALENCE ERROR
-    >>> test('⍀ 0')
-    VALENCE ERROR
-    >>> test('⌿ 0')
+    >>> test(r"≠ 0")
     VALENCE ERROR
 
-    >>> test('⊤ 0')
+    >>> test(r"⍪ 0")
     VALENCE ERROR
-    >>> test('⊥ 0')
+    >>> test(r"⍷ 0")
+    VALENCE ERROR
+    >>> test(r"∩ 0")
+    VALENCE ERROR
+
+    >>> test(r"\\ 0")
+    VALENCE ERROR
+    >>> test(r"/ 0")
+    VALENCE ERROR
+    >>> test(r"⍀ 0")
+    VALENCE ERROR
+    >>> test(r"⌿ 0")
+    VALENCE ERROR
+
+    >>> test(r"⊤ 0")
+    VALENCE ERROR
+    >>> test(r"⊥ 0")
     VALENCE ERROR
 """
     try:
@@ -83,21 +83,21 @@ def     aardvark ():
     so named to ensure it is run first
 
     for + - and ×
-    >>> test('P ← 0 0.5 1 2')
+    >>> test(r"P ← 0 0.5 1 2")
     0 0.5 1 2
-    >>> test('N ← ¯0 ¯0.5 ¯1 ¯2')
+    >>> test(r"N ← ¯0 ¯0.5 ¯1 ¯2")
     0 ¯0.5 ¯1 ¯2
 
     for ÷
-    >>> test('PD ← 0.25 0.5 1 2')
+    >>> test(r"PD ← 0.25 0.5 1 2")
     0.25 0.5 1 2
-    >>> test('ND ← ¯0.25 ¯0.5 ¯1 ¯2')
+    >>> test(r"ND ← ¯0.25 ¯0.5 ¯1 ¯2")
     ¯0.25 ¯0.5 ¯1 ¯2
 
     for ⌈ ⌊ and |
-    >>> test('PM ← 0.25 0.5 1.9 2.1')
+    >>> test(r"PM ← 0.25 0.5 1.9 2.1")
     0.25 0.5 1.9 2.1
-    >>> test('NM ← ¯0.25 ¯0.5 ¯1.9 ¯2.1')
+    >>> test(r"NM ← ¯0.25 ¯0.5 ¯1.9 ¯2.1")
     ¯0.25 ¯0.5 ¯1.9 ¯2.1
     """
     pass
@@ -106,12 +106,12 @@ def     aardvark ():
 
 def     monadicPlus():
     """
-    >>> test('+ 0')
+    >>> test(r"+ 0")
     0
 
-    >>> test('+ P')
+    >>> test(r"+ P")
     0 0.5 1 2
-    >>> test('+ N')
+    >>> test(r"+ N")
     0 ¯0.5 ¯1 ¯2
     """
     pass
@@ -120,12 +120,12 @@ def     monadicPlus():
 
 def     monadicMinus():
     """
-    >>> test('- 0')
+    >>> test(r"- 0")
     0
 
-    >>> test('- P')
+    >>> test(r"- P")
     0 ¯0.5 ¯1 ¯2
-    >>> test('- N')
+    >>> test(r"- N")
     0 0.5 1 2
     """
     pass
@@ -134,12 +134,12 @@ def     monadicMinus():
 
 def     monadicTimes():
     """
-    >>> test('× 0')
+    >>> test(r"× 0")
     0
 
-    >>> test('× P')
+    >>> test(r"× P")
     0 1 1 1
-    >>> test('× N')
+    >>> test(r"× N")
     0 ¯1 ¯1 ¯1
     """
     pass
@@ -148,14 +148,14 @@ def     monadicTimes():
 
 def     monadicDivide():
     """
-    >>> test('÷ 0')
+    >>> test(r"÷ 0")
     DOMAIN ERROR
-    >>> test('÷ 1')
+    >>> test(r"÷ 1")
     1
 
-    >>> test('÷ PD')
+    >>> test(r"÷ PD")
     4 2 1 0.5
-    >>> test('÷ ND')
+    >>> test(r"÷ ND")
     ¯4 ¯2 ¯1 ¯0.5
     """
     pass
@@ -164,12 +164,12 @@ def     monadicDivide():
 
 def     monadicCiel():
     """
-    >>> test('⌈ 0')
+    >>> test(r"⌈ 0")
     0
 
-    >>> test('⌈ PM')
+    >>> test(r"⌈ PM")
     1 1 2 3
-    >>> test('⌈ NM')
+    >>> test(r"⌈ NM")
     0 0 ¯1 ¯2
     """
     pass
@@ -178,12 +178,12 @@ def     monadicCiel():
 
 def     monadicFloor():
     """
-    >>> test('⌊ 0')
+    >>> test(r"⌊ 0")
     0
 
-    >>> test('⌊ PM')
+    >>> test(r"⌊ PM")
     0 0 1 2
-    >>> test('⌊ NM')
+    >>> test(r"⌊ NM")
     ¯1 ¯1 ¯2 ¯3
     """
     pass
@@ -192,12 +192,12 @@ def     monadicFloor():
 
 def     monadicMagnitude():
     """
-    >>> test('| 0')
+    >>> test(r"| 0")
     0
 
-    >>> test('| PM')
+    >>> test(r"| PM")
     0.25 0.5 1.9 2.1
-    >>> test('| NM')
+    >>> test(r"| NM")
     0.25 0.5 1.9 2.1
     """
     pass
@@ -206,16 +206,16 @@ def     monadicMagnitude():
 
 def     monadicExponential():
     """
-    >>> test('* 1 0 ¯1')
+    >>> test(r"* 1 0 ¯1")
     2.718281828 1 0.3678794412
 
-    >>> test('* 1 2 3 4 5')
+    >>> test(r"* 1 2 3 4 5")
     2.718281828 7.389056099 20.08553692 54.59815003 148.4131591
 
-    >>> test('* ¯1 ¯2 ¯3 ¯4 ¯5')
+    >>> test(r"* ¯1 ¯2 ¯3 ¯4 ¯5")
     0.3678794412 0.1353352832 0.04978706837 0.01831563889 0.006737946999
 
-    >>> test('* 0.125 0.25 0.5')
+    >>> test(r"* 0.125 0.25 0.5")
     1.133148453 1.284025417 1.648721271
     """
     pass
@@ -224,18 +224,18 @@ def     monadicExponential():
 
 def     monadicLogarithm():
     """
-    >>> test('⍟ 0')
+    >>> test(r"⍟ 0")
     DOMAIN ERROR
-    >>> test('⍟ -1')
+    >>> test(r"⍟ -1")
     DOMAIN ERROR
 
-    >>> test('⍟ 2.718281828459045 1.0 0.36787944117144233')
+    >>> test(r"⍟ 2.718281828459045 1.0 0.36787944117144233")
     1 0 ¯1
 
-    >>> test('⍟ 1 2 3 4 5')
+    >>> test(r"⍟ 1 2 3 4 5")
     0 0.6931471806 1.098612289 1.386294361 1.609437912
 
-    >>> test('⍟ 0.125 0.25 0.5')
+    >>> test(r"⍟ 0.125 0.25 0.5")
     ¯2.079441542 ¯1.386294361 ¯0.6931471806
     """
     pass
@@ -246,13 +246,13 @@ def     monadicRoll():
     """
     randomness makes positive testing a little tricky
 
-    >>> test('? 0')
+    >>> test(r"? 0")
     DOMAIN ERROR
-    >>> test('? -1')
+    >>> test(r"? -1")
     DOMAIN ERROR
-    >>> test('? 1')
+    >>> test(r"? 1")
     1
-    >>> test('? 1÷2')
+    >>> test(r"? 1÷2")
     DOMAIN ERROR
     """
     pass
@@ -261,13 +261,13 @@ def     monadicRoll():
 
 def     monadicFactorial():
     """
-    >>> test('! -1')
+    >>> test(r"! -1")
     DOMAIN ERROR
-    >>> test('! 0')
+    >>> test(r"! 0")
     1
-    >>> test('! 1 2 3 4 5')
+    >>> test(r"! 1 2 3 4 5")
     1 2 6 24 120
-    >>> test('! 0.125 0.25 0.5')
+    >>> test(r"! 0.125 0.25 0.5")
     0.9417426998 0.9064024771 0.8862269255
     """
     pass
@@ -276,11 +276,11 @@ def     monadicFactorial():
 
 def     monadicPi():
     """
-    >>> test('○ ¯1 0 1')
+    >>> test(r"○ ¯1 0 1")
     ¯3.141592654 0 3.141592654
-    >>> test('○ ¯0.5 0.5')
+    >>> test(r"○ ¯0.5 0.5")
     ¯1.570796327 1.570796327
-    >>> test('○ ¯2 2')
+    >>> test(r"○ ¯2 2")
     ¯6.283185307 6.283185307
     """
     pass
@@ -289,11 +289,11 @@ def     monadicPi():
 
 def     monadicNegation():
     """
-    >>> test('~ ¯1')
+    >>> test(r"~ ¯1")
     DOMAIN ERROR
-    >>> test('~ 0 1')
+    >>> test(r"~ 0 1")
     1 0
-    >>> test('~ 0.5')
+    >>> test(r"~ 0.5")
     DOMAIN ERROR
     """
     pass
@@ -302,15 +302,15 @@ def     monadicNegation():
 
 def     monadicIota():
     """
-    >>> test('⍳ 0')
+    >>> test(r"⍳ 0")
     ⍬
-    >>> test('⍳ 1')
+    >>> test(r"⍳ 1")
     1
-    >>> test('⍳ 2')
+    >>> test(r"⍳ 2")
     1 2
-    >>> test('⍳ 3.142')
+    >>> test(r"⍳ 3.142")
     DOMAIN ERROR
-    >>> test('⍳ 1 1')
+    >>> test(r"⍳ 1 1")
     RANK ERROR
     """
     pass
@@ -319,11 +319,11 @@ def     monadicIota():
 
 def     monadicRho():
     """
-    >>> test('⍴ 7')
+    >>> test(r"⍴ 7")
     ⍬
-    >>> test('⍴ 1 2 3')
+    >>> test(r"⍴ 1 2 3")
     3
-    >>> test('⍴ ⍬')
+    >>> test(r"⍴ ⍬")
     0
     """
     pass
@@ -332,14 +332,14 @@ def     monadicRho():
 
 def     monadicComma():
     """
-    >>> test(', 7')
+    >>> test(r", 7")
     7
-    >>> test(', 1 2 3')
+    >>> test(r", 1 2 3")
     1 2 3
 
-    >>> test('⍴ , 7')
+    >>> test(r"⍴ , 7")
     1
-    >>> test('⍴ , 1 2 3')
+    >>> test(r"⍴ , 1 2 3")
     3
     """
     pass
@@ -348,18 +348,18 @@ def     monadicComma():
 
 def     monadicDropTake():
     """
-    >>> test('↓ 1 2 3')
+    >>> test(r"↓ 1 2 3")
     2 3
-    >>> test('↓ 0.1 0.2 0.3')
+    >>> test(r"↓ 0.1 0.2 0.3")
     0.2 0.3
-    >>> test('↓ ¯1 ¯2 ¯3')
+    >>> test(r"↓ ¯1 ¯2 ¯3")
     ¯2 ¯3
 
-    >>> test('↑ 1 2 3')
+    >>> test(r"↑ 1 2 3")
     1
-    >>> test('↑ 0.1 0.2 0.3')
+    >>> test(r"↑ 0.1 0.2 0.3")
     0.1
-    >>> test('↑ ¯1 ¯2 ¯3')
+    >>> test(r"↑ ¯1 ¯2 ¯3")
     ¯1
     """
     pass
@@ -368,14 +368,14 @@ def     monadicDropTake():
 
 def     monadicReverse():
     """
-    >>> test('⌽ 1 2 3')
+    >>> test(r"⌽ 1 2 3")
     3 2 1
-    >>> test('⊖ 0.1 0.2 0.3')
+    >>> test(r"⊖ 0.1 0.2 0.3")
     0.3 0.2 0.1
 
-    >>> test('⌽ 2')
+    >>> test(r"⌽ 2")
     2
-    >>> test('⊖ 0.2')
+    >>> test(r"⊖ 0.2")
     0.2
     """
     pass
@@ -384,10 +384,10 @@ def     monadicReverse():
 
 def     monadicUnique():
     """
-    >>> test('∪ 0')
+    >>> test(r"∪ 0")
     0
 
-    >>> test('∪ 0 1 0 1 0 1')
+    >>> test(r"∪ 0 1 0 1 0 1")
     0 1
     """
     pass
@@ -396,9 +396,9 @@ def     monadicUnique():
 
 def     monadicTranspose():
     """
-    >>> test('⍉ 0')
+    >>> test(r"⍉ 0")
     0
-    >>> test('⍉ 1 2 3')
+    >>> test(r"⍉ 1 2 3")
     1 2 3
     """
     pass
@@ -408,16 +408,16 @@ def     monadicTranspose():
 
 def     monadicDepthTally():
     """
-    >>> test('≡ 1')
+    >>> test(r"≡ 1")
     0
 
-    >>> test('≡ 1 2 3')
+    >>> test(r"≡ 1 2 3")
     1
 
-    >>> test('≢ 1')
+    >>> test(r"≢ 1")
     1
 
-    >>> test('≢ 1 2 3')
+    >>> test(r"≢ 1 2 3")
     3
     """
     pass
