@@ -18,13 +18,13 @@
 """
 
 from evaluate import evaluate, evaluate_and_print
-
+0
 from apl_cio import APL_cio as apl_cio
 from apl_error import APL_exception as apl_exception
 
 # ------------------------------
 
-def     test (expr):
+def     test(expr):
     """
     test both positive and negative outcomes
     """
@@ -36,7 +36,7 @@ def     test (expr):
 
 # ------------------------------
 
-def     test_number (expr):
+def     parseNumber():
     """
     >>> test('0')
     0
@@ -63,7 +63,7 @@ def     test_number (expr):
 
 # ------------------------------
 
-def     test_name (expr):
+def     parseName():
     """
     >>> test('A')
     UNKNOWN VARIABLE
@@ -95,7 +95,7 @@ def     test_name (expr):
 
 # ------------------------------
 
-def     test_zilde (expr):
+def     testZilde():
     """
     zilde - empty numeric vector
 
@@ -164,7 +164,7 @@ def     test_zilde (expr):
 
 # ------------------------------
 
-def     test_scalar (expr):
+def     parseScalar():
     """
     >>> test('+2')
     2
@@ -192,7 +192,7 @@ def     test_scalar (expr):
 
 # ------------------------------
 
-def     test_parse_vector (expr):
+def     parseVector():
     """
     >>> test('1 2 3')
     1 2 3
@@ -245,7 +245,7 @@ def     test_parse_vector (expr):
 
 # ------------------------------
 
-def     test_parentheses (expr):
+def     parseParentheses():
     """
     >>> test('(0)')
     0
@@ -268,7 +268,7 @@ def     test_parentheses (expr):
 
 # ------------------------------
 
-def     test_tacks (expr):
+def     parseTacks():
     """
     >>> test('⊣ 2')
     0
@@ -284,67 +284,67 @@ def     test_tacks (expr):
 
 # ------------------------------
 
-def     test_output (expr):
+def     parseOutput(expr):
     """
-    >>> test_output('"Hello" ⍝ end of line comments are ignored')
+    >>> parseOutput('"Hello" ⍝ end of line comments are ignored')
     Hello
 
-    >>> test_output('"Hello ⍝ in a string is not a comment" ⍝ end of line comments are ignored')
+    >>> parseOutput('"Hello ⍝ in a string is not a comment" ⍝ end of line comments are ignored')
     Hello ⍝ in a string is not a comment
 
-    >>> test_output('"Hello" ⋄ "Paul"')
+    >>> parseOutput('"Hello" ⋄ "Paul"')
     Hello
     Paul
-    >>> test_output('"Hello ⋄ Paul"')
+    >>> parseOutput('"Hello ⋄ Paul"')
     Hello ⋄ Paul
 
-    >>> test_output('1 + 2 ⋄ 3 + 4 ⋄ 5 + 6')
+    >>> parseOutput('1 + 2 ⋄ 3 + 4 ⋄ 5 + 6')
     3
     7
     11
-    >>> test_output('1 + 2 ⋄ 3 + 4 ⋄')
+    >>> parseOutput('1 + 2 ⋄ 3 + 4 ⋄')
     3
     7
-    >>> test_output('⋄ 3 + 4')
+    >>> parseOutput('⋄ 3 + 4')
     7
 
-    >>> test_output('⎕ ← 1 + 2')
+    >>> parseOutput('⎕ ← 1 + 2')
     3
-    >>> test_output('⍞ ← 1 + 2')
+    >>> parseOutput('⍞ ← 1 + 2')
     3
 
-    >>> test_output('6 + ⎕ ← 1 + 2')
+    >>> parseOutput('6 + ⎕ ← 1 + 2')
     3
     9
-    >>> test_output('6 + ⍞ ← 1 + 2')
+    >>> parseOutput('6 + ⍞ ← 1 + 2')
     39
 
-    >>> test_output('⎕ ← "Hello" ⋄ "Paul"')
+    >>> parseOutput('⎕ ← "Hello" ⋄ "Paul"')
     Hello
     Paul
-    >>> test_output('⍞ ← "Hello " ⋄ "Paul"')
+    >>> parseOutput('⍞ ← "Hello " ⋄ "Paul"')
     Hello Paul
 
-    >>> test_output('1 + 2 ⋄ ⎕ ← 3 + 4 ⋄ 5 + 6')
+    >>> parseOutput('1 + 2 ⋄ ⎕ ← 3 + 4 ⋄ 5 + 6')
     3
     7
     11
-    >>> test_output('1 + 2 ⋄ ⍞ ← 3 + 4 ⋄ 5 + 6')
+    >>> parseOutput('1 + 2 ⋄ ⍞ ← 3 + 4 ⋄ 5 + 6')
     3
     711
 
-    >>> test_output('1 2 3')
+    >>> parseOutput('1 2 3')
     1 2 3
-    >>> test_output('1 ⎕ ← 2 3')
+    >>> parseOutput('1 ⎕ ← 2 3')
     2 3
     1 (2 3)
-    >>> test_output('"Hello" 2 3')
+    >>> parseOutput('"Hello" 2 3')
     'Hello' 2 3
-    >>> test_output('"Hello" ⎕ ← 2 3')
+    >>> parseOutput('"Hello" ⎕ ← 2 3')
     2 3
     'Hello' (2 3)
 
-    >>> test_output('1 ⍞ ← 2 3')
+    >>> parseOutput('1 ⍞ ← 2 3')
     (2 3)1 (2 3)
     """
     try:
@@ -355,26 +355,26 @@ def     test_output (expr):
 
 # ------------------------------
 
-def     test_sys_vars (expr):
+def     systemVariable(expr):
     """
-    >>> test_sys_vars('⎕dummy')
+    >>> systemVariable('⎕dummy')
     UNKNOWN SYSTEM VARIABLE
 
-    >>> test_sys_vars('⎕IO')
+    >>> systemVariable('⎕IO')
     1
-    >>> test_sys_vars('⎕Io←0')
+    >>> systemVariable('⎕Io←0')
     0
-    >>> test_sys_vars('⎕io')
+    >>> systemVariable('⎕io')
     0
-    >>> test_sys_vars('⎕iO←0')
+    >>> systemVariable('⎕iO←0')
     0
-    >>> test_sys_vars('⎕IO←2')
+    >>> systemVariable('⎕IO←2')
     DOMAIN ERROR
-    >>> test_sys_vars('⎕io')
+    >>> systemVariable('⎕io')
     0
-    >>> test_sys_vars('⎕IO←1')
+    >>> systemVariable('⎕IO←1')
     1
-    >>> test_sys_vars('⎕io')
+    >>> systemVariable('⎕io')
     1
     """
     try:
@@ -385,9 +385,9 @@ def     test_sys_vars (expr):
 
 # ------------------------------
 
-def     test_sys_cmds (expr):
+def     systemCommand(expr):
     """
-    >>> test_sys_cmds(')dummy')
+    >>> systemCommand(')dummy')
     UNKNOWN SYSTEM COMMAND
     """
     try:

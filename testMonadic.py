@@ -18,7 +18,7 @@ from apl_error import APL_exception as apl_exception
 
 # ------------------------------
 
-def     test (expr):
+def     test(expr):
     """
     test both positive and negative outcomes
 
@@ -104,7 +104,7 @@ def     aardvark ():
 
 # ------------------------------
 
-def     monadic_plus ():
+def     monadicPlus():
     """
     >>> test('+ 0')
     0
@@ -118,7 +118,7 @@ def     monadic_plus ():
 
 # --------------
 
-def     monadic_minus ():
+def     monadicMinus():
     """
     >>> test('- 0')
     0
@@ -132,7 +132,7 @@ def     monadic_minus ():
 
 # --------------
 
-def     monadic_times ():
+def     monadicTimes():
     """
     >>> test('× 0')
     0
@@ -146,7 +146,7 @@ def     monadic_times ():
 
 # --------------
 
-def     monadic_divide ():
+def     monadicDivide():
     """
     >>> test('÷ 0')
     DOMAIN ERROR
@@ -162,7 +162,7 @@ def     monadic_divide ():
 
 # --------------
 
-def     monadic_ciel ():
+def     monadicCiel():
     """
     >>> test('⌈ 0')
     0
@@ -176,7 +176,7 @@ def     monadic_ciel ():
 
 # --------------
 
-def     monadic_floor ():
+def     monadicFloor():
     """
     >>> test('⌊ 0')
     0
@@ -190,7 +190,7 @@ def     monadic_floor ():
 
 # --------------
 
-def     monadic_magnitude ():
+def     monadicMagnitude():
     """
     >>> test('| 0')
     0
@@ -204,7 +204,7 @@ def     monadic_magnitude ():
 
 # --------------
 
-def     monadic_exp ():
+def     monadicExponential():
     """
     >>> test('* 1 0 ¯1')
     2.718281828 1 0.3678794412
@@ -222,7 +222,7 @@ def     monadic_exp ():
 
 # --------------
 
-def     monadic_log ():
+def     monadicLogarithm():
     """
     >>> test('⍟ 0')
     DOMAIN ERROR
@@ -242,7 +242,7 @@ def     monadic_log ():
 
 # --------------
 
-def     monadic_roll ():
+def     monadicRoll():
     """
     randomness makes positive testing a little tricky
 
@@ -259,7 +259,7 @@ def     monadic_roll ():
 
 # --------------
 
-def     monadic_factorial ():
+def     monadicFactorial():
     """
     >>> test('! -1')
     DOMAIN ERROR
@@ -274,7 +274,7 @@ def     monadic_factorial ():
 
 # --------------
 
-def     monadic_pi ():
+def     monadicPi():
     """
     >>> test('○ ¯1 0 1')
     ¯3.141592654 0 3.141592654
@@ -287,7 +287,7 @@ def     monadic_pi ():
 
 # --------------
 
-def     monadic_negation ():
+def     monadicNegation():
     """
     >>> test('~ ¯1')
     DOMAIN ERROR
@@ -300,7 +300,7 @@ def     monadic_negation ():
 
 # --------------
 
-def     monadic_iota ():
+def     monadicIota():
     """
     >>> test('⍳ 0')
     ⍬
@@ -317,7 +317,7 @@ def     monadic_iota ():
 
 # --------------
 
-def     monadic_rho ():
+def     monadicRho():
     """
     >>> test('⍴ 7')
     ⍬
@@ -330,7 +330,7 @@ def     monadic_rho ():
 
 # --------------
 
-def     monadic_comma ():
+def     monadicComma():
     """
     >>> test(', 7')
     7
@@ -346,7 +346,7 @@ def     monadic_comma ():
 
 # --------------
 
-def     monadic_drop_take ():
+def     monadicDropTake():
     """
     >>> test('↓ 1 2 3')
     2 3
@@ -366,7 +366,7 @@ def     monadic_drop_take ():
 
 # --------------
 
-def     monadic_reverse ():
+def     monadicReverse():
     """
     >>> test('⌽ 1 2 3')
     3 2 1
@@ -382,7 +382,7 @@ def     monadic_reverse ():
 
 # --------------
 
-def     monadic_unique ():
+def     monadicUnique():
     """
     >>> test('∪ 0')
     0
@@ -394,7 +394,7 @@ def     monadic_unique ():
 
 # --------------
 
-def     monadic_transpose ():
+def     monadicTranspose():
     """
     >>> test('⍉ 0')
     0
@@ -406,7 +406,7 @@ def     monadic_transpose ():
 
 # --------------
 
-def     monadic_depth_tally ():
+def     monadicDepthTally():
     """
     >>> test('≡ 1')
     0

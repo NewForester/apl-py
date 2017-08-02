@@ -18,7 +18,7 @@ from apl_error import APL_exception as apl_exception
 
 # ------------------------------
 
-def     test (expr):
+def     test(expr):
     """
     test both positive and negative outcomes
 
@@ -35,7 +35,7 @@ def     test (expr):
 
 # ------------------------------
 
-def     aardvark ():
+def     aardvark():
     """
     so named to ensure it is run first
 
@@ -67,7 +67,7 @@ def     aardvark ():
 
 # ------------------------------
 
-def     dyadic_plus ():
+def     dyadicPlus():
     """
     >>> test('1 + 1')
     2
@@ -90,7 +90,7 @@ def     dyadic_plus ():
 
 # --------------
 
-def     dyadic_minus ():
+def     dyadicMinus():
     """
     >>> test('1 - 1')
     0
@@ -113,7 +113,7 @@ def     dyadic_minus ():
 
 # --------------
 
-def     dyadic_times ():
+def     dyadicTimes():
     """
     >>> test('1 × 1')
     1
@@ -136,7 +136,7 @@ def     dyadic_times ():
 
 # --------------
 
-def     dyadic_divide ():
+def     dyadicDivide():
     """
     >>> test('0 ÷ 0')
     1
@@ -165,7 +165,7 @@ def     dyadic_divide ():
 
 # --------------
 
-def     dyadic_maximum ():
+def     dyadicMaximum():
     """
     >>> test('1 ⌈ 1')
     1
@@ -188,7 +188,7 @@ def     dyadic_maximum ():
 
 # --------------
 
-def     dyadic_minimum ():
+def     dyadicMinimum():
     """
     >>> test('1 ⌊ 1')
     1
@@ -211,7 +211,7 @@ def     dyadic_minimum ():
 
 # --------------
 
-def     dyadic_residue ():
+def     dyadicResidue():
     """
     >>> test('0 | 0')
     0
@@ -241,7 +241,7 @@ def     dyadic_residue ():
 
 # --------------
 
-def     dyadic_exp ():
+def     dyadicExponential():
     """
     >>> test('0 * ¯1')
     DOMAIN ERROR
@@ -266,7 +266,7 @@ def     dyadic_exp ():
 
 # --------------
 
-def     dyadic_log ():
+def     dyadicLogarithm():
     """
     >>> test('0 ⍟ ¯1 0 1')
     0 1 0
@@ -306,7 +306,7 @@ def     dyadic_log ():
 
 # --------------
 
-def     dyadic_deal ():
+def     dyadicDeal():
     """
     randomness makes positive testing a little tricky
 
@@ -334,7 +334,7 @@ def     dyadic_deal ():
 
 # --------------
 
-def     dyadic_combinations ():
+def     dyadicCombinations():
     """
     >>> test('¯1 ! ¯1 0 1')
     1 0 0
@@ -367,7 +367,7 @@ def     dyadic_combinations ():
 
 # --------------
 
-def     dyadic_trigonometry ():
+def     dyadicTrigonometry():
     """
     Only test values that return real number - ignore the imaginary results for now
 
@@ -429,7 +429,7 @@ def     dyadic_trigonometry ():
 
 # --------------
 
-def     dyadic_or ():
+def     dyadicOr():
     """
     >>> test('0 ∨ 0 1')
     0 1
@@ -454,7 +454,7 @@ def     dyadic_or ():
 
 # --------------
 
-def     dyadic_and ():
+def     dyadicAnd():
     """
     >>> test('0 ∧ 0 1')
     0 0
@@ -479,7 +479,7 @@ def     dyadic_and ():
 
 # --------------
 
-def     dyadic_nor ():
+def     dyadicNor():
     """
     >>> test('0 ⍱ ¯1')
     DOMAIN ERROR
@@ -498,7 +498,7 @@ def     dyadic_nor ():
 
 # --------------
 
-def     dyadic_nand ():
+def     dyadicNand():
     """
     >>> test('0 ⍲ ¯1')
     DOMAIN ERROR
@@ -517,7 +517,7 @@ def     dyadic_nand ():
 
 # --------------
 
-def     dyadic_compare ():
+def     dyadicCompare():
     """
     >>> test('AC ← ¯0.5 ¯0.5 0.5 0.5')
     ¯0.5 ¯0.5 0.5 0.5
@@ -569,7 +569,7 @@ def     dyadic_compare ():
 
 # --------------
 
-def     dyadic_without ():
+def     dyadicWithout():
     """
     >>> test('1 ~ 1')
     ⍬
@@ -594,7 +594,7 @@ def     dyadic_without ():
 
 # --------------
 
-def     dyadic_iota ():
+def     dyadicIota():
     """
     >>> test('⎕IO ← 1')
     1
@@ -635,7 +635,7 @@ def     dyadic_iota ():
 
 # --------------
 
-def     dyadic_rho ():
+def     dyadicRho():
     """
     >>> test('1 ⍴ 0')
     0
@@ -663,7 +663,7 @@ def     dyadic_rho ():
 
 # --------------
 
-def     dyadic_comma ():
+def     dyadicComma():
     """
     >>> test('1 , 0')
     1 0
@@ -681,7 +681,7 @@ def     dyadic_comma ():
 
 # --------------
 
-def     dyadic_drop_take ():
+def     dyadicDropTake():
     """
     >>> test('3 ↓ 1 2 3 4 5 6')
     4 5 6
@@ -727,7 +727,7 @@ def     dyadic_drop_take ():
 
 # --------------
 
-def     dyadic_rotate ():
+def     dyadicRotate():
     """
     >>> test('1 ⌽ 1 2 3 4 5 6')
     2 3 4 5 6 1
@@ -765,7 +765,7 @@ def     dyadic_rotate ():
 
 # --------------
 
-def     dyadic_union_intersection ():
+def     dyadicUnionIntersection():
     """
     >>> test('1 2 3 ∩ 3 2 1')
     1 2 3
@@ -808,7 +808,7 @@ def     dyadic_union_intersection ():
 
 # --------------
 
-def     dyadic_transpose ():
+def     dyadicTranspose():
     """
     >>> test('1 ⍉ 1 2 3')
     1 2 3
@@ -831,7 +831,7 @@ def     dyadic_transpose ():
 
 # --------------
 
-def     dyadic_compress ():
+def     dyadicCompress():
     """
     >>> test('1 1 1 / 1 2 3')
     1 2 3
@@ -861,7 +861,7 @@ def     dyadic_compress ():
 
 # --------------
 
-def     dyadic_expand ():
+def     dyadicExpand():
     """
     >>> test('1 1 1 \ 1 2 3')
     1 2 3
@@ -885,7 +885,7 @@ def     dyadic_expand ():
 
 # --------------
 
-def     dyadic_match ():
+def     dyadicMatch():
     """
     >>> test('1 ≡ 1')
     1
@@ -915,7 +915,7 @@ def     dyadic_match ():
 
 # --------------
 
-def     encode_decode ():
+def     encodeDecode():
     """
     >>> test('16 16 ⊤ 17')
     1 1
