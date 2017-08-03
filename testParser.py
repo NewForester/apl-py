@@ -4,17 +4,20 @@
 
     WIP - grows as evaluate.py is extended
 
-    Each test passes a APL expression to the evaluate function.
-
-    Tests include recognition of:
+    The tests in this module exercise the functions in evaluate.py:
       - recognition of numbers
+      - recognition of strings
       - recognition of names
       - scalar invocation of monadic and dyadic functions
-      - parsing of vector quantities
       - parentheses to alter order of execution
+      - tack functions (⊢ and ⊣)
+      - parsing of vector quantities - including mixed vectors
+      - parsing of output operators (⎕ ⍞) - but not input operators
       - system variables
       - system commands
 
+    All but the system commnd tests pass an APL expression to the evaluate function.
+    Almost all tests are positive.
 """
 
 from evaluate import evaluate, evaluate_and_print
@@ -30,13 +33,13 @@ def     test(expr):
     """
     try:
         cio = apl_cio()
-        cio.printResult(evaluate(expr,cio))
+        cio.printResult(evaluate(expr, cio))
     except apl_exception as error:
         print(error.message)
 
 # ------------------------------
 
-def     parseNumber():
+def     parseNumbers():
     """
     >>> test(r"0")
     0
@@ -63,7 +66,39 @@ def     parseNumber():
 
 # ------------------------------
 
-def     parseName():
+def     parseStrings(expr):
+    """
+    >>> test(r"'Hello'")
+    Hello
+    >>> test("'Hello\\"Jello'")
+    Hello"Jello
+    >>> test(r"'Hello''Jello'")
+    Hello'Jello
+    >>> test(r"'H'")
+    H
+    >>> test(r"''")
+    <BLANKLINE>
+
+    >>> test(r'"Hello"')
+    Hello
+    >>> test('"Hello\\'Jello"')
+    Hello'Jello
+    >>> test(r'"Hello""Jello"')
+    Hello"Jello
+    >>> test(r'"H"')
+    H
+    >>> test(r'""')
+    <BLANKLINE>
+    """
+    try:
+        cio = apl_cio()
+        cio.printResult(evaluate(expr, cio))
+    except apl_exception as error:
+        print(error.message)
+
+# ------------------------------
+
+def     parseNames():
     """
     >>> test(r"A")
     UNKNOWN VARIABLE
@@ -95,7 +130,7 @@ def     parseName():
 
 # ------------------------------
 
-def     parseScalar():
+def     parseScalars():
     """
     >>> test(r"+2")
     2
@@ -123,7 +158,46 @@ def     parseScalar():
 
 # ------------------------------
 
-def     parseVector():
+def     parseParentheses():
+    """
+    >>> test(r"(0)")
+    0
+    >>> test(r"1 + 2 × 2 + 1")
+    7
+    >>> test(r"(1 + 2) × (2 + 1)")
+    9
+    >>> test(r"(1 + 2) × 2 + 1")
+    9
+    >>> test(r"1 - 2 - 3 - 4")
+    ¯2
+    >>> test(r"((1 - 2) - 3) - 4")
+    ¯8
+    >>> test(r"1 - (2 - 3) - 4")
+    6
+    >>> test(r"1 - (2 - 3 - 4")
+    SYNTAX ERROR
+    """
+    pass
+
+# ------------------------------
+
+def     parseTacks():
+    """
+    >>> test(r"⊣ 2")
+    0
+    >>> test(r"⊢ 2")
+    2
+
+    >>> test(r"6 ⊣ 2")
+    6
+    >>> test(r"6 ⊢ 2")
+    2
+    """
+    pass
+
+# ------------------------------
+
+def     parseVectors():
     """
     >>> test(r"1 2 3")
     1 2 3
@@ -171,45 +245,13 @@ def     parseVector():
     10 20
     >>> test(r"1 A 3")
     1 (10 20) 3
-    """
-    pass
 
-# ------------------------------
-
-def     parseParentheses():
-    """
-    >>> test(r"(0)")
-    0
-    >>> test(r"1 + 2 × 2 + 1")
-    7
-    >>> test(r"(1 + 2) × (2 + 1)")
-    9
-    >>> test(r"(1 + 2) × 2 + 1")
-    9
-    >>> test(r"1 - 2 - 3 - 4")
-    ¯2
-    >>> test(r"((1 - 2) - 3) - 4")
-    ¯8
-    >>> test(r"1 - (2 - 3) - 4")
-    6
-    >>> test(r"1 - (2 - 3 - 4")
-    SYNTAX ERROR
-    """
-    pass
-
-# ------------------------------
-
-def     parseTacks():
-    """
-    >>> test(r"⊣ 2")
-    0
-    >>> test(r"⊢ 2")
-    2
-
-    >>> test(r"6 ⊣ 2")
-    6
-    >>> test(r"6 ⊢ 2")
-    2
+    >>> test(r"'Hello' 'Paul'")
+    'Hello' 'Paul'
+    >>> test(r"1 'Hello' 2")
+    1 'Hello' 2
+    >>> test(r"'Hello' (19 20) 'Paul'")
+    'Hello' (19 20) 'Paul'
     """
     pass
 
@@ -280,7 +322,7 @@ def     parseOutput(expr):
     """
     try:
         cio = apl_cio()
-        evaluate_and_print(expr,cio)
+        evaluate_and_print(expr, cio)
     except apl_exception as error:
         print(error.message)
 
@@ -307,10 +349,13 @@ def     systemVariable(expr):
     1
     >>> systemVariable(r"⎕io")
     1
+
+    >>> systemVariable(r"⎕CT")
+    1e¯13
     """
     try:
         cio = apl_cio()
-        cio.printResult(evaluate(expr,cio))
+        cio.printResult(evaluate(expr, cio))
     except apl_exception as error:
         print(error.message)
 
@@ -322,7 +367,7 @@ def     systemCommand(expr):
     UNKNOWN SYSTEM COMMAND
     """
     try:
-        evaluate(expr,apl_cio())
+        evaluate(expr, apl_cio())
     except apl_exception as error:
         print(error.message)
 

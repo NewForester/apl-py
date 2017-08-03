@@ -2,11 +2,16 @@
 """
     doctest style unit tests for strings
 
-    WIP - grows as operators are implemented
+    WIP - grows as functions are implemented
 
-    Each test passes a APL expression to the evaluate function.
+    The tests in this module exercise monadic and dyadic functions with
 
-    Each expression has one or two string operand.
+        either one or two string operands
+
+    Other cases are covered in other test modules.
+
+    Each test passes an APL expression to the evaluate function.
+    Both positive and negative (e.g. DOMAIN ERROR) cases are tested.
 """
 
 from evaluate import evaluate
@@ -18,47 +23,35 @@ from apl_error import APL_exception as apl_exception
 
 def     test(expr):
     """
-    >>> test(r"'Hello'")
-    Hello
-    >>> test("'Hello\\"Jello'")
-    Hello"Jello
-    >>> test(r"'Hello''Jello'")
-    Hello'Jello
-    >>> test(r"'H'")
-    H
-    >>> test(r"''")
-    <BLANKLINE>
-
-    >>> test(r'"Hello"')
-    Hello
-    >>> test('"Hello\\'Jello"')
-    Hello'Jello
-    >>> test(r'"Hello""Jello"')
-    Hello"Jello
-    >>> test(r'"H"')
-    H
-    >>> test(r'""')
-    <BLANKLINE>
-
-    >>> test(r"'Hello'")
-    Hello
-    >>> test(r"'Hello' 'Paul'")
-    'Hello' 'Paul'
-    >>> test(r"1 'Hello' 2")
-    1 'Hello' 2
-    >>> test(r"'Hello' (19 20) 'Paul'")
-    'Hello' (19 20) 'Paul'
+    test both positive and negative outcomes
     """
     try:
         cio = apl_cio()
-        cio.printResult(evaluate(expr,cio))
+        cio.printResult(evaluate(expr, cio))
     except apl_exception as error:
         print(error.message)
 
 # ------------------------------
 
-def     monadicArithmetic():
+def     stringMathematical():
     """
+    For the mathematical functions
+        + - × ÷ ⌈ ⌊ |
+        * ⍟ ? ! ⌹ ○
+        ~ ∨ ∧ ⍱ ⍲
+        < ≤ ≥ > = ≠
+
+    and any string argument S:
+
+        fn S
+        S fn S
+        X fn S
+        S fn X
+
+    yield DOMAIN ERROR
+
+    except where the monadic form yields VALENCE ERROR
+
     >>> test(r"+ 'Hello'")
     DOMAIN ERROR
     >>> test(r"- 'Hello'")
@@ -68,33 +61,15 @@ def     monadicArithmetic():
     >>> test(r"÷ 'Hello'")
     DOMAIN ERROR
 
-    >>> test(r"⌈ 'Hello'")
+    >>> test(r"'Hello' + 'Goodbye'")
     DOMAIN ERROR
-    >>> test(r"⌊ 'Hello'")
+    >>> test(r"'Hello' - 'Goodbye'")
     DOMAIN ERROR
-    >>> test(r"| 'Hello'")
+    >>> test(r"'Hello' × 'Goodbye'")
     DOMAIN ERROR
-
-    >>> test(r"* 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"⍟ 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"? 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"! 'Hello'")
+    >>> test(r"'Hello' ÷ 'Goodbye'")
     DOMAIN ERROR
 
-    >>> test(r"⌹ 'Hello'")
-    FUNCTION NOT YET IMPLEMENTED
-    >>> test(r"○ 'Hello'")
-    DOMAIN ERROR
-    """
-    pass
-
-# ------------------------------
-
-def     dyadicArithmetic():
-    """
     >>> test(r"1 + 'Hello'")
     DOMAIN ERROR
     >>> test(r"1 - 'Hello'")
@@ -112,58 +87,28 @@ def     dyadicArithmetic():
     DOMAIN ERROR
     >>> test(r"'Hello' ÷ 1")
     DOMAIN ERROR
+    """
+    pass
 
-    >>> test(r"1 ⌈ 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"1 ⌊ 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"1 | 'Hello'")
-    DOMAIN ERROR
+# ------------------------------
 
-    >>> test(r"1 * 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"1 ⍟ 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"1 ? 'Hello'")
-    RANK ERROR
-    >>> test(r"1 ! 'Hello'")
-    DOMAIN ERROR
-
-    >>> test(r"1 ⌹ 'Hello'")
-    FUNCTION NOT YET IMPLEMENTED
-    >>> test(r"1 ○ 'Hello'")
-    DOMAIN ERROR
-
-    >>> test(r"1 ∨ 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"1 ∧ 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"1 ⍱ 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"1 ⍲ 'Hello'")
-    DOMAIN ERROR
-
-    >>> test(r"1 < 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"1 ≤ 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"1 ≥ 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"1 > 'Hello'")
-    DOMAIN ERROR
-
+def     stringCompare():
+    """
     >>> test(r"1 = 'Hello'")
     0 0 0 0 0
     >>> test(r"1 ≠ 'Hello'")
     1 1 1 1 1
+
     >>> test(r"'Hello' = 'Hello'")
     1 1 1 1 1
     >>> test(r"'hello' ≠ 'Hello'")
     1 0 0 0 0
+
     >>> test(r"'H' = 72")
     1
     >>> test(r'"H" ≠ 72')
     0
+
     >>> test(r"'Hello' = 'Goodbye'")
     LENGTH ERROR
     >>> test(r"'Hello' ≠ 'Goodbye'")
@@ -171,47 +116,49 @@ def     dyadicArithmetic():
     """
     pass
 
-# ------------------------------
+# --------------
 
-def     tilda():
+def     stringMatch():
     """
-    >>> test(r"~ 'Hello'")
-    DOMAIN ERROR
-
-    >>> test(r"1 ~ 'Hello'")
+    >>> test(r"'Hello' ≡ 'H', 'ello'")
     1
-    >>> test(r"'Hello' ~ 1")
-    Hello
-    >>> test(r"'Hello' ~ 'hello'")
-    H
+    >>> test(r"'Hello' ≡ 'Hello'")
+    1
 
-    >>> test(r"'Hello' ~ 'Hello'")
-    <BLANKLINE>
+    >>> test(r"'Hello' ≢ 'J', 'ello'")
+    1
+    >>> test(r"'Hello' ≢ 'Jello'")
+    1
+
+    !>>> test(r"(1 'Hello' 3) ≡ 1 'Jello' 3")
+    0
+
+    !>>> test(r"(1 'Hello' 3) ≡ 1 'Hello' 3")
+    1
     """
     pass
 
 # ------------------------------
 
-def     iota():
+def     stringDepthTally():
     """
-    >>> test(r"⍳ 'Hello'")
-    DOMAIN ERROR
+    >>> test(r"≡ 'Hello'")
+    1
 
-    >>> test(r"1 ⍳ 'Hello'")
-    2 2 2 2 2
-    >>> test(r"'Hello' ⍳ 1")
-    6
-    >>> test(r"'Hello' ⍳ 'hello'")
-    6 2 3 3 5
+    >>> test(r"≡ 1 'Hello' 3")
+    2
 
-    >>> test(r"'Hello' ⍳ 72")
-    6
+    >>> test(r"≢ 'Hello'")
+    5
+
+    >>> test(r"≢ 1 'Hello' 3")
+    3
     """
     pass
 
-# ------------------------------
+# --------------
 
-def     rho():
+def     stringRho():
     """
     >>> test(r"⍴ 'Hello'")
     5
@@ -225,7 +172,6 @@ def     rho():
     >>> test(r'⍴ "H"')
     1
 
-
     >>> test(r"4 ⍴ 'Hello'")
     Hell
     >>> test(r"5 ⍴ 'Hello'")
@@ -237,7 +183,7 @@ def     rho():
 
 # ------------------------------
 
-def     comma():
+def     stringComma():
     """
     >>> test(r", 'Hello'")
     Hello
@@ -272,52 +218,7 @@ def     comma():
 
 # --------------
 
-def     dropTake():
-    """
-    >>> test(r"¯9 ↓ 'abcdef'")
-    <BLANKLINE>
-    >>> test(r"¯6 ↓ 'abcdef'")
-    <BLANKLINE>
-    >>> test(r"¯3 ↓ 'abcdef'")
-    abc
-    >>> test(r"0 ↓ 'abcdef'")
-    abcdef
-    >>> test(r"3 ↓ 'abcdef'")
-    def
-    >>> test(r"6 ↓ 'abcdef'")
-    <BLANKLINE>
-    >>> test(r"9 ↓ 'abcdef'")
-    <BLANKLINE>
-
-    >>> test(r"¯9 ↑ 'abcdef'")
-       abcdef
-    >>> test(r"¯6 ↑ 'abcdef'")
-    abcdef
-    >>> test(r"¯3 ↑ 'abcdef'")
-    def
-    >>> test(r"0 ↑ 'abcdef'")
-    <BLANKLINE>
-    >>> test(r"3 ↑ 'abcdef'")
-    abc
-    >>> test(r"6 ↑ 'abcdef'")
-    abcdef
-    >>> test(r"(9 ↑ 'abcdef'), '!'")
-    abcdef   !
-
-    >>> test(r'↓ ""')
-    <BLANKLINE>
-    >>> test(r'↑ ""')
-    <BLANKLINE>
-    >>> test(r"1 ↑ 'Hello'")
-    H
-    >>> test(r"↑ 'Hello'")
-    H
-    """
-    pass
-
-# --------------
-
-def     reverseRotate():
+def     stringRotate():
     """
     >>> test(r"⌽ 'niagara'")
     aragain
@@ -343,7 +244,7 @@ def     reverseRotate():
 
 # --------------
 
-def     transpose():
+def     stringTranspose():
     """
     >>> test(r"'H' ⍉ 1 2 3")
     DOMAIN ERROR
@@ -356,9 +257,135 @@ def     transpose():
     """
     pass
 
+# ------------------------------
+
+def     stringTilda():
+    """
+    >>> test(r"~ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 ~ 'Hello'")
+    1
+    >>> test(r"'Hello' ~ 1")
+    Hello
+    >>> test(r"'Hello' ~ 'hello'")
+    H
+
+    >>> test(r"'Hello' ~ 'Hello'")
+    <BLANKLINE>
+    """
+    pass
+
 # --------------
 
-def     compressExpand():
+def     stringIota():
+    """
+    >>> test(r"⍳ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 ⍳ 'Hello'")
+    2 2 2 2 2
+    >>> test(r"'Hello' ⍳ 1")
+    6
+    >>> test(r"'Hello' ⍳ 'hello'")
+    6 2 3 3 5
+
+    >>> test(r"'Hello' ⍳ 72")
+    6
+    """
+    pass
+
+# --------------
+
+def     stringDrop():
+    """
+    >>> test(r'↓ ""')
+    <BLANKLINE>
+    >>> test(r"↓ 'Hello'")
+    ello
+    >>> test(r"1 ↓ 'Hello'")
+    ello
+
+    >>> test(r"¯9 ↓ 'abcdef'")
+    <BLANKLINE>
+    >>> test(r"¯6 ↓ 'abcdef'")
+    <BLANKLINE>
+    >>> test(r"¯3 ↓ 'abcdef'")
+    abc
+    >>> test(r"0 ↓ 'abcdef'")
+    abcdef
+    >>> test(r"3 ↓ 'abcdef'")
+    def
+    >>> test(r"6 ↓ 'abcdef'")
+    <BLANKLINE>
+    >>> test(r"9 ↓ 'abcdef'")
+    <BLANKLINE>
+    """
+    pass
+
+# --------------
+
+def     stringTake():
+    """
+    >>> test(r"1 ↑ 'Hello'")
+    H
+    >>> test(r"↑ 'Hello'")
+    H
+    >>> test(r'↑ ""')
+    <BLANKLINE>
+
+    >>> test(r"¯9 ↑ 'abcdef'")
+       abcdef
+    >>> test(r"¯6 ↑ 'abcdef'")
+    abcdef
+    >>> test(r"¯3 ↑ 'abcdef'")
+    def
+    >>> test(r"0 ↑ 'abcdef'")
+    <BLANKLINE>
+    >>> test(r"3 ↑ 'abcdef'")
+    abc
+    >>> test(r"6 ↑ 'abcdef'")
+    abcdef
+    >>> test(r"(9 ↑ 'abcdef'), '!'")
+    abcdef   !
+    """
+    pass
+
+# --------------
+
+def     stringUnion():
+    """
+    >>> test(r"'Hi' ∪ 'Hello'")
+    Hiello
+    >>> test(r"'ll' ∪ 'Hello'")
+    llHeo
+    >>> test(r"'l' ∪ 'Hello'")
+    lHeo
+
+    !!! test(r""Hi" ∪ 1 2 3")
+    "Hi" 1 2 3
+    """
+    pass
+
+# --------------
+
+def     stringIntersection():
+    """
+    >>> test(r"'Hi' ∩ 'Hello'")
+    H
+    >>> test(r"'ll' ∩ 'Hello'")
+    ll
+    >>> test(r"'l' ∩ 'Hello'")
+    l
+
+    !!! test(r""Hi" ∩ 1 2 3")
+    ⍬
+    """
+    pass
+
+# --------------
+
+def     stringCompress():
     """
     >>> test(r"1 0 1 / 'ABC'")
     AC
@@ -366,7 +393,13 @@ def     compressExpand():
     ABBCCC
     >>> test(r"1 ¯2 3 / 'ABC'")
     A  CCC
+    """
+    pass
 
+# --------------
+
+def     stringExpand():
+    """
     >>> test(r"1 0 1 0 1 \\ 'ABC'")
     A B C
     >>> test(r"1 0 2 0 3 \\ 'ABC'")
@@ -378,48 +411,13 @@ def     compressExpand():
 
 # --------------
 
-def     depthTally():
-    """
-    >>> test(r"≡ 'Hello'")
-    1
-
-    >>> test(r"≡ 1 'Hello' 3")
-    2
-
-    >>> test(r"≢ 'Hello'")
-    5
-
-    >>> test(r"≢ 1 'Hello' 3")
-    3
-    """
-    pass
-
-# --------------
-
-def     matchUnmatch():
-    """
-    >>> test(r"'Hello' ≡ 'H', 'ello'")
-    1
-
-    >>> test(r"'Hello' ≡ 'Hello'")
-    1
-
-    !>>> test(r"(1 'Hello' 3) ≡ 1 'Jello' 3")
-    0
-
-    !>>> test(r"(1 'Hello' 3) ≡ 1 'Hello' 3")
-    1
-    """
-    pass
-
-# --------------
-
-def     encodeDecode():
+def     stringEncodeDecode():
     """
     >>> test(r"'Hello' ⊤ 17")
     DOMAIN ERROR
     >>> test(r"16 16 ⊤ 'Hello'")
     DOMAIN ERROR
+
     >>> test(r"'Hello' ⊥ 1 1")
     DOMAIN ERROR
     >>> test(r"16 16 ⊥ 'Hello'")
