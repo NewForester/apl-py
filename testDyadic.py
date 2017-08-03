@@ -2,13 +2,16 @@
 """
     doctest style unit tests for dyadic.py
 
-    WIP - grows as operators are implemented in dyadic.py.
+    WIP - grows as functions are implemented in dyadic.py.
 
-    Each test passes a APL expression to the evaluate function.
+    The tests in this module exercise dyadic functions with
 
+        numeric scalar and vector arguments only.
+
+    Other cases are covered in other test modules.
+
+    Each test passes an APL expression to the evaluate function.
     Both positive and negative (e.g. DOMAIN ERROR) cases are tested.
-
-    Many of these expressions exercise the vector calculator.
 """
 
 from evaluate import evaluate
@@ -29,41 +32,9 @@ def     test(expr):
     """
     try:
         cio = apl_cio()
-        cio.printResult(evaluate(expr,cio))
+        cio.printResult(evaluate(expr, cio))
     except apl_exception as error:
         print(error.message)
-
-# ------------------------------
-
-def     aardvark():
-    """
-    so named to ensure it is run first
-
-    for + - and ×
-    >>> test(r"P ← 0 0.5 1 2")
-    0 0.5 1 2
-    >>> test(r"N ← ¯0 ¯0.5 ¯1 ¯2")
-    0 ¯0.5 ¯1 ¯2
-
-    for ÷
-    >>> test(r"PD ← 0.25 0.5 1 2")
-    0.25 0.5 1 2
-    >>> test(r"ND ← ¯0.25 ¯0.5 ¯1 ¯2")
-    ¯0.25 ¯0.5 ¯1 ¯2
-
-    for ⌈ ⌊ and |
-    >>> test(r"PM ← 0.25 0.5 1.9 2.1")
-    0.25 0.5 1.9 2.1
-    >>> test(r"NM ← ¯0.25 ¯0.5 ¯1.9 ¯2.1")
-    ¯0.25 ¯0.5 ¯1.9 ¯2.1
-
-    for ∨ ∧ and |
-    >>> test(r"P10 ← 1 2 3 4 5 6 7 8 9 10")
-    1 2 3 4 5 6 7 8 9 10
-    >>> test(r"M10 ← ¯1 ¯2 ¯3 ¯4 ¯5 ¯6 ¯7 ¯8 ¯9 ¯10")
-    ¯1 ¯2 ¯3 ¯4 ¯5 ¯6 ¯7 ¯8 ¯9 ¯10
-    """
-    pass
 
 # ------------------------------
 
@@ -71,19 +42,18 @@ def     dyadicPlus():
     """
     >>> test(r"1 + 1")
     2
-
-    >>> test(r"0 + P")
+    >>> test(r"0 + 0 0.5 1 2")
     0 0.5 1 2
-    >>> test(r"N + 0")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 + 0")
     0 ¯0.5 ¯1 ¯2
 
-    >>> test(r"P + P")
+    >>> test(r"0 0.5 1 2 + 0 0.5 1 2")
     0 1 2 4
-    >>> test(r"N + N")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 + ¯0 ¯0.5 ¯1 ¯2")
     0 ¯1 ¯2 ¯4
-    >>> test(r"P + N")
+    >>> test(r"0 0.5 1 2 + ¯0 ¯0.5 ¯1 ¯2")
     0 0 0 0
-    >>> test(r"N + P")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 + 0 0.5 1 2")
     0 0 0 0
     """
     pass
@@ -94,19 +64,18 @@ def     dyadicMinus():
     """
     >>> test(r"1 - 1")
     0
-
-    >>> test(r"0 - P")
+    >>> test(r"0 - 0 0.5 1 2")
     0 ¯0.5 ¯1 ¯2
-    >>> test(r"N - 0")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 - 0")
     0 ¯0.5 ¯1 ¯2
 
-    >>> test(r"P - P")
+    >>> test(r"0 0.5 1 2 - 0 0.5 1 2")
     0 0 0 0
-    >>> test(r"N - N")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 - ¯0 ¯0.5 ¯1 ¯2")
     0 0 0 0
-    >>> test(r"P - N")
+    >>> test(r"0 0.5 1 2 - ¯0 ¯0.5 ¯1 ¯2")
     0 1 2 4
-    >>> test(r"N - P")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 - 0 0.5 1 2")
     0 ¯1 ¯2 ¯4
     """
     pass
@@ -117,19 +86,18 @@ def     dyadicTimes():
     """
     >>> test(r"1 × 1")
     1
-
-    >>> test(r"1 × P")
+    >>> test(r"1 × 0 0.5 1 2")
     0 0.5 1 2
-    >>> test(r"N × 1")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 × 1")
     0 ¯0.5 ¯1 ¯2
 
-    >>> test(r"P × P")
+    >>> test(r"0 0.5 1 2 × 0 0.5 1 2")
     0 0.25 1 4
-    >>> test(r"N × N")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 × ¯0 ¯0.5 ¯1 ¯2")
     0 0.25 1 4
-    >>> test(r"P × N")
+    >>> test(r"0 0.5 1 2 × ¯0 ¯0.5 ¯1 ¯2")
     0 ¯0.25 ¯1 ¯4
-    >>> test(r"N × P")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 × 0 0.5 1 2")
     0 ¯0.25 ¯1 ¯4
     """
     pass
@@ -147,18 +115,18 @@ def     dyadicDivide():
     >>> test(r"1 ÷ 1")
     1
 
-    >>> test(r"1 ÷ PD")
+    >>> test(r"1 ÷ 0.25 0.5 1 2")
     4 2 1 0.5
-    >>> test(r"ND ÷ 1")
+    >>> test(r"¯0.25 ¯0.5 ¯1 ¯2 ÷ 1")
     ¯0.25 ¯0.5 ¯1 ¯2
 
-    >>> test(r"P ÷ PD")
+    >>> test(r"0 0.5 1 2 ÷ 0.25 0.5 1 2")
     0 1 1 1
-    >>> test(r"N ÷ ND")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 ÷ ¯0.25 ¯0.5 ¯1 ¯2")
     0 1 1 1
-    >>> test(r"P ÷ ND")
+    >>> test(r"0 0.5 1 2 ÷ ¯0.25 ¯0.5 ¯1 ¯2")
     0 ¯1 ¯1 ¯1
-    >>> test(r"N ÷ PD")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 ÷ 0.25 0.5 1 2")
     0 ¯1 ¯1 ¯1
     """
     pass
@@ -170,18 +138,18 @@ def     dyadicMaximum():
     >>> test(r"1 ⌈ 1")
     1
 
-    >>> test(r"0 ⌈ PM")
+    >>> test(r"0 ⌈ 0.25 0.5 1.9 2.1")
     0.25 0.5 1.9 2.1
-    >>> test(r"NM ⌈ 0")
+    >>> test(r"¯0.25 ¯0.5 ¯1.9 ¯2.1 ⌈ 0")
     0 0 0 0
 
-    >>> test(r"PM ⌈ PM")
+    >>> test(r"0.25 0.5 1.9 2.1 ⌈ 0.25 0.5 1.9 2.1")
     0.25 0.5 1.9 2.1
-    >>> test(r"NM ⌈ NM")
+    >>> test(r"¯0.25 ¯0.5 ¯1.9 ¯2.1 ⌈ ¯0.25 ¯0.5 ¯1.9 ¯2.1")
     ¯0.25 ¯0.5 ¯1.9 ¯2.1
-    >>> test(r"PM ⌈ NM")
+    >>> test(r"0.25 0.5 1.9 2.1 ⌈ ¯0.25 ¯0.5 ¯1.9 ¯2.1")
     0.25 0.5 1.9 2.1
-    >>> test(r"NM ⌈ PM")
+    >>> test(r"¯0.25 ¯0.5 ¯1.9 ¯2.1 ⌈ 0.25 0.5 1.9 2.1")
     0.25 0.5 1.9 2.1
     """
     pass
@@ -193,18 +161,18 @@ def     dyadicMinimum():
     >>> test(r"1 ⌊ 1")
     1
 
-    >>> test(r"0 ⌊ PM")
+    >>> test(r"0 ⌊ 0.25 0.5 1.9 2.1")
     0 0 0 0
-    >>> test(r"NM ⌊ 0")
+    >>> test(r"¯0.25 ¯0.5 ¯1.9 ¯2.1 ⌊ 0")
     ¯0.25 ¯0.5 ¯1.9 ¯2.1
 
-    >>> test(r"PM ⌊ PM")
+    >>> test(r"0.25 0.5 1.9 2.1 ⌊ 0.25 0.5 1.9 2.1")
     0.25 0.5 1.9 2.1
-    >>> test(r"NM ⌊ NM")
+    >>> test(r"¯0.25 ¯0.5 ¯1.9 ¯2.1 ⌊ ¯0.25 ¯0.5 ¯1.9 ¯2.1")
     ¯0.25 ¯0.5 ¯1.9 ¯2.1
-    >>> test(r"PM ⌊ NM")
+    >>> test(r"0.25 0.5 1.9 2.1 ⌊ ¯0.25 ¯0.5 ¯1.9 ¯2.1")
     ¯0.25 ¯0.5 ¯1.9 ¯2.1
-    >>> test(r"NM ⌊ PM")
+    >>> test(r"¯0.25 ¯0.5 ¯1.9 ¯2.1 ⌊ 0.25 0.5 1.9 2.1")
     ¯0.25 ¯0.5 ¯1.9 ¯2.1
     """
     pass
@@ -218,28 +186,28 @@ def     dyadicResidue():
     >>> test(r"1 | 1")
     0
 
-    >>> test(r"0 | PM")
+    >>> test(r"0 | 0.25 0.5 1.9 2.1")
     0.25 0.5 1.9 2.1
-    >>> test(r"NM | 0")
+    >>> test(r"¯0.25 ¯0.5 ¯1.9 ¯2.1 | 0")
     0 0 0 0
 
-    >>> test(r"PM | PM")
+    >>> test(r"0.25 0.5 1.9 2.1 | 0.25 0.5 1.9 2.1")
     0 0 0 0
-    >>> test(r"NM | NM")
+    >>> test(r"¯0.25 ¯0.5 ¯1.9 ¯2.1 | ¯0.25 ¯0.5 ¯1.9 ¯2.1")
     0 0 0 0
-    >>> test(r"PM | NM")
+    >>> test(r"0.25 0.5 1.9 2.1 | ¯0.25 ¯0.5 ¯1.9 ¯2.1")
     0 0 0 0
-    >>> test(r"NM | PM")
+    >>> test(r"¯0.25 ¯0.5 ¯1.9 ¯2.1 | 0.25 0.5 1.9 2.1")
     0 0 0 0
 
-    >>> test(r"P10 | 10")
+    >>> test(r"(⍳10) | 10")
     0 0 1 2 0 4 3 2 1 0
-    >>> test(r"M10 | 10")
+    >>> test(r"(-⍳10) | 10")
     0 0 ¯2 ¯2 0 ¯2 ¯4 ¯6 ¯8 0
     """
     pass
 
-# --------------
+# ------------------------------
 
 def     dyadicExponential():
     """
@@ -248,18 +216,18 @@ def     dyadicExponential():
     >>> test(r"¯2 ¯1 0 1 2 * 0")
     1 1 1 1 1
 
-    >>> test(r"1 * P")
+    >>> test(r"1 * 0 0.5 1 2")
     1 1 1 1
-    >>> test(r"N * 1")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 * 1")
     0 ¯0.5 ¯1 ¯2
 
-    >>> test(r"P * P")
+    >>> test(r"0 0.5 1 2 * 0 0.5 1 2")
     1 0.7071067812 1 4
-    >>> test(r"N * N")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 * ¯0 ¯0.5 ¯1 ¯2")
     DOMAIN ERROR
-    >>> test(r"P * N")
+    >>> test(r"0 0.5 1 2 * ¯0 ¯0.5 ¯1 ¯2")
     1 1.414213562 1 0.25
-    >>> test(r"N * P")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 * 0 0.5 1 2")
     DOMAIN ERROR
     """
     pass
@@ -283,18 +251,18 @@ def     dyadicLogarithm():
     >>> test(r"¯1 ⍟ ¯1 1")
     1 0
 
-    >>> test(r"1 ⍟ P")
+    >>> test(r"1 ⍟ 0 0.5 1 2")
     DOMAIN ERROR
-    >>> test(r"N ⍟ 1")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 ⍟ 1")
     0 0 0 0
 
-    >>> test(r"P ⍟ P")
+    >>> test(r"0 0.5 1 2 ⍟ 0 0.5 1 2")
     1 1 1 1
-    >>> test(r"N ⍟ N")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 ⍟ ¯0 ¯0.5 ¯1 ¯2")
     1 1 1 1
-    >>> test(r"P ⍟ N")
+    >>> test(r"0 0.5 1 2 ⍟ ¯0 ¯0.5 ¯1 ¯2")
     DOMAIN ERROR
-    >>> test(r"N ⍟ P")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 ⍟ 0 0.5 1 2")
     DOMAIN ERROR
 
     >>> test(r"2 ⍟ 0.5 2 4 16 256 1024")
@@ -343,19 +311,18 @@ def     dyadicCombinations():
     >>> test(r"1 ! ¯1 0 1")
     ¯1 0 1
 
-    >>> test(r"1 ! P")
+    >>> test(r"1 ! 0 0.5 1 2")
     0 0.5 1 2
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 ! 1")
+    1 0.4244131816 0 0
 
-    > >> test(r"N ! 1")
-    0 ¯0.5 ¯1 ¯2
-
-    >>> test(r"P ! P")
+    >>> test(r"0 0.5 1 2 ! 0 0.5 1 2")
     1 1 1 1
-    >>> test(r"N ! N")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 ! ¯0 ¯0.5 ¯1 ¯2")
     1 1 1 1
-    >>> test(r"P ! N")
+    >>> test(r"0 0.5 1 2 ! ¯0 ¯0.5 ¯1 ¯2")
     1 0 ¯1 3
-    >>> test(r"N ! P")
+    >>> test(r"¯0 ¯0.5 ¯1 ¯2 ! 0 0.5 1 2")
     1 0.5 0 0
 
     >>> test(r"0 1 2 3 4 ! 4")
@@ -365,7 +332,7 @@ def     dyadicCombinations():
     """
     pass
 
-# --------------
+# ------------------------------
 
 def     dyadicTrigonometry():
     """
@@ -427,7 +394,7 @@ def     dyadicTrigonometry():
     """
     pass
 
-# --------------
+# ------------------------------
 
 def     dyadicOr():
     """
@@ -436,13 +403,13 @@ def     dyadicOr():
     >>> test(r"1 ∨ 0 1")
     1 1
 
-    >>> test(r"P10 ∨ 10")
+    >>> test(r"(⍳10) ∨ 10")
     1 2 1 2 5 2 1 2 1 10
-    >>> test(r"M10 ∨ 10")
+    >>> test(r"(-⍳10) ∨ 10")
     1 2 1 2 5 2 1 2 1 10
-    >>> test(r"P10 ∨ ¯10")
+    >>> test(r"(⍳10) ∨ ¯10")
     1 2 1 2 5 2 1 2 1 10
-    >>> test(r"M10 ∨ ¯10")
+    >>> test(r"(-⍳10) ∨ ¯10")
     1 2 1 2 5 2 1 2 1 10
 
     >>> test(r"7.5 ∨ ¯5 5")
@@ -461,13 +428,13 @@ def     dyadicAnd():
     >>> test(r"1 ∧ 0 1")
     0 1
 
-    >>> test(r"P10 ∧ 10")
+    >>> test(r"(⍳10) ∧ 10")
     10 10 30 20 10 30 70 40 90 10
-    >>> test(r"M10 ∧ 10")
+    >>> test(r"(-⍳10) ∧ 10")
     ¯10 ¯10 ¯30 ¯20 ¯10 ¯30 ¯70 ¯40 ¯90 ¯10
-    >>> test(r"P10 ∧ ¯10")
+    >>> test(r"(⍳10) ∧ ¯10")
     ¯10 ¯10 ¯30 ¯20 ¯10 ¯30 ¯70 ¯40 ¯90 ¯10
-    >>> test(r"M10 ∧ ¯10")
+    >>> test(r"(-⍳10) ∧ ¯10")
     10 10 30 20 10 30 70 40 90 10
 
     >>> test(r"7.5 ∧ ¯5 5")
@@ -485,10 +452,12 @@ def     dyadicNor():
     DOMAIN ERROR
     >>> test(r"¯1 ⍱ 0")
     DOMAIN ERROR
+
     >>> test(r"0 ⍱ 0 1")
     1 0
     >>> test(r"1 ⍱ 0 1")
     0 0
+
     >>> test(r"0.5 ⍱ 0")
     DOMAIN ERROR
     >>> test(r"1 ⍱ 0.5")
@@ -504,10 +473,12 @@ def     dyadicNand():
     DOMAIN ERROR
     >>> test(r"¯1 ⍲ 0")
     DOMAIN ERROR
+
     >>> test(r"0 ⍲ 0 1")
     1 1
     >>> test(r"1 ⍲ 0 1")
     1 0
+
     >>> test(r"0.5 ⍲ 0")
     DOMAIN ERROR
     >>> test(r"1 ⍲ 0.5")
@@ -515,7 +486,7 @@ def     dyadicNand():
     """
     pass
 
-# --------------
+# ------------------------------
 
 def     dyadicCompare():
     """
@@ -568,6 +539,144 @@ def     dyadicCompare():
     pass
 
 # --------------
+
+def     dyadicMatch():
+    """
+    >>> test(r"1 ≡ 1")
+    1
+    >>> test(r"1 ≢ 1")
+    0
+
+    >>> test(r"1 ≡ ,1")
+    0
+
+    >>> test(r"1 ≢ 1 2 3")
+    1
+    >>> test(r"1 2 3 ≡ ⍳ 3")
+    1
+    >>> test(r"1 2 3 4 ≢ 1 2 3")
+    1
+
+    >>> test(r"1 2 3 0 ≡ ⍳ 4")
+    0
+    >>> test(r"1 2 3 4 ≢ ⍳ 4")
+    0
+    """
+    pass
+
+# ------------------------------
+
+def     dyadicRho():
+    """
+    >>> test(r"1 ⍴ 0")
+    0
+    >>> test(r"⍴ 1 ⍴ 0")
+    1
+
+    >>> test(r"8 ⍴ ⍳ 4")
+    1 2 3 4 1 2 3 4
+    >>> test(r"8 ⍴ ⍳ 8")
+    1 2 3 4 5 6 7 8
+    >>> test(r"8 ⍴ ⍳ 16")
+    1 2 3 4 5 6 7 8
+
+    >>> test(r"3 ⍴ ⍳ 4")
+    1 2 3
+    >>> test(r"4 ⍴ ⍳ 4")
+    1 2 3 4
+    >>> test(r"5 ⍴ ⍳ 4")
+    1 2 3 4 1
+
+    >>> test(r"1 2 ⍴ 1 2 ")
+    RANK ERROR
+    """
+    pass
+
+# --------------
+
+def     dyadicComma():
+    """
+    >>> test(r"1 , 0")
+    1 0
+    >>> test(r"⍴ 1 , 0")
+    2
+
+    >>> test(r"0 1, 2")
+    0 1 2
+    >>> test(r"0, 1 2")
+    0 1 2
+    >>> test(r"0 1, 2 3")
+    0 1 2 3
+    """
+    pass
+
+# --------------
+
+def     dyadicRotate():
+    """
+    >>> test(r"1 ⌽ 3")
+    3
+    >>> test(r"2 ⊖ 3")
+    3
+
+    >>> test(r"⍴ 1 ⌽ 3")
+    ⍬
+    >>> test(r"⍴ 2 ⊖ 3")
+    ⍬
+
+    >>> test(r"1 ⌽ 1 2 3 4 5 6")
+    2 3 4 5 6 1
+    >>> test(r"2 ⊖ 1 2 3 4 5 6")
+    3 4 5 6 1 2
+
+    >>> test(r"¯1 ⌽ 1 2 3 4 5 6")
+    6 1 2 3 4 5
+    >>> test(r"¯2 ⊖ 1 2 3 4 5 6")
+    5 6 1 2 3 4
+
+    >>> test(r"6 ⌽ 1 2 3 4 5 6")
+    1 2 3 4 5 6
+    >>> test(r"0 ⊖ 1 2 3 4 5 6")
+    1 2 3 4 5 6
+    >>> test(r"¯6 ⌽ 1 2 3 4 5 6")
+    1 2 3 4 5 6
+
+    >>> test(r"7 ⌽ 1 2 3 4 5 6")
+    2 3 4 5 6 1
+    >>> test(r"¯7 ⊖ 1 2 3 4 5 6")
+    6 1 2 3 4 5
+
+    >>> test(r"1 2 ⊖ 1 2 3 4 5 6")
+    RANK ERROR
+    >>> test(r"1.5 ⊖ 1 2 3 4 5 6")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     dyadicTranspose():
+    """
+    >>> test(r"1 ⍉ 1 2 3")
+    1 2 3
+
+    >>> test(r"2 ⍉ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"0 ⍉ 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"1 1 ⍉ 1 2 3")
+    LENGTH ERROR
+    >>> test(r"1 2 3 ⍉ 1 2 3")
+    LENGTH ERROR
+    >>> test(r"1 ⍉ 10")
+    LENGTH ERROR
+    >>> test(r"1 ⍉ ,10")
+    10
+    """
+    pass
+
+# ------------------------------
 
 def     dyadicWithout():
     """
@@ -635,53 +744,7 @@ def     dyadicIota():
 
 # --------------
 
-def     dyadicRho():
-    """
-    >>> test(r"1 ⍴ 0")
-    0
-    >>> test(r"⍴ 1 ⍴ 0")
-    1
-
-    >>> test(r"8 ⍴ ⍳ 4")
-    1 2 3 4 1 2 3 4
-    >>> test(r"8 ⍴ ⍳ 8")
-    1 2 3 4 5 6 7 8
-    >>> test(r"8 ⍴ ⍳ 16")
-    1 2 3 4 5 6 7 8
-
-    >>> test(r"3 ⍴ ⍳ 4")
-    1 2 3
-    >>> test(r"4 ⍴ ⍳ 4")
-    1 2 3 4
-    >>> test(r"5 ⍴ ⍳ 4")
-    1 2 3 4 1
-
-    >>> test(r"1 2 ⍴ 1 2 ")
-    RANK ERROR
-    """
-    pass
-
-# --------------
-
-def     dyadicComma():
-    """
-    >>> test(r"1 , 0")
-    1 0
-    >>> test(r"⍴ 1 , 0")
-    2
-
-    >>> test(r"0 1, 2")
-    0 1 2
-    >>> test(r"0, 1 2")
-    0 1 2
-    >>> test(r"0 1, 2 3")
-    0 1 2 3
-    """
-    pass
-
-# --------------
-
-def     dyadicDropTake():
+def     dyadicDrop():
     """
     >>> test(r"3 ↓ 1 2 3 4 5 6")
     4 5 6
@@ -689,26 +752,25 @@ def     dyadicDropTake():
     1 2 3
     >>> test(r"0 ↓ 1 2 3 4 5 6")
     1 2 3 4 5 6
-    >>> test(r"3 ↓ 1 2 3")
-    ⍬
-    >>> test(r"¯3 ↓ 1 2 3")
-    ⍬
-    >>> test(r"6 ↓ 1 2 3")
-    ⍬
-    >>> test(r"¯6 ↓ 1 2 3")
-    ⍬
 
     >>> test(r"3.3 ↓ 1 2 3 4 5 6")
     DOMAIN ERROR
     >>> test(r"3 3 ↓ 1 2 3 4 5 6")
     LENGTH ERROR
+    """
+    pass
 
+# --------------
+
+def     dyadicTake():
+    """
     >>> test(r"3 ↑ 1 2 3 4 5 6")
     1 2 3
     >>> test(r"¯3 ↑ 1 2 3 4 5 6")
     4 5 6
     >>> test(r"0 ↑ 1 2 3 4 5 6")
     ⍬
+
     >>> test(r"3 ↑ 1 2 3")
     1 2 3
     >>> test(r"¯3 ↑ 1 2 3")
@@ -727,53 +789,9 @@ def     dyadicDropTake():
 
 # --------------
 
-def     dyadicRotate():
+def     dyadicUnion():
     """
-    >>> test(r"1 ⌽ 1 2 3 4 5 6")
-    2 3 4 5 6 1
-    >>> test(r"2 ⊖ 1 2 3 4 5 6")
-    3 4 5 6 1 2
-
-    >>> test(r"¯1 ⌽ 1 2 3 4 5 6")
-    6 1 2 3 4 5
-    >>> test(r"¯2 ⊖ 1 2 3 4 5 6")
-    5 6 1 2 3 4
-
-    >>> test(r"6 ⌽ 1 2 3 4 5 6")
-    1 2 3 4 5 6
-    >>> test(r"0 ⊖ 1 2 3 4 5 6")
-    1 2 3 4 5 6
-    >>> test(r"¯6 ⌽ 1 2 3 4 5 6")
-    1 2 3 4 5 6
-
-    >>> test(r"7 ⌽ 1 2 3 4 5 6")
-    2 3 4 5 6 1
-    >>> test(r"¯7 ⊖ 1 2 3 4 5 6")
-    6 1 2 3 4 5
-
-    >>> test(r"1 ⌽ 3")
-    3
-    >>> test(r"2 ⊖ 3")
-    3
-
-    >>> test(r"1 2 ⊖ 1 2 3 4 5 6")
-    RANK ERROR
-    >>> test(r"1.5 ⊖ 1 2 3 4 5 6")
-    DOMAIN ERROR
-    """
-    pass
-
-# --------------
-
-def     dyadicUnionIntersection():
-    """
-    >>> test(r"1 2 3 ∩ 3 2 1")
-    1 2 3
-    >>> test(r"1 2 3 ∩ 6 5 4")
-    ⍬
-    >>> test(r"1 1 1 ∩ 1")
-    1 1 1
-    >>> test(r"1 ∩ 1 1 1")
+    >>> test(r"⍴ 1 ∪ 1")
     1
 
     >>> test(r"1 2 3 ∪ 6 5 4")
@@ -784,48 +802,28 @@ def     dyadicUnionIntersection():
     1 1 1
     >>> test(r"1 ∪ 1 1 1")
     1
-
-    >>> test(r"'Hi' ∩ 'Hello'")
-    H
-    >>> test(r"'Hi' ∪ 'Hello'")
-    Hiello
-    >>> test(r"'ll' ∩ 'Hello'")
-    ll
-    >>> test(r"'ll' ∪ 'Hello'")
-    llHeo
-    >>> test(r"'l' ∩ 'Hello'")
-    l
-    >>> test(r"'l' ∪ 'Hello'")
-    lHeo
-
-    !!! test(r""Hi" ∩ 1 2 3")
-    ⍬
-    !!! test(r""Hi" ∪ 1 2 3")
-    "Hi" 1 2 3
-
     """
     pass
 
 # --------------
 
-def     dyadicTranspose():
+def     dyadicIntersection():
     """
-    >>> test(r"1 ⍉ 1 2 3")
+    >>> test(r"3 ∩ 3")
+    3
+    >>> test(r"⍴ 3 ∩ 3")
+    1
+    >>> test(r"⍴ 2 ∩ 4")
+    0
+
+    >>> test(r"1 2 3 ∩ 3 2 1")
     1 2 3
-
-    >>> test(r"2 ⍉ 1 2 3")
-    DOMAIN ERROR
-    >>> test(r"0 ⍉ 1 2 3")
-    DOMAIN ERROR
-
-    >>> test(r"1 1 ⍉ 1 2 3")
-    LENGTH ERROR
-    >>> test(r"1 2 3 ⍉ 1 2 3")
-    LENGTH ERROR
-    >>> test(r"1 ⍉ 10")
-    LENGTH ERROR
-    >>> test(r"1 ⍉ ,10")
-    10
+    >>> test(r"1 2 3 ∩ 6 5 4")
+    ⍬
+    >>> test(r"1 1 1 ∩ 1")
+    1 1 1
+    >>> test(r"1 ∩ 1 1 1")
+    1
     """
     pass
 
@@ -835,25 +833,20 @@ def     dyadicCompress():
     """
     >>> test(r"1 1 1 / 1 2 3")
     1 2 3
-
     >>> test(r"1 1 / 1 2 3")
     LENGTH ERROR
-
     >>> test(r"1 1 1 1 / 1 2 3")
     LENGTH ERROR
-
     >>> test(r"1 0 1 / 1 2 3")
     1 3
 
     >>> test(r"1 2 3 / 1 2 3")
     1 2 2 3 3 3
-
     >>> test(r"1 ¯2 3 / 1 2 3")
     1 0 0 3 3 3
 
     !>>> test(r"0 / 1 2 3")
     ⍬
-
     !>>> test(r"1 / 1 2 3")
     1 2 3
     """
@@ -865,16 +858,13 @@ def     dyadicExpand():
     """
     >>> test(r"1 1 1 \\ 1 2 3")
     1 2 3
-
     >>> test(r"1 1 \\ 1 2 3")
     LENGTH ERROR
-
     >>> test(r"1 1 1 1 \\ 1 2 3")
     LENGTH ERROR
 
     >>> test(r"1 0 1 0 1 \\ 1 2 3")
     1 0 2 0 3
-
     >>> test(r"1 0 2 0 3 \\ 1 2 3")
     1 0 2 2 0 3 3 3
 
@@ -885,37 +875,7 @@ def     dyadicExpand():
 
 # --------------
 
-def     dyadicMatch():
-    """
-    >>> test(r"1 ≡ 1")
-    1
-
-    >>> test(r"1 ≢ 1")
-    0
-
-    >>> test(r"1 ≡ ,1")
-    0
-
-    >>> test(r"1 ≢ 1 2 3")
-    1
-
-    >>> test(r"1 2 3 ≡ ⍳ 3")
-    1
-
-    >>> test(r"1 2 3 4 ≢ 1 2 3")
-    1
-
-    >>> test(r"1 2 3 0 ≡ ⍳ 4")
-    0
-
-    >>> test(r"1 2 3 4 ≢ ⍳ 4")
-    0
-    """
-    pass
-
-# --------------
-
-def     encodeDecode():
+def     dyadicEncode():
     """
     >>> test(r"16 16 ⊤ 17")
     1 1
@@ -925,16 +885,25 @@ def     encodeDecode():
     0 2 1
     >>> test(r"8 ⊤ 17")
     1
+
     >>> test(r"16 8 ⊤ 256 + 17")
     2 1
     >>> test(r"16 16 8 ⊤ 256 + 17")
     2 2 1
     >>> test(r"16 0 8 ⊤ 256 + 17")
     0 34 1
+
     >>> test(r"0 1 ⊤ ○ 1")
     3 0.1415926536
     >>> test(r"8.5 8.5 ⊤ 17")
     2 0
+    """
+    pass
+
+# --------------
+
+def     dyadicDecode():
+    """
 
     >>> test(r"16 16 ⊥ 1 1")
     17
@@ -942,14 +911,17 @@ def     encodeDecode():
     17
     >>> test(r"16 16 8 ⊥ 2 1")
     17
+
     >>> test(r"8 ⊥ 2 1")
     17
     >>> test(r"8 ⊥ 1")
     1
+
     >>> test(r"16 16 8 ⊥ 1 2 1")
     145
     >>> test(r"16 0 8 ⊥ 0 34 1")
     273
+
     >>> test(r"0 1 ⊥ 3 0.14159265436")
     3.141592654
     >>> test(r"8.5 8.5 ⊥ 2 0")
