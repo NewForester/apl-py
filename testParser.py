@@ -9,12 +9,12 @@
     Tests include recognition of:
       - recognition of numbers
       - recognition of names
-      - zilde as a result
       - scalar invocation of monadic and dyadic functions
       - parsing of vector quantities
       - parentheses to alter order of execution
       - system variables
       - system commands
+
 """
 
 from evaluate import evaluate, evaluate_and_print
@@ -90,75 +90,6 @@ def     parseName():
 
     >>> test(r"name←'Heather'")
     Heather
-    """
-    pass
-
-# ------------------------------
-
-def     testZilde():
-    """
-    zilde - empty numeric vector
-
-    >>> test(r"⍬")
-    ⍬
-    >>> test(r"⍴ ⍬")
-    0
-    >>> test(r"⍴ ⍳0")
-    0
-    >>> test(r"⍴ 1 ~ 1")
-    0
-    >>> test(r"⍴ 1 2 3 ~ 1 2 3")
-    0
-    >>> test(r"⍴ ⍴0")
-    0
-    >>> test(r"⍴ 0 ⍴ 1 2 3 4 5")
-    0
-    >>> test(r"⍴ 0 ↑ 1 2 3 4 5")
-    0
-    >>> test(r"⍴ 10 ↓ 1 2 3 4 5")
-    0
-    >>> test(r"↓ 1")
-    ⍬
-    >>> test(r"↓ ,1")
-    ⍬
-    >>> test(r"↓ ⍬")
-    ⍬
-    >>> test(r"⍴ ⌽ 1")
-    ⍬
-    >>> test(r"⍴ ⊖ 1")
-    ⍬
-    >>> test(r"⍴ 6 ⌽ 1")
-    ⍬
-    >>> test(r"⍴ 1 ∩ 1")
-    1
-    >>> test(r"⍴ 6 ∩ 1")
-    0
-    >>> test(r"⍴ 1 ∪ 1")
-    1
-    >>> test(r"⍴ ⍉ 1")
-    ⍬
-    >>> test(r"⍴ ⍉ ⍬")
-    0
-    >>> test(r"⍴ ⍉ ,1")
-    1
-    >>> test(r"0 0 0 / 1 2 3")
-    ⍬
-    >>> test(r"⍴ 0 / ⍬")
-    0
-    >>> test(r"⍴ 0 \\ ⍬")
-    1
-    >>> test(r"⍬ ≡ ⍳ 0")
-    1
-    >>> test(r"⍬ ≡ 0 ⍴ ⍳ 3")
-    1
-    >>> test(r"⍬ ⊤ 17")
-    ⍬
-    >>> test(r"16 16 ⊤ ⍬")
-    RANK ERROR
-    >>> test(r"⍬ ⊥ 1 1")
-    0
-    >>> test(r"16 16 ⊥ ⍬")
-    0
     """
     pass
 
