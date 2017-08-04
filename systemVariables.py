@@ -38,7 +38,7 @@ _system_variables = {
 
 # ------------------------------
 
-def     system_variable (name,value=None):
+def     systemVariable(name,value=None):
     """
     set or get the value of a system variable (from the shell)
 

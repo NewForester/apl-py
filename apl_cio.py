@@ -17,8 +17,8 @@
     static state of the object and other state variables are set and reset at
     different points in evaluate.py ('side-effects').
 
-    The object is passed to system_cmds.py but solely to determine whether or
-    not to print messages such "Bye bye" as part of the )OFF command.
+    The object is passed to systemCommands.py but solely to determine whether
+    or not to print messages such "Bye bye" as part of the )OFF command.
 
     The ⎕ input operator involves invoking the parser from the top-level.  The
     APL_cio object is cloned and the clone passed to this second 'instance' of

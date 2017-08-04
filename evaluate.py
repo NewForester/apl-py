@@ -18,8 +18,8 @@ from functools import reduce
 from monadic import monadic_function
 from dyadic import dyadic_function
 
-from system_vars import system_variable
-from system_cmds import system_command
+from systemCommands import systemCommand
+from systemVariables import systemVariable
 
 from workspace_vars import workspace_variable
 

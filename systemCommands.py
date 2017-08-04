@@ -26,7 +26,7 @@ system_commands = {
 
 # ------------------------------
 
-def     system_command (name,arguments,cio):
+def     systemCommand(name,arguments,cio):
     """
     invoke a system command
 

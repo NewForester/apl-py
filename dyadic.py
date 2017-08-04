@@ -17,7 +17,7 @@ import math
 import random
 import mpmath
 
-from system_vars import confirm_bool, confirm_int, equalCT, integerCT, indexOrigin
+from systemVariables import confirm_bool, confirm_int, equalCT, integerCT, indexOrigin
 
 from apl_quantity import APL_quantity as apl_quantity
 from apl_quantity import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s, sv2vr, sv2vl, sv_transpose, ce2v, vv_match, vv2s_decode, vs2v_encode
