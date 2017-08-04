@@ -16,7 +16,7 @@ from apl_error import apl_error
 
 # ------------------------------
 
-class   APL_system_variable(object):
+class   _SystemVariable(object):
     """
     an APL system variable is represented by a pair; the is no behaviour
         - a value (represented by an instance of APL_quantity)
@@ -28,24 +28,24 @@ class   APL_system_variable(object):
 
 # ------------------------------
 
-_indexOrigin =           APL_system_variable(make_scalar(1),      lambda B: eval_monadic(confirm_bool,B))
-_comparisonTolerance =   APL_system_variable(make_scalar(1e-13),  lambda B: eval_monadic(confirm_real,B))
+_IO =           _SystemVariable(make_scalar(1),      lambda B: eval_monadic(confirmBoolean, B))
+_CT =   _SystemVariable(make_scalar(1e-13),  lambda B: eval_monadic(confirmReal, B))
 
-_system_variables = {
-    "IO":       _indexOrigin,
-    "CT":       _comparisonTolerance,
+_SystemVariables = {
+    "IO":       _IO,
+    "CT":       _CT,
 }
 
 # ------------------------------
 
-def     systemVariable(name,value=None):
+def     systemVariable(name, value=None):
     """
     set or get the value of a system variable (from the shell)
 
     throws UNKNOWN SYSTEM VARIABLE if the name is not recognised
     """
     try:
-        sys_var = _system_variables[name.upper()]
+        sys_var = _SystemVariables[name.upper()]
     except KeyError:
         apl_error("UNKNOWN SYSTEM VARIABLE", name)
 
@@ -56,23 +56,23 @@ def     systemVariable(name,value=None):
 
 # ------------------------------
 
-def     indexOrigin ():
+def     indexOrigin():
     """
     the current index origin (0 or 1)
     """
-    return _indexOrigin.value.python()
+    return _IO.value.python()
 
 # --------------
 
-def     equalCT (A,B):
+def     fuzzyEquals(A, B):
     """
     true if A = B within the current comparison tolerance
     """
-    return operator.le(math.fabs(A-B),_comparisonTolerance.value.python() * max(math.fabs(A), math.fabs(B)))
+    return operator.le(math.fabs(A-B),_CT.value.python() * max(math.fabs(A), math.fabs(B)))
 
 # --------------
 
-def     integerCT (B):
+def     fuzzyInteger(B):
     """
     returns B but if B is withhin comparison toleranace of an integer, returns the integer
     """
@@ -84,18 +84,18 @@ def     integerCT (B):
         else:
             integer = 0
 
-        if equalCT(integer,B):
+        if fuzzyEquals(integer,B):
             return integer
 
     return B
 
 # --------------
 
-def     confirm_bool (B):
+def     confirmBoolean(B):
     """
     return the Boolean-domain value of B (within comparison tolerance) - else throw DOMAIN ERROR
     """
-    B = integerCT(B)
+    B = fuzzyInteger(B)
 
     if B == 0:  return 0
     if B == 1:  return 1
@@ -104,11 +104,11 @@ def     confirm_bool (B):
 
 # --------------
 
-def     confirm_int (B):
+def     confirmInteger(B):
     """
     return the integer-domain value of B (within comparison tolerance) - else throw DOMAIN ERROR
     """
-    B = integerCT(B)
+    B = fuzzyInteger(B)
 
     if not type(B) is int:
         apl_error("DOMAIN ERROR")
@@ -117,7 +117,7 @@ def     confirm_int (B):
 
 # --------------
 
-def     confirm_real (B):
+def     confirmReal(B):
     """
     return the real-domain value of B
     """

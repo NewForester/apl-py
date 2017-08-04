@@ -214,10 +214,10 @@ def     evaluate_system_variable (expr,_,cio):
             rhs_expr = expr[len(name)+1:].lstrip()
             if rhs_expr and rhs_expr[0] == '←':
                 rhs = evaluate(rhs_expr[1:],cio)
-                lhs = system_variable(name,rhs.resolve())
+                lhs = systemVariable(name,rhs.resolve())
                 return (lhs, len(expr))
             else:
-                lhs = system_variable(name)
+                lhs = systemVariable(name)
                 return (lhs, len(name)+1)
 
     return (None, 0)
@@ -232,7 +232,7 @@ def     handle_system_command (expr,_,cio):
     if match:
         name = match.group(0)
         if name:
-            system_command(name,expr[len(name)+1:],cio)
+            systemCommand(name,expr[len(name)+1:],cio)
             return (None, len(expr))
 
     return (None, 0)

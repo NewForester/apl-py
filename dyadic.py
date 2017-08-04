@@ -17,7 +17,7 @@ import math
 import random
 import mpmath
 
-from systemVariables import confirm_bool, confirm_int, equalCT, integerCT, indexOrigin
+from systemVariables import fuzzyEquals, fuzzyInteger, confirmBoolean, confirmInteger, indexOrigin
 
 from apl_quantity import APL_quantity as apl_quantity
 from apl_quantity import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s, sv2vr, sv2vl, sv_transpose, ce2v, vv_match, vv2s_decode, vs2v_encode
@@ -57,7 +57,7 @@ def     _divide (A,B):
     try:
         return operator.truediv(A,B)
     except:
-        if equalCT(A,0) and equalCT(B,0):   return 1
+        if fuzzyEquals(A,0) and fuzzyEquals(B,0):   return 1
 
         apl_error("DOMAIN ERROR")
 
@@ -86,9 +86,9 @@ def     _residue (A,B):
     if type(A) is int:
         if A == 0:          return B
     else:
-        if equalCT(A,0):    return B
+        if fuzzyEquals(A,0):    return B
 
-    if type(integerCT(operator.truediv(B,A))) is int:
+    if type(fuzzyInteger(operator.truediv(B,A))) is int:
         return 0
 
     result = math.fmod(B,A)
@@ -129,12 +129,12 @@ def     _log (A,B):
         return math.log(B,A)
 
     except ValueError:
-        if equalCT(A,B):  return 1.0
-        if equalCT(A,0):  return 0.0
-        if equalCT(B,1):  return 0.0
+        if fuzzyEquals(A,B):  return 1.0
+        if fuzzyEquals(A,0):  return 0.0
+        if fuzzyEquals(B,1):  return 0.0
 
     except ZeroDivisionError:
-        if equalCT(A,B):  return 1.0
+        if fuzzyEquals(A,B):  return 1.0
 
     apl_error("DOMAIN ERROR")
 
@@ -145,8 +145,8 @@ def     _deal (A,B):
     random selection of A numbers from the range [1,B] without replacement - may raise DOMAIN ERROR
     """
 
-    A = confirm_int(A)
-    B = confirm_int(B)
+    A = confirmInteger(A)
+    B = confirmInteger(B)
 
     try:
         return random.sample(range(1,B+1),A)
@@ -226,7 +226,7 @@ def     _trigonometric (A,B):
      6  cosh(B)
      7  tanh(B)
     """
-    A = confirm_int(A)
+    A = confirmInteger(A)
 
     if A <= -12 or A >= 12:
         apl_error("DOMAIN ERROR")
@@ -261,7 +261,7 @@ def     _or_gcd (A,B):
     A or B (Boolean); GCD(A,B) (otherwise)
     """
     try:
-        return int(confirm_bool(A) + confirm_bool(B) != 0)
+        return int(confirmBoolean(A) + confirmBoolean(B) != 0)
     except:
         return _highest_common_factor(A,B)
 
@@ -272,7 +272,7 @@ def     _and_lcm (A,B):
     A and B (Boolean); LCM(A,B) (otherwise)
     """
     try:
-        return int(confirm_bool(A) + confirm_bool(B) == 2)
+        return int(confirmBoolean(A) + confirmBoolean(B) == 2)
     except:
         return A * B / _highest_common_factor(A,B)
 
@@ -282,7 +282,7 @@ def     _nor (A,B):
     """
     A nor B - may raise DOMAIN ERROR
     """
-    return int(confirm_bool(A) + confirm_bool(B) == 0)
+    return int(confirmBoolean(A) + confirmBoolean(B) == 0)
 
 # --------------
 
@@ -290,7 +290,7 @@ def     _nand (A,B):
     """
     A nand B - may raise DOMAIN ERROR
     """
-    return int(confirm_bool(A) + confirm_bool(B) != 2)
+    return int(confirmBoolean(A) + confirmBoolean(B) != 2)
 
 # ------------------------------
 
@@ -301,7 +301,7 @@ def     _lt (A,B):
     if type(A) is int and type(B) is int:
         return int(operator.lt(A,B))
 
-    if equalCT(A,B):
+    if fuzzyEquals(A,B):
         return 0
 
     return int(operator.lt(A,B))
@@ -315,7 +315,7 @@ def     _le (A,B):
     if type(A) is int and type(B) is int:
         return int(operator.le(A,B))
 
-    if equalCT(A,B):
+    if fuzzyEquals(A,B):
         return 1
 
     return int(operator.le(A,B))
@@ -329,7 +329,7 @@ def     _eq (A,B):
     if type(A) is int and type(B) is int:
         return int(operator.eq(A,B))
 
-    return int(equalCT(A,B))
+    return int(fuzzyEquals(A,B))
 
 # --------------
 
@@ -340,7 +340,7 @@ def     _ge (A,B):
     if type(A) is int and type(B) is int:
         return int(operator.ge(A,B))
 
-    if equalCT(A,B):
+    if fuzzyEquals(A,B):
         return 1
 
     return int(operator.ge(A,B))
@@ -354,7 +354,7 @@ def     _gt (A,B):
     if type(A) is int and type(B) is int:
         return int(operator.gt(A,B))
 
-    if equalCT(A,B):
+    if fuzzyEquals(A,B):
         return 0
 
     return int(operator.gt(A,B))
@@ -371,7 +371,7 @@ def     _ne (A,B):
     if isinstance(A,apl_quantity) or isinstance(B,apl_quantity):
         return True
 
-    return int(not equalCT(A,B))
+    return int(not fuzzyEquals(A,B))
 
 # ------------------------------
 
@@ -415,7 +415,7 @@ def     _take (A,B):
     """
     take A elements from B
     """
-    A = confirm_int(A)
+    A = confirmInteger(A)
     if type(B) != str:  B = list(B)
     LB = len(B)
 
@@ -442,7 +442,7 @@ def     _drop (A,B):
     """
     drop A elements from B
     """
-    A = confirm_int(A)
+    A = confirmInteger(A)
     if type(B) != str:  B = list(B)
     LB = len(B)
 
@@ -460,7 +460,7 @@ def     _rotatelast (A,B):
     """
     rotate (vector) B by A elements
     """
-    A = confirm_int(A) % len(B)
+    A = confirmInteger(A) % len(B)
 
     return B[A:] + B[:A]
 
@@ -470,7 +470,7 @@ def     _rotatefirst (A,B):
     """
     rotate (vector) B by A elements
     """
-    A = confirm_int(A) % len(B)
+    A = confirmInteger(A) % len(B)
 
     return B[A:] + B[:A]
 
@@ -480,7 +480,7 @@ def     _reshape (A,B):
     """
     reshape (list) B to have length A by replication and/or truncation
     """
-    A = confirm_int(A)
+    A = confirmInteger(A)
     B = list(B)
 
     length = len(B)
@@ -552,7 +552,7 @@ def     _compress (A,B,pad):
 
     try:
         for X in A:
-            X = confirm_int(X)
+            X = confirmInteger(X)
 
             V = I.__next__()
 
@@ -590,7 +590,7 @@ def     _expand (A,B,pad):
 
     try:
         for X in A:
-            X = confirm_int(X)
+            X = confirmInteger(X)
 
             if X > 0:
                 V = I.__next__()

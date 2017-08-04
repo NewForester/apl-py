@@ -10,7 +10,7 @@ from apl_error import apl_error, apl_exit
 
 # ------------------------------
 
-def     sys_cmd_off (arguments,cio):
+def     systemCommandOff(_, cio):
     """
     time to go ...
     """
@@ -20,13 +20,13 @@ def     sys_cmd_off (arguments,cio):
 
 # ------------------------------
 
-system_commands = {
-    "OFF":      sys_cmd_off,
+_SystemCommands = {
+    "OFF":      systemCommandOff,
 }
 
 # ------------------------------
 
-def     systemCommand(name,arguments,cio):
+def     systemCommand(name, arguments, cio):
     """
     invoke a system command
 
@@ -35,7 +35,7 @@ def     systemCommand(name,arguments,cio):
     throws UNKNOWN SYSTEM COMMAND if the name is not recognised
     """
     try:
-        system_commands[name.upper()](arguments.lstrip(),cio)
+        _SystemCommands[name.upper()](arguments.lstrip(), cio)
     except KeyError:
         apl_error("UNKNOWN SYSTEM COMMAND", name)
 

@@ -17,7 +17,7 @@ import math
 import random
 import mpmath
 
-from systemVariables import integerCT, confirm_int, indexOrigin
+from systemVariables import fuzzyInteger, confirmInteger, indexOrigin
 
 from apl_quantity import APL_quantity as apl_quantity, s2s, s2v, s_rho, s_comma, v_head, v_tail, v2v, v_nest, v_tally
 from apl_error import apl_error
@@ -66,7 +66,7 @@ def     _ceil (B):
     """
     ceil of B with comparison tolerance
     """
-    B = integerCT(B)
+    B = fuzzyInteger(B)
 
     if type(B) is int:  return B
 
@@ -78,7 +78,7 @@ def     _floor (B):
     """
     floor of B with comparison tolerance
     """
-    B = integerCT(B)
+    B = fuzzyInteger(B)
 
     if type(B) is int:  return B
 
@@ -129,7 +129,7 @@ def     _factorial (B):
     """
     factorial B (also valid for floating point numbers) - may raise DOMAIN ERROR
     """
-    B = integerCT(B)
+    B = fuzzyInteger(B)
 
     try:
         if type(B) is int:
@@ -153,7 +153,7 @@ def     _logical_negation (B):
     """
     Boolean integer inverse of B - may raise DOMAIN ERROR
     """
-    B = integerCT(B)
+    B = fuzzyInteger(B)
 
     if B == 1:  return 0
     if B == 0:  return 1
@@ -166,7 +166,7 @@ def     _range (B):
     """
     [1, B] or [0, B) depending on ⎕IO
     """
-    B = confirm_int(B)
+    B = confirmInteger(B)
 
     IO = indexOrigin()
 
