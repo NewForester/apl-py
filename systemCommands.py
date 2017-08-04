@@ -3,7 +3,7 @@
 
     UNDER DEVELOPMENT
 
-    This is an initial version:  there is much still to be done
+    This initial version implements only )OFF.
 """
 
 from apl_error import apl_error, apl_exit
@@ -20,6 +20,8 @@ def     systemCommandOff(_, cio):
 
 # ------------------------------
 
+# a simple dictionary with (k, v) = (name, system-command-function)
+
 _SystemCommands = {
     "OFF":      systemCommandOff,
 }
@@ -31,8 +33,6 @@ def     systemCommand(name, arguments, cio):
     invoke a system command
 
     the rest of the command line may be ignored
-
-    throws UNKNOWN SYSTEM COMMAND if the name is not recognised
     """
     try:
         _SystemCommands[name.upper()](arguments.lstrip(), cio)

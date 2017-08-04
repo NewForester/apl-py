@@ -161,14 +161,6 @@ def     make_string(value):
 
 # ------------------------------
 
-def eval_monadic(Fn,B):
-    """
-    evaluate an monadic Python function that does not understand APL quantitites
-    """
-    return make_scalar(Fn(B.scalarToPy("LENGTH ERROR")))
-
-# ------------------------------
-
 def s2s (Fn,B):
     """
     evaluate a numeric monadic function that, given a scalar argument, returns a scalar
