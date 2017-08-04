@@ -40,7 +40,7 @@ class APL_quantity (object):
     """
     trivial class that holds an APL quantity
     """
-    def __init__(self,value,dimension,string=False):
+    def __init__(self,value=None,dimension=0,string=False):
         self.value = value
         self.dim = dimension
         self.string = string
@@ -62,6 +62,14 @@ class APL_quantity (object):
                 return '⍬'
             else:
                 return ' '.join(map(_format_element, self.value))
+
+    def clone(self,quantity):
+        self.dim = quantity.dim
+        self.string = quantity.string
+        self.value = quantity.value
+
+    def deepClone(self,quantity):
+        self.clone(quantity.resolve())      # quick and dirty
 
     def python(self):
         return self.value

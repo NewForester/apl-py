@@ -9,12 +9,12 @@
 import  math
 import  operator
 
-from apl_quantity import make_scalar
+from apl_quantity import APL_quantity as apl_quantity, make_scalar
 from apl_error import apl_error
 
 # ------------------------------
 
-class   _SystemVariable(object):
+class   _SystemVariable(apl_quantity):
     """
     an APL system variable is represented by a triplet;
         - a make function (used to make an APL quantity from a Python value)
@@ -22,27 +22,22 @@ class   _SystemVariable(object):
         - an APL quantity
     """
     def __init__(self, makeFunction, confirmFunction, value):
+        apl_quantity.__init__(self)
         self._make = makeFunction
         self._confirm = confirmFunction
-        self._quantity = self._make(value)
+        self.deepClone(self._make(value))
 
     def get(self):
         """
         return the APL quantity
         """
-        return self._quantity
-
-    def python(self):
-        """
-        return the Python value
-        """
-        return self._quantity.python()
+        return self
 
     def set(self, quantity):
         """
-        confirm and set the APL quantity
+        validate and set the APL quantity
         """
-        self._quantity = self._make(self._confirm(quantity.python()))
+        self.deepClone(self._make(self._confirm(quantity.python())))
 
 # ------------------------------
 

@@ -214,7 +214,7 @@ def     evaluate_system_variable (expr,_,cio):
             rhs_expr = expr[len(name)+1:].lstrip()
             if rhs_expr and rhs_expr[0] == '←':
                 rhs = evaluate(rhs_expr[1:],cio)
-                lhs = systemVariable(name,rhs.resolve())
+                lhs = systemVariable(name,rhs)
                 return (lhs, len(expr))
             else:
                 lhs = systemVariable(name)
