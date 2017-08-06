@@ -22,7 +22,7 @@ class   _SystemVariable(apl_quantity):
         - an APL quantity
     """
     def __init__(self, makeFunction, confirmFunction, value):
-        apl_quantity.__init__(self)
+        apl_quantity.__init__(self,None)
         self._make = makeFunction
         self._confirm = confirmFunction
         self.deepClone(self._make(value))

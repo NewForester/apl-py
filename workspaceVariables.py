@@ -6,28 +6,30 @@
     This is an initial version:  there is much still to be done
 """
 
+from apl_quantity import APL_quantity as apl_quantity
 from apl_error import apl_error
 
 # ------------------------------
 
-class   _WorkspaceVariable(object):
+class   _WorkspaceVariable(apl_quantity):
     """
-    a simple value, not even a checker
+    a simple wrapper for an APL_quantity to ensure values are values, not promises
     """
     def __init__(self, quantity):
-        self._quantity = quantity
+        apl_quantity.__init__(self,None)
+        self.deepClone(quantity)
 
     def get(self):
         """
         return the APL quantity
         """
-        return self._quantity
+        return self
 
     def set(self, quantity):
         """
-        set the APL quantity
+        set the APL quantity - ensure promises are made good
         """
-        self._quantity = quantity
+        self.deepClone(quantity)
 
 # ------------------------------
 

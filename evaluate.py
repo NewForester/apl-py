@@ -132,7 +132,7 @@ def     evaluate_name (expr,_,cio):
                 if cio.newStmt:
                     cio.hushImplicit = True
                 rhs = evaluate(rhs_expr[1:].lstrip(),cio)
-                lhs = workspaceVariable(name,rhs.resolve())
+                lhs = workspaceVariable(name,rhs)
                 return (lhs, len(expr))
             else:
                 lhs = workspaceVariable(name)

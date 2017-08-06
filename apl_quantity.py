@@ -40,7 +40,7 @@ class APL_quantity (object):
     """
     trivial class that holds an APL quantity
     """
-    def __init__(self,value=None,dimension=0,string=False):
+    def __init__(self,value,dimension=0,string=False):
         self.value = value
         self.dim = dimension
         self.string = string
