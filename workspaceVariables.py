@@ -10,7 +10,7 @@ from apl_error import apl_error
 
 # ------------------------------
 
-class   apl_variable(object):
+class   _WorkspaceVariable(object):
     """
     a simple value, not even a checker
     """
@@ -19,11 +19,11 @@ class   apl_variable(object):
 
 # ------------------------------
 
-workspace_variables = {}
+_WorkspaceVariables = {}
 
 # ------------------------------
 
-def     workspace_variable (name,value=None):
+def     workspaceVariable(name,value=None):
     """
     return the value of a workspace variable
 
@@ -32,7 +32,7 @@ def     workspace_variable (name,value=None):
     a new variable is created if necessary
     """
     try:
-        apl_var = workspace_variables[name]
+        apl_var = _WorkspaceVariables[name]
 
         if not value is None:
             apl_var.value = value
@@ -40,9 +40,9 @@ def     workspace_variable (name,value=None):
         if value is None:
             apl_error("UNKNOWN VARIABLE")
 
-        apl_var = apl_variable(value)
+        apl_var = _WorkspaceVariable(value)
 
-        workspace_variables[name] = apl_var
+        _WorkspaceVariables[name] = apl_var
 
     return apl_var.value
 

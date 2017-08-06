@@ -21,7 +21,7 @@ from dyadic import dyadic_function
 from systemCommands import systemCommand
 from systemVariables import systemVariable
 
-from workspace_vars import workspace_variable
+from workspaceVariables import workspaceVariable
 
 from apl_quantity import APL_quantity as apl_value, make_scalar, make_vector, make_string
 from apl_error import APL_exception as apl_exception, apl_error
@@ -132,10 +132,10 @@ def     evaluate_name (expr,_,cio):
                 if cio.newStmt:
                     cio.hushImplicit = True
                 rhs = evaluate(rhs_expr[1:].lstrip(),cio)
-                lhs = workspace_variable(name,rhs.resolve())
+                lhs = workspaceVariable(name,rhs.resolve())
                 return (lhs, len(expr))
             else:
-                lhs = workspace_variable(name)
+                lhs = workspaceVariable(name)
                 return (lhs, len(name))
 
     return (None, 0)
