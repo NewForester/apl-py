@@ -6,7 +6,7 @@
     This initial version implements only )OFF.
 """
 
-from apl_error import apl_error, apl_exit
+from aplError import aplError, aplExit
 
 # ------------------------------
 
@@ -16,7 +16,7 @@ def     systemCommandOff(_, cio):
     """
     if not cio.silent:
         cio.printThis("Bye bye")
-    apl_exit(0)
+    aplExit(0)
 
 # ------------------------------
 
@@ -37,6 +37,6 @@ def     systemCommand(name, arguments, cio):
     try:
         _SystemCommands[name.upper()](arguments.lstrip(), cio)
     except KeyError:
-        apl_error("UNKNOWN SYSTEM COMMAND", name)
+        aplError("UNKNOWN SYSTEM COMMAND", name)
 
 # EOF

@@ -6,25 +6,26 @@ import sys
 
 # ------------------------------
 
-class   APL_exception (Exception):
+class   aplException(Exception):
     """
-    An simple APL Exception Class
+    A simple APL Exception Class
     """
-    def __init__(self,message,expr=None):
+    def __init__(self, message, expr=None):
+        Exception.__init__(self)
         self.message = message
         self.expr = expr
 
 # ------------------------------
 
-def     apl_error (message,expr=None):
+def     aplError(message, expr=None):
     """
     raise an exception so aborting the current operation
     """
-    raise(APL_exception(message,expr))
+    raise aplException(message, expr)
 
 # ------------------------------
 
-def     apl_exit (status,message=None):
+def     aplExit(status, message=None):
     """
     clean up and exit session
     """
@@ -35,7 +36,7 @@ def     apl_exit (status,message=None):
 
 # ------------------------------
 
-def     apl_quit (status,message=""):
+def     aplQuit(status, message=""):
     """
     quit session without clean up
     """

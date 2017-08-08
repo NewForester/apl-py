@@ -105,7 +105,7 @@
 
 import sys, readline, traceback
 
-from apl_error import apl_quit
+from aplError import aplQuit
 
 # ------------------------------
 
@@ -127,7 +127,7 @@ class   APL_fio (object):
                 self.path = path
                 self.lineCount = 0
             except:
-                apl_quit(3,"unable to open '{0}' for {1}".format(path, "output" if self.mode == "w" else "input"))
+                aplQuit(3,"unable to open '{0}' for {1}".format(path, "output" if self.mode == "w" else "input"))
 
     def fetchLine(self,closeOnEof=True):
         line = self.handle.readline()

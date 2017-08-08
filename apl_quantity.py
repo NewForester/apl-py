@@ -11,7 +11,7 @@
     The intention is that these are external routines used by evaluate.py.
 """
 
-from apl_error import apl_error
+from aplError import aplError
 
 # ------------------------------
 
@@ -82,7 +82,7 @@ class APL_quantity (object):
 
     def noStringConfirm(self):
         if self.isString():
-            apl_error("DOMAIN ERROR")
+            aplError("DOMAIN ERROR")
 
     def noString(self):
         if self.isString():
@@ -99,7 +99,7 @@ class APL_quantity (object):
         elif self.dim == 1:
             return self.value[0]
 
-        apl_error(error if error else "RANK ERROR")
+        aplError(error if error else "RANK ERROR")
 
     def vectorToPy(self):
         if self.dim is None and not self.string:
@@ -247,7 +247,7 @@ def s_rho (Fn,B):
 
     if B.isVector():    return APL_quantity([B.dimension()],1)
 
-    apl_error("RANK ERROR")
+    aplError("RANK ERROR")
 
 # ------------------------------
 
@@ -260,7 +260,7 @@ def s_comma (Fn,B):
 
     if B.isVector():    return B
 
-    apl_error("RANK ERROR")
+    aplError("RANK ERROR")
 
 # ------------------------------
 
@@ -283,7 +283,7 @@ def ss2s (Fn,A,B,numbersOnly):
 
     if case == 2:
         if dims[0] != dims[1]:
-            apl_error("LENGTH ERROR")
+            aplError("LENGTH ERROR")
 
     return APL_quantity(map(Fn,A,B),dims[0])
 
@@ -362,10 +362,10 @@ def sv_transpose (Fn,A,B):
     Apy = A.scalarToPy("LENGTH ERROR")
 
     if Apy != 1:
-        apl_error("DOMAIN ERROR")
+        aplError("DOMAIN ERROR")
 
     if B.isScalar():
-        apl_error("LENGTH ERROR")
+        aplError("LENGTH ERROR")
 
     Bpy = B.vectorToPy()
 
@@ -436,7 +436,7 @@ def vv_match (Fn,A,B,noMatch):
         R =  not next(filter(None,ss2s(Fn,A,B,False)), False)
 
     else:
-        apl_error ("RANK ERROR")
+        aplError("RANK ERROR")
 
     return APL_quantity(int(R ^ noMatch),None)
 
@@ -459,7 +459,7 @@ def v_nest (B):
                 break
 
     else:
-        apl_error ("RANK ERROR")
+        aplError("RANK ERROR")
 
     return APL_quantity(R,None)
 
@@ -478,7 +478,7 @@ def v_tally (B):
         R = B.dimension()
 
     else:
-        apl_error ("RANK ERROR")
+        aplError("RANK ERROR")
 
     return APL_quantity(R,None)
 

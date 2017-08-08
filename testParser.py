@@ -23,7 +23,7 @@
 from evaluate import evaluate, evaluate_and_print
 
 from apl_cio import APL_cio as apl_cio
-from apl_error import APL_exception as apl_exception
+from aplError import aplException
 
 # ------------------------------
 
@@ -34,7 +34,7 @@ def     test(expr):
     try:
         cio = apl_cio()
         cio.printResult(evaluate(expr, cio))
-    except apl_exception as error:
+    except aplException as error:
         print(error.message)
 
 # ------------------------------
@@ -93,7 +93,7 @@ def     parseStrings(expr):
     try:
         cio = apl_cio()
         cio.printResult(evaluate(expr, cio))
-    except apl_exception as error:
+    except aplException as error:
         print(error.message)
 
 # ------------------------------
@@ -323,7 +323,7 @@ def     parseOutput(expr):
     try:
         cio = apl_cio()
         evaluate_and_print(expr, cio)
-    except apl_exception as error:
+    except aplException as error:
         print(error.message)
 
 # ------------------------------
@@ -356,7 +356,7 @@ def     systemVariable(expr):
     try:
         cio = apl_cio()
         cio.printResult(evaluate(expr, cio))
-    except apl_exception as error:
+    except aplException as error:
         print(error.message)
 
 # ------------------------------
@@ -368,7 +368,7 @@ def     systemCommand(expr):
     """
     try:
         evaluate(expr, apl_cio())
-    except apl_exception as error:
+    except aplException as error:
         print(error.message)
 
 # ------------------------------

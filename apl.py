@@ -18,7 +18,7 @@ from functools import reduce
 from evaluate import evaluate_and_print
 
 from apl_cio import APL_cio as apl_cio
-from apl_error import APL_exception as apl_exception, apl_error, apl_exit, apl_quit
+from aplError import aplException, aplExit, aplQuit
 
 # ------------------------------
 
@@ -196,10 +196,10 @@ def     read_evaluate_print (cio):
 
         try:
             evaluate_and_print(line,cio)
-        except apl_exception as error:
+        except aplException as error:
             cio.printError(cio.scriptFile,error,line)
             if cio.scriptFile is not None:
-                apl_exit(1)
+                aplExit(1)
 
 # ------------------------------
 
@@ -223,13 +223,13 @@ if __name__ == '__main__':
             for flag in flags:
                 if flag in ("-h", "--help"):
                     print(_banner)
-                    apl_quit(0,_helpText)
+                    aplQuit(0,_helpText)
 
                 elif flag in ("-V", "--Version"):
                     print(_banner)
                     print(_version)
                     print(_milestone)
-                    apl_quit(0)
+                    aplQuit(0)
 
             for flag in flags:
                 if flag in ("-s", "--silent"):
@@ -252,7 +252,7 @@ if __name__ == '__main__':
                     read_evaluate_print(cio)
 
                 else:
-                    apl_quit(3,"{0} not recognised: perhaps try --help".format(flag))
+                    aplQuit(3,"{0} not recognised: perhaps try --help".format(flag))
 
             if not sys.stdin.isatty():
                 # stdin redirected
@@ -265,7 +265,7 @@ if __name__ == '__main__':
                 cio.printThis(_banner)
                 read_evaluate_print(cio)
                 cio.printThis("^D")
-                apl_exit(0)
+                aplExit(0)
 
             if len(args):
                 # evaluate command line expression
@@ -278,13 +278,13 @@ if __name__ == '__main__':
 
                 try:
                     evaluate_and_print(line,cio)
-                    apl_exit(0)
-                except apl_exception as error:
+                    aplExit(0)
+                except aplException as error:
                     cio.printThis(line)
                     cio.printError(None,error,line)
-                    apl_exit(1)
+                    aplExit(1)
 
     except KeyboardInterrupt:
-        apl_quit(2,"^C")
+        aplQuit(2,"^C")
 
 # EOF

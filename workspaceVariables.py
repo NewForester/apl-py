@@ -7,7 +7,7 @@
 """
 
 from apl_quantity import APL_quantity as apl_quantity
-from apl_error import apl_error
+from aplError import aplError
 
 # ------------------------------
 
@@ -51,7 +51,7 @@ def     workspaceVariable(name, value=None):
         try:
             apl_var = _WorkspaceVariables[name]
         except KeyError:
-            apl_error("UNKNOWN VARIABLE")
+            aplError("UNKNOWN VARIABLE")
     else:
         try:
             apl_var = _WorkspaceVariables[name]

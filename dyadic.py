@@ -22,7 +22,7 @@ from systemVariables import fuzzyEquals, fuzzyInteger, confirmBoolean, confirmIn
 from apl_quantity import APL_quantity as apl_quantity
 from apl_quantity import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s, sv2vr, sv2vl, sv_transpose, ce2v, vv_match, vv2s_decode, vs2v_encode
 
-from apl_error import apl_error
+from aplError import aplError
 
 # ------------------------------
 
@@ -59,7 +59,7 @@ def     _divide (A,B):
     except:
         if fuzzyEquals(A,0) and fuzzyEquals(B,0):   return 1
 
-        apl_error("DOMAIN ERROR")
+        aplError("DOMAIN ERROR")
 
 # --------------
 
@@ -114,7 +114,7 @@ def     _exp (A,B):
     try:
         return math.pow(A,B)
     except ValueError:
-        apl_error("DOMAIN ERROR")
+        aplError("DOMAIN ERROR")
 
 # --------------
 
@@ -136,7 +136,7 @@ def     _log (A,B):
     except ZeroDivisionError:
         if fuzzyEquals(A,B):  return 1.0
 
-    apl_error("DOMAIN ERROR")
+    aplError("DOMAIN ERROR")
 
 # --------------
 
@@ -151,7 +151,7 @@ def     _deal (A,B):
     try:
         return random.sample(range(1,B+1),A)
     except ValueError:
-        apl_error("DOMAIN ERROR")
+        aplError("DOMAIN ERROR")
 
 # --------------
 
@@ -170,7 +170,7 @@ def     _combinations (A,B):
         else:
             return float(mpmath.binomial(B,A))
     except ValueError:
-        apl_error("DOMAIN ERROR")
+        aplError("DOMAIN ERROR")
 
 # ------------------------------
 
@@ -229,7 +229,7 @@ def     _trigonometric (A,B):
     A = confirmInteger(A)
 
     if A <= -12 or A >= 12:
-        apl_error("DOMAIN ERROR")
+        aplError("DOMAIN ERROR")
 
     function = _trigonometric_functions[A+12]
     if function is None:
@@ -238,7 +238,7 @@ def     _trigonometric (A,B):
     try:
         return function(B)
     except ValueError:
-        apl_error("DOMAIN ERROR")
+        aplError("DOMAIN ERROR")
 
 
 # ------------------------------
@@ -567,14 +567,14 @@ def     _compress (A,B,pad):
 
     except StopIteration:
         if len(B) != 0:
-            apl_error ("LENGTH ERROR")
+            aplError("LENGTH ERROR")
 
     try:
         V = I.__next__()
     except StopIteration:
         pass
     else:
-        apl_error ("LENGTH ERROR")
+        aplError("LENGTH ERROR")
 
     return R
 
@@ -603,14 +603,14 @@ def     _expand (A,B,pad):
                 R.append(pad)
 
     except StopIteration:
-        apl_error ("LENGTH ERROR")
+        aplError("LENGTH ERROR")
 
     try:
         V = I.__next__()
     except StopIteration:
         pass
     else:
-        apl_error ("LENGTH ERROR")
+        aplError("LENGTH ERROR")
 
     return R
 
@@ -659,7 +659,7 @@ def     to_be_implemented (A,B):
 
     raises FUNCTION NOT YET IMPLEMENTED
     """
-    apl_error("FUNCTION NOT YET IMPLEMENTED")
+    aplError("FUNCTION NOT YET IMPLEMENTED")
 
 # ------------------------------
 
@@ -755,6 +755,6 @@ def     dyadic_function (symbol):
     try:
         return _dyadic_functions[symbol[0]]
     except KeyError:
-        apl_error("INVALID TOKEN", symbol)
+        aplError("INVALID TOKEN", symbol)
 
 # EOF

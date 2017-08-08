@@ -10,7 +10,7 @@ import  math
 import  operator
 
 from apl_quantity import APL_quantity as apl_quantity, make_scalar
-from apl_error import apl_error
+from aplError import aplError
 
 # ------------------------------
 
@@ -82,7 +82,7 @@ def     confirmBoolean(B):
     if B == 1:
         return 1
 
-    apl_error("DOMAIN ERROR")
+    aplError("DOMAIN ERROR")
 
 # --------------
 
@@ -95,7 +95,7 @@ def     confirmInteger(B):
     if isinstance(B, int):
         return B
 
-    apl_error("DOMAIN ERROR")
+    aplError("DOMAIN ERROR")
 
 # --------------
 
@@ -134,7 +134,7 @@ def     systemVariable(name, value=None):
     try:
         SV = _SystemVariables[name.upper()]
     except KeyError:
-        apl_error("UNKNOWN SYSTEM VARIABLE", name)
+        aplError("UNKNOWN SYSTEM VARIABLE", name)
 
     if not value is None:
         SV.set(value)

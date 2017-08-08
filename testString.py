@@ -17,7 +17,7 @@
 from evaluate import evaluate
 
 from apl_cio import APL_cio as apl_cio
-from apl_error import APL_exception as apl_exception
+from aplError import aplException
 
 # ------------------------------
 
@@ -28,7 +28,7 @@ def     test(expr):
     try:
         cio = apl_cio()
         cio.printResult(evaluate(expr, cio))
-    except apl_exception as error:
+    except aplException as error:
         print(error.message)
 
 # ------------------------------

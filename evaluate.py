@@ -24,7 +24,7 @@ from systemVariables import systemVariable
 from workspaceVariables import workspaceVariable
 
 from apl_quantity import APL_quantity as apl_value, make_scalar, make_vector, make_string
-from apl_error import APL_exception as apl_exception, apl_error
+from aplError import aplException, aplError
 
 # ------------------------------
 
@@ -51,7 +51,7 @@ def     _findUnquoted(expr,char,spos=0):
 
     spos = expr.find(expr[mpos],mpos+1)
     if spos == -1:
-        apl_error("SYNTAX ERROR",expr[mpos:])
+        aplError("SYNTAX ERROR",expr[mpos:])
 
     return _findUnquoted(expr,char,spos+1)
 
@@ -95,7 +95,7 @@ def     expression_within_parentheses (expr,opos,cpos):
     """
     pos = expr[cpos + 1:].find(')')
     if pos == -1:
-        apl_error("SYNTAX ERROR")
+        aplError("SYNTAX ERROR")
     cpos += pos + 1
 
     pos = expr[opos + 1:cpos].find('(')
@@ -178,7 +178,7 @@ def     evaluate_input_output (expr,leader,cio):
             try:
                 expr = lcio.read(lcio.inFile)
             except EOFError:
-                apl_error("EOF_ERROR")
+                aplError("EOF_ERROR")
 
             value = make_vector(cio.userPromptLength * ' ' + expr,True)
 
@@ -189,13 +189,13 @@ def     evaluate_input_output (expr,leader,cio):
             try:
                 expr = lcio.read(lcio.inFile)
             except EOFError:
-                apl_error("EOF_ERROR")
+                aplError("EOF_ERROR")
 
             try:
                 value = evaluate_and_print(expr,lcio,True)
-            except apl_exception as error:
+            except aplException as error:
                 lcio.printError(lcio.inFile,error,expr)
-                apl_error(None)
+                aplError(None)
 
             cio.prefixDone = lcio.prefixDone
 
@@ -325,7 +325,7 @@ def     parse (expr,cio):
         elif leader == '⎕' and len(expr) > 1 and expr[1].isalpha():
             function = evaluate_system_variable
         elif leader == ')' and lhs != []:
-            apl_error("SYNTAX ERROR")
+            aplError("SYNTAX ERROR")
         else:
             function = parser_functions["'\")(⎕⍞⍬⍝".find(leader)+1]
 
@@ -375,7 +375,7 @@ def     evaluate (expression,cio):
         expr = expression.lstrip()
 
         if not expr:
-            apl_error("SYNTAX ERROR")
+            aplError("SYNTAX ERROR")
 
         lhs, expr = parse(expr,cio)
 
@@ -395,7 +395,7 @@ def     evaluate (expression,cio):
             rhs = evaluate(expr[1:],cio)
             return function(lhs,rhs)
 
-    except apl_exception as error:
+    except aplException as error:
         if not error.expr:
            error.expr = expr
         raise(error)

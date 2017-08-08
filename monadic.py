@@ -20,7 +20,7 @@ import mpmath
 from systemVariables import fuzzyInteger, confirmInteger, indexOrigin
 
 from apl_quantity import APL_quantity as apl_quantity, s2s, s2v, s_rho, s_comma, v_head, v_tail, v2v, v_nest, v_tally
-from apl_error import apl_error
+from aplError import aplError
 
 # ------------------------------
 
@@ -58,7 +58,7 @@ def     _reciprocal (B):
     try:
         return operator.truediv(1.0,B)
     except:
-        apl_error("DOMAIN ERROR")
+        aplError("DOMAIN ERROR")
 
 # --------------
 
@@ -109,7 +109,7 @@ def     _log (B):
     try:
         return math.log(B)
     except ValueError:
-        apl_error("DOMAIN ERROR")
+        aplError("DOMAIN ERROR")
 
 # --------------
 
@@ -121,7 +121,7 @@ def     _roll (B):
     try:
         return random.randint(1,B)
     except ValueError:
-        apl_error("DOMAIN ERROR")
+        aplError("DOMAIN ERROR")
 
 # --------------
 
@@ -137,7 +137,7 @@ def     _factorial (B):
         else:
             return float(mpmath.factorial(B))
     except ValueError:
-        apl_error("DOMAIN ERROR")
+        aplError("DOMAIN ERROR")
 
 # ------------------------------
 
@@ -158,7 +158,7 @@ def     _logical_negation (B):
     if B == 1:  return 0
     if B == 0:  return 1
 
-    apl_error("DOMAIN ERROR")
+    aplError("DOMAIN ERROR")
 
 # ------------------------------
 
@@ -244,7 +244,7 @@ def     to_be_implemented (B):
 
     raises FUNCTION NOT YET IMPLEMENTED
     """
-    apl_error("FUNCTION NOT YET IMPLEMENTED")
+    aplError("FUNCTION NOT YET IMPLEMENTED")
 
 # ------------------------------
 
@@ -270,18 +270,18 @@ _monadic_functions = {
 
     # Logical
     '~':        lambda B: s2s(_logical_negation,B),
-    '∨':        lambda B: apl_error("VALENCE ERROR"),
-    '∧':        lambda B: apl_error("VALENCE ERROR"),
-    '⍱':        lambda B: apl_error("VALENCE ERROR"),
-    '⍲':        lambda B: apl_error("VALENCE ERROR"),
+    '∨':        lambda B: aplError("VALENCE ERROR"),
+    '∧':        lambda B: aplError("VALENCE ERROR"),
+    '⍱':        lambda B: aplError("VALENCE ERROR"),
+    '⍲':        lambda B: aplError("VALENCE ERROR"),
 
     # Comparison
-    '<':        lambda B: apl_error("VALENCE ERROR"),
-    '≤':        lambda B: apl_error("VALENCE ERROR"),
-    '=':        lambda B: apl_error("VALENCE ERROR"),
-    '≥':        lambda B: apl_error("VALENCE ERROR"),
-    '>':        lambda B: apl_error("VALENCE ERROR"),
-    '≠':        lambda B: apl_error("VALENCE ERROR"),
+    '<':        lambda B: aplError("VALENCE ERROR"),
+    '≤':        lambda B: aplError("VALENCE ERROR"),
+    '=':        lambda B: aplError("VALENCE ERROR"),
+    '≥':        lambda B: aplError("VALENCE ERROR"),
+    '>':        lambda B: aplError("VALENCE ERROR"),
+    '≠':        lambda B: aplError("VALENCE ERROR"),
 
     # Structural (aka manipulative)
     '⍳':        lambda B: s2v(_range,B),
@@ -289,12 +289,12 @@ _monadic_functions = {
     '≡':        lambda B: v_nest(B),
     '≢':        lambda B: v_tally(B),
     ',':        lambda B: s_comma(None,B),
-    '⍪':        lambda B: apl_error("VALENCE ERROR"),
+    '⍪':        lambda B: aplError("VALENCE ERROR"),
     '⌽':        lambda B: v2v(_reverselast,B),
     '⊖':        lambda B: v2v(_reversefirst,B),
     '⍉':        lambda B: v2v(_transpose,B),
-    '∊':        to_be_implemented,      # enlist - ditto but also nested arrays
-    '⍷':        lambda B: apl_error("VALENCE ERROR"),
+    '∊':        to_be_implemented,      # enlist - as comma but also nested arrays
+    '⍷':        lambda B: aplError("VALENCE ERROR"),
     '⊃':        to_be_implemented,      # (disclose) - turn nested scalar into vector (?!?) - mix ?
     '⊂':        to_be_implemented,      # (enclose) - turn array into nested scalar (?!?)
 
@@ -302,11 +302,11 @@ _monadic_functions = {
     '↑':        lambda B: v_head(_head,B),
     '↓':        lambda B: v_tail(_tail,B),
     '∪':        lambda B: v2v(_unique,B),
-    '∩':        lambda B: apl_error("VALENCE ERROR"),
-    '\\':       lambda B: apl_error("VALENCE ERROR"),
-    '/':        lambda B: apl_error("VALENCE ERROR"),
-    '⍀':        lambda B: apl_error("VALENCE ERROR"),
-    '⌿':        lambda B: apl_error("VALENCE ERROR"),
+    '∩':        lambda B: aplError("VALENCE ERROR"),
+    '\\':       lambda B: aplError("VALENCE ERROR"),
+    '/':        lambda B: aplError("VALENCE ERROR"),
+    '⍀':        lambda B: aplError("VALENCE ERROR"),
+    '⌿':        lambda B: aplError("VALENCE ERROR"),
 
 # Sort
     '⍋':        to_be_implemented,      # grade up (ascending sort indicies)
@@ -315,9 +315,9 @@ _monadic_functions = {
     # Miscellaneous
     '⊣':        lambda B: apl_quantity(0,None),
     '⊢':        lambda B: B,
-    '⊤':        lambda B: apl_error("VALENCE ERROR"),
-    '⊥':        lambda B: apl_error("VALENCE ERROR"),
-    '⌷':        to_be_implemented,      # materialise
+    '⊤':        lambda B: aplError("VALENCE ERROR"),
+    '⊥':        lambda B: aplError("VALENCE ERROR"),
+    '⌷':        lambda B: aplError("VALENCE ERROR"),
     '⍕':        to_be_implemented,      # monadic format
     '⍎':        to_be_implemented,      # execute
     };
@@ -333,6 +333,6 @@ def     monadic_function (symbol):
     try:
         return _monadic_functions[symbol[0]]
     except KeyError:
-        apl_error("INVALID TOKEN", symbol)
+        aplError("INVALID TOKEN", symbol)
 
 # EOF
