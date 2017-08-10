@@ -7,11 +7,50 @@
 
     The complexity arises from the decision to implement logging and scripting
     in apl-py as well as the definition of APL's ⎕ and ⍞ functions.
+
+    The current implementation is stable and less fragile that its predecessor.
+    One of the reasons may be in the names:
+
+    endOfLine, prefixDone, userPromptLength, newStmt record current state
+    ('what has happened')
+
+    hushImplicit records future state ('what must be done')
 """
-"""
-    The behaviour is 'encapsulated' in a single object of type aplCio passed
-    up, as well as down, the recursive call tree that is the parser implemented
-    in evaluate.py.
+
+import sys
+import readline
+import traceback
+
+from aplError import aplQuit
+
+# ------------------------------
+
+def     _notesOnStreams():
+    """
+    The interpreter considers console i/o to involve four streams:
+    - in - APL expressions to evaluate
+    - out - prompts and results
+    - out - ⎕← and ⍞← explicit prompts and results
+    - in - ⎕ and ⍞ data and responses in
+
+    For normal interactive use, these default to sysin and sysout.
+
+    These six streams are represented by members of the aplCio object that are
+    themselves objects of this class.  Output is an 'and' - potentially sysout
+    and logFile and outFile while input is an 'or' - either scriptFile or
+    inFile, if defined, or otherwise sysin.
+
+    The main complication on input streams is ensuring input and prompts are
+    echoed to output streams appropriately.  The main complication for output
+    streams is taking advantage of Python iterators types.
+    """
+    pass
+
+def     _notesOnConsoleIO():
+    """
+    Console i/o is 'encapsulated' in a single object of type aplCio passed up,
+    as well as down, the recursive call tree that is the parser implemented in
+    evaluate.py.
 
     The flags passed to apl-py on invocation determine the initial and largely
     static state of the object and other state variables are set and reset at
@@ -23,26 +62,11 @@
     The ⎕ input operator involves invoking the parser from the top-level.  The
     aplCio object is cloned and the clone passed to this second 'instance' of
     the parser so that the state passed back up the call stack is known.
-"""
-"""
-    The interpreter considers console i/o to involve four streams:
-        - in - APL expressions to evaluate
-        - out - prompts and results
-        - out - ⎕← and ⍞← explicit prompts and results
-        - in - ⎕ and ⍞ data and responses in
+    """
+    pass
 
-    For normal interactive use, these default to sysin and sysout.
-
-    These six streams are represented by members of the aplCio object that are
-    themselves objects of class aplSio.  Output is an 'and' - potentially
-    sysout and logFile and outFile while input is an 'or' - either scriptFile
-    or inFile, if defined, or sysin otherwise.
-
-    The main complication on input streams is ensuring input and prompts are
-    echoed to output streams appropriately.  The main complication for output
-    streams is taking advantage of Python iterators types.
-"""
-"""
+def     _notesOnComplications():
+    """
     The complications for dealing with edge cases that arise with ⎕ and ⍞ are
     less straight forward (aka ugly and not easy to 'reason about').
 
@@ -92,44 +116,42 @@
     The need to support userPromptLength forces state to be carried forward
     between expressions on the same line.  It was the straw that led the camel
     to implement aplCio.
-"""
-"""
-    The current implementation is stable and less fragile that its predecessor.
-    One of the reasons may be in the names:
-
-        endOfLine, prefixDone, userPromptLength, newStmt record current state
-        ('what has happened')
-
-        hushImplicit records future state ('what must be done')
-"""
-
-import sys, readline, traceback
-
-from aplError import aplQuit
+    """
+    pass
 
 # ------------------------------
 
-class   aplSio (object):
-    def __init__(self,mode):
+class   aplSio(object):
+    """
+    a simple wrapper for an i/o stream (aka file handle)
+    """
+    def __init__(self, mode):
         self.mode = mode
         self.handle = None
         self.path = None
         self.lineCount = 0
 
-    def setPath (self,path):
+    def setPath(self, path):
+        """
+        (re)set the stream's file systen, closing and reopening the stream as necessary
+        """
         if self.handle is not None:
             self.handle.close()
             self.handle = None
 
         if path is not None:
             try:
-                self.handle = open(path,self.mode)
+                self.handle = open(path, self.mode)
                 self.path = path
                 self.lineCount = 0
-            except:
-                aplQuit(3,"unable to open '{0}' for {1}".format(path, "output" if self.mode == "w" else "input"))
+            except IOError:
+                mode = "output" if self.mode == "w" else "input"
+                aplQuit(3, "unable to open '{0}' for {1}".format(path, mode))
 
-    def fetchLine(self,closeOnEof=True):
+    def fetchLine(self, closeOnEof=True):
+        """
+        read a line of input from the stream, keep track of the line number and signal end-of-file
+        """
         line = self.handle.readline()
 
         if line:
@@ -143,21 +165,49 @@ class   aplSio (object):
         if closeOnEof:
             self.setPath(None)
 
-        raise(EOFError)
+        raise EOFError
 
-    def printString (self,string,end=None):
+    def printString(self, string, end=None):
+        """
+        print a string to the stream
+        """
         if self.handle is not None:
-            print(string,end=end,file=self.handle)
+            print(string, end=end, file=self.handle)
 
-    def printTraceback (self, exc_type, exc_value, tb):
-        if self.handle is not None:
-            if exc_type is not None and exc_type != SystemExit:
-                traceback.print_exception(exc_type,exc_value,tb,None,self.handle)
+    def printTraceback(self, exceptionType, exceptionValue, traceBack):
+        """
+        print Python trace back to the stream
+        """
+        if self.handle is not None and exceptionType is not None and exceptionType != SystemExit:
+            traceback.print_exception(exceptionType, exceptionValue, traceBack, None, self.handle)
+
+# ------------------------------
+
+def _outputString(streams, string, end=None):
+    """
+    print a string to one or more streams
+    """
+    for stream in streams:
+        stream.printString(string, end=end)
+
+# --------------
+
+def _outputValue(streams, value, end=None):
+    """
+    print an APL quantity to one or more streams
+    """
+    value = value.resolve()
+
+    for stream in streams:
+        stream.printString(value, end=end)
 
 # ------------------------------
 
 class   aplCio(object):
-    def __init__(self,prompt="",prefix=""):
+    """
+    a representation of console i/o
+    """
+    def __init__(self, prompt="", prefix=""):
         self.prompt = prompt
         self.prefix = prefix
         self.silent = False
@@ -171,100 +221,141 @@ class   aplCio(object):
         if not sys.stdin.isatty():
             self.sysin.path = "<stdin>"
             self.sysin.handle = sys.stdin
-        self.startNewLine()
+        self.endOfLine = '\n'
+        self.prefixDone = False
+        self.userPromptLength = 0
+        self.newStmt = True
+        self.hushImplicit = self.silent
 
     def startNewLine(self):
+        """
+        reset state variables at the start of a new line of APL
+        """
         self.endOfLine = '\n'
         self.prefixDone = False
         self.userPromptLength = 0
         self.startNewStmt()
 
     def startNewStmt(self):
-        self.newStmt = True;
+        """
+        reset state variables at the start of an APL expression
+        """
+        self.newStmt = True
         self.hushImplicit = self.silent
 
     def __enter__(self):
+        """
+        called at the start a Python with block (to ensure streams are closed)
+        """
         return self
 
-    def __exit__(self, exc_type, exc_value, tb):
-        self.logFile.printTraceback(exc_type,exc_value,tb)
+    def __exit__(self, exceptionType, exceptionValue, traceBack):
+        """
+        called at the end of a Python with block (to close any open streams)
+        """
+        self.logFile.printTraceback(exceptionType, exceptionValue, traceBack)
+
         self.scriptFile.setPath(None)
         self.inFile.setPath(None)
         self.outFile.setPath(None)
         self.logFile.setPath(None)
 
-    def printStreams (self,streams,string,end=None):
-        for stream in streams:
-            stream.printString(string,end=end)
+    def printString(self, string, end=None):
+        """
+        print a string - not the value of an APL quantity
+        """
+        _outputString((self.sysout, self.logFile), string, end)
 
-    def printResult (self,value):
-        self.printStreams((self.sysout,),value)
+    def printResult(self, value):
+        """
+        format and print the result of evaluating a test expression
+        """
+        _outputValue((self.sysout,), value)
 
-    def printThis (self,value,end=None):
-        self.printStreams((self.sysout,self.logFile),value,end)
-
-    def printEndOfLine (self):
+    def printEndOfLine(self):
+        """
+        print \n at end of line evaluation following output with ⍞
+        """
         if self.endOfLine != '\n':
             if self.hushImplicit:
-                self.printStreams((self.sysout,self.logFile,self.outFile),"")
+                _outputString((self.sysout, self.logFile, self.outFile), "")
             else:
-                self.printStreams((self.outFile,),"")
+                _outputString((self.outFile,), "")
 
-    def printImplicit (self,value):
+    def printImplicit(self, value):
+        """
+        print an implicit result (not one passed to ⎕ or ⍞)
+        """
         if value is not None and not self.hushImplicit:
             if not self.prefixDone:
-                self.printThis(self.prefix,end="")
+                self.printString(self.prefix, end="")
                 self.prefixDone = True
 
-            self.printThis(value.resolve())
+            _outputValue((self.sysout, self.logFile), value)
             self.endOfLine = '\n'
 
-    def printExplicit (self,value,end='\n'):
+    def printExplicit(self, value, end='\n'):
+        """
+        print an explicit result (one passed to ⎕ or ⍞)
+        """
         if value is not None:
             if not self.prefixDone and not self.silent:
-                self.printThis(self.prefix,end="")
+                self.printString(self.prefix, end="")
                 self.prefixDone = True
 
-            self.printStreams((self.sysout,self.logFile,self.outFile),value.resolve(),end=end)
+            _outputValue((self.sysout, self.logFile, self.outFile), value, end=end)
             self.endOfLine = end
 
-    def _errorInFile (self,fio,expr):
+    def _errorInFile(self, sio, expr):
+        """
+        return where in an input script an error occurred (and print the offending line)
+        """
         if self.silent:
-            self.printThis(self.prompt + expr)
+            self.printString(self.prompt+expr)
 
-        return " in {0} on line {1}".format(fio.path,fio.lineCount)
+        return " in {0} on line {1}".format(sio.path, sio.lineCount)
 
-    def printError (self,fio,error,expr):
+    def printError(self, sio, error, expr):
+        """
+        print an error message and error diagnostics
+        """
         if error.message:
-            if fio is not None:
-                if fio.handle is not None:
-                    error.message += self._errorInFile(fio,expr)
+            if sio is not None:
+                if sio.handle is not None:
+                    error.message += self._errorInFile(sio, expr)
                 elif self.sysin.handle is not None:
-                    error.message += self._errorInFile(self.sysin,expr)
+                    error.message += self._errorInFile(self.sysin, expr)
 
-            self.printThis('\r'+' '*(len(self.prompt)+expr.rfind(error.expr)),end="^\n")
-            self.printThis(error.message)
+            self.printString('\r'+' '*(len(self.prompt)+expr.rfind(error.expr)), end="^\n")
+            self.printString(error.message)
 
-    def read (self,fio):
-        if fio.handle is not None:
-            line = fio.fetchLine()
+    def read(self, sio):
+        """
+        read a line of input from the preferred stream (sio)
+
+        otherwise fall back to redirected stdin or else the console
+
+        echo to log and output files as appropriate
+        """
+        if sio.handle is not None:
+            line = sio.fetchLine()
 
         elif self.sysin.handle is not None:
             line = self.sysin.fetchLine(False)
 
         else:
-            self.printStreams((self.logFile,),self.prompt,end="")
+            _outputString((self.logFile,), self.prompt, end="")
             line = input(self.prompt)
-            self.printStreams((self.logFile,),line)
+            _outputString((self.logFile,), line)
             return line
 
         if not self.silent:
-            self.printThis(self.prompt + line)
+            self.printString(self.prompt+line)
 
-        if fio == self.inFile:
+        if sio == self.inFile:
             if self.inFile.handle is not None:
                 if self.outFile.handle is not None:
-                    self.printStreams((self.outFile,),line)
+                    _outputString((self.outFile,), line)
 
         return line
 

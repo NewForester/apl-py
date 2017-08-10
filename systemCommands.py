@@ -15,7 +15,7 @@ def     systemCommandOff(_, cio):
     time to go ...
     """
     if not cio.silent:
-        cio.printThis("Bye bye")
+        cio.printString("Bye bye")
     aplExit(0)
 
 # ------------------------------

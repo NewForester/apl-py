@@ -262,9 +262,9 @@ if __name__ == '__main__':
             elif not len(args):
                 # enter interactive shell as there are is no command line expression
 
-                cio.printThis(_banner)
+                cio.printString(_banner)
                 read_evaluate_print(cio)
-                cio.printThis("^D")
+                cio.printString("^D")
                 aplExit(0)
 
             if len(args):
@@ -280,7 +280,7 @@ if __name__ == '__main__':
                     evaluate_and_print(line,cio)
                     aplExit(0)
                 except aplException as error:
-                    cio.printThis(line)
+                    cio.printString(line)
                     cio.printError(None,error,line)
                     aplExit(1)
 
