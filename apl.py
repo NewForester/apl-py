@@ -17,7 +17,7 @@ from functools import reduce
 
 from evaluate import evaluate_and_print
 
-from apl_cio import APL_cio as apl_cio
+from aplCio import aplCio
 from aplError import aplException, aplExit, aplQuit
 
 # ------------------------------
@@ -218,7 +218,7 @@ if __name__ == '__main__':
         flags = ' '.join(flags).replace(' -',':-').split(':')
 
     try:
-        with apl_cio(6 * ' ',"□") as cio:
+        with aplCio(6 * ' ',"□") as cio:
 
             for flag in flags:
                 if flag in ("-h", "--help"):

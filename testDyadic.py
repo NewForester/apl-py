@@ -16,7 +16,7 @@
 
 from evaluate import evaluate
 
-from apl_cio import APL_cio as apl_cio
+from aplCio import aplCio
 from aplError import aplException
 
 # ------------------------------
@@ -31,7 +31,7 @@ def     test(expr):
     INVALID TOKEN
     """
     try:
-        cio = apl_cio()
+        cio = aplCio()
         cio.printResult(evaluate(expr, cio))
     except aplException as error:
         print(error.message)

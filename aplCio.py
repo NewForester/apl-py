@@ -9,7 +9,7 @@
     in apl-py as well as the definition of APL's ⎕ and ⍞ functions.
 """
 """
-    The behaviour is 'encapsulated' in a single object of type APL_cio passed
+    The behaviour is 'encapsulated' in a single object of type aplCio passed
     up, as well as down, the recursive call tree that is the parser implemented
     in evaluate.py.
 
@@ -21,7 +21,7 @@
     or not to print messages such "Bye bye" as part of the )OFF command.
 
     The ⎕ input operator involves invoking the parser from the top-level.  The
-    APL_cio object is cloned and the clone passed to this second 'instance' of
+    aplCio object is cloned and the clone passed to this second 'instance' of
     the parser so that the state passed back up the call stack is known.
 """
 """
@@ -33,8 +33,8 @@
 
     For normal interactive use, these default to sysin and sysout.
 
-    These six streams are represented by members of the APL_cio object that are
-    themselves objects of class APL_fio.  Output is an 'and' - potentially
+    These six streams are represented by members of the aplCio object that are
+    themselves objects of class aplSio.  Output is an 'and' - potentially
     sysout and logFile and outFile while input is an 'or' - either scriptFile
     or inFile, if defined, or sysin otherwise.
 
@@ -91,7 +91,7 @@
 
     The need to support userPromptLength forces state to be carried forward
     between expressions on the same line.  It was the straw that led the camel
-    to implement APL_cio.
+    to implement aplCio.
 """
 """
     The current implementation is stable and less fragile that its predecessor.
@@ -109,7 +109,7 @@ from aplError import aplQuit
 
 # ------------------------------
 
-class   APL_fio (object):
+class   aplSio (object):
     def __init__(self,mode):
         self.mode = mode
         self.handle = None
@@ -156,17 +156,17 @@ class   APL_fio (object):
 
 # ------------------------------
 
-class   APL_cio (object):
+class   aplCio(object):
     def __init__(self,prompt="",prefix=""):
         self.prompt = prompt
         self.prefix = prefix
         self.silent = False
-        self.scriptFile = APL_fio("r")
-        self.inFile = APL_fio("r")
-        self.outFile = APL_fio("w")
-        self.logFile = APL_fio("w")
-        self.sysin = APL_fio("r")
-        self.sysout = APL_fio("w")
+        self.scriptFile = aplSio("r")
+        self.inFile = aplSio("r")
+        self.outFile = aplSio("w")
+        self.logFile = aplSio("w")
+        self.sysin = aplSio("r")
+        self.sysout = aplSio("w")
         self.sysout.handle = sys.stdout
         if not sys.stdin.isatty():
             self.sysin.path = "<stdin>"

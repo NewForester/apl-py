@@ -22,7 +22,7 @@
 
 from evaluate import evaluate, evaluate_and_print
 
-from apl_cio import APL_cio as apl_cio
+from aplCio import aplCio
 from aplError import aplException
 
 # ------------------------------
@@ -32,7 +32,7 @@ def     test(expr):
     test both positive and negative outcomes
     """
     try:
-        cio = apl_cio()
+        cio = aplCio()
         cio.printResult(evaluate(expr, cio))
     except aplException as error:
         print(error.message)
@@ -91,7 +91,7 @@ def     parseStrings(expr):
     <BLANKLINE>
     """
     try:
-        cio = apl_cio()
+        cio = aplCio()
         cio.printResult(evaluate(expr, cio))
     except aplException as error:
         print(error.message)
@@ -321,7 +321,7 @@ def     parseOutput(expr):
     (2 3)1 (2 3)
     """
     try:
-        cio = apl_cio()
+        cio = aplCio()
         evaluate_and_print(expr, cio)
     except aplException as error:
         print(error.message)
@@ -354,7 +354,7 @@ def     systemVariable(expr):
     1e¯13
     """
     try:
-        cio = apl_cio()
+        cio = aplCio()
         cio.printResult(evaluate(expr, cio))
     except aplException as error:
         print(error.message)
@@ -367,7 +367,7 @@ def     systemCommand(expr):
     UNKNOWN SYSTEM COMMAND
     """
     try:
-        evaluate(expr, apl_cio())
+        evaluate(expr, aplCio())
     except aplException as error:
         print(error.message)
 
