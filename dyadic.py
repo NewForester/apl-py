@@ -18,10 +18,9 @@ import random
 import mpmath
 
 from systemVariables import fuzzyEquals, fuzzyInteger, confirmBoolean, confirmInteger, indexOrigin
+from dyadicMaps import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s, sv2vr, sv2vl, sv_transpose, ce2v, vv_match, vv2s_decode, vs2v_encode
 
 from aplQuantity import aplQuantity
-from aplQuantity import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s, sv2vr, sv2vl, sv_transpose, ce2v, vv_match, vv2s_decode, vs2v_encode
-
 from aplError import aplError
 
 # ------------------------------

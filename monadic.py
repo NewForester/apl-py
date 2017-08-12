@@ -18,9 +18,9 @@ import random
 import mpmath
 
 from systemVariables import fuzzyInteger, confirmInteger, indexOrigin
+from monadicMaps import s2s, s2v, s_rho, s_comma, v_head, v_tail, v2v, v_nest, v_tally
 
 from aplQuantity import makeScalar
-from aplQuantity import s2s, s2v, s_rho, s_comma, v_head, v_tail, v2v, v_nest, v_tally
 from aplError import aplError
 
 # ------------------------------
