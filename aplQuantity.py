@@ -19,7 +19,7 @@ def _format_element (value):
     """
     format a single element of an APL quantity
     """
-    if isinstance(value,APL_quantity):
+    if isinstance(value,aplQuantity):
         if value.isString():
             return "'{0}'".format(value)
         else:
@@ -36,7 +36,7 @@ def _format_element (value):
 
 # ------------------------------
 
-class APL_quantity (object):
+class   aplQuantity(object):
     """
     trivial class that holds an APL quantity
     """
@@ -78,7 +78,7 @@ class APL_quantity (object):
         if self.isString() or self.isScalar():
             return self
         else:
-            return APL_quantity(list(self.value),self.dim,self.string)
+            return aplQuantity(list(self.value),self.dim,self.string)
 
     def noStringConfirm(self):
         if self.isString():
@@ -87,9 +87,9 @@ class APL_quantity (object):
     def noString(self):
         if self.isString():
             if self.isScalar():
-                return APL_quantity(ord(self.value),None)
+                return aplQuantity(ord(self.value),None)
             else:
-                return APL_quantity(map(ord,self.value),self.dim)
+                return aplQuantity(map(ord,self.value),self.dim)
 
         return self
 
@@ -138,23 +138,23 @@ class APL_scalar_iter (object):
 
 # ------------------------------
 
-def     make_scalar(value):
+def     makeScalar(value):
     """
     make an APL scalar quantity from a numeric Python value
     """
-    return APL_quantity(value,None)
+    return aplQuantity(value,None)
 
 # ------------------------------
 
-def     make_vector(value,string=False):
+def     makeVector(value, string=False):
     """
     make an APL vector quantity from a numeric Python list
     """
-    return APL_quantity(value,len(value),string)
+    return aplQuantity(value,len(value),string)
 
 # ------------------------------
 
-def     make_string(value):
+def     makeString(value):
     """
     make an APL string quantity from a Python str
     """
@@ -163,9 +163,9 @@ def     make_string(value):
     length = len(value)
 
     if length == 1 and delim == "'":
-        return APL_quantity(value,None,True)
+        return aplQuantity(value,None,True)
     else:
-        return APL_quantity(value,length,True)
+        return aplQuantity(value,length,True)
 
 # ------------------------------
 
@@ -176,9 +176,9 @@ def s2s (Fn,B):
     B.noStringConfirm()
 
     if B.isScalar():
-        return APL_quantity(Fn(B.python()),None)
+        return aplQuantity(Fn(B.python()),None)
     else:
-        return APL_quantity(map(Fn,B),B.dimension())
+        return aplQuantity(map(Fn,B),B.dimension())
 
 # ------------------------------
 
@@ -190,7 +190,7 @@ def s2v (Fn,B):
 
     Bpy = B.scalarToPy()
 
-    return APL_quantity(Fn(Bpy),Bpy)
+    return aplQuantity(Fn(Bpy),Bpy)
 
 # ------------------------------
 
@@ -199,14 +199,14 @@ def v_head (Fn,B):
     evaluate a numeric function that, given a vector argument, returns a scalar
     """
     if B.isScalar():
-        return APL_quantity(Fn(B.scalarToPy()),None,B.isString())
+        return aplQuantity(Fn(B.scalarToPy()),None,B.isString())
 
     # assert B.isVector()
 
     if B.dimension() < 1:
-        return APL_quantity([],0,B.isString())
+        return aplQuantity([],0,B.isString())
     else:
-        return APL_quantity(Fn(B.vectorToPy()),None,B.isString())
+        return aplQuantity(Fn(B.vectorToPy()),None,B.isString())
 
 # ------------------------------
 
@@ -215,14 +215,14 @@ def v_tail (Fn,B):
     evaluate a function that, given a vector argument, returns a vector (probably)
     """
     if B.isScalar():
-        return APL_quantity([],0,B.isString())
+        return aplQuantity([],0,B.isString())
 
     # assert B.isVector()
 
     if B.dimension() <= 1:
-        return APL_quantity([],0,B.isString())
+        return aplQuantity([],0,B.isString())
 
-    return APL_quantity(Fn(B.vectorToPy()),B.dimension()-1,B.isString())
+    return aplQuantity(Fn(B.vectorToPy()),B.dimension()-1,B.isString())
 
 # ------------------------------
 
@@ -233,9 +233,9 @@ def v2v (Fn,B):
     Rpy = Fn(B.vectorToPy())
 
     if B.isScalar():
-        return APL_quantity(Rpy[0],B.dimension(),B.isString())
+        return aplQuantity(Rpy[0],B.dimension(),B.isString())
     else:
-        return APL_quantity(Rpy,B.dimension(),B.isString())
+        return aplQuantity(Rpy,B.dimension(),B.isString())
 
 # ------------------------------
 
@@ -243,9 +243,9 @@ def s_rho (Fn,B):
     """
     scalar rho - return dimension/rank of B - does not operate on B
     """
-    if B.isScalar():    return APL_quantity([],0)
+    if B.isScalar():    return aplQuantity([],0)
 
-    if B.isVector():    return APL_quantity([B.dimension()],1)
+    if B.isVector():    return aplQuantity([B.dimension()],1)
 
     aplError("RANK ERROR")
 
@@ -256,7 +256,7 @@ def s_comma (Fn,B):
     scalar comma - unravel B and return a vector
     """
 
-    if B.isScalar():    return APL_quantity(B.vectorToPy(),1,B.isString())
+    if B.isScalar():    return aplQuantity(B.vectorToPy(),1,B.isString())
 
     if B.isVector():    return B
 
@@ -279,13 +279,13 @@ def ss2s (Fn,A,B,numbersOnly):
     case = len(dims)
 
     if case == 0:
-        return APL_quantity(Fn(A.python(),B.python()),None)
+        return aplQuantity(Fn(A.python(),B.python()),None)
 
     if case == 2:
         if dims[0] != dims[1]:
             aplError("LENGTH ERROR")
 
-    return APL_quantity(map(Fn,A,B),dims[0])
+    return aplQuantity(map(Fn,A,B),dims[0])
 
 # ------------------------------
 
@@ -293,7 +293,7 @@ def ss2v (Fn,A,B):
     """
     evaluate a numeric dyadic function that, given scalar arguments, returns a vector
     """
-    return APL_quantity(Fn(A.scalarToPy(),B.scalarToPy()),A)
+    return aplQuantity(Fn(A.scalarToPy(),B.scalarToPy()),A)
 
 # ------------------------------
 
@@ -307,7 +307,7 @@ def vv2v (Fn,A,B):
 
     Rpy = Fn(A.vectorToPy(),B.vectorToPy())
 
-    return APL_quantity(Rpy,len(Rpy),case == 2)
+    return aplQuantity(Rpy,len(Rpy),case == 2)
 
 # ------------------------------
 
@@ -318,9 +318,9 @@ def vv2s (Fn,A,B):
     Rpy = Fn(A.vectorToPy(),B.vectorToPy())
 
     if B.isScalar():
-        return APL_quantity(Rpy[0],None)
+        return aplQuantity(Rpy[0],None)
     else:
-        return APL_quantity(Rpy,B.dimension())
+        return aplQuantity(Rpy,B.dimension())
 
 # ------------------------------
 
@@ -334,7 +334,7 @@ def sv_rho (Fn,A,B):
 
     Rpy = Fn(A.scalarToPy(),B.vectorToPy())
 
-    return APL_quantity(Rpy,A.scalarToPy(),B.isString())
+    return aplQuantity(Rpy,A.scalarToPy(),B.isString())
 
 # ------------------------------
 
@@ -349,7 +349,7 @@ def vv_comma (Fn,A,B):
 
     Rpy = Fn(Apy,Bpy)
 
-    return APL_quantity(Rpy,len(Rpy),case == 2)
+    return aplQuantity(Rpy,len(Rpy),case == 2)
 
 # ------------------------------
 
@@ -369,7 +369,7 @@ def sv_transpose (Fn,A,B):
 
     Bpy = B.vectorToPy()
 
-    return APL_quantity(Fn(Apy,Bpy),B.dimension(),B.isString())
+    return aplQuantity(Fn(Apy,Bpy),B.dimension(),B.isString())
 
 # ------------------------------
 
@@ -382,9 +382,9 @@ def sv2vr (Fn,A,B):
     Rpy = Fn(A.scalarToPy("RANK ERROR"),B.vectorToPy())
 
     if B.isScalar():
-        return APL_quantity(Rpy[0],None,B.isString())
+        return aplQuantity(Rpy[0],None,B.isString())
     else:
-        return APL_quantity(Rpy,B.dimension(),B.isString())
+        return aplQuantity(Rpy,B.dimension(),B.isString())
 
 # ------------------------------
 
@@ -397,9 +397,9 @@ def sv2vl (Fn,A,B):
     Rpy = Fn(A.scalarToPy("LENGTH ERROR"),B.vectorToPy())
 
     if B.isScalar():
-        return APL_quantity(Rpy[0],B.dimension(),B.isString())
+        return aplQuantity(Rpy[0],B.dimension(),B.isString())
     else:
-        return APL_quantity(Rpy,len(Rpy),B.isString())
+        return aplQuantity(Rpy,len(Rpy),B.isString())
 
 # ------------------------------
 
@@ -412,11 +412,11 @@ def ce2v (Fn,A,B):
     if B.isString():
         Rpy = Fn(A.vectorToPy(),B.vectorToPy(),' ')
 
-        return APL_quantity(Rpy,len(Rpy),True)
+        return aplQuantity(Rpy,len(Rpy),True)
     else:
         Rpy = Fn(A.vectorToPy(),B.vectorToPy(),0)
 
-        return APL_quantity(Rpy,len(Rpy),False)
+        return aplQuantity(Rpy,len(Rpy),False)
 
 # ------------------------------
 
@@ -438,7 +438,7 @@ def vv_match (Fn,A,B,noMatch):
     else:
         aplError("RANK ERROR")
 
-    return APL_quantity(int(R ^ noMatch),None)
+    return aplQuantity(int(R ^ noMatch),None)
 
 # ------------------------------
 
@@ -454,14 +454,14 @@ def v_nest (B):
     elif B.isVector():
         R = 1
         for X in B:
-            if isinstance(X,APL_quantity):
+            if isinstance(X,aplQuantity):
                 R = 2
                 break
 
     else:
         aplError("RANK ERROR")
 
-    return APL_quantity(R,None)
+    return aplQuantity(R,None)
 
 # ------------------------------
 
@@ -480,7 +480,7 @@ def v_tally (B):
     else:
         aplError("RANK ERROR")
 
-    return APL_quantity(R,None)
+    return aplQuantity(R,None)
 
 # ------------------------------
 
@@ -494,9 +494,9 @@ def     vs2v_encode (Fn,A,B):
     Rpy = Fn(A.vectorToPy(),B.scalarToPy())
 
     if A.isScalar():
-        return APL_quantity(Rpy[0],None,False)
+        return aplQuantity(Rpy[0],None,False)
     else:
-        return APL_quantity(Rpy,A.dimension(),False)
+        return aplQuantity(Rpy,A.dimension(),False)
 
 # ------------------------------
 
@@ -512,6 +512,6 @@ def     vv2s_decode (Fn,A,B):
     else:
         Rpy = Fn(A.vectorToPy()[-B.dimension():],B.vectorToPy())
 
-    return APL_quantity(Rpy,None,False)
+    return aplQuantity(Rpy,None,False)
 
 # EOF

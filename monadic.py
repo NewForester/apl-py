@@ -19,7 +19,8 @@ import mpmath
 
 from systemVariables import fuzzyInteger, confirmInteger, indexOrigin
 
-from apl_quantity import APL_quantity as apl_quantity, s2s, s2v, s_rho, s_comma, v_head, v_tail, v2v, v_nest, v_tally
+from aplQuantity import makeScalar
+from aplQuantity import s2s, s2v, s_rho, s_comma, v_head, v_tail, v2v, v_nest, v_tally
 from aplError import aplError
 
 # ------------------------------
@@ -313,7 +314,7 @@ _monadic_functions = {
     '⍒':        to_be_implemented,      # grade down (descending sort indicies)
 
     # Miscellaneous
-    '⊣':        lambda B: apl_quantity(0,None),
+    '⊣':        lambda B: makeScalar(0),
     '⊢':        lambda B: B,
     '⊤':        lambda B: aplError("VALENCE ERROR"),
     '⊥':        lambda B: aplError("VALENCE ERROR"),

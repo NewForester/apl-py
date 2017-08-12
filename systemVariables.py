@@ -9,12 +9,12 @@
 import  math
 import  operator
 
-from apl_quantity import APL_quantity as apl_quantity, make_scalar
+from aplQuantity import aplQuantity, makeScalar
 from aplError import aplError
 
 # ------------------------------
 
-class   _SystemVariable(apl_quantity):
+class   _SystemVariable(aplQuantity):
     """
     an APL system variable is represented by a triplet;
         - a make function (used to make an APL quantity from a Python value)
@@ -22,7 +22,7 @@ class   _SystemVariable(apl_quantity):
         - an APL quantity
     """
     def __init__(self, makeFunction, confirmFunction, value):
-        apl_quantity.__init__(self,None)
+        aplQuantity.__init__(self,None)
         self._make = makeFunction
         self._confirm = confirmFunction
         self.deepClone(self._make(value))
@@ -115,8 +115,8 @@ def     indexOrigin():
 
 # ------------------------------
 
-_CT = _SystemVariable(make_scalar, confirmReal, 1e-13)
-_IO = _SystemVariable(make_scalar, confirmBoolean, 1)
+_CT = _SystemVariable(makeScalar, confirmReal, 1e-13)
+_IO = _SystemVariable(makeScalar, confirmBoolean, 1)
 
 # a simple dictionary with (k, v) = (name, system-variable)
 

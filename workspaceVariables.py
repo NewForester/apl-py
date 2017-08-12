@@ -6,17 +6,17 @@
     This is an initial version:  there is much still to be done
 """
 
-from apl_quantity import APL_quantity as apl_quantity
+from aplQuantity import aplQuantity
 from aplError import aplError
 
 # ------------------------------
 
-class   _WorkspaceVariable(apl_quantity):
+class   _WorkspaceVariable(aplQuantity):
     """
-    a simple wrapper for an APL_quantity to ensure values are values, not promises
+    a simple wrapper for an aplQuantity to ensure values are values, not promises
     """
     def __init__(self, quantity):
-        apl_quantity.__init__(self,None)
+        aplQuantity.__init__(self,None)
         self.deepClone(quantity)
 
     def get(self):

@@ -23,7 +23,7 @@ from systemVariables import systemVariable
 
 from workspaceVariables import workspaceVariable
 
-from apl_quantity import APL_quantity as apl_value, make_scalar, make_vector, make_string
+from aplQuantity import aplQuantity, makeScalar, makeVector, makeString
 from aplError import aplException, aplError
 
 # ------------------------------
@@ -161,7 +161,7 @@ def     evaluate_input_output (expr,leader,cio):
             cio.userPromptLength = rhs.dimension()
             cio.printExplicit(rhs,'')
         elif rhs.isVector():
-            cio.printExplicit(make_vector([rhs]),'')
+            cio.printExplicit(makeVector([rhs]),'')
         else:
             cio.printExplicit(rhs,'')
 
@@ -180,7 +180,7 @@ def     evaluate_input_output (expr,leader,cio):
             except EOFError:
                 aplError("EOF_ERROR")
 
-            value = make_vector(cio.userPromptLength * ' ' + expr,True)
+            value = makeVector(cio.userPromptLength * ' ' + expr,True)
 
             cio.endOfLine = '\n'
         else:
@@ -255,7 +255,7 @@ def     extract_string (expr,delim,_):
     if match:
         string = match.group(0)
         if string:
-            return (make_string(string), len(string))
+            return (makeString(string), len(string))
 
     return (None, 0)
 
@@ -305,7 +305,7 @@ parser_functions = (
     evaluate_subexpression,
     evaluate_input_output,
     evaluate_input_output,
-    lambda e,l,c: (make_vector([]), 1),
+    lambda e,l,c: (makeVector([]), 1),
     lambda e,l,c: (None, len(e)),
 )
 
@@ -332,7 +332,7 @@ def     parse (expr,cio):
         value, consumed = function(expr,leader,cio)
 
         if value is not None:
-            if isinstance(value,apl_value) and value.isScalar() and not value.isString():
+            if isinstance(value,aplQuantity) and value.isScalar() and not value.isString():
                 lhs.append(value.python())
             else:
                 lhs.append(value)
@@ -355,11 +355,11 @@ def     parse (expr,cio):
     if len(lhs) == 0:
         lhs = None
     elif len(lhs) > 1:
-        lhs = make_vector(lhs)
+        lhs = makeVector(lhs)
     else:
         lhs = lhs[0]
-        if not isinstance(lhs,apl_value):
-            lhs = make_scalar(lhs)
+        if not isinstance(lhs,aplQuantity):
+            lhs = makeScalar(lhs)
 
     return (lhs, expr)
 
