@@ -88,24 +88,40 @@ for step in ${steps}; do
 
       (3)
         narrative <<- EOF
-	Test cases check the short and long forms of the version flag.
+	Test cases check the short and long forms of the long help flag.
 	EOF
 
         nn=3a;
-        herald "Test Case ${nn} - Check recognition of short form version flag";
-        invoke apl.py -V;
+        herald "Test Case ${nn} - Check recognition of short form long help flag";
+        invoke apl.py -h long '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "longhelp.ref";
 
         nn=3b;
-        herald "Test Case ${nn} - Check recognition of long form version flag";
-        invoke apl.py --Version;
+        herald "Test Case ${nn} - Check recognition of long form long help flag";
+        invoke apl.py --help long '&>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "longhelp.ref";
       ;;
 
       (4)
         narrative <<- EOF
-	Test cases check behaviour when files cannot be opened or created.
+	Test cases check the short and long forms of the version flag.
 	EOF
 
         nn=4a;
+        herald "Test Case ${nn} - Check recognition of short form version flag";
+        invoke apl.py -V;
+
+        nn=4b;
+        herald "Test Case ${nn} - Check recognition of long form version flag";
+        invoke apl.py --Version;
+      ;;
+
+      (5)
+        narrative <<- EOF
+	Test cases check behaviour when files cannot be opened or created.
+	EOF
+
+        nn=5a;
         herald "Test Case ${nn} - Response to input redirection to a file that cannot be read";
         invoke apl.py -f "test_${nn::1}.txt" '||' true;
         ;;
