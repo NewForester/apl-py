@@ -1,5 +1,5 @@
 """
-    the top level of the APL Read-Evaluate-Print loop
+    parse and evaluate APL expressions
 
     UNDER DEVELOPMENT
 
@@ -29,46 +29,48 @@ from aplError import aplException, aplError
 # ------------------------------
 
 _reNumber = re.compile(r'¯?[0-9]*\.?[0-9]*([eE][-+¯]?[0-9]+)?')
-_reName   = re.compile(r'[A-Za-z][A-Z_a-z0-9]*')
+_reName = re.compile(r'[A-Za-z][A-Z_a-z0-9]*')
 
 _reAposString = re.compile(r"'([^']|'')*'")
 _reQuotString = re.compile(r'"([^"]|"")*"')
 
 # ------------------------------
 
-def     _findUnquoted(expr,char,spos=0):
+def     _findUnquoted(expr, char, spos=0):
     """
     find the first occurrence in char that is not in a string literal
     """
-    cpos = expr.find(char,spos)
+    cpos = expr.find(char, spos)
     if cpos == -1:
         return cpos
 
-    mpos = reduce(lambda a, x: x if x < a and x != -1 else a, map(lambda x: expr.find(x,spos), ('"',"'")),cpos)
+    mpos = reduce(lambda a, x: x if x < a and x != -1 else a,
+                  map(lambda x: expr.find(x, spos), ('"', "'")),
+                  cpos)
 
     if mpos == cpos:
         return cpos
 
-    spos = expr.find(expr[mpos],mpos+1)
+    spos = expr.find(expr[mpos], mpos+1)
     if spos == -1:
-        aplError("SYNTAX ERROR",expr[mpos:])
+        aplError("SYNTAX ERROR", expr[mpos:])
 
-    return _findUnquoted(expr,char,spos+1)
+    return _findUnquoted(expr, char, spos+1)
 
-# ------------------------------
+# --------------
 
-def     evaluateAndPrint(line,cio,hushLast=False):
+def     evaluateAndPrint(line, cio, hushLast=False):
     """
     evaluate and print possibly more than one expression
     """
     cio.startNewStmt()
 
-    pos = _findUnquoted(line,'⋄')
+    pos = _findUnquoted(line, '⋄')
 
     if pos == -1:
         expr = line.lstrip()
         if expr:
-            result = evaluate(expr,cio)
+            result = evaluate(expr, cio)
             if not hushLast:
                 cio.printEndOfLine()
                 cio.printImplicit(result)
@@ -78,20 +80,18 @@ def     evaluateAndPrint(line,cio,hushLast=False):
     else:
         expr = line[:pos].lstrip()
         if expr:
-            result = evaluate(expr,cio)
+            result = evaluate(expr, cio)
             cio.printImplicit(result)
 
         line = line[pos + 1:].lstrip()
         if line:
-            return evaluateAndPrint(line,cio,hushLast)
+            return evaluateAndPrint(line, cio, hushLast)
 
 # ------------------------------
 
-def     expression_within_parentheses (expr,opos,cpos):
+def     _expressionWithinParentheses(expr, opos, cpos):
     """
-    Find expression in parentheses
-
-    Raises SYNTAX ERROR (closing parenthesis missing)
+    find expression in parentheses
     """
     pos = expr[cpos + 1:].find(')')
     if pos == -1:
@@ -103,25 +103,23 @@ def     expression_within_parentheses (expr,opos,cpos):
         return expr[:cpos + 1]
     opos += pos + 1
 
-    return expression_within_parentheses(expr,opos,cpos)
+    return _expressionWithinParentheses(expr, opos, cpos)
+
+# --------------
+
+def     evaluateSubexpression(expr, cio):
+    """
+    extract and evaluate a leading subexpression in parentheses
+    """
+    subexpression = _expressionWithinParentheses(expr, 0, 0)
+
+    return evaluate(subexpression[1:-1], cio), len(subexpression)
 
 # ------------------------------
 
-def     evaluate_subexpression (expr,_,cio):
+def     evaluateName(expr, cio):
     """
-    Extract and evaluate a leading subexpression in parentheses
-    """
-    subexpression = expression_within_parentheses(expr,0,0)
-
-    return (evaluate(subexpression[1:-1],cio), len(subexpression))
-
-# ------------------------------
-
-def     evaluate_name (expr,_,cio):
-    """
-    Evaluate, assign to or create a workspace variable
-
-    does not handle functions
+    evaluate, assign to or create a workspace variable
     """
     match = _reName.match(expr)
     if match:
@@ -131,81 +129,107 @@ def     evaluate_name (expr,_,cio):
             if rhs_expr and rhs_expr[0] == '←':
                 if cio.newStmt:
                     cio.hushImplicit = True
-                rhs = evaluate(rhs_expr[1:].lstrip(),cio)
-                lhs = workspaceVariable(name,rhs)
+                rhs = evaluate(rhs_expr[1:].lstrip(), cio)
+                lhs = workspaceVariable(name, rhs)
                 return (lhs, len(expr))
             else:
                 lhs = workspaceVariable(name)
                 return (lhs, len(name))
 
-    return (None, 0)
+    return None, 0
 
 # ------------------------------
 
-def     evaluate_input_output (expr,leader,cio):
+def     evaluateBoxIO(expr, cio):
     """
     evaluate, print (possibly) and return an intermediary result
     """
     texpr = expr[1:].lstrip()
+
     if texpr and texpr[0] == '←':
         # output operator
 
         if cio.newStmt:
             cio.hushImplicit = True
 
-        rhs = evaluate(texpr[1:],cio)
+        rhs = evaluate(texpr[1:], cio)
 
-        if leader == '⎕':
-            cio.printExplicit(rhs)
-        elif rhs.isString():
-            cio.userPromptLength = rhs.dimension()
-            cio.printExplicit(rhs,'')
-        elif rhs.isVector():
-            cio.printExplicit(makeVector([rhs]),'')
-        else:
-            cio.printExplicit(rhs,'')
+        cio.printExplicit(rhs)
 
-        return (rhs, len(expr))
+        return rhs, len(expr)
 
     else:
         # input operator
 
         lcio = shallowcopy(cio)
         lcio.startNewLine()
+        lcio.prompt = "⎕:    "
+        lcio.prefixDone = cio.prefixDone
 
-        if leader == '⍞':
-            lcio.prompt = ""
-            try:
-                expr = lcio.read(lcio.inFile)
-            except EOFError:
-                aplError("EOF_ERROR")
+        try:
+            expr = lcio.read(lcio.inFile)
+        except EOFError:
+            aplError("EOF_ERROR")
 
-            value = makeVector(cio.userPromptLength * ' ' + expr,True)
+        try:
+            value = evaluateAndPrint(expr, lcio, True)
+        except aplException as error:
+            lcio.printError(lcio.inFile, error, expr)
+            aplError(None)
 
-            cio.endOfLine = '\n'
-        else:
-            lcio.prompt = "⎕:    "
-            lcio.prefixDone = cio.prefixDone
-            try:
-                expr = lcio.read(lcio.inFile)
-            except EOFError:
-                aplError("EOF_ERROR")
+        cio.prefixDone = lcio.prefixDone
 
-            try:
-                value = evaluateAndPrint(expr,lcio,True)
-            except aplException as error:
-                lcio.printError(lcio.inFile,error,expr)
-                aplError(None)
-
-            cio.prefixDone = lcio.prefixDone
-
-        return (value, 1)
+        return value, 1
 
 # ------------------------------
 
-def     evaluate_system_variable (expr,_,cio):
+def     evaluateBoxTickIO(expr, cio):
     """
-    Evaluate or assign to a system variable
+    evaluate, print (possibly) and return an intermediary result
+    """
+    texpr = expr[1:].lstrip()
+
+    if texpr and texpr[0] == '←':
+        # output operator
+
+        if cio.newStmt:
+            cio.hushImplicit = True
+
+        rhs = evaluate(texpr[1:], cio)
+
+        if rhs.isString():
+            cio.userPromptLength = rhs.dimension()
+            cio.printExplicit(rhs, '')
+        elif rhs.isVector():
+            cio.printExplicit(makeVector([rhs]), '')
+        else:
+            cio.printExplicit(rhs, '')
+
+        return rhs, len(expr)
+
+    else:
+        # input operator
+
+        lcio = shallowcopy(cio)
+        lcio.startNewLine()
+        lcio.prompt = ""
+
+        try:
+            expr = lcio.read(lcio.inFile)
+        except EOFError:
+            aplError("EOF_ERROR")
+
+        value = makeVector(cio.userPromptLength*' '+expr, True)
+
+        cio.endOfLine = '\n'
+
+        return value, 1
+
+# ------------------------------
+
+def     evaluateSystemVariable(expr, cio):
+    """
+    evaluate or assign to a system variable
     """
     match = _reName.match(expr[1:])
     if match:
@@ -213,41 +237,43 @@ def     evaluate_system_variable (expr,_,cio):
         if name:
             rhs_expr = expr[len(name)+1:].lstrip()
             if rhs_expr and rhs_expr[0] == '←':
-                rhs = evaluate(rhs_expr[1:],cio)
-                lhs = systemVariable(name,rhs)
-                return (lhs, len(expr))
+                rhs = evaluate(rhs_expr[1:], cio)
+                lhs = systemVariable(name, rhs)
+                consumed = len(expr)
             else:
                 lhs = systemVariable(name)
-                return (lhs, len(name)+1)
+                consumed = len(name)+1
 
-    return (None, 0)
+            return lhs, consumed
+
+    return None, 0
 
 # ------------------------------
 
-def     handle_system_command (expr,_,cio):
+def     handleSystemCommand(expr, cio):
     """
-    Invoke a system command
+    invoke a system command
     """
     match = _reName.match(expr[1:])
     if match:
         name = match.group(0)
         if name:
-            systemCommand(name,expr[len(name)+1:],cio)
-            return (None, len(expr))
+            systemCommand(name, expr[len(name)+1:], cio)
+            return None, len(expr)
 
-    return (None, 0)
+    return None, 0
 
 # ------------------------------
 
-def     extract_string (expr,delim,_):
+def     extractString(expr, _):
     """
-    Extract leading string from expression
+    extract leading string from expression
     """
+    delim = expr[0]
+
     if delim == "'":
-        lhs = 0
         match = _reAposString.match(expr)
     elif delim == '"':
-        lhs = 1
         match = _reQuotString.match(expr)
     else:
         match = None
@@ -255,15 +281,15 @@ def     extract_string (expr,delim,_):
     if match:
         string = match.group(0)
         if string:
-            return (makeString(string), len(string))
+            return makeString(string), len(string)
 
-    return (None, 0)
+    return None, 0
 
 # ------------------------------
 
-def     extract_number (expr,_,__):
+def     extractNumber(expr, _):
     """
-    Extract leading number from expression
+    extract leading number from expression
     """
     match = _reNumber.match(expr)
 
@@ -271,68 +297,63 @@ def     extract_number (expr,_,__):
         number = match.group(0)
         if number:
             try:
-                return (float(number.replace('¯','-')), len(number))
-            except ValueError as e:
-                if not reduce (lambda a,x: a or x == number,('.', '¯', "¯."),False):
-                    raise(e)
+                return float(number.replace('¯', '-')), len(number)
+            except ValueError as exception:
+                if not reduce(lambda a, x: a or x == number, ('.', '¯', "¯."), False):
+                    raise exception
 
-    return (None, 0)
-
-# ------------------------------
-
-def     _isCompoundOperator (operator,expr):
-    """
-    does expression start with the given compound operator ?
-    """
-    start = len(expr)
-
-    while operator:
-        if not expr.startswith(operator[0]):
-            return 0
-
-        expr = expr[1:].lstrip()
-        operator = operator[1:]
-
-    return start - len(expr)
+    return None, 0
 
 # ------------------------------
 
-parser_functions = (
-    extract_number,
-    extract_string,
-    extract_string,
-    handle_system_command,
-    evaluate_subexpression,
-    evaluate_input_output,
-    evaluate_input_output,
-    lambda e,l,c: (makeVector([]), 1),
-    lambda e,l,c: (None, len(e)),
+_ParserFunctions = (
+    extractNumber,
+    extractString,
+    extractString,
+    handleSystemCommand,
+    evaluateSubexpression,
+    evaluateBoxIO,
+    evaluateBoxTickIO,
+    lambda e, c: (makeVector([]), 1),
+    lambda e, c: (None, len(e)),
 )
 
-def     parse (expr,cio):
+# --------------
+
+def     parseFunction(expr, lhs):
     """
-    Extract and evaluate the next token in a APL expression (left to right)
+    chose function that will parse the next token
+    """
+    leader = expr[0]
+
+    if leader.isalpha():
+        return evaluateName
+
+    if leader == '⎕' and len(expr) > 1 and expr[1].isalpha():
+        return evaluateSystemVariable
+
+    if leader == ')' and lhs != []:
+        aplError("SYNTAX ERROR")
+
+    return _ParserFunctions["'\")(⎕⍞⍬⍝".find(leader)+1]
+
+# --------------
+
+def     parse(expr, cio):
+    """
+    extract and evaluate the next subexpression from expr
 
     Beware indirect recursion
     """
     lhs = []
 
     while True:
-        leader = expr[0]
+        function = parseFunction(expr, lhs)
 
-        if leader.isalpha():
-            function = evaluate_name
-        elif leader == '⎕' and len(expr) > 1 and expr[1].isalpha():
-            function = evaluate_system_variable
-        elif leader == ')' and lhs != []:
-            aplError("SYNTAX ERROR")
-        else:
-            function = parser_functions["'\")(⎕⍞⍬⍝".find(leader)+1]
-
-        value, consumed = function(expr,leader,cio)
+        value, consumed = function(expr, cio)
 
         if value is not None:
-            if isinstance(value,aplQuantity) and value.isScalar() and not value.isString():
+            if isinstance(value, aplQuantity) and value.isScalar() and not value.isString():
                 lhs.append(value.python())
             else:
                 lhs.append(value)
@@ -352,24 +373,13 @@ def     parse (expr,cio):
         if not expr:
             break
 
-    if len(lhs) == 0:
-        lhs = None
-    elif len(lhs) > 1:
-        lhs = makeVector(lhs)
-    else:
-        lhs = lhs[0]
-        if not isinstance(lhs,aplQuantity):
-            lhs = makeScalar(lhs)
-
-    return (lhs, expr)
+    return lhs, expr
 
 # ------------------------------
 
-def     evaluate (expression,cio):
+def     evaluate(expression, cio):
     """
-    Evaluate an APL expression
-
-    this routine is recursive
+    evaluate an APL expression
     """
     try:
         expr = expression.lstrip()
@@ -377,7 +387,16 @@ def     evaluate (expression,cio):
         if not expr:
             aplError("SYNTAX ERROR")
 
-        lhs, expr = parse(expr,cio)
+        lhs, expr = parse(expr, cio)
+
+        if lhs == []:
+            lhs = None
+        elif len(lhs) > 1:
+            lhs = makeVector(lhs)
+        else:
+            lhs = lhs[0]
+            if not isinstance(lhs, aplQuantity):
+                lhs = makeScalar(lhs)
 
         if not expr:
             return lhs
@@ -387,17 +406,17 @@ def     evaluate (expression,cio):
                 cio.hushImplicit = True
             cio.newStmt = False
             function = monadic_function(expr)
-            rhs = evaluate(expr[1:],cio)
+            rhs = evaluate(expr[1:], cio)
             return function(rhs)
         else:
             cio.newStmt = False
             function = dyadic_function(expr)
-            rhs = evaluate(expr[1:],cio)
-            return function(lhs,rhs)
+            rhs = evaluate(expr[1:], cio)
+            return function(lhs, rhs)
 
     except aplException as error:
         if not error.expr:
-           error.expr = expr
-        raise(error)
+            error.expr = expr
+        raise error
 
 # EOF
