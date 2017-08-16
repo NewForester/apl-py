@@ -20,7 +20,7 @@
     Almost all tests are positive.
 """
 
-from evaluate import evaluate, evaluate_and_print
+from evaluate import evaluate, evaluateAndPrint
 
 from aplCio import aplCio
 from aplError import aplException
@@ -322,7 +322,7 @@ def     parseOutput(expr):
     """
     try:
         cio = aplCio()
-        evaluate_and_print(expr, cio)
+        evaluateAndPrint(expr, cio)
     except aplException as error:
         print(error.message)
 

@@ -57,7 +57,7 @@ def     _findUnquoted(expr,char,spos=0):
 
 # ------------------------------
 
-def     evaluate_and_print (line,cio,hushLast=False):
+def     evaluateAndPrint(line,cio,hushLast=False):
     """
     evaluate and print possibly more than one expression
     """
@@ -83,7 +83,7 @@ def     evaluate_and_print (line,cio,hushLast=False):
 
         line = line[pos + 1:].lstrip()
         if line:
-            return evaluate_and_print(line,cio,hushLast)
+            return evaluateAndPrint(line,cio,hushLast)
 
 # ------------------------------
 
@@ -192,7 +192,7 @@ def     evaluate_input_output (expr,leader,cio):
                 aplError("EOF_ERROR")
 
             try:
-                value = evaluate_and_print(expr,lcio,True)
+                value = evaluateAndPrint(expr,lcio,True)
             except aplException as error:
                 lcio.printError(lcio.inFile,error,expr)
                 aplError(None)

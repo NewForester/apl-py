@@ -13,7 +13,7 @@
 
 import sys
 
-from evaluate import evaluate_and_print
+from evaluate import evaluateAndPrint
 
 from aplCio import aplCio
 from aplError import aplException, aplExit, aplQuit
@@ -220,7 +220,7 @@ def     readEvaluatePrint(cio):
             return
 
         try:
-            evaluate_and_print(line, cio)
+            evaluateAndPrint(line, cio)
         except aplException as error:
             cio.printError(cio.scriptFile, error, line)
             if cio.scriptFile.path is not None or cio.sysin.path is not None:
@@ -326,7 +326,7 @@ def     _processArgs(args, cio):
         cio.startNewLine()
 
         try:
-            evaluate_and_print(args, cio)
+            evaluateAndPrint(args, cio)
             aplExit(0)
         except aplException as error:
             cio.printString(args)
