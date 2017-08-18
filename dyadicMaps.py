@@ -1,19 +1,17 @@
 """
-    maps used to apply a dyadic function to a pair of APL quantitities
+    map functions for dyadic APL functions
 
     UNDER DEVELOPMENT
 
-    A dyadic APL function that can be applied to a pair of numeric values can
-    be extended to operator over a pair of large APL quantities by means of a
-    higher order function known as a map.
+    This module contains functions that map mathematical scalar functions over
+    vectors and higher order arrays with the help of iterators functions.  It
+    also contains functions that map non-mathematical vector functions.
 
-    Python provides a standard map that is good for APL mathematical functions
-    but functions that do not map one-to-one need special purpose maps.
+    The external view is a map function but internally the functions delegate.
+    Their task is a validate parameters and handle degenerate cases.
 
-    The Python map is an example of lazy evaluation.  The special purpose maps
-    also implement lazy evaluation where possible.
-
-    That is a statement of intent:  the old implementations are to be replaced.
+    WIP - the implementation of lazy evaluation means all functions in this
+    module are under review.
 """
 
 from aplQuantity import aplQuantity
