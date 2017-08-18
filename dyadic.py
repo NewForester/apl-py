@@ -18,162 +18,168 @@ import random
 import mpmath
 
 from systemVariables import fuzzyEquals, fuzzyInteger, confirmBoolean, confirmInteger, indexOrigin
-from dyadicMaps import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s, sv2vr, sv2vl, sv_transpose, ce2v, vv_match, vv2s_decode, vs2v_encode
+
+from dyadicMaps import ss2s, ss2v, sv_rho, vv_comma, vv2v, vv2s, sv2vr, sv2vl, sv_transpose, ce2v
+from dyadicMaps import vv_match, vv2s_decode, vs2v_encode
 
 from aplQuantity import aplQuantity
-from aplError import aplError
+from aplError import aplError, aplException
 
 # ------------------------------
 
-def     _add (A,B):
+def     add(A, B):
     """
     A plus B
     """
-    return operator.add(A,B)
+    return operator.add(A, B)
 
 # --------------
 
-def     _subtract (A,B):
+def     subtract(A, B):
     """
     A minus B
     """
-    return operator.sub(A,B)
+    return operator.sub(A, B)
 
 # --------------
 
-def     _multiply (A,B):
+def     multiply(A, B):
     """
     A times B
     """
-    return operator.mul(A,B)
+    return operator.mul(A, B)
 
 # --------------
 
-def     _divide (A,B):
+def     divide(A, B):
     """
     A divided by B - may raise DOMAIN ERROR
     """
     try:
-        return operator.truediv(A,B)
-    except:
-        if fuzzyEquals(A,0) and fuzzyEquals(B,0):   return 1
+        return operator.truediv(A, B)
+    except ZeroDivisionError:
+        if fuzzyEquals(A, 0) and fuzzyEquals(B, 0):
+            return 1
 
         aplError("DOMAIN ERROR")
 
 # --------------
 
-def     _maximum (A,B):
+def     maximum(A, B):
     """
     A maximum B
     """
-    return max(A,B)
+    return max(A, B)
 
 # --------------
 
-def     _minimum (A,B):
+def     minimum(A, B):
     """
     A minimum B
     """
-    return min(A,B)
+    return min(A, B)
 
 # --------------
 
-def     _residue (A,B):
+def     residue(A, B):
     """
     B modulo A with comparison tolerance
     """
-    if type(A) is int:
-        if A == 0:          return B
+    if isinstance(A, int):
+        if A == 0:
+            return B
     else:
-        if fuzzyEquals(A,0):    return B
+        if fuzzyEquals(A, 0):
+            return B
 
-    if type(fuzzyInteger(operator.truediv(B,A))) is int:
+    if isinstance(fuzzyInteger(operator.truediv(B, A)), int):
         return 0
 
-    result = math.fmod(B,A)
+    R = math.fmod(B, A)
 
-    if result < 0:
-        if A > 0:       result += A
-    elif result > 0:
-        if A < 0:       result += A
-    else:
-        result = 0.0
+    if (R < 0) != (A < 0):
+        R += A
 
-    if type(A) is int and type(B) is int:
-        return int(result)
-    else:
-        return result
+    if isinstance(A, int) and isinstance(B, int):
+        R = int(R)
+
+    return R
 
 # ------------------------------
 
-def     _exp (A,B):
+def     exp(A, B):
     """
     A to the power B - may raise DOMAIN ERROR
     """
     try:
-        return math.pow(A,B)
+        return math.pow(A, B)
     except ValueError:
         aplError("DOMAIN ERROR")
 
 # --------------
 
-def     _log (A,B):
+def     log(A, B):
     """
     log to base A of B - may raise DOMAIN ERROR
     """
     try:
-        if A == 10: return math.log10(B)
+        if A == 10:
+            return math.log10(B)
         # Python 3.3 and later # if A == 2:  return math.log2(B)
 
-        return math.log(B,A)
+        return math.log(B, A)
 
     except ValueError:
-        if fuzzyEquals(A,B):  return 1.0
-        if fuzzyEquals(A,0):  return 0.0
-        if fuzzyEquals(B,1):  return 0.0
+        if fuzzyEquals(A, B):
+            return 1.0
+        if fuzzyEquals(A, 0):
+            return 0.0
+        if fuzzyEquals(B, 1):
+            return 0.0
 
     except ZeroDivisionError:
-        if fuzzyEquals(A,B):  return 1.0
+        if fuzzyEquals(A, B):
+            return 1.0
 
     aplError("DOMAIN ERROR")
 
 # --------------
 
-def     _deal (A,B):
+def     deal(A, B):
     """
-    random selection of A numbers from the range [1,B] without replacement - may raise DOMAIN ERROR
+    random selection of A numbers from the range [1, B] without replacement - may raise DOMAIN ERROR
     """
 
     A = confirmInteger(A)
     B = confirmInteger(B)
 
     try:
-        return random.sample(range(1,B+1),A)
+        return random.sample(range(1, B+1), A)
     except ValueError:
         aplError("DOMAIN ERROR")
 
 # --------------
 
-def     _combinations (A,B):
+def     combinations(A, B):
     """
     number of combinations of size A from a population of size B - may raise DOMAIN ERROR
 
-    for floating point numbers this is binomial(B,A)
+    for floating point numbers this is binomial(B, A)
 
     rules for negative integers and floating point are interesting
     """
 
     try:
-        if type(A) is int and type(B) is int:
-            return int(mpmath.binomial(B,A))
-        else:
-            return float(mpmath.binomial(B,A))
+        if isinstance(A, int) and isinstance(B, int):
+            return int(mpmath.binomial(B, A))
+
+        return float(mpmath.binomial(B, A))
     except ValueError:
         aplError("DOMAIN ERROR")
 
 # ------------------------------
 
-_trigonometric_functions = (
+_TrigonometricFunctions = (
     None,               # -12
     None,
     None,
@@ -203,11 +209,11 @@ _trigonometric_functions = (
 
 # --------------
 
-def     _trigonometric (A,B):
+def     trigonometric(A, B):
     """
     A(B) where A is a trignometic function and B is an angle in Radians
 
-    A is valid in the range [-12,+12].  The following are implemented:
+    A is valid in the range [-12, +12].  The following are implemented:
 
     ¯7  atanh(B)
     ¯6  acosh(B)
@@ -230,9 +236,9 @@ def     _trigonometric (A,B):
     if A <= -12 or A >= 12:
         aplError("DOMAIN ERROR")
 
-    function = _trigonometric_functions[A+12]
+    function = _TrigonometricFunctions[A+12]
     if function is None:
-        return to_be_implemented(A,B)
+        return _toBeImplemented(A, B)
 
     try:
         return function(B)
@@ -242,7 +248,7 @@ def     _trigonometric (A,B):
 
 # ------------------------------
 
-def     _highest_common_factor (A,B):
+def     _highestCommonFactor(A, B):
     """
     Highest Common Factor by the Euclid method
 
@@ -251,33 +257,33 @@ def     _highest_common_factor (A,B):
     if B == 0:
         return abs(A)
 
-    return _highest_common_factor(B, A % B)
+    return _highestCommonFactor(B, A % B)
 
 # --------------
 
-def     _or_gcd (A,B):
+def     orGCD(A, B):
     """
-    A or B (Boolean); GCD(A,B) (otherwise)
+    A or B (Boolean); GCD(A, B) (otherwise)
     """
     try:
         return int(confirmBoolean(A) + confirmBoolean(B) != 0)
-    except:
-        return _highest_common_factor(A,B)
+    except aplException:
+        return _highestCommonFactor(A, B)
 
 # --------------
 
-def     _and_lcm (A,B):
+def     andLCM(A, B):
     """
-    A and B (Boolean); LCM(A,B) (otherwise)
+    A and B (Boolean); LCM(A, B) (otherwise)
     """
     try:
         return int(confirmBoolean(A) + confirmBoolean(B) == 2)
-    except:
-        return A * B / _highest_common_factor(A,B)
+    except aplException:
+        return A * B / _highestCommonFactor(A, B)
 
 # --------------
 
-def     _nor (A,B):
+def     nor(A, B):
     """
     A nor B - may raise DOMAIN ERROR
     """
@@ -285,7 +291,7 @@ def     _nor (A,B):
 
 # --------------
 
-def     _nand (A,B):
+def     nand(A, B):
     """
     A nand B - may raise DOMAIN ERROR
     """
@@ -293,88 +299,88 @@ def     _nand (A,B):
 
 # ------------------------------
 
-def     _lt (A,B):
+def     lt(A, B):
     """
     A < B with comparison tolerance
     """
-    if type(A) is int and type(B) is int:
-        return int(operator.lt(A,B))
+    if isinstance(A, int) and isinstance(B, int):
+        return int(operator.lt(A, B))
 
-    if fuzzyEquals(A,B):
+    if fuzzyEquals(A, B):
         return 0
 
-    return int(operator.lt(A,B))
+    return int(operator.lt(A, B))
 
 # --------------
 
-def     _le (A,B):
+def     le(A, B):
     """
     A <= B
     """
-    if type(A) is int and type(B) is int:
-        return int(operator.le(A,B))
+    if isinstance(A, int) and isinstance(B, int):
+        return int(operator.le(A, B))
 
-    if fuzzyEquals(A,B):
+    if fuzzyEquals(A, B):
         return 1
 
-    return int(operator.le(A,B))
+    return int(operator.le(A, B))
 
 # --------------
 
-def     _eq (A,B):
+def     eq(A, B):
     """
     A == B with comparison tolerance
     """
-    if type(A) is int and type(B) is int:
-        return int(operator.eq(A,B))
+    if isinstance(A, int) and isinstance(B, int):
+        return int(operator.eq(A, B))
 
-    return int(fuzzyEquals(A,B))
+    return int(fuzzyEquals(A, B))
 
 # --------------
 
-def     _ge (A,B):
+def     ge(A, B):
     """
     A >= B with comparison tolerance
     """
-    if type(A) is int and type(B) is int:
-        return int(operator.ge(A,B))
+    if isinstance(A, int) and isinstance(B, int):
+        return int(operator.ge(A, B))
 
-    if fuzzyEquals(A,B):
+    if fuzzyEquals(A, B):
         return 1
 
-    return int(operator.ge(A,B))
+    return int(operator.ge(A, B))
 
 # --------------
 
-def     _gt (A,B):
+def     gt(A, B):
     """
     A > B with comparison tolerance
     """
-    if type(A) is int and type(B) is int:
-        return int(operator.gt(A,B))
+    if isinstance(A, int) and isinstance(B, int):
+        return int(operator.gt(A, B))
 
-    if fuzzyEquals(A,B):
+    if fuzzyEquals(A, B):
         return 0
 
-    return int(operator.gt(A,B))
+    return int(operator.gt(A, B))
 
 # --------------
 
-def     _ne (A,B):
+def     ne(A, B):
     """
     A != B with comparison tolerance
     """
-    if type(A) is int and type(B) is int:
-        return int(operator.ne(A,B))
+    if isinstance(A, int) and isinstance(B, int):
+        return int(operator.ne(A, B))
 
-    if isinstance(A,aplQuantity) or isinstance(B,aplQuantity):
+    if isinstance(A, aplQuantity) or isinstance(B, aplQuantity):
         return True
 
-    return int(not fuzzyEquals(A,B))
+    return int(not fuzzyEquals(A, B))
 
 # ------------------------------
 
-def     _without (A,B):
+def     without(A, B):
     """
     remove (elements of B) from (list) A
     """
@@ -391,7 +397,7 @@ def     _without (A,B):
 
 # --------------
 
-def     _index (A,B):
+def     index(A, B):
     """
     index(es) of (elements of) B in (list) A
     """
@@ -410,52 +416,59 @@ def     _index (A,B):
 
 # --------------
 
-def     _take (A,B):
+def     take(A, B):
     """
     take A elements from B
     """
     A = confirmInteger(A)
-    if type(B) != str:  B = list(B)
+
+    if isinstance(B, str):
+        pad = ' '
+    else:
+        pad = [0]
+        B = list(B)
+
     LB = len(B)
 
     if A < 0:
-        if (0 > LB + A):
-            if type(B) == str:
-                return (' ' * (0 - (LB + A))) + B
-            else:
-                return ([0] * (0 - (LB + A))) + B
+        length = LB + A
+
+        if length < 0:
+            R = (pad * (0 - length)) + B
         else:
-            return B[LB + A:]
+            R = B[length:]
     else:
-        if (0 > LB - A):
-            if type(B) == str:
-                return B + (' ' * (0 - (LB - A)))
-            else:
-                return B + ([0] * (0 - (LB - A)))
+        length = LB - A
+
+        if length < 0:
+            R = B + (pad * (0 - length))
         else:
-            return B[:A]
+            R = B[:A]
+
+    return R
 
 # --------------
 
-def     _drop (A,B):
+def     drop(A, B):
     """
     drop A elements from B
     """
     A = confirmInteger(A)
-    if type(B) != str:  B = list(B)
+    if not isinstance(B, str):
+        B = list(B)
     LB = len(B)
 
-    if A < 0:
-        if (0 > LB + A):
-            return ''
-        else:
-            return B[:LB + A]
-    else:
+    if A >= 0:
         return B[A:]
+
+    if LB + A >= 0:
+        return B[:LB + A]
+
+    return []
 
 # --------------
 
-def     _rotatelast (A,B):
+def     rotateLast(A, B):
     """
     rotate (vector) B by A elements
     """
@@ -465,7 +478,7 @@ def     _rotatelast (A,B):
 
 # --------------
 
-def     _rotatefirst (A,B):
+def     rotateFirst(A, B):
     """
     rotate (vector) B by A elements
     """
@@ -475,11 +488,15 @@ def     _rotatefirst (A,B):
 
 # ------------------------------
 
-def     _reshape (A,B):
+def     reshape(A, B):
     """
     reshape (list) B to have length A by replication and/or truncation
     """
     A = confirmInteger(A)
+
+    if A < 0:
+        aplError("DOMAIN ERROR")
+
     B = list(B)
 
     length = len(B)
@@ -492,7 +509,7 @@ def     _reshape (A,B):
 
 # ------------------------------
 
-def     _concatenation (A,B):
+def     concatenation(A, B):
     """
     concatenate (list) B onto the end of (list) A
     """
@@ -500,7 +517,7 @@ def     _concatenation (A,B):
 
 # ------------------------------
 
-def     _union (A,B):
+def     union(A, B):
     """
     return union of B with A
 
@@ -516,7 +533,7 @@ def     _union (A,B):
 
 # ------------------------------
 
-def     _intersection (A,B):
+def     intersection(A, B):
     """
     return intersection of of B with A
 
@@ -532,7 +549,7 @@ def     _intersection (A,B):
 
 # ------------------------------
 
-def     _transpose (A,B):
+def     transpose(_, B):
     """
     transpose B about A
     """
@@ -540,7 +557,7 @@ def     _transpose (A,B):
 
 # ------------------------------
 
-def     _compress (A,B,pad):
+def     compress(A, B, pad):
     """
     compress/replicate B using A as the template
     """
@@ -556,16 +573,16 @@ def     _compress (A,B,pad):
             V = I.__next__()
 
             if X > 0:
-                for Y in range(X):
+                for _ in range(X):
                     R.append(V)
             elif X < 0:
-                for Y in range(-X):
+                for _ in range(-X):
                     R.append(pad)
             else:
                 pass
 
     except StopIteration:
-        if len(B) != 0:
+        if len(A) > 1:
             aplError("LENGTH ERROR")
 
     try:
@@ -579,11 +596,11 @@ def     _compress (A,B,pad):
 
 # ------------------------------
 
-def     _expand (A,B,pad):
+def     expand(A, B, pad):
     """
     expand B using A as the template
     """
-    R = []
+    V = []
 
     I = B.__iter__()
 
@@ -592,30 +609,30 @@ def     _expand (A,B,pad):
             X = confirmInteger(X)
 
             if X > 0:
-                V = I.__next__()
-                for Y in range(X):
-                    R.append(V)
+                S = I.__next__()
+                for _ in range(X):
+                    V.append(S)
             elif X < 0:
-                for Y in range(-X):
-                    R.append(pad)
+                for _ in range(-X):
+                    V.append(pad)
             else:
-                R.append(pad)
+                V.append(pad)
 
     except StopIteration:
         aplError("LENGTH ERROR")
 
     try:
-        V = I.__next__()
+        S = I.__next__()
     except StopIteration:
         pass
     else:
         aplError("LENGTH ERROR")
 
-    return R
+    return V
 
 # ------------------------------
 
-def     _encode (A,B):
+def     encode(A, B):
     """
     encode (scalar) B using (vector) A as base
     """
@@ -623,9 +640,8 @@ def     _encode (A,B):
 
     for X in reversed(A):
         if X != 0:
-            M = operator.mod(B,X)
-            V = [M] + V
-            B = operator.floordiv(B,X)
+            V = [operator.mod(B, X)] + V
+            B = operator.floordiv(B, X)
         else:
             V = [B] + V
             B = 0
@@ -634,7 +650,7 @@ def     _encode (A,B):
 
 # ------------------------------
 
-def     _decode (A,B):
+def     decode(A, B):
     """
     decode (vector) B using (vector) A as base
     """
@@ -644,7 +660,7 @@ def     _decode (A,B):
 
     try:
         for X in A:
-            S = S * X + next(I)
+            S = S * X + I.__next__()
     except StopIteration:
         pass
 
@@ -652,7 +668,7 @@ def     _decode (A,B):
 
 # ------------------------------
 
-def     to_be_implemented (A,B):
+def     _toBeImplemented(_, __):
     """
     placeholder for functions not yet implemented
 
@@ -662,97 +678,89 @@ def     to_be_implemented (A,B):
 
 # ------------------------------
 
-_dyadic_functions = {
-    # Mathematical
-    '+':        lambda A,B: ss2s(_add,A,B,True),
-    '-':        lambda A,B: ss2s(_subtract,A,B,True),
-    '×':        lambda A,B: ss2s(_multiply,A,B,True),
-    '÷':        lambda A,B: ss2s(_divide,A,B,True),
-    '⌈':        lambda A,B: ss2s(_maximum,A,B,True),
-    '⌊':        lambda A,B: ss2s(_minimum,A,B,True),
-    '|':        lambda A,B: ss2s(_residue,A,B,True),
+_DyadicFunctions = {
+    # Arithmetic
+    '+':        lambda A, B: ss2s(add, A, B, True),
+    '-':        lambda A, B: ss2s(subtract, A, B, True),
+    '×':        lambda A, B: ss2s(multiply, A, B, True),
+    '÷':        lambda A, B: ss2s(divide, A, B, True),
+    '⌈':        lambda A, B: ss2s(maximum, A, B, True),
+    '⌊':        lambda A, B: ss2s(minimum, A, B, True),
+    '|':        lambda A, B: ss2s(residue, A, B, True),
 
     # Algebraic
-    '*':        lambda A,B: ss2s(_exp,A,B,True),
-    '⍟':        lambda A,B: ss2s(_log,A,B,True),
-    '?':        lambda A,B: ss2v(_deal,A,B),
-    '!':        lambda A,B: ss2s(_combinations,A,B,True),
-    '⌹':        to_be_implemented,      # matrix divide
+    '*':        lambda A, B: ss2s(exp, A, B, True),
+    '⍟':        lambda A, B: ss2s(log, A, B, True),
+    '?':        lambda A, B: ss2v(deal, A, B),
+    '!':        lambda A, B: ss2s(combinations, A, B, True),
+    '⌹':        _toBeImplemented,       # matrix divide
 
     # Trigonometric
-    '○':        lambda A,B: ss2s(_trigonometric,A,B,True),
+    '○':        lambda A, B: ss2s(trigonometric, A, B, True),
 
     # Logical
-    '∨':        lambda A,B: ss2s(_or_gcd,A,B,True),
-    '∧':        lambda A,B: ss2s(_and_lcm,A,B,True),
-    '⍱':        lambda A,B: ss2s(_nor,A,B,True),
-    '⍲':        lambda A,B: ss2s(_nand,A,B,True),
+    '∨':        lambda A, B: ss2s(orGCD, A, B, True),
+    '∧':        lambda A, B: ss2s(andLCM, A, B, True),
+    '⍱':        lambda A, B: ss2s(nor, A, B, True),
+    '⍲':        lambda A, B: ss2s(nand, A, B, True),
 
     # Comparison
-    '<':        lambda A,B: ss2s(_lt,A,B,True),
-    '≤':        lambda A,B: ss2s(_le,A,B,True),
-    '=':        lambda A,B: ss2s(_eq,A,B,False),
-    '≥':        lambda A,B: ss2s(_ge,A,B,True),
-    '>':        lambda A,B: ss2s(_gt,A,B,True),
-    '≠':        lambda A,B: ss2s(_ne,A,B,False),
-    '≡':        lambda A,B: vv_match(_ne,A,B,False),
-    '≢':        lambda A,B: vv_match(_ne,A,B,True),
+    '<':        lambda A, B: ss2s(lt, A, B, True),
+    '≤':        lambda A, B: ss2s(le, A, B, True),
+    '=':        lambda A, B: ss2s(eq, A, B, False),
+    '≥':        lambda A, B: ss2s(ge, A, B, True),
+    '>':        lambda A, B: ss2s(gt, A, B, True),
+    '≠':        lambda A, B: ss2s(ne, A, B, False),
+    '≡':        lambda A, B: vv_match(ne, A, B, False),
+    '≢':        lambda A, B: vv_match(ne, A, B, True),
 
     # Structural (aka manipulative)
-    '⍴':        lambda A,B: sv_rho(_reshape,A,B),
-    ',':        lambda A,B: vv_comma(_concatenation,A,B),
-    '⍪':        lambda A,B: vv_comma(_concatenation,A,B),
-    '⌽':        lambda A,B: sv2vr(_rotatelast,A,B),
-    '⊖':        lambda A,B: sv2vr(_rotatefirst,A,B),
-    '⍉':        lambda A,B: sv_transpose(_transpose,A,B),
-    '⊃':        to_be_implemented,      # pick (disclose) = picks from an array (?!?)
-    '⊂':        to_be_implemented,      # partitioned enclose - creates an array of vectors (?!?)
+    '⍴':        lambda A, B: sv_rho(reshape, A, B),
+    ',':        lambda A, B: vv_comma(concatenation, A, B),
+    '⍪':        lambda A, B: vv_comma(concatenation, A, B),
+    '⌽':        lambda A, B: sv2vr(rotateLast, A, B),
+    '⊖':        lambda A, B: sv2vr(rotateFirst, A, B),
+    '⍉':        lambda A, B: sv_transpose(transpose, A, B),
+    '⊃':        _toBeImplemented,       # pick (disclose) = picks from an array (?!?)
+    '⊂':        _toBeImplemented,       # partitioned enclose - creates an array of vectors (?!?)
 
     # Selection and Set Operations
-    '~':        lambda A,B: vv2v(_without,A,B),
-    '⍳':        lambda A,B: vv2s(_index,A,B),
-    '↑':        lambda A,B: sv2vl(_take,A,B),
-    '↓':        lambda A,B: sv2vl(_drop,A,B),
-    '∪':        lambda A,B: vv2v(_union,A,B),
-    '∩':        lambda A,B: vv2v(_intersection,A,B),
-    '/':        lambda A,B: ce2v(_compress,A,B),
-    '⌿':        lambda A,B: ce2v(_compress,A,B),
-    '\\':       lambda A,B: ce2v(_expand,A,B),
-    '⍀':        lambda A,B: ce2v(_expand,A,B),
-    '⌷':        to_be_implemented,      # index
-
-# Search
-    '∊':        to_be_implemented,      # membership - is A in B (also characters) - returns a boolean
-    '⍷':        to_be_implemented,      # find (look for a substring)
-
-# Sorting
-    '⍋':        to_be_implemented,      # Sort ascending with specified collating sequence
-    '⍒':        to_be_implemented,      # Sort descending with specified collating sequence
-
-    # Encode/decode
-    '⊤':        lambda A,B: vs2v_encode(_encode,A,B),
-    '⊥':        lambda A,B: vv2s_decode(_decode,A,B),
-
-# Formatting
-    '⍕':        to_be_implemented,      # Format data for display
-    '⍎':        to_be_implemented,      # dyadic execute
-    '⍺':        to_be_implemented,      # Use picture to format data for display
+    '~':        lambda A, B: vv2v(without, A, B),
+    '⍳':        lambda A, B: vv2s(index, A, B),
+    '↓':        lambda A, B: sv2vl(drop, A, B),
+    '↑':        lambda A, B: sv2vl(take, A, B),
+    '⌷':        _toBeImplemented,       # index
+    '∪':        lambda A, B: vv2v(union, A, B),
+    '∩':        lambda A, B: vv2v(intersection, A, B),
+    '/':        lambda A, B: ce2v(compress, A, B),
+    '⌿':        lambda A, B: ce2v(compress, A, B),
+    '\\':       lambda A, B: ce2v(expand, A, B),
+    '⍀':        lambda A, B: ce2v(expand, A, B),
 
     # Miscellaneous
-    '⊣':        lambda A,B: A,
-    '⊢':        lambda A,B: B,
-    };
+    '∊':        _toBeImplemented,       # membership - is A in B (also characters)
+    '⍷':        _toBeImplemented,       # find (look for a substring)
+    '⍋':        _toBeImplemented,       # sort ascending with specified collating sequence
+    '⍒':        _toBeImplemented,       # sort descending with specified collating sequence
+    '⍺':        _toBeImplemented,       # picture format
+    '⍕':        _toBeImplemented,       # dyadic (specification) format
+    '⍎':        _toBeImplemented,       # dyadic execute
+    '⊤':        lambda A, B: vs2v_encode(encode, A, B),
+    '⊥':        lambda A, B: vv2s_decode(decode, A, B),
+    '⊣':        lambda A, B: A,
+    '⊢':        lambda A, B: B,
+}
 
 # ------------------------------
 
-def     dyadic_function (symbol):
+def     dyadicFunction(symbol):
     """
     return the dyadic function given its APL symbol
 
     raises INVALID TOKEN if the symbol is not recognised
     """
     try:
-        return _dyadic_functions[symbol[0]]
+        return _DyadicFunctions[symbol[0]]
     except KeyError:
         aplError("INVALID TOKEN", symbol)
 

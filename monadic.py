@@ -18,6 +18,7 @@ import random
 import mpmath
 
 from systemVariables import fuzzyInteger, confirmInteger, indexOrigin
+
 from monadicMaps import s2s, s2v, s_rho, s_comma, v_head, v_tail, v2v, v_nest, v_tally
 
 from aplQuantity import makeScalar
@@ -25,7 +26,7 @@ from aplError import aplError
 
 # ------------------------------
 
-def     _identity (B):
+def     identity(B):
     """
     identity
     """
@@ -33,7 +34,7 @@ def     _identity (B):
 
 # --------------
 
-def     _negation (B):
+def     negation(B):
     """
     change sign of B
     """
@@ -41,53 +42,57 @@ def     _negation (B):
 
 # --------------
 
-def     _signum (B):
+def     signum(B):
     """
     sign of B
     """
-    if B > 0:   return 1
-    if B < 0:   return -1
+    if B > 0:
+        return 1
+    if B < 0:
+        return -1
 
     return 0
 
 # --------------
 
-def     _reciprocal (B):
+def     reciprocal(B):
     """
     reciprocal of B - may raise DOMAIN ERROR
     """
     try:
-        return operator.truediv(1.0,B)
-    except:
+        return operator.truediv(1.0, B)
+    except ZeroDivisionError:
         aplError("DOMAIN ERROR")
 
 # --------------
 
-def     _ceil (B):
+def     ceil(B):
     """
     ceil of B with comparison tolerance
     """
     B = fuzzyInteger(B)
 
-    if type(B) is int:  return B
+    if isinstance(B, int):
+        return B
 
     return math.ceil(B)
 
 # --------------
 
-def     _floor (B):
+def     floor(B):
     """
     floor of B with comparison tolerance
     """
     B = fuzzyInteger(B)
 
-    if type(B) is int:  return B
+    if isinstance(B, int):
+        return B
 
     return math.floor(B)
 
 # --------------
 
-def     _magnitude (B):
+def     magnitude(B):
     """
     absolute value of B
     """
@@ -95,7 +100,7 @@ def     _magnitude (B):
 
 # ------------------------------
 
-def     _exp (B):
+def     exp(B):
     """
     e raised to the power B - may raise DOMAIN ERROR
     """
@@ -103,7 +108,7 @@ def     _exp (B):
 
 # --------------
 
-def     _log (B):
+def     log(B):
     """
     natural logarithm of B
     """
@@ -114,35 +119,35 @@ def     _log (B):
 
 # --------------
 
-def     _roll (B):
+def     roll(B):
     """
-    random selection of a number from the range [1,B] - may raise DOMAIN ERROR
+    random selection of a number from the range [1, B] - may raise DOMAIN ERROR
     """
 
     try:
-        return random.randint(1,B)
+        return random.randint(1, B)
     except ValueError:
         aplError("DOMAIN ERROR")
 
 # --------------
 
-def     _factorial (B):
+def     factorial(B):
     """
     factorial B (also valid for floating point numbers) - may raise DOMAIN ERROR
     """
     B = fuzzyInteger(B)
 
     try:
-        if type(B) is int:
+        if isinstance(B, int):
             return int(mpmath.factorial(B))
-        else:
-            return float(mpmath.factorial(B))
+
+        return float(mpmath.factorial(B))
     except ValueError:
         aplError("DOMAIN ERROR")
 
 # ------------------------------
 
-def     _pi (B):
+def     pi(B):
     """
     pi times B (for conversion between Radians and degrees)
     """
@@ -150,20 +155,22 @@ def     _pi (B):
 
 # ------------------------------
 
-def     _logical_negation (B):
+def     logicalNegation(B):
     """
     Boolean integer inverse of B - may raise DOMAIN ERROR
     """
     B = fuzzyInteger(B)
 
-    if B == 1:  return 0
-    if B == 0:  return 1
+    if B == 1:
+        return 0
+    if B == 0:
+        return 1
 
     aplError("DOMAIN ERROR")
 
 # ------------------------------
 
-def     _range (B):
+def     iota(B):
     """
     [1, B] or [0, B) depending on ⎕IO
     """
@@ -171,11 +178,11 @@ def     _range (B):
 
     IO = indexOrigin()
 
-    return range (IO, B + IO)
+    return range(IO, B + IO)
 
 # ------------------------------
 
-def     _head (B):
+def     head(B):
     """
     return the first element of B
     """
@@ -183,7 +190,7 @@ def     _head (B):
 
 # ------------------------------
 
-def     _tail (B):
+def     tail(B):
     """
     return everything but the first element of B
     """
@@ -191,7 +198,7 @@ def     _tail (B):
 
 # ------------------------------
 
-def     _reverselast (B):
+def     reverseLast(B):
     """
     return B reversed along its last axis
     """
@@ -204,7 +211,7 @@ def     _reverselast (B):
 
 # ------------------------------
 
-def     _reversefirst (B):
+def     reverseFirst(B):
     """
     return B reversed along its first axis
     """
@@ -217,7 +224,7 @@ def     _reversefirst (B):
 
 # ------------------------------
 
-def     _unique (B):
+def     unique(B):
     """
     return B with duplicate values removed
     """
@@ -231,7 +238,7 @@ def     _unique (B):
 
 # ------------------------------
 
-def     _transpose (B):
+def     transpose(B):
     """
     transpose B about its major axis
     """
@@ -239,7 +246,7 @@ def     _transpose (B):
 
 # ------------------------------
 
-def     to_be_implemented (B):
+def     _toBeImplemented(_):
     """
     placeholder for functions not yet implemented
 
@@ -249,28 +256,28 @@ def     to_be_implemented (B):
 
 # ------------------------------
 
-_monadic_functions = {
-    # Mathematical
-    '+':        lambda B: s2s(_identity,B),
-    '-':        lambda B: s2s(_negation,B),
-    '×':        lambda B: s2s(_signum,B),
-    '÷':        lambda B: s2s(_reciprocal,B),
-    '⌈':        lambda B: s2s(_ceil,B),
-    '⌊':        lambda B: s2s(_floor,B),
-    '|':        lambda B: s2s(_magnitude,B),
+_MonadicFunctions = {
+    # Arithmetic
+    '+':        lambda B: s2s(identity, B),
+    '-':        lambda B: s2s(negation, B),
+    '×':        lambda B: s2s(signum, B),
+    '÷':        lambda B: s2s(reciprocal, B),
+    '⌈':        lambda B: s2s(ceil, B),
+    '⌊':        lambda B: s2s(floor, B),
+    '|':        lambda B: s2s(magnitude, B),
 
     # Algebraic
-    '*':        lambda B: s2s(_exp,B),
-    '⍟':        lambda B: s2s(_log,B),
-    '?':        lambda B: s2s(_roll,B),
-    '!':        lambda B: s2s(_factorial,B),
-    '⌹':        to_be_implemented,      # matrix inverse
+    '*':        lambda B: s2s(exp, B),
+    '⍟':        lambda B: s2s(log, B),
+    '?':        lambda B: s2s(roll, B),
+    '!':        lambda B: s2s(factorial, B),
+    '⌹':        _toBeImplemented,       # matrix inverse
 
     # Trigonometric
-    '○':        lambda B: s2s(_pi,B),
+    '○':        lambda B: s2s(pi, B),
 
     # Logical
-    '~':        lambda B: s2s(_logical_negation,B),
+    '~':        lambda B: s2s(logicalNegation, B),
     '∨':        lambda B: aplError("VALENCE ERROR"),
     '∧':        lambda B: aplError("VALENCE ERROR"),
     '⍱':        lambda B: aplError("VALENCE ERROR"),
@@ -285,54 +292,53 @@ _monadic_functions = {
     '≠':        lambda B: aplError("VALENCE ERROR"),
 
     # Structural (aka manipulative)
-    '⍳':        lambda B: s2v(_range,B),
-    '⍴':        lambda B: s_rho(None,B),
+    '⍳':        lambda B: s2v(iota, B),
     '≡':        lambda B: v_nest(B),
     '≢':        lambda B: v_tally(B),
-    ',':        lambda B: s_comma(None,B),
+    '⍴':        lambda B: s_rho(None, B),
+    ',':        lambda B: s_comma(None, B),
     '⍪':        lambda B: aplError("VALENCE ERROR"),
-    '⌽':        lambda B: v2v(_reverselast,B),
-    '⊖':        lambda B: v2v(_reversefirst,B),
-    '⍉':        lambda B: v2v(_transpose,B),
-    '∊':        to_be_implemented,      # enlist - as comma but also nested arrays
-    '⍷':        lambda B: aplError("VALENCE ERROR"),
-    '⊃':        to_be_implemented,      # (disclose) - turn nested scalar into vector (?!?) - mix ?
-    '⊂':        to_be_implemented,      # (enclose) - turn array into nested scalar (?!?)
+    '∊':        _toBeImplemented,       # enlist - as comma but also nested arrays
+    '⌽':        lambda B: v2v(reverseLast, B),
+    '⊖':        lambda B: v2v(reverseFirst, B),
+    '⍉':        lambda B: v2v(transpose, B),
+    '⊃':        _toBeImplemented,       # (disclose) - turn nested scalar into vector (?!?) - mix ?
+    '⊂':        _toBeImplemented,       # (enclose) - turn array into nested scalar (?!?)
 
     # Selection and Set Operations
-    '↑':        lambda B: v_head(_head,B),
-    '↓':        lambda B: v_tail(_tail,B),
-    '∪':        lambda B: v2v(_unique,B),
+    '↑':        lambda B: v_head(head, B),
+    '↓':        lambda B: v_tail(tail, B),
+    '⌷':        lambda B: aplError("VALENCE ERROR"),
+    '∪':        lambda B: v2v(unique, B),
     '∩':        lambda B: aplError("VALENCE ERROR"),
-    '\\':       lambda B: aplError("VALENCE ERROR"),
     '/':        lambda B: aplError("VALENCE ERROR"),
-    '⍀':        lambda B: aplError("VALENCE ERROR"),
     '⌿':        lambda B: aplError("VALENCE ERROR"),
-
-# Sort
-    '⍋':        to_be_implemented,      # grade up (ascending sort indicies)
-    '⍒':        to_be_implemented,      # grade down (descending sort indicies)
+    '\\':       lambda B: aplError("VALENCE ERROR"),
+    '⍀':        lambda B: aplError("VALENCE ERROR"),
 
     # Miscellaneous
-    '⊣':        lambda B: makeScalar(0),
-    '⊢':        lambda B: B,
+    '⍷':        lambda B: aplError("VALENCE ERROR"),
+    '⍋':        _toBeImplemented,       # grade up (ascending sort indicies)
+    '⍒':        _toBeImplemented,       # grade down (descending sort indicies)
+    '⍺':        lambda B: aplError("VALENCE ERROR"),
+    '⍕':        _toBeImplemented,       # monadic format
+    '⍎':        _toBeImplemented,       # execute
     '⊤':        lambda B: aplError("VALENCE ERROR"),
     '⊥':        lambda B: aplError("VALENCE ERROR"),
-    '⌷':        lambda B: aplError("VALENCE ERROR"),
-    '⍕':        to_be_implemented,      # monadic format
-    '⍎':        to_be_implemented,      # execute
-    };
+    '⊣':        lambda B: makeScalar(0),
+    '⊢':        lambda B: B,
+}
 
 # ------------------------------
 
-def     monadic_function (symbol):
+def     monadicFunction(symbol):
     """
     return the monadic function given its APL symbol
 
     raises INVALID TOKEN if the symbol is not recognised
     """
     try:
-        return _monadic_functions[symbol[0]]
+        return _MonadicFunctions[symbol[0]]
     except KeyError:
         aplError("INVALID TOKEN", symbol)
 

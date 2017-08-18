@@ -15,8 +15,8 @@ import re
 from copy import copy as shallowcopy
 from functools import reduce
 
-from monadic import monadic_function
-from dyadic import dyadic_function
+from monadic import monadicFunction
+from dyadic import dyadicFunction
 
 from systemCommands import systemCommand
 from systemVariables import systemVariable
@@ -405,12 +405,12 @@ def     evaluate(expression, cio):
             if cio.newStmt and expr[0] == '⊣':
                 cio.hushImplicit = True
             cio.newStmt = False
-            function = monadic_function(expr)
+            function = monadicFunction(expr)
             rhs = evaluate(expr[1:], cio)
             return function(rhs)
         else:
             cio.newStmt = False
-            function = dyadic_function(expr)
+            function = dyadicFunction(expr)
             rhs = evaluate(expr[1:], cio)
             return function(lhs, rhs)
 
