@@ -210,7 +210,7 @@ def     stringComma():
     >>> test(r"'Hello' , 1 2 3")
     'Hello' 1 2 3
     >>> test(r"1 2 3 , 'H'")
-    1 2 3 'H'
+    1 2 3 H
     >>> test(r'1 2 3 , "H"')
     1 2 3 'H'
     """

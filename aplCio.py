@@ -21,7 +21,8 @@ import sys
 import readline
 import traceback
 
-from aplError import aplQuit
+from aplQuantity import aplQuantity
+from aplError import aplException, aplQuit
 
 # ------------------------------
 
@@ -192,14 +193,62 @@ def _outputString(streams, string, end=None):
 
 # --------------
 
-def _outputValue(streams, value, end=None):
+def _countOutput(count, streams, string, end=None):
+    """
+    print and string and update the count of characters printed so far on this line
+    """
+    for stream in streams:
+        stream.printString(string, end=end)
+
+    if end is None or end == '\n':
+        return 0
+    else:
+        return count+len(string)+len(end)
+
+# --------------
+
+def _outputValue(printed, streams, value, end=None):
     """
     print an APL quantity to one or more streams
     """
-    value = value.resolve()
+    try:
+        sep = '' if value.isString() else ' '
 
-    for stream in streams:
-        stream.printString(value, end=end)
+        string = None
+        for element in value:
+            if string is not None:
+                printed = _countOutput(printed, streams, string, end=sep)
+
+            if value.isString():
+                string = chr(element)
+            elif isinstance(element, aplQuantity):
+                if element.isVector():
+                    outfix = "'"  if element.isString() else '('
+                    printed = _countOutput(printed, streams, outfix, end='')
+
+                printed = _outputValue(printed, streams, element, end='')
+                string = ''
+
+                if element.isVector():
+                    outfix = "'"  if element.isString() else ')'
+                    printed = _countOutput(printed, streams, outfix, end='')
+            else:
+                string = "{0:.10g}".format(element)
+                string = "0" if string == "-0" else string.replace('-', '¯')
+
+        if string is None:
+            string = '' if value.isString() else '⍬'
+
+        printed = _countOutput(printed, streams, string, end=end)
+
+        return printed
+
+    except aplException as error:
+        if not error.expr:
+            error.expr = value.expressionToGo
+        if printed:
+            _outputString(streams, '\b \b'*printed, end='')
+        raise error
 
 # ------------------------------
 
@@ -270,7 +319,7 @@ class   aplCio(object):
         """
         format and print the result of evaluating a test expression
         """
-        _outputValue((self.sysout,), value)
+        _outputValue(0, (self.sysout,), value)
 
     def printEndOfLine(self):
         """
@@ -291,7 +340,7 @@ class   aplCio(object):
                 self.printString(self.prefix, end="")
                 self.prefixDone = True
 
-            _outputValue((self.sysout, self.logFile), value)
+            _outputValue(0, (self.sysout, self.logFile), value)
             self.endOfLine = '\n'
 
     def printExplicit(self, value, end='\n'):
@@ -303,7 +352,7 @@ class   aplCio(object):
                 self.printString(self.prefix, end="")
                 self.prefixDone = True
 
-            _outputValue((self.sysout, self.logFile, self.outFile), value, end=end)
+            _outputValue(0, (self.sysout, self.logFile, self.outFile), value, end=end)
             self.endOfLine = end
 
     def _errorInFile(self, sio, expr):

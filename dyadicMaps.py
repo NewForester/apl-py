@@ -29,17 +29,19 @@ def     ss2s(Fn, A, B, numbersOnly):
         A.noStringConfirm()
         B.noStringConfirm()
 
-    dims = tuple(filter(lambda X: X is not None, (A.dimension(), B.dimension())))
-    case = len(dims)
-
-    if case == 0:
+    if A.isScalar() and B.isScalar():
         return aplQuantity(Fn(A.python(), B.python()), None)
 
-    if case == 2:
-        if dims[0] != dims[1]:
-            aplError("LENGTH ERROR")
+    if A.isScalar():
+        return aplQuantity(map(Fn, A.scalarIter(), B), B.dimension())
 
-    return aplQuantity(map(Fn, A, B), dims[0])
+    if B.isScalar():
+        return aplQuantity(map(Fn, A, B.scalarIter()), A.dimension())
+
+    if A.dimension() == B.dimension():
+        return aplQuantity(map(Fn, A, B), B.dimension())
+
+    aplError("LENGTH ERROR")
 
 # ------------------------------
 
@@ -275,7 +277,7 @@ def     vv2s_decode(Fn, A, B):
     B.noStringConfirm()
 
     if A.isScalar():
-        Rpy = Fn(iter(A), B.vectorToPy())
+        Rpy = Fn(A.scalarIter(), B.vectorToPy())
     else:
         Rpy = Fn(A.vectorToPy()[-B.dimension():], B.vectorToPy())
 

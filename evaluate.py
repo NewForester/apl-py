@@ -129,7 +129,7 @@ def     evaluateName(expr, cio):
             if rhs_expr and rhs_expr[0] == '←':
                 if cio.newStmt:
                     cio.hushImplicit = True
-                rhs = evaluate(rhs_expr[1:].lstrip(), cio)
+                rhs = evaluate(rhs_expr[1:].lstrip(), cio).resolve()
                 lhs = workspaceVariable(name, rhs)
                 return (lhs, len(expr))
             else:
@@ -152,7 +152,7 @@ def     evaluateBoxIO(expr, cio):
         if cio.newStmt:
             cio.hushImplicit = True
 
-        rhs = evaluate(texpr[1:], cio)
+        rhs = evaluate(texpr[1:], cio).resolve()
 
         cio.printExplicit(rhs)
 
@@ -195,7 +195,7 @@ def     evaluateBoxTickIO(expr, cio):
         if cio.newStmt:
             cio.hushImplicit = True
 
-        rhs = evaluate(texpr[1:], cio)
+        rhs = evaluate(texpr[1:], cio).resolve()
 
         if rhs.isString():
             cio.userPromptLength = rhs.dimension()
@@ -406,13 +406,14 @@ def     evaluate(expression, cio):
                 cio.hushImplicit = True
             cio.newStmt = False
             function = monadicFunction(expr)
-            rhs = evaluate(expr[1:], cio)
-            return function(rhs)
+            rhs = function(evaluate(expr[1:], cio))
         else:
             cio.newStmt = False
             function = dyadicFunction(expr)
-            rhs = evaluate(expr[1:], cio)
-            return function(lhs, rhs)
+            rhs = function(lhs, evaluate(expr[1:], cio))
+
+        rhs.expressionToGo = expr
+        return rhs
 
     except aplException as error:
         if not error.expr:
