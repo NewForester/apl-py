@@ -15,8 +15,8 @@
         - numeric, string and mixed vectors
             - vectors comprise a (Python) list of values and have no rank but a single dimension
 
-    Strings are represented by a Python string unless converted to a Python list (TBC).
-    A scalar string is a single character.
+    Strings have a lazy representation - a promise of a list of the ordinal representation of the
+    characters in the Python string.  A scalar string is a single character.
 
     Mixed vectors comprised numeric and string values and are, by definition, nested.
 
@@ -66,7 +66,7 @@ class   aplQuantity(object):
 
     def __str__(self):
         if self.isString():
-            return ''.join(self._value)
+            return ''.join(map(chr,self._value))
 
         if self.isScalar():
             return _formatElement(self._value)
@@ -94,6 +94,9 @@ class   aplQuantity(object):
         """
         return the Python value (could be a promise)
         """
+        if self.isScalar() and self._string:
+            return self._value.__iter__().__next__()
+
         return self._value
 
     def resolve(self):
@@ -111,18 +114,6 @@ class   aplQuantity(object):
         """
         if self.isString():
             aplError("DOMAIN ERROR")
-
-    def noString(self):
-        """
-        convert Python string to list of integers
-        """
-        if self.isString():
-            if self.isScalar():
-                return aplQuantity(ord(self._value), None)
-            if self.isVector():
-                return aplQuantity(map(ord, self._value), self._dim)
-
-        return self
 
     def scalarToPy(self, error=None):
         """
@@ -203,17 +194,20 @@ def     makeVector(value, string=False):
 
 # ------------------------------
 
-def     makeString(value):
+def     makeString(value, withDelimiter):
     """
     make an APL string quantity from a Python string
     """
-    delim = value[0]
-    value = value.replace(delim*2, delim)[1:-1]
+    if withDelimiter:
+        delimiter = value[0]
+        value = value.replace(delimiter*2, delimiter)[1:-1]
+
     length = len(value)
 
-    if length == 1 and delim == "'":
-        length = None
+    if withDelimiter:
+        if length == 1 and delimiter == "'":
+            length = None
 
-    return aplQuantity(value, length, True)
+    return aplQuantity(map(ord, value), length, True)
 
 # EOF

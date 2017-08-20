@@ -60,6 +60,9 @@ def     v_head(Fn, B):
         if B.dimension() < 1:
             return aplQuantity([], 0, B.isString())
 
+        if B.isString():
+            return aplQuantity([Fn(B.vectorToPy())], None, B.isString())
+
         return aplQuantity(Fn(B.vectorToPy()), None, B.isString())
 
     aplError("RANK ERROR")

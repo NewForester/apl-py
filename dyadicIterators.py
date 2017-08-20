@@ -46,7 +46,7 @@ def     concatenate(A, B):
     """
     concatenate (list) B onto the end of (list) A
     """
-    return A + B
+    return list(A) + list(B)
 
 # --------------
 
@@ -54,6 +54,7 @@ def     rotateLast(A, B):
     """
     rotate (vector) B by A elements
     """
+    B = list(B)
     A = confirmInteger(A) % len(B)
 
     return B[A:] + B[:A]
@@ -64,6 +65,7 @@ def     rotateFirst(A, B):
     """
     rotate (vector) B by A elements
     """
+    B = list(B)
     A = confirmInteger(A) % len(B)
 
     return B[A:] + B[:A]
@@ -95,7 +97,7 @@ def     without(A, B):
 
 # --------------
 
-def     index(A, B):
+def     index(A, B, mixed):
     """
     index(es) of (elements of) B in (list) A
     """
@@ -105,16 +107,19 @@ def     index(A, B):
     A = list(A)
 
     for X in B:
-        try:
-            V.append(A.index(X) + IO)
-        except ValueError:
+        if mixed:
             V.append(len(A) + IO)
+        else:
+            try:
+                V.append(A.index(X) + IO)
+            except ValueError:
+                V.append(len(A) + IO)
 
     return V
 
 # --------------
 
-def     drop(A, B):
+def     drop(A, B, _):
     """
     drop A elements from B
     """
@@ -133,32 +138,27 @@ def     drop(A, B):
 
 # --------------
 
-def     take(A, B):
+def     take(A, B, pad):
     """
     take A elements from B
     """
     A = confirmInteger(A)
 
-    if isinstance(B, str):
-        pad = ' '
-    else:
-        pad = [0]
-        B = list(B)
-
+    B = list(B)
     LB = len(B)
 
     if A < 0:
         length = LB + A
 
         if length < 0:
-            R = (pad * (0 - length)) + B
+            R = ([pad] * (0 - length)) + B
         else:
             R = B[length:]
     else:
         length = LB - A
 
         if length < 0:
-            R = B + (pad * (0 - length))
+            R = B + ([pad] * (0 - length))
         else:
             R = B[:A]
 
@@ -172,7 +172,12 @@ def     union(A, B):
 
     NB  only good for homogeneous operands
     """
-    V = list(A)
+    V = []
+
+    A = list(A)
+
+    for X in A:
+        V.append(X)
 
     for X in B:
         if X not in A:

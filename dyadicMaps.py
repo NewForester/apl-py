@@ -28,9 +28,6 @@ def     ss2s(Fn, A, B, numbersOnly):
     if numbersOnly:
         A.noStringConfirm()
         B.noStringConfirm()
-    else:
-        A = A.noString()
-        B = B.noString()
 
     dims = tuple(filter(lambda X: X is not None, (A.dimension(), B.dimension())))
     case = len(dims)
@@ -73,7 +70,9 @@ def     vv2s(Fn, A, B):
     """
     evaluate a dyadic function that returns a vector if B is a vector but a scalar if B is scalar
     """
-    Rpy = Fn(A.vectorToPy(), B.vectorToPy())
+    case = A.isString() + B.isString()
+
+    Rpy = Fn(A.vectorToPy(), B.vectorToPy(), case == 1)
 
     if B.isScalar():
         return aplQuantity(Rpy[0], None)
@@ -191,7 +190,10 @@ def     sv2vl(Fn, A, B):
 
         aplError("RANK ERROR")
 
-    Rpy = Fn(A.scalarToPy("LENGTH ERROR"), B.vectorToPy())
+    if B.isString():
+        Rpy = Fn(A.scalarToPy("LENGTH ERROR"), B.vectorToPy(), ord(' '))
+    else:
+        Rpy = Fn(A.scalarToPy("LENGTH ERROR"), B.vectorToPy(), 0)
 
     if B.isScalar() and Rpy != []:
         return aplQuantity(Rpy[0], None, B.isString())
@@ -210,7 +212,7 @@ def     ce2v(Fn, A, B):
         return aplQuantity([], 0, B.isString())
 
     if B.isString():
-        Rpy = Fn(A.vectorToPy(), B.vectorToPy(), ' ')
+        Rpy = Fn(A.vectorToPy(), B.vectorToPy(), ord(' '))
     else:
         Rpy = Fn(A.vectorToPy(), B.vectorToPy(), 0)
 

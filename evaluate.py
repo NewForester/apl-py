@@ -219,7 +219,7 @@ def     evaluateBoxTickIO(expr, cio):
         except EOFError:
             aplError("EOF_ERROR")
 
-        value = makeVector(cio.userPromptLength*' '+expr, True)
+        value = makeString(cio.userPromptLength*' '+expr, False)
 
         cio.endOfLine = '\n'
 
@@ -281,7 +281,7 @@ def     extractString(expr, _):
     if match:
         string = match.group(0)
         if string:
-            return makeString(string), len(string)
+            return makeString(string, True), len(string)
 
     return None, 0
 

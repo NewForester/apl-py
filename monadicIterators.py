@@ -67,7 +67,7 @@ def     head(B):
     """
     return the first element of B
     """
-    return B[0]
+    return list(B)[0]
 
 # --------------
 
@@ -75,7 +75,7 @@ def     tail(B):
     """
     return everything but the first element of B
     """
-    return B[1:]
+    return list(B)[1:]
 
 # --------------
 
