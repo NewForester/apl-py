@@ -19,7 +19,7 @@ from monadic import monadicFunction
 from dyadic import dyadicFunction
 
 from systemCommands import systemCommand
-from systemVariables import systemVariable
+from systemVariables import systemVariable, eagerEvaluation
 
 from workspaceVariables import workspaceVariable
 
@@ -129,7 +129,12 @@ def     evaluateName(expr, cio):
             if rhs_expr and rhs_expr[0] == '←':
                 if cio.newStmt:
                     cio.hushImplicit = True
-                rhs = evaluate(rhs_expr[1:].lstrip(), cio).resolve()
+                    cio.newStmt = False
+
+                if eagerEvaluation():
+                    rhs = evaluate(rhs_expr[1:].lstrip(), cio)
+                else:
+                    rhs = evaluate(rhs_expr[1:].lstrip(), cio).resolve()
                 lhs = workspaceVariable(name, rhs)
                 return (lhs, len(expr))
             else:
@@ -149,12 +154,16 @@ def     evaluateBoxIO(expr, cio):
     if texpr and texpr[0] == '←':
         # output operator
 
-        if cio.newStmt:
-            cio.hushImplicit = True
+        newStmt = cio.newStmt
+        cio.newStmt = False
 
-        rhs = evaluate(texpr[1:], cio).resolve()
+        rhs = evaluate(texpr[1:], cio) if newStmt else evaluate(texpr[1:], cio).resolve()
 
         cio.printExplicit(rhs)
+
+        if newStmt:
+            cio.hushImplicit = True
+            rhs = None
 
         return rhs, len(expr)
 
@@ -192,10 +201,10 @@ def     evaluateBoxTickIO(expr, cio):
     if texpr and texpr[0] == '←':
         # output operator
 
-        if cio.newStmt:
-            cio.hushImplicit = True
+        newStmt = cio.newStmt
+        cio.newStmt = False
 
-        rhs = evaluate(texpr[1:], cio).resolve()
+        rhs = evaluate(texpr[1:], cio) if newStmt else evaluate(texpr[1:], cio).resolve()
 
         if rhs.isString():
             cio.userPromptLength = rhs.dimension()
@@ -204,6 +213,10 @@ def     evaluateBoxTickIO(expr, cio):
             cio.printExplicit(makeVector([rhs]), '')
         else:
             cio.printExplicit(rhs, '')
+
+        if newStmt:
+            cio.hushImplicit = True
+            rhs = None
 
         return rhs, len(expr)
 
@@ -237,7 +250,15 @@ def     evaluateSystemVariable(expr, cio):
         if name:
             rhs_expr = expr[len(name)+1:].lstrip()
             if rhs_expr and rhs_expr[0] == '←':
-                rhs = evaluate(rhs_expr[1:], cio)
+                if cio.newStmt:
+                    cio.hushImplicit = True
+                    cio.newStmt = False
+
+                if eagerEvaluation():
+                    rhs = evaluate(rhs_expr[1:], cio)
+                else:
+                    rhs = evaluate(rhs_expr[1:], cio).resolve()
+
                 lhs = systemVariable(name, rhs)
                 consumed = len(expr)
             else:
@@ -401,19 +422,19 @@ def     evaluate(expression, cio):
         if not expr:
             return lhs
 
-        if lhs is None:
-            if cio.newStmt and expr[0] == '⊣':
+        if cio.newStmt:
+            if lhs is None and expr[0] == '⊣':
                 cio.hushImplicit = True
             cio.newStmt = False
-            function = monadicFunction(expr)
-            rhs = function(evaluate(expr[1:], cio))
-        else:
-            cio.newStmt = False
-            function = dyadicFunction(expr)
-            rhs = function(lhs, evaluate(expr[1:], cio))
 
+        function = monadicFunction(expr) if lhs is None else dyadicFunction(expr)
+
+        rhs = evaluate(expr[1:], cio)
         rhs.expressionToGo = expr
-        return rhs
+
+        result = function(rhs) if lhs is None else function(lhs, rhs)
+
+        return result.resolve() if eagerEvaluation() else result
 
     except aplException as error:
         if not error.expr:
