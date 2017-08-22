@@ -350,6 +350,21 @@ def     systemVariable(expr):
     >>> systemVariable(r"⎕io")
     1
 
+    >>> systemVariable(r"⊣ EE←⎕EE")
+    0
+    >>> systemVariable(r"⎕EE←0")
+    0
+    >>> systemVariable(r"⎕EE")
+    0
+    >>> systemVariable(r"⎕EE←1")
+    1
+    >>> systemVariable(r"⎕EE←2")
+    DOMAIN ERROR
+    >>> systemVariable(r"⎕EE")
+    1
+    >>> systemVariable(r"⊣ ⎕EE←EE")
+    0
+
     >>> systemVariable(r"⎕CT")
     1e¯13
     """
