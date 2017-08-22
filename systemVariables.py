@@ -4,10 +4,13 @@
     UNDER DEVELOPMENT
 
     This initial version implements only ⎕CT and ⎕IO.
+
+    The non-standard ⎕EE was added to ease switching between lazy and eager
+    evaluation modes for debugging purposes and may be withdrawn.
 """
 
-import  math
-import  operator
+import math
+import operator
 
 from aplQuantity import aplQuantity, makeScalar
 from aplError import aplError
@@ -113,15 +116,33 @@ def     indexOrigin():
     """
     return _IO.python()
 
+# --------------
+
+def     eagerEvaluation():
+    """
+    true is evaluation mode is set to eager
+    """
+    return _EE.python() == 1
+
+# --------------
+
+def     setEvaluationMode(mode):
+    """
+    the eager/lazy evaluation mode
+    """
+    return _EE.set(makeScalar(mode))
+
 # ------------------------------
 
 _CT = _SystemVariable(makeScalar, confirmReal, 1e-13)
+_EE = _SystemVariable(makeScalar, confirmBoolean, 0)
 _IO = _SystemVariable(makeScalar, confirmBoolean, 1)
 
 # a simple dictionary with (k, v) = (name, system-variable)
 
 _SystemVariables = {
     "CT":       _CT,
+    "EE":       _EE,
     "IO":       _IO,
 }
 
