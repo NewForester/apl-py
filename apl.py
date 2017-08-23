@@ -69,6 +69,8 @@ Summary of the command line flags recognised by the interpreter:
 
     -s --silent         suppress interactive output
     -v --verbose        resume interactive output
+    -ee=0 --lazy        switch to lazy evaluation (default)
+    -ee=1 --eager       switch to eager evaluation
 
     --                  ends of flags (what follows are arguments, if any)
 
