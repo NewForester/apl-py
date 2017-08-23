@@ -77,12 +77,12 @@ for step in ${steps}; do
 
         nn=2a;
         herald "Test Case ${nn} - Check recognition of short form help flag";
-        invoke apl.py -h '&>' "case_${nn}.out";
+        invoke apl.py -h '>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "help.ref";
 
         nn=2b;
         herald "Test Case ${nn} - Check recognition of long form help flag";
-        invoke apl.py --help '&>' "case_${nn}.out";
+        invoke apl.py --help '>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "help.ref";
       ;;
 
@@ -93,12 +93,12 @@ for step in ${steps}; do
 
         nn=3a;
         herald "Test Case ${nn} - Check recognition of short form long help flag";
-        invoke apl.py -h long '&>' "case_${nn}.out";
+        invoke apl.py -h long '>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "longhelp.ref";
 
         nn=3b;
         herald "Test Case ${nn} - Check recognition of long form long help flag";
-        invoke apl.py --help long '&>' "case_${nn}.out";
+        invoke apl.py --help long '>' "case_${nn}.out";
         invoke diff "case_${nn}.out" "longhelp.ref";
       ;;
 
@@ -124,6 +124,32 @@ for step in ${steps}; do
         nn=5a;
         herald "Test Case ${nn} - Response to input redirection to a file that cannot be read";
         invoke apl.py -f "test_${nn::1}.txt" '||' true;
+        ;;
+
+      (6)
+        narrative <<- EOF
+	Test cases to check turning eager/lazy evaluation on and off from the command line
+	EOF
+
+        nn=61a;
+        herald "Test Case ${nn} - Check eager evaluation can be turned on - short form";
+        invoke apl.py -ee=1 -- '⎕EE' '>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn:0:2}.ref";
+
+        nn=62a;
+        herald "Test Case ${nn} - Check eager evaluation can be turned off - short form";
+        invoke apl.py -ee=1 -ee=0 -- '⎕EE' '>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn:0:2}.ref";
+
+        nn=61b;
+        herald "Test Case ${nn} - Check eager evaluation can be turned on - short form";
+        invoke apl.py --eager -- '⎕EE' '>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn:0:2}.ref";
+
+        nn=62b;
+        herald "Test Case ${nn} - Check eager evaluation can be turned off - short form";
+        invoke apl.py --eager --lazy -- '⎕EE' '>' "case_${nn}.out";
+        invoke diff "case_${nn}.out" "test_${nn:0:2}.ref";
         ;;
     esac
 done
