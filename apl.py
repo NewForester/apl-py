@@ -15,6 +15,8 @@ import sys
 
 from evaluate import evaluateAndPrint
 
+from systemVariables import setEvaluationMode
+
 from aplCio import aplCio
 from aplError import aplException, aplExit, aplQuit
 
@@ -280,6 +282,12 @@ def     _processFlags(flags, cio):
 
         elif flag in ("-v", "--verbose"):
             cio.silent = False
+
+        elif flag in ("-ee=0", "--lazy"):
+            setEvaluationMode(0)
+
+        elif flag in ("-ee=1", "--eager"):
+            setEvaluationMode(1)
 
         elif flag.startswith(("-l ", "--log ")):
             cio.logFile.setPath(flag.split()[1])
