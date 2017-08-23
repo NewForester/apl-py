@@ -18,9 +18,17 @@
 
     All but the system commnd tests pass an APL expression to the evaluate function.
     Almost all tests are positive.
+
+    Note:
+        testDyadic --eager      # run with eager evaluation
+        testDyadic --lazy       # run with lazy evaluation
 """
 
+import sys
+
 from evaluate import evaluate, evaluateAndPrint
+
+from systemVariables import setEvaluationMode
 
 from aplCio import aplCio
 from aplError import aplException
@@ -388,8 +396,49 @@ def     systemCommand(expr):
 
 # ------------------------------
 
-if __name__ == "__main__":
+def     _parseCommandLineArgs(args):
+    """
+    separate command line args into (optional) flags and an (optional) APL expression
+    """
+    if len(args) == 1:
+        flags, args = [], []
+    elif '--' in args:
+        pivot = args.index("--")
+        flags, args = args[1:pivot], args[pivot + 1:]
+    elif args[1][0] == '-':
+        flags, args = args[1:], []
+    else:
+        flags, args = [], args[1:]
+
+    if flags != []:
+        flags = ' '.join(flags).replace(' -', ':-').split(':')
+
+    if args != []:
+        args = ' '.join(args)
+
+    return flags, args
+
+# ------------------------------
+
+def     main():
+    """
+    the main routine - allows a choice between eager and lazy evaluation
+    """
+    flags, args = _parseCommandLineArgs(sys.argv)
+
+    for flag in flags:
+        if flag in ("-ee=0", "--lazy"):
+            setEvaluationMode(0)
+
+        elif flag in ("-ee=1", "--eager"):
+            setEvaluationMode(1)
+
     import doctest
     doctest.testmod()
+
+# ------------------------------
+
+if __name__ == "__main__":
+    main()
 
 # EOF

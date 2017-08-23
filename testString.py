@@ -12,9 +12,17 @@
 
     Each test passes an APL expression to the evaluate function.
     Both positive and negative (e.g. DOMAIN ERROR) cases are tested.
+
+    Note:
+        testDyadic --eager      # run with eager evaluation
+        testDyadic --lazy       # run with lazy evaluation
 """
 
+import sys
+
 from evaluate import evaluate
+
+from systemVariables import setEvaluationMode
 
 from aplCio import aplCio
 from aplError import aplException
@@ -427,8 +435,49 @@ def     stringEncodeDecode():
 
 # ------------------------------
 
-if __name__ == "__main__":
+def     _parseCommandLineArgs(args):
+    """
+    separate command line args into (optional) flags and an (optional) APL expression
+    """
+    if len(args) == 1:
+        flags, args = [], []
+    elif '--' in args:
+        pivot = args.index("--")
+        flags, args = args[1:pivot], args[pivot + 1:]
+    elif args[1][0] == '-':
+        flags, args = args[1:], []
+    else:
+        flags, args = [], args[1:]
+
+    if flags != []:
+        flags = ' '.join(flags).replace(' -', ':-').split(':')
+
+    if args != []:
+        args = ' '.join(args)
+
+    return flags, args
+
+# ------------------------------
+
+def     main():
+    """
+    the main routine - allows a choice between eager and lazy evaluation
+    """
+    flags, args = _parseCommandLineArgs(sys.argv)
+
+    for flag in flags:
+        if flag in ("-ee=0", "--lazy"):
+            setEvaluationMode(0)
+
+        elif flag in ("-ee=1", "--eager"):
+            setEvaluationMode(1)
+
     import doctest
     doctest.testmod()
+
+# ------------------------------
+
+if __name__ == "__main__":
+    main()
 
 # EOF
