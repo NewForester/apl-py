@@ -42,32 +42,58 @@ class   aplQuantity(object):
         except TypeError:
             self._value = tuple([value])
 
-        self._dim = dimension
+        self._dimension = dimension
         self._string = string
         self.expressionToGo = None
 
     def __iter__(self):
         return self._value.__iter__()
 
-    def clone(self, quantity):
+    def _clone(self, quantity):
         """
         clone (without realising any promises)
         """
         self._value = quantity._value
-        self._dim = quantity._dim
+        self._dimension = quantity._dimension
         self._string = quantity._string
 
     def deepClone(self, quantity):
         """
         clone converting promises
         """
-        self.clone(quantity.resolve())      # quick and dirty
+        self._clone(quantity.resolve())      # quick and dirty
+
+    def tally(self):
+        """
+        1 if a scalar, its length if a vector
+        """
+        if self._dimension is None:
+            return 1
+
+        if isinstance(self._dimension, int):
+            return self._dimension
+
+        aplError("RANK ERROR ASSERTION")
 
     def dimension(self):
         """
         the dimension(s) of the quantity
         """
-        return self._dim
+        return self._dimension
+
+    def rank(self):
+        """
+        the rank of the quantity
+        """
+        if isinstance(self._dimension, tuple):
+            return len(self._dimension)
+        return None
+
+    def prototype(self):
+        """
+        the padding/filling value
+        """
+        return ord(' ') if self.isString() else 0
 
     def isString(self):
         """
@@ -79,19 +105,43 @@ class   aplQuantity(object):
         """
         true if quantity is scalar
         """
-        return self._dim is None
+        return self._dimension is None
 
     def isVector(self):
         """
         true if quantity is a vector
         """
-        return self._dim is not None
+        return self._dimension is not None
+
+    def isArray(self):
+        """
+        true if quantity is a higher order array
+        """
+        return isinstance(self._dimension, tuple)
+
+    def isScalarLike(self):
+        """
+        true if quantity is scalar or a vector length 1
+        """
+        return self._dimension is None or (isinstance(self._dimension, int) and self._dimension == 1)
+
+    def isVectorLike(self):
+        """
+        true if quantity is scalar or a vector
+        """
+        return self._dimension is None or isinstance(self._dimension, int)
+
+    def isEmptyVector(self):
+        """
+        true if quantity is a vector length 0
+        """
+        return isinstance(self._dimension, int) and self._dimension == 0
 
     def scalarToPy(self, error=None):
         """
         return Python numeric
         """
-        if self._dim is None or self._dim == 1:
+        if self._dimension is None or self._dimension == 1:
             return next(iter(self._value))
 
         aplError(error if error else "RANK ERROR")
@@ -101,6 +151,21 @@ class   aplQuantity(object):
         return Python list
         """
         return self._value
+
+    def promoteScalarToVectorPy(self, specialEmpty=False):
+        """
+        return a scalar as a scalar iterator but a vector as a sequence (promise)
+        """
+        if self.isScalar():
+            return self.aplScalarIter()
+
+        if specialEmpty and self.isEmptyVector():
+            return self.aplScalarIter(self.prototype())
+
+        if self.isVector():
+            return self.vectorToPy()
+
+        aplError("RANK ASSERTION ERROR")
 
     def python(self):
         """
@@ -124,7 +189,7 @@ class   aplQuantity(object):
         """
         realise a promise
         """
-        return aplQuantity(list(self._value), self._dim, self._string)
+        return aplQuantity(list(self._value), self._dimension, self._string)
 
     def noStringConfirm(self):
         """
