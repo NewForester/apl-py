@@ -210,21 +210,34 @@ class   aplScalarIter(object):
 
 # ------------------------------
 
-def     makeScalar(value):
+def     makeScalar(value, string=False):
     """
     make an APL scalar quantity from a numeric Python value
     """
-    return aplQuantity([value], None)
+    try:
+        value.__iter__()
+    except AttributeError:
+        value = (value,)
 
-# ------------------------------
+    return aplQuantity(value, None, string)
 
-def     makeVector(value, string=False):
+# --------------
+
+def     makeVector(value, length=-1, string=False):
     """
     make an APL vector quantity from a numeric Python list
     """
-    return aplQuantity(value, len(value), string)
+    return aplQuantity(value, length, string)
 
-# ------------------------------
+# --------------
+
+def     makeEmptyVector(string=False):
+    """
+    make an empty APL vector quantity (⍬ or '')
+    """
+    return aplQuantity((), 0, string)
+
+# --------------
 
 def     makeString(value, withDelimiter):
     """

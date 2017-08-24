@@ -23,8 +23,8 @@ from systemVariables import systemVariable, eagerEvaluation
 
 from workspaceVariables import workspaceVariable
 
-from aplQuantity import aplQuantity, makeScalar, makeVector, makeString
-from aplError import aplException, aplError
+from aplQuantity import aplQuantity, makeScalar, makeVector, makeEmptyVector, makeString
+from aplError import aplException, assertError
 
 # ------------------------------
 
@@ -53,7 +53,7 @@ def     _findUnquoted(expr, char, spos=0):
 
     spos = expr.find(expr[mpos], mpos+1)
     if spos == -1:
-        aplError("SYNTAX ERROR", expr[mpos:])
+        raise aplException("SYNTAX ERROR", expr[mpos:])
 
     return _findUnquoted(expr, char, spos+1)
 
@@ -95,7 +95,7 @@ def     _expressionWithinParentheses(expr, opos, cpos):
     """
     pos = expr[cpos + 1:].find(')')
     if pos == -1:
-        aplError("SYNTAX ERROR")
+        assertError("SYNTAX ERROR")
     cpos += pos + 1
 
     pos = expr[opos + 1:cpos].find('(')
@@ -178,13 +178,13 @@ def     evaluateBoxIO(expr, cio):
         try:
             expr = lcio.read(lcio.inFile)
         except EOFError:
-            aplError("EOF_ERROR")
+            assertError("EOF ERROR")
 
         try:
             value = evaluateAndPrint(expr, lcio, True)
         except aplException as error:
             lcio.printError(lcio.inFile, error, expr)
-            aplError(None)
+            assertError(None)
 
         cio.prefixDone = lcio.prefixDone
 
@@ -210,7 +210,7 @@ def     evaluateBoxTickIO(expr, cio):
             cio.userPromptLength = rhs.dimension()
             cio.printExplicit(rhs, '')
         elif rhs.isVector():
-            cio.printExplicit(makeVector([rhs]), '')
+            cio.printExplicit(makeVector((rhs,), 1), '')
         else:
             cio.printExplicit(rhs, '')
 
@@ -230,7 +230,7 @@ def     evaluateBoxTickIO(expr, cio):
         try:
             expr = lcio.read(lcio.inFile)
         except EOFError:
-            aplError("EOF_ERROR")
+            assertError("EOF ERROR")
 
         value = makeString(cio.userPromptLength*' '+expr, False)
 
@@ -335,7 +335,7 @@ _ParserFunctions = (
     evaluateSubexpression,
     evaluateBoxIO,
     evaluateBoxTickIO,
-    lambda e, c: (makeVector([]), 1),
+    lambda e, c: (makeEmptyVector(), 1),
     lambda e, c: (None, len(e)),
 )
 
@@ -354,7 +354,7 @@ def     parseFunction(expr, lhs):
         return evaluateSystemVariable
 
     if leader == ')' and lhs != []:
-        aplError("SYNTAX ERROR")
+        assertError("SYNTAX ERROR")
 
     return _ParserFunctions["'\")(⎕⍞⍬⍝".find(leader)+1]
 
@@ -364,7 +364,7 @@ def     parse(expr, cio):
     """
     extract and evaluate the next subexpression from expr
 
-    Beware indirect recursion
+    called only from evaluate but beware indirect recursion
     """
     lhs = []
 
@@ -374,10 +374,7 @@ def     parse(expr, cio):
         value, consumed = function(expr, cio)
 
         if value is not None:
-            if isinstance(value, aplQuantity) and value.isScalar() and not value.isString():
-                lhs.append(value.python())
-            else:
-                lhs.append(value)
+            lhs.append(value)
 
         if consumed == 0:
             break
@@ -401,23 +398,25 @@ def     parse(expr, cio):
 def     evaluate(expression, cio):
     """
     evaluate an APL expression
+
+    called from parse and routines parse calls so beware indirect recursion
     """
     try:
         expr = expression.lstrip()
 
         if not expr:
-            aplError("SYNTAX ERROR")
+            assertError("SYNTAX ERROR")
 
         lhs, expr = parse(expr, cio)
 
         if lhs == []:
             lhs = None
         elif len(lhs) > 1:
-            lhs = makeVector(lhs)
-        else:
+            lhs = makeVector(tuple(lhs), len(lhs))
+        elif isinstance(lhs[0], aplQuantity):
             lhs = lhs[0]
-            if not isinstance(lhs, aplQuantity):
-                lhs = makeScalar(lhs)
+        else:
+            lhs = makeScalar(lhs[0])
 
         if not expr:
             return lhs
