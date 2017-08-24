@@ -34,38 +34,28 @@ class   aplQuantity(object):
     trivial class that holds an APL quantity
     """
     def __init__(self, value, dimension=0, string=False):
-        self._string = string
-        self._dim = dimension
-
         try:
-            if self._dim == None:
+            if dimension == None:
                 iter(value)
             self._value = value
 
         except TypeError:
             self._value = tuple([value])
 
+        self._dim = dimension
+        self._string = string
         self.expressionToGo = None
 
     def __iter__(self):
         return self._value.__iter__()
 
-    def scalarIter(self):
-        """
-        infinite iterator for scalars so they may be used with arrays
-        """
-        if not self.isScalar():
-            aplError("RANK ASSERTION ERROR")
-
-        return aplScalarIter(next(iter(self._value)))
-
     def clone(self, quantity):
         """
-        clone without realishcing promises
+        clone (without realising any promises)
         """
-        self._string = quantity._string
-        self._dim = quantity._dim
         self._value = quantity._value
+        self._dim = quantity._dim
+        self._string = quantity._string
 
     def deepClone(self, quantity):
         """
@@ -73,46 +63,9 @@ class   aplQuantity(object):
         """
         self.clone(quantity.resolve())      # quick and dirty
 
-    def python(self):
-        """
-        return the Python value (could be a promise)
-        """
-        if self.isScalar():
-            return next(iter(self._value))
-        else:
-            return self._value
-
-    def resolve(self):
-        """
-        realise a promise
-        """
-        return aplQuantity(list(self._value), self._dim, self._string)
-
-    def noStringConfirm(self):
-        """
-        ensure quantity is not a string quantity
-        """
-        if self.isString():
-            aplError("DOMAIN ERROR")
-
-    def scalarToPy(self, error=None):
-        """
-        return Python numeric
-        """
-        if self._dim is None or self._dim == 1:
-            return next(iter(self._value))
-
-        aplError(error if error else "RANK ERROR")
-
-    def vectorToPy(self):
-        """
-        return Python list
-        """
-        return self._value
-
     def dimension(self):
         """
-        the dimensions of the quantity
+        the dimension(s) of the quantity
         """
         return self._dim
 
@@ -133,6 +86,52 @@ class   aplQuantity(object):
         true if quantity is a vector
         """
         return self._dim is not None
+
+    def scalarToPy(self, error=None):
+        """
+        return Python numeric
+        """
+        if self._dim is None or self._dim == 1:
+            return next(iter(self._value))
+
+        aplError(error if error else "RANK ERROR")
+
+    def vectorToPy(self):
+        """
+        return Python list
+        """
+        return self._value
+
+    def python(self):
+        """
+        return the Python value (which could be a promise)
+        """
+        if self.isScalar():
+            return next(iter(self._value))
+        else:
+            return self._value
+
+    def scalarIter(self):
+        """
+        infinite iterator for scalars so they may be used with arrays
+        """
+        if not self.isScalar():
+            aplError("RANK ASSERTION ERROR")
+
+        return aplScalarIter(next(iter(self._value)))
+
+    def resolve(self):
+        """
+        realise a promise
+        """
+        return aplQuantity(list(self._value), self._dim, self._string)
+
+    def noStringConfirm(self):
+        """
+        ensure quantity is not a string quantity
+        """
+        if self.isString():
+            aplError("DOMAIN ERROR")
 
 # ------------------------------
 
