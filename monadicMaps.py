@@ -15,7 +15,7 @@
 """
 
 from aplQuantity import aplQuantity
-from aplError import aplError
+from aplError import aplError, assertNumeric
 
 # ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
@@ -25,7 +25,7 @@ def     s2s(Fn, B):
     """
     evaluate a numeric monadic function that, given a scalar argument, returns a scalar
     """
-    B.noStringConfirm()
+    assertNumeric(B)
 
     if B.isScalar():
         return aplQuantity(Fn(B.python()), None)
@@ -41,7 +41,7 @@ def     s2v(Fn, B):
     """
     evaluate a numeric monadic function that, given a scalar argument, returns a vector
     """
-    B.noStringConfirm()
+    assertNumeric(B)
 
     Bpy = B.scalarToPy()
 

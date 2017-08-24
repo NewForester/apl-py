@@ -191,13 +191,6 @@ class   aplQuantity(object):
         """
         return aplQuantity(list(self._value), self._dimension, self._string)
 
-    def noStringConfirm(self):
-        """
-        ensure quantity is not a string quantity
-        """
-        if self.isString():
-            aplError("DOMAIN ERROR")
-
 # ------------------------------
 
 class   aplScalarIter(object):

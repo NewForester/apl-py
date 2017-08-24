@@ -15,7 +15,7 @@
 """
 
 from aplQuantity import aplQuantity
-from aplError import aplError
+from aplError import aplError, assertNumeric
 
 # ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
@@ -26,8 +26,8 @@ def     ss2s(Fn, A, B, numbersOnly):
     evaluate a dyadic function that, given scalar arguments, returns a scalar
     """
     if numbersOnly:
-        A.noStringConfirm()
-        B.noStringConfirm()
+        assertNumeric(A)
+        assertNumeric(B)
 
     if A.isScalar() and B.isScalar():
         return aplQuantity(Fn(A.python(), B.python()), None)
@@ -92,7 +92,7 @@ def     sv_rho(Fn, A, B):
 
     well, this is for ⍴ and probably will not work for anything else
     """
-    A.noStringConfirm()
+    assertNumeric(A)
 
     if A.dimension() == 0:
         dimension = None
@@ -135,7 +135,7 @@ def     sv_transpose(Fn, A, B):
     """
     evaluate dyadic transpose (a degenerate function for vectors)
     """
-    A.noStringConfirm()
+    assertNumeric(A)
 
     if A.dimension() == 0 and B.isScalar():
         return B
@@ -158,7 +158,7 @@ def     sv2vr(Fn, A, B):
     """
     evaluate a dyadic function that returns a vector if B is a vector but a scalar if B is scalar
     """
-    A.noStringConfirm()
+    assertNumeric(A)
 
     if A.dimension() == 0:
         aplError("RANK ERROR")
@@ -182,7 +182,7 @@ def     sv2vl(Fn, A, B):
     """
     evaluate a dyadic function that returns a vector if B is a vector but a scalar if B is scalar
     """
-    A.noStringConfirm()
+    assertNumeric(A)
 
     if A.dimension() == 0:
         if B.isScalar():
@@ -208,7 +208,7 @@ def     ce2v(Fn, A, B):
     """
     compress or expand a vector yielding another
     """
-    A.noStringConfirm()
+    assertNumeric(A)
 
     if A.dimension() == 0 and B.isScalar():
         return aplQuantity([], 0, B.isString())
@@ -251,8 +251,8 @@ def     vs2v_encode(Fn, A, B):
     """
     encode B to base A
     """
-    A.noStringConfirm()
-    B.noStringConfirm()
+    assertNumeric(A)
+    assertNumeric(B)
 
     if B.dimension() == 0:
         return aplQuantity([])
@@ -273,8 +273,8 @@ def     vv2s_decode(Fn, A, B):
     """
     decode B from base A
     """
-    A.noStringConfirm()
-    B.noStringConfirm()
+    assertNumeric(A)
+    assertNumeric(B)
 
     if A.isScalar():
         Rpy = Fn(A.scalarIter(), B.vectorToPy())
