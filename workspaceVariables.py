@@ -7,17 +7,17 @@
 """
 
 from aplQuantity import aplQuantity
-from aplError import aplError
+from aplError import assertError
 
 # ------------------------------
 
-class   _WorkspaceVariable(aplQuantity):
+class   _workspaceVariable(aplQuantity):
     """
     a simple wrapper for an aplQuantity to ensure values are values, not promises
     """
     def __init__(self, quantity):
-        aplQuantity.__init__(self,None)
-        self.deepClone(quantity)
+        aplQuantity.__init__(self, [])
+        self.set(quantity)
 
     def get(self):
         """
@@ -27,9 +27,9 @@ class   _WorkspaceVariable(aplQuantity):
 
     def set(self, quantity):
         """
-        set the APL quantity - ensure promises are made good
+        set the APL quantity
         """
-        self.deepClone(quantity)
+        self._clone(quantity)
 
 # ------------------------------
 
@@ -39,7 +39,7 @@ _WorkspaceVariables = {}
 
 # ------------------------------
 
-def     workspaceVariable(name, value=None):
+def     workspaceVariable(name, quantity=None):
     """
     set or get the value of a workspace variable by name lookup
 
@@ -47,18 +47,19 @@ def     workspaceVariable(name, value=None):
 
     a new variable is created if appropriate
     """
-    if value is None:
+    if quantity is None:
         try:
             apl_var = _WorkspaceVariables[name]
         except KeyError:
-            aplError("UNKNOWN VARIABLE")
+            assertError("UNKNOWN VARIABLE")
     else:
+        quantity = quantity.resolve()
         try:
             apl_var = _WorkspaceVariables[name]
 
-            apl_var.set(value)
+            apl_var.set(quantity)
         except KeyError:
-            apl_var = _WorkspaceVariable(value)
+            apl_var = _workspaceVariable(quantity)
 
             _WorkspaceVariables[name] = apl_var
 

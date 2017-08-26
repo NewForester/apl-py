@@ -44,6 +44,7 @@ class   aplQuantity(object):
 
         self._dimension = dimension
         self._string = string
+        self._resolved = False
         self.expressionToGo = None
 
     def __iter__(self):
@@ -56,12 +57,7 @@ class   aplQuantity(object):
         self._value = quantity._value
         self._dimension = quantity._dimension
         self._string = quantity._string
-
-    def deepClone(self, quantity):
-        """
-        clone converting promises
-        """
-        self._clone(quantity.resolve())      # quick and dirty
+        self._resolved = quantity._resolved
 
     def tally(self):
         """
@@ -157,10 +153,10 @@ class   aplQuantity(object):
         return a scalar as a scalar iterator but a vector as a sequence (promise)
         """
         if self.isScalar():
-            return self.aplScalarIter()
+            return self.scalarIterator()
 
         if specialEmpty and self.isEmptyVector():
-            return self.aplScalarIter(self.prototype())
+            return scalarIterator(self.prototype())
 
         if self.isVector():
             return self.vectorToPy()
@@ -176,37 +172,78 @@ class   aplQuantity(object):
         else:
             return self._value
 
-    def scalarIter(self):
+    def scalarIterator(self):
         """
         infinite iterator for scalars so they may be used with arrays
         """
-        if not self.isScalar():
-            aplError("RANK ASSERTION ERROR")
-
-        return aplScalarIter(next(iter(self._value)))
+        return scalarIterator(self.scalarToPy(), self.expressionToGo)
 
     def resolve(self):
         """
         realise a promise
         """
-        return aplQuantity(list(self._value), self._dimension, self._string)
+        if self._resolved:
+            return self
+
+        return _resolveMap(self)
 
 # ------------------------------
 
-class   aplScalarIter(object):
+class   scalarIterator(object):
     """
-    trival class that supports mixed scalar/vector arithmetic
+    trival iterator for mapping scalar quantities with vector quantities
 
-    the iterable returns the same value ad infinitum
+    the iterator returns the scalar value ad infinitum
     """
-    def __init__(self, value):
+    def __init__(self, value, expressionToGo=None):
         self._value = value
+        self.expressionToGo = expressionToGo
 
     def __iter__(self):
         return self
 
     def __next__(self):
         return self._value
+
+# ------------------------------
+
+class   _resolveIterator(object):
+    """
+    recursive iterator for eager evaluation of a lazy APL quantity B
+    """
+    def __init__(self, B):
+        self._B = B.__iter__()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        Y = self._B.__next__()
+
+        if isinstance(Y, aplQuantity):
+            if not Y._resolved:
+                return _resolveMap(Y)
+
+        return Y
+
+# --------------
+
+def     _resolveMap(B):
+    """
+    map for eager evaluation of a lazy APL quantity B
+    """
+    if B.isScalar():
+        R = aplQuantity(tuple(_resolveIterator(B)), None, B.isString())
+
+    elif B.isVector():
+        R = aplQuantity(tuple(_resolveIterator(B)), B.dimension(), B.isString())
+
+    else:
+        aplError("RANK ERROR")
+
+    R.expressionToGo = B.expressionToGo
+    R._resolved = True
+    return R
 
 # ------------------------------
 

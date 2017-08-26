@@ -33,10 +33,10 @@ def     ss2s(Fn, A, B, numbersOnly):
         return aplQuantity(Fn(A.python(), B.python()), None)
 
     if A.isScalar():
-        return aplQuantity(map(Fn, A.scalarIter(), B), B.dimension())
+        return aplQuantity(map(Fn, A.scalarIterator(), B), B.dimension())
 
     if B.isScalar():
-        return aplQuantity(map(Fn, A, B.scalarIter()), A.dimension())
+        return aplQuantity(map(Fn, A, B.scalarIterator()), A.dimension())
 
     if A.dimension() == B.dimension():
         return aplQuantity(map(Fn, A, B), B.dimension())
@@ -277,7 +277,7 @@ def     vv2s_decode(Fn, A, B):
     assertNumeric(B)
 
     if A.isScalar():
-        Rpy = Fn(A.scalarIter(), B.vectorToPy())
+        Rpy = Fn(A.scalarIterator(), B.vectorToPy())
     else:
         Rpy = Fn(A.vectorToPy()[-B.dimension():], B.vectorToPy())
 

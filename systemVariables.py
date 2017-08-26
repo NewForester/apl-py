@@ -13,11 +13,11 @@ import math
 import operator
 
 from aplQuantity import aplQuantity, makeScalar
-from aplError import aplError
+from aplError import assertError
 
 # ------------------------------
 
-class   _SystemVariable(aplQuantity):
+class   _systemVariable(aplQuantity):
     """
     an APL system variable is represented by a triplet;
         - a make function (used to make an APL quantity from a Python value)
@@ -25,10 +25,11 @@ class   _SystemVariable(aplQuantity):
         - an APL quantity
     """
     def __init__(self, makeFunction, confirmFunction, value):
-        aplQuantity.__init__(self,None)
+        aplQuantity.__init__(self, [])
         self._make = makeFunction
         self._confirm = confirmFunction
-        self.deepClone(self._make(value))
+        self._clone(self._make(self._confirm(value)))
+        self._resolved = True
 
     def get(self):
         """
@@ -40,7 +41,8 @@ class   _SystemVariable(aplQuantity):
         """
         validate and set the APL quantity
         """
-        self.deepClone(self._make(self._confirm(quantity.python())))
+        self._clone(self._make(self._confirm(quantity.python())))
+        self._resolved = True
 
 # ------------------------------
 
@@ -85,7 +87,7 @@ def     confirmBoolean(B):
     if B == 1:
         return 1
 
-    aplError("DOMAIN ERROR")
+    assertError("DOMAIN ERROR")
 
 # --------------
 
@@ -98,7 +100,7 @@ def     confirmInteger(B):
     if isinstance(B, int):
         return B
 
-    aplError("DOMAIN ERROR")
+    assertError("DOMAIN ERROR")
 
 # --------------
 
@@ -128,15 +130,15 @@ def     eagerEvaluation():
 
 def     setEvaluationMode(mode):
     """
-    the eager/lazy evaluation mode
+    set the eager/lazy evaluation mode (from command line flags)
     """
     return _EE.set(makeScalar(mode))
 
 # ------------------------------
 
-_CT = _SystemVariable(makeScalar, confirmReal, 1e-13)
-_EE = _SystemVariable(makeScalar, confirmBoolean, 0)
-_IO = _SystemVariable(makeScalar, confirmBoolean, 1)
+_CT = _systemVariable(makeScalar, confirmReal, 1e-13)
+_EE = _systemVariable(makeScalar, confirmBoolean, 0)
+_IO = _systemVariable(makeScalar, confirmBoolean, 1)
 
 # a simple dictionary with (k, v) = (name, system-variable)
 
@@ -148,17 +150,17 @@ _SystemVariables = {
 
 # ------------------------------
 
-def     systemVariable(name, value=None):
+def     systemVariable(name, quantity=None):
     """
     set or get the value of a system variable (from the shell)
     """
     try:
         SV = _SystemVariables[name.upper()]
     except KeyError:
-        aplError("UNKNOWN SYSTEM VARIABLE", name)
+        assertError("UNKNOWN SYSTEM VARIABLE")
 
-    if not value is None:
-        SV.set(value)
+    if not quantity is None:
+        SV.set(quantity.resolve())
 
     return SV.get()
 

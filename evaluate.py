@@ -131,10 +131,7 @@ def     evaluateName(expr, cio):
                     cio.hushImplicit = True
                     cio.newStmt = False
 
-                if eagerEvaluation():
-                    rhs = evaluate(rhs_expr[1:].lstrip(), cio)
-                else:
-                    rhs = evaluate(rhs_expr[1:].lstrip(), cio).resolve()
+                rhs = evaluate(rhs_expr[1:].lstrip(), cio)
                 lhs = workspaceVariable(name, rhs)
                 return (lhs, len(expr))
             else:
@@ -254,11 +251,7 @@ def     evaluateSystemVariable(expr, cio):
                     cio.hushImplicit = True
                     cio.newStmt = False
 
-                if eagerEvaluation():
-                    rhs = evaluate(rhs_expr[1:], cio)
-                else:
-                    rhs = evaluate(rhs_expr[1:], cio).resolve()
-
+                rhs = evaluate(rhs_expr[1:], cio)
                 lhs = systemVariable(name, rhs)
                 consumed = len(expr)
             else:

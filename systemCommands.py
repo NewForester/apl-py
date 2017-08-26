@@ -6,7 +6,7 @@
     This initial version implements only )OFF.
 """
 
-from aplError import aplError, aplExit
+from aplError import aplExit, assertError
 
 # ------------------------------
 
@@ -37,6 +37,6 @@ def     systemCommand(name, arguments, cio):
     try:
         _SystemCommands[name.upper()](arguments.lstrip(), cio)
     except KeyError:
-        aplError("UNKNOWN SYSTEM COMMAND", name)
+        assertError("UNKNOWN SYSTEM COMMAND")
 
 # EOF
