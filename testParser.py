@@ -2,7 +2,7 @@
 """
     doctest style unit tests for the APL parser
 
-    WIP - grows as evaluate.py is extended
+    WIP - grows as evaluate.py is extended.
 
     The tests in this module exercise the functions in evaluate.py:
       - recognition of numbers
@@ -24,26 +24,7 @@
         testDyadic --lazy       # run with lazy evaluation
 """
 
-import sys
-
-from evaluate import evaluate, evaluateAndPrint
-
-from systemVariables import setEvaluationMode
-
-from aplCio import aplCio
-from aplError import aplException
-
-# ------------------------------
-
-def     test(expr):
-    """
-    test both positive and negative outcomes
-    """
-    try:
-        cio = aplCio()
-        cio.printResult(evaluate(expr, cio))
-    except aplException as error:
-        print(error.message)
+from test.base import preamble, testOutput, testCommand, testResult as test
 
 # ------------------------------
 
@@ -98,11 +79,7 @@ def     parseStrings(expr):
     >>> test(r'""')
     <BLANKLINE>
     """
-    try:
-        cio = aplCio()
-        cio.printResult(evaluate(expr, cio))
-    except aplException as error:
-        print(error.message)
+    pass
 
 # ------------------------------
 
@@ -267,178 +244,127 @@ def     parseVectors():
 
 def     parseOutput(expr):
     """
-    >>> parseOutput(r"'Hello' ⍝ end of line comments are ignored")
+    >>> testOutput(r"'Hello' ⍝ end of line comments are ignored")
     Hello
 
-    >>> parseOutput(r"'Hello ⍝ in a string is not a comment' ⍝ end of line comments are ignored")
+    >>> testOutput(r"'Hello ⍝ in a string is not a comment' ⍝ end of line comments are ignored")
     Hello ⍝ in a string is not a comment
 
-    >>> parseOutput(r"'Hello' ⋄ 'Paul'")
+    >>> testOutput(r"'Hello' ⋄ 'Paul'")
     Hello
     Paul
-    >>> parseOutput(r"'Hello ⋄ Paul'")
+    >>> testOutput(r"'Hello ⋄ Paul'")
     Hello ⋄ Paul
 
-    >>> parseOutput(r"1 + 2 ⋄ 3 + 4 ⋄ 5 + 6")
+    >>> testOutput(r"1 + 2 ⋄ 3 + 4 ⋄ 5 + 6")
     3
     7
     11
-    >>> parseOutput(r"1 + 2 ⋄ 3 + 4 ⋄")
+    >>> testOutput(r"1 + 2 ⋄ 3 + 4 ⋄")
     3
     7
-    >>> parseOutput(r"⋄ 3 + 4")
+    >>> testOutput(r"⋄ 3 + 4")
     7
 
-    >>> parseOutput(r"⎕ ← 1 + 2")
+    >>> testOutput(r"⎕ ← 1 + 2")
     3
-    >>> parseOutput(r"⍞ ← 1 + 2")
+    >>> testOutput(r"⍞ ← 1 + 2")
     3
 
-    >>> parseOutput(r"6 + ⎕ ← 1 + 2")
+    >>> testOutput(r"6 + ⎕ ← 1 + 2")
     3
     9
-    >>> parseOutput(r"6 + ⍞ ← 1 + 2")
+    >>> testOutput(r"6 + ⍞ ← 1 + 2")
     39
 
-    >>> parseOutput(r"⎕ ← 'Hello' ⋄ 'Paul'")
+    >>> testOutput(r"⎕ ← 'Hello' ⋄ 'Paul'")
     Hello
     Paul
-    >>> parseOutput(r"⍞ ← 'Hello ' ⋄ 'Paul'")
+    >>> testOutput(r"⍞ ← 'Hello ' ⋄ 'Paul'")
     Hello Paul
 
-    >>> parseOutput(r"1 + 2 ⋄ ⎕ ← 3 + 4 ⋄ 5 + 6")
+    >>> testOutput(r"1 + 2 ⋄ ⎕ ← 3 + 4 ⋄ 5 + 6")
     3
     7
     11
-    >>> parseOutput(r"1 + 2 ⋄ ⍞ ← 3 + 4 ⋄ 5 + 6")
+    >>> testOutput(r"1 + 2 ⋄ ⍞ ← 3 + 4 ⋄ 5 + 6")
     3
     711
 
-    >>> parseOutput(r"1 2 3")
+    >>> testOutput(r"1 2 3")
     1 2 3
-    >>> parseOutput(r"1 ⎕ ← 2 3")
+    >>> testOutput(r"1 ⎕ ← 2 3")
     2 3
     1 (2 3)
-    >>> parseOutput(r"'Hello' 2 3")
+    >>> testOutput(r"'Hello' 2 3")
     'Hello' 2 3
-    >>> parseOutput(r"'Hello' ⎕ ← 2 3")
+    >>> testOutput(r"'Hello' ⎕ ← 2 3")
     2 3
     'Hello' (2 3)
 
-    >>> parseOutput(r"1 ⍞ ← 2 3")
+    >>> testOutput(r"1 ⍞ ← 2 3")
     (2 3)1 (2 3)
     """
-    try:
-        cio = aplCio()
-        evaluateAndPrint(expr, cio)
-    except aplException as error:
-        print(error.message)
+    pass
 
 # ------------------------------
 
 def     systemVariable(expr):
     """
-    >>> systemVariable(r"⎕dummy")
+    >>> test(r"⎕dummy")
     UNKNOWN SYSTEM VARIABLE
 
-    >>> systemVariable(r"⎕IO")
+    >>> test(r"⎕IO")
     1
-    >>> systemVariable(r"⎕Io←0")
+    >>> test(r"⎕Io←0")
     0
-    >>> systemVariable(r"⎕io")
+    >>> test(r"⎕io")
     0
-    >>> systemVariable(r"⎕iO←0")
+    >>> test(r"⎕iO←0")
     0
-    >>> systemVariable(r"⎕IO←2")
+    >>> test(r"⎕IO←2")
     DOMAIN ERROR
-    >>> systemVariable(r"⎕io")
+    >>> test(r"⎕io")
     0
-    >>> systemVariable(r"⎕IO←1")
+    >>> test(r"⎕IO←1")
     1
-    >>> systemVariable(r"⎕io")
+    >>> test(r"⎕io")
     1
 
-    >>> systemVariable(r"⊣ EE←⎕EE")
+    >>> test(r"⊣ EE←⎕EE")
     0
-    >>> systemVariable(r"⎕EE←0")
+    >>> test(r"⎕EE←0")
     0
-    >>> systemVariable(r"⎕EE")
+    >>> test(r"⎕EE")
     0
-    >>> systemVariable(r"⎕EE←1")
+    >>> test(r"⎕EE←1")
     1
-    >>> systemVariable(r"⎕EE←2")
+    >>> test(r"⎕EE←2")
     DOMAIN ERROR
-    >>> systemVariable(r"⎕EE")
+    >>> test(r"⎕EE")
     1
-    >>> systemVariable(r"⊣ ⎕EE←EE")
+    >>> test(r"⊣ ⎕EE←EE")
     0
 
-    >>> systemVariable(r"⎕CT")
+    >>> test(r"⎕CT")
     1e¯13
     """
-    try:
-        cio = aplCio()
-        cio.printResult(evaluate(expr, cio))
-    except aplException as error:
-        print(error.message)
+    pass
 
 # ------------------------------
 
 def     systemCommand(expr):
     """
-    >>> systemCommand(")dummy")
+    >>> testCommand(")dummy")
     UNKNOWN SYSTEM COMMAND
     """
-    try:
-        evaluate(expr, aplCio())
-    except aplException as error:
-        print(error.message)
-
-# ------------------------------
-
-def     _parseCommandLineArgs(args):
-    """
-    separate command line args into (optional) flags and an (optional) APL expression
-    """
-    if len(args) == 1:
-        flags, args = [], []
-    elif '--' in args:
-        pivot = args.index("--")
-        flags, args = args[1:pivot], args[pivot + 1:]
-    elif args[1][0] == '-':
-        flags, args = args[1:], []
-    else:
-        flags, args = [], args[1:]
-
-    if flags != []:
-        flags = ' '.join(flags).replace(' -', ':-').split(':')
-
-    if args != []:
-        args = ' '.join(args)
-
-    return flags, args
-
-# ------------------------------
-
-def     main():
-    """
-    the main routine - allows a choice between eager and lazy evaluation
-    """
-    flags, args = _parseCommandLineArgs(sys.argv)
-
-    for flag in flags:
-        if flag in ("-ee=0", "--lazy"):
-            setEvaluationMode(0)
-
-        elif flag in ("-ee=1", "--eager"):
-            setEvaluationMode(1)
-
-    import doctest
-    doctest.testmod()
+    pass
 
 # ------------------------------
 
 if __name__ == "__main__":
-    main()
+    preamble()
+    import doctest
+    doctest.testmod()
 
 # EOF
