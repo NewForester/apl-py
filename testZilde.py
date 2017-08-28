@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """
-    doctest style unit tests for zilde (the empty vector)
+    doctest style unit tests for degnerate cases involving zilde the empty vector
 
-    WIP - grows as functions are implemented
+    WIP - grows as more functions are implemented.
 
     The tests in this module exercise monadic and dyadic functions with
 
@@ -18,29 +18,22 @@
         testDyadic --lazy       # run with lazy evaluation
 """
 
-import sys
-
-from evaluate import evaluate
-
-from systemVariables import setEvaluationMode
-
-from aplCio import aplCio
-from aplError import aplException
+from test.base import preamble, testResult as test
 
 # ------------------------------
 
-def     test(expr):
+def     zilde(expr):
     """
-    test both positive and negative outcomes
-
     >>> test(r"⍬")
     ⍬
+    >>> test(r"⍴ ⍬")
+    0
+    >>> test(r"≡ ⍬")
+    1
+    >>> test(r"≢ ⍬")
+    0
     """
-    try:
-        cio = aplCio()
-        cio.printResult(evaluate(expr, cio))
-    except aplException as error:
-        print(error.message)
+    pass
 
 # ------------------------------
 
@@ -446,50 +439,9 @@ def     zildeDecode():
 
 # ------------------------------
 
-def     _parseCommandLineArgs(args):
-    """
-    separate command line args into (optional) flags and an (optional) APL expression
-    """
-    if len(args) == 1:
-        flags, args = [], []
-    elif '--' in args:
-        pivot = args.index("--")
-        flags, args = args[1:pivot], args[pivot + 1:]
-    elif args[1][0] == '-':
-        flags, args = args[1:], []
-    else:
-        flags, args = [], args[1:]
-
-    if flags != []:
-        flags = ' '.join(flags).replace(' -', ':-').split(':')
-
-    if args != []:
-        args = ' '.join(args)
-
-    return flags, args
-
-# ------------------------------
-
-def     main():
-    """
-    the main routine - allows a choice between eager and lazy evaluation
-    """
-    flags, args = _parseCommandLineArgs(sys.argv)
-
-    for flag in flags:
-        if flag in ("-ee=0", "--lazy"):
-            setEvaluationMode(0)
-
-        elif flag in ("-ee=1", "--eager"):
-            setEvaluationMode(1)
-
+if __name__ == "__main__":
+    preamble()
     import doctest
     doctest.testmod()
-
-# ------------------------------
-
-if __name__ == "__main__":
-    main()
-
 
 # EOF
