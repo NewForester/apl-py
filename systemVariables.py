@@ -80,12 +80,15 @@ def     confirmBoolean(B):
     """
     the Boolean-domain value of B (if within comparison tolerance - else throw DOMAIN ERROR)
     """
-    B = fuzzyInteger(B)
+    try:
+        B = fuzzyInteger(B)
 
-    if B == 0:
-        return 0
-    if B == 1:
-        return 1
+        if B == 0:
+            return 0
+        if B == 1:
+            return 1
+    except TypeError:
+        pass
 
     assertError("DOMAIN ERROR")
 
@@ -95,10 +98,13 @@ def     confirmInteger(B):
     """
     the integer-domain value of B (if within comparison tolerance - else throw DOMAIN ERROR)
     """
-    B = fuzzyInteger(B)
+    try:
+        B = fuzzyInteger(B)
 
-    if isinstance(B, int):
-        return B
+        if isinstance(B, int):
+            return B
+    except TypeError:
+        pass
 
     assertError("DOMAIN ERROR")
 
@@ -108,7 +114,12 @@ def     confirmReal(B):
     """
     the real-domain value of B
     """
-    return float(B)
+    try:
+        return float(B)
+    except TypeError:
+        pass
+
+    assertError("DOMAIN ERROR")
 
 # --------------
 

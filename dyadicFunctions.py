@@ -365,7 +365,13 @@ def     eq(A, B):
     if isinstance(A, int) and isinstance(B, int):
         return int(operator.eq(A, B))
 
-    return int(fuzzyEquals(A, B))
+    if isinstance(A, str) and isinstance(B, str):
+        return int(operator.eq(ord(A), ord(B)))
+
+    try:
+        return int(fuzzyEquals(A, B))
+    except TypeError:
+        return 0
 
 # --------------
 
@@ -376,6 +382,12 @@ def     ne(A, B):
     if isinstance(A, int) and isinstance(B, int):
         return int(operator.ne(A, B))
 
-    return int(not fuzzyEquals(A, B))
+    if isinstance(A, str) and isinstance(B, str):
+        return int(operator.ne(ord(A), ord(B)))
+
+    try:
+        return int(not fuzzyEquals(A, B))
+    except TypeError:
+        return 1
 
 # EOF

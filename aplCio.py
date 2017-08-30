@@ -212,29 +212,37 @@ def _outputValue(printed, streams, value, end=None):
     print an APL quantity to one or more streams
     """
     try:
-        sep = '' if value.isString() else ' '
-
         string = None
+        sep = ''
+
         for element in value:
-            if string is not None:
-                printed = _countOutput(printed, streams, string, end=sep)
+            if isinstance(element, str):
+                if string is not None:
+                    printed = _countOutput(printed, streams, string, end=sep)
 
-            if value.isString():
-                string = chr(element)
-            elif isinstance(element, aplQuantity):
-                if element.isVector():
-                    outfix = "'"  if element.isString() else '('
-                    printed = _countOutput(printed, streams, outfix, end='')
+                string = element
+                sep = ''
 
-                printed = _outputValue(printed, streams, element, end='')
-                string = ''
-
-                if element.isVector():
-                    outfix = "'"  if element.isString() else ')'
-                    printed = _countOutput(printed, streams, outfix, end='')
             else:
-                string = "{0:.10g}".format(element)
-                string = "0" if string == "-0" else string.replace('-', '¯')
+                sep = ' '
+                if string is not None:
+                    printed = _countOutput(printed, streams, string, end=sep)
+
+                if isinstance(element, aplQuantity):
+                    if element.isVector():
+                        outfix = "'"  if element.isString() else '('
+                        printed = _countOutput(printed, streams, outfix, end='')
+
+                    printed = _outputValue(printed, streams, element, end='')
+                    string = ''
+
+                    if element.isVector():
+                        outfix = "'"  if element.isString() else ')'
+                        printed = _countOutput(printed, streams, outfix, end='')
+
+                else:
+                    string = "{0:.10g}".format(element)
+                    string = "0" if string == "-0" else string.replace('-', '¯')
 
         if string is None:
             string = '' if value.isString() else '⍬'

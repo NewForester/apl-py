@@ -120,14 +120,12 @@ def     vv_comma(Fn, A, B):
     """
     evaluate a dyadic function that returns a vector
     """
-    case = A.isString() + B.isString()
-
-    Apy = [A] if A.isString() and case == 1 else A.vectorToPy()
-    Bpy = [B] if B.isString() and case == 1 else B.vectorToPy()
+    Apy = A.vectorToPy()
+    Bpy = B.vectorToPy()
 
     Rpy = Fn(Apy, Bpy)
 
-    return aplQuantity(Rpy, len(Rpy), case == 2)
+    return aplQuantity(Rpy, len(Rpy), A.isString())
 
 # ------------------------------
 
@@ -193,7 +191,7 @@ def     sv2vl(Fn, A, B):
         aplError("RANK ERROR")
 
     if B.isString():
-        Rpy = Fn(A.scalarToPy("LENGTH ERROR"), B.vectorToPy(), ord(' '))
+        Rpy = Fn(A.scalarToPy("LENGTH ERROR"), B.vectorToPy(), ' ')
     else:
         Rpy = Fn(A.scalarToPy("LENGTH ERROR"), B.vectorToPy(), 0)
 
@@ -214,7 +212,7 @@ def     ce2v(Fn, A, B):
         return aplQuantity([], 0, B.isString())
 
     if B.isString():
-        Rpy = Fn(A.vectorToPy(), B.vectorToPy(), ord(' '))
+        Rpy = Fn(A.vectorToPy(), B.vectorToPy(), ' ')
     else:
         Rpy = Fn(A.vectorToPy(), B.vectorToPy(), 0)
 

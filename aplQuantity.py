@@ -15,14 +15,9 @@
         - numeric, string and mixed vectors
             - vectors comprise a (Python) list of values and have no rank but a single dimension
 
-    Strings have a lazy representation - a promise of a list of the ordinal representation of the
-    characters in the Python string.  A scalar string is a single character.
+    Strings are represented by a tuple of single characters, each of which has Python type str.
 
     Scalars are stored as a list of length 1 for computational convenience.
-
-    Mixed vectors comprised numeric and string values and are, by definition, nested.
-
-    Strings and hence mixed/nested vectors are a product of the parser: support for these is adhoc.
 """
 
 from aplError import aplError
@@ -89,7 +84,7 @@ class   aplQuantity(object):
         """
         the padding/filling value
         """
-        return ord(' ') if self.isString() else 0
+        return ' ' if self.isString() else 0
 
     def isString(self):
         """
@@ -171,6 +166,19 @@ class   aplQuantity(object):
             return next(iter(self._value))
         else:
             return self._value
+
+    def safeScalar(self):
+        """
+        return the value of a scalar if safe and appropriate to do so
+
+        We are just waiting for this one to blow up
+        """
+        if self.isScalar():
+            value = self.scalarToPy()
+            if not isinstance(value, aplQuantity):
+                return value
+            self._value = (value,)
+        return self
 
     def scalarIterator(self):
         """
@@ -290,6 +298,6 @@ def     makeString(value, withDelimiter):
         if length == 1 and delimiter == "'":
             length = None
 
-    return aplQuantity(map(ord, value), length, True)
+    return aplQuantity(tuple(value), length, True)
 
 # EOF

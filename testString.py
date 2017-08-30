@@ -94,9 +94,9 @@ def     stringCompare():
     1 0 0 0 0
 
     >>> test(r"'H' = 72")
-    1
-    >>> test(r'"H" ≠ 72')
     0
+    >>> test(r'"H" ≠ 72')
+    1
 
     >>> test(r"'Hello' = 'Goodbye'")
     LENGTH ERROR
@@ -195,13 +195,13 @@ def     stringComma():
     Hello Paul
 
     >>> test(r"1 2 3 , 'Hello'")
-    1 2 3 'Hello'
+    1 2 3 Hello
     >>> test(r"'Hello' , 1 2 3")
-    'Hello' 1 2 3
+    Hello 1 2 3
     >>> test(r"1 2 3 , 'H'")
     1 2 3 H
     >>> test(r'1 2 3 , "H"')
-    1 2 3 'H'
+    1 2 3 H
     """
     pass
 

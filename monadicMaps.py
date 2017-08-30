@@ -140,14 +140,11 @@ def     v_nest(B):
     if B.isScalar():
         Rpy = 0
 
-    elif B.isString():
-        Rpy = 1
-
     elif B.isVector():
         Rpy = 1
         for X in B:
             if isinstance(X, aplQuantity):
-                Rpy = 2
+                Rpy = max (Rpy, 1 + v_nest(X).python())
                 break
 
     else:
