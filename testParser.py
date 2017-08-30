@@ -8,10 +8,10 @@
       - recognition of numbers
       - recognition of strings
       - recognition of names
+      - tack functions (⊢ and ⊣)
       - scalar invocation of monadic and dyadic functions
       - parentheses to alter order of execution
-      - tack functions (⊢ and ⊣)
-      - parsing of vector quantities - including mixed vectors
+      - parsing of vector quantities - including mixed/nested vectors
       - parsing of output operators (⎕ ⍞) - but not input operators
       - system variables
       - system commands
@@ -115,6 +115,22 @@ def     parseNames():
 
 # ------------------------------
 
+def     parseTacks():
+    """
+    >>> test(r"⊣ 2")
+    0
+    >>> test(r"⊢ 2")
+    2
+
+    >>> test(r"6 ⊣ 2")
+    6
+    >>> test(r"6 ⊢ 2")
+    2
+    """
+    pass
+
+# ------------------------------
+
 def     parseScalars():
     """
     >>> test(r"+2")
@@ -161,22 +177,6 @@ def     parseParentheses():
     6
     >>> test(r"1 - (2 - 3 - 4")
     SYNTAX ERROR
-    """
-    pass
-
-# ------------------------------
-
-def     parseTacks():
-    """
-    >>> test(r"⊣ 2")
-    0
-    >>> test(r"⊢ 2")
-    2
-
-    >>> test(r"6 ⊣ 2")
-    6
-    >>> test(r"6 ⊢ 2")
-    2
     """
     pass
 
@@ -237,6 +237,117 @@ def     parseVectors():
     1 'Hello' 2
     >>> test(r"'Hello' (19 20) 'Paul'")
     'Hello' (19 20) 'Paul'
+    """
+    pass
+
+# ------------------------------
+
+def     parseMixed():
+    """
+    >>> test(r"N ← 1 2 3 'a' 'b' 'c'")
+    1 2 3 abc
+    >>> test(r"≢ N")
+    6
+    >>> test(r"≡ N")
+    1
+    >>> test(r"N ≡ 1 2 3, 'abc'")
+    1
+    >>> test(r"1 ↑ 0 ⍴ N")
+    0
+
+    >>> test(r"N ← 'c' 'b' 'a' 3 2 1")
+    cba 3 2 1
+    >>> test(r"≢ N")
+    6
+    >>> test(r"≡ N")
+    1
+    >>> test(r"N ≡ 'cba', 3 2 1")
+    1
+    >>> test(r"1 ↑ 0 ⍴ N")
+    <BLANKLINE>
+    """
+    pass
+
+# ------------------------------
+
+def     parseNested():
+    """
+    >>> test(r"N ← 1 2 3 'abc' 4 5 6")
+    1 2 3 'abc' 4 5 6
+    >>> test(r"≢ N")
+    7
+    >>> test(r"≡ N")
+    2
+
+    >>> test(r"N ← 1 2 3 ('abc') 4 5 6")
+    1 2 3 'abc' 4 5 6
+    >>> test(r"≢ N")
+    7
+    >>> test(r"≡ N")
+    2
+
+    >>> test(r"N ← 1 2 3, 'abc', 4 5 6")
+    1 2 3 abc 4 5 6
+    >>> test(r"≢ N")
+    9
+    >>> test(r"≡ N")
+    1
+
+    >>> test(r'N ← 1 2 3 "a" "b" "c" 4 5 6')
+    1 2 3 'a' 'b' 'c' 4 5 6
+    >>> test(r"≢ N")
+    9
+    >>> test(r"≡ N")
+    2
+
+    >>> test(r'N ← 1 2 3 ("a" "b" "c") 4 5 6')
+    1 2 3 ('a' 'b' 'c') 4 5 6
+    >>> test(r"≢ N")
+    7
+    >>> test(r"≡ N")
+    3
+
+    >>> test(r"N ← 1 2 3 'a' 'b' 'c' 4 5 6")
+    1 2 3 abc 4 5 6
+    >>> test(r"≢ N")
+    9
+    >>> test(r"≡ N")
+    1
+
+    >>> test(r"N ← 1 2 3 ('a' 'b' 'c') 4 5 6")
+    1 2 3 'abc' 4 5 6
+    >>> test(r"≢ N")
+    7
+    >>> test(r"≡ N")
+    2
+
+    >>> test(r"N ← 'H' 'ello'")
+    H 'ello'
+    >>> test(r"≢ N")
+    2
+    >>> test(r"≡ N")
+    2
+
+    >>> test(r'N ← "H" "ello"')
+    'H' 'ello'
+    >>> test(r"≢ N")
+    2
+    >>> test(r"≡ N")
+    2
+
+    >>> test(r"N ← 'Hell' 'o'")
+    'Hell' o
+    >>> test(r"≢ N")
+    2
+    >>> test(r"≡ N")
+    2
+
+    >>> test(r'N ← "Hell" "o"')
+    'Hell' 'o'
+    >>> test(r"≢ N")
+    2
+    >>> test(r"≡ N")
+    2
     """
     pass
 
