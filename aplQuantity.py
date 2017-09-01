@@ -105,6 +105,11 @@ class   aplQuantity(object):
                 if not isinstance(self._value, tuple):
                     self._value = tuple(self._value)
                 self._dimension = len(self._value)
+
+                if self._dimension == 0:
+                    self._value = (' ' if self._string else 0,)
+                else:
+                    self._string = isinstance(self._value[0], str)
         return self._dimension
 
     def rank(self):
@@ -173,7 +178,7 @@ class   aplQuantity(object):
         """
         self.isString()
 
-        if self._dimension is None or self.dimension() == 1:
+        if self._dimension is None or self.dimension() <= 1:
             return next(iter(self._value))
 
         aplError(error if error else "RANK ERROR")
@@ -182,6 +187,9 @@ class   aplQuantity(object):
         """
         return Python list
         """
+        if self.isEmptyVector():
+            return ()
+
         self.isString()
 
         return self._value
@@ -194,7 +202,7 @@ class   aplQuantity(object):
             return self.scalarIterator()
 
         if specialEmpty and self.isEmptyVector():
-            return scalarIterator(self.prototype())
+            return self.scalarIterator()
 
         if self.isVector():
             return self.vectorToPy()
@@ -293,7 +301,7 @@ def     makeEmptyVector(string=False):
     """
     make an empty APL vector quantity (⍬ or '')
     """
-    return aplQuantity((), 0, string)
+    return aplQuantity((' ' if string else 0,), 0, string)
 
 # --------------
 
@@ -306,6 +314,9 @@ def     makeString(value, withDelimiter):
         value = value.replace(delimiter*2, delimiter)[1:-1]
 
     length = len(value)
+
+    if length == 0:
+        value = ' '
 
     if withDelimiter:
         if length == 1 and delimiter == "'":

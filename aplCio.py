@@ -184,79 +184,89 @@ class   aplSio(object):
 
 # ------------------------------
 
-def _outputString(streams, string, end=None):
+def     _outputString(streams, string, end=None):
     """
     print a string to one or more streams
     """
     for stream in streams:
         stream.printString(string, end=end)
 
-# --------------
+# ------------------------------
 
-def _countOutput(count, streams, string, end=None):
+class   _outputValue(object):
     """
-    print and string and update the count of characters printed so far on this line
+    print, prettily, an APL quantity, to one or more streams
     """
-    for stream in streams:
-        stream.printString(string, end=end)
+    def __init__(self, streams, quantity, end=None):
+        self._streams = streams
+        self._printed = 0
 
-    if end is None or end == '\n':
-        return 0
-    else:
-        return count+len(string)+len(end)
+        self._outputQuantity(quantity, end)
 
-# --------------
+    def _output(self, string, end):
+        """
+        print a string and update the count of characters printed so far on this line
+        """
+        if not string is None:
+            for stream in self._streams:
+                stream.printString(string, end=end)
 
-def _outputValue(printed, streams, value, end=None):
-    """
-    print an APL quantity to one or more streams
-    """
-    try:
-        string = None
-        sep = ''
+            self._printed += len(string)
 
-        for element in value:
-            if isinstance(element, str):
-                if string is not None:
-                    printed = _countOutput(printed, streams, string, end=sep)
-
-                string = element
-                sep = ''
-
+            if end is None or end == '\n':
+                self._printed = 0
             else:
-                sep = ' '
-                if string is not None:
-                    printed = _countOutput(printed, streams, string, end=sep)
+                self._printed += len(end)
 
-                if isinstance(element, aplQuantity):
-                    if element.isVector():
-                        outfix = "'"  if element.isString() else '('
-                        printed = _countOutput(printed, streams, outfix, end='')
+    def _outputQuantity(self, quantity, end):
+        """
+        print an APL quantity recursively
+        """
+        try:
+            string = None
+            separator = ''
 
-                    printed = _outputValue(printed, streams, element, end='')
-                    string = ''
+            if quantity.isEmptyVector():
+                string = '' if quantity.isString() else '⍬'
+            else:
+                for element in quantity:
+                    if isinstance(element, str):
+                        self._output(string, separator)
 
-                    if element.isVector():
-                        outfix = "'"  if element.isString() else ')'
-                        printed = _countOutput(printed, streams, outfix, end='')
+                        string = element
+                        separator = ''
 
-                else:
-                    string = "{0:.10g}".format(element)
-                    string = "0" if string == "-0" else string.replace('-', '¯')
+                    elif isinstance(element, aplQuantity):
+                        separator = ' '
+                        self._output(string, separator)
 
-        if string is None:
-            string = '' if value.isString() else '⍬'
+                        if element.isVector():
+                            outfix = "'"  if element.isString() else '('
+                            self._output(outfix, '')
 
-        printed = _countOutput(printed, streams, string, end=end)
+                        self._outputQuantity(element, '')
+                        string = ''
 
-        return printed
+                        if element.isVector():
+                            outfix = "'"  if element.isString() else ')'
+                            self._output(outfix, '')
 
-    except aplException as error:
-        if not error.expr:
-            error.expr = value.expressionToGo
-        if printed:
-            _outputString(streams, '\b \b'*printed, end='')
-        raise error
+                    else:
+                        separator = ' '
+                        self._output(string, separator)
+
+                        string = "{0:.10g}".format(element)
+                        string = "0" if string == "-0" else string.replace('-', '¯')
+
+            self._output(string, end)
+
+        except aplException as error:
+            if not error.expr:
+                error.expr = quantity.expressionToGo
+            if self._printed != 0:
+                _outputString(self._streams, '\b \b'*self._printed, end='')
+                self._printed = 0
+            raise error
 
 # ------------------------------
 
@@ -327,7 +337,7 @@ class   aplCio(object):
         """
         format and print the result of evaluating a test expression
         """
-        _outputValue(0, (self.sysout,), value)
+        _outputValue((self.sysout,), value)
 
     def printEndOfLine(self):
         """
@@ -348,7 +358,7 @@ class   aplCio(object):
                 self.printString(self.prefix, end="")
                 self.prefixDone = True
 
-            _outputValue(0, (self.sysout, self.logFile), value)
+            _outputValue((self.sysout, self.logFile), value)
             self.endOfLine = '\n'
 
     def printExplicit(self, value, end='\n'):
@@ -360,7 +370,7 @@ class   aplCio(object):
                 self.printString(self.prefix, end="")
                 self.prefixDone = True
 
-            _outputValue(0, (self.sysout, self.logFile, self.outFile), value, end=end)
+            _outputValue((self.sysout, self.logFile, self.outFile), value, end=end)
             self.endOfLine = end
 
     def _errorInFile(self, sio, expr):

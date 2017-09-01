@@ -140,6 +140,9 @@ def     sv_transpose(Fn, A, B):
     if A.dimension() == 0 and B.isScalar():
         return B
 
+    if A.dimension() == 0 and B.dimension() == 0:
+        aplError("LENGTH ERROR")
+
     Apy = A.scalarToPy("LENGTH ERROR")
 
     if Apy != 1:
