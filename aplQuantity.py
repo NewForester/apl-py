@@ -123,8 +123,12 @@ class   aplQuantity(object):
 
     def isString(self):
         """
-        true is quantity is a string
+        true if quantity is a string
         """
+        if self._string is None:
+            if not isinstance(self._value, tuple):
+                self._value = tuple(self._value)
+            self._string = isinstance(self._value[0], str)
         return self._string
 
     def isScalar(self):
@@ -167,6 +171,8 @@ class   aplQuantity(object):
         """
         return Python numeric
         """
+        self.isString()
+
         if self._dimension is None or self.dimension() == 1:
             return next(iter(self._value))
 
@@ -176,6 +182,8 @@ class   aplQuantity(object):
         """
         return Python list
         """
+        self.isString()
+
         return self._value
 
     def promoteScalarToVectorPy(self, specialEmpty=False):
@@ -198,9 +206,12 @@ class   aplQuantity(object):
         return the Python value (which could be a promise)
         """
         if self.isScalar():
-            return next(iter(self._value))
-        else:
-            return self._value
+            return self.scalarToPy()
+
+        if self.isVector():
+            return self.vectorToPy()
+
+        aplError("RANK ERROR")
 
     def safeScalar(self):
         """

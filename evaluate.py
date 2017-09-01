@@ -407,11 +407,11 @@ def     evaluate(expression, cio):
         if lhs == []:
             lhs = None
         elif len(lhs) > 1:
-            lhs = makeVector(tuple(lhs), -1, isinstance(lhs[0], str))
+            lhs = makeVector(tuple(lhs), -1, None)
         elif isinstance(lhs[0], aplQuantity):
             lhs = lhs[0]
         else:
-            lhs = makeScalar(lhs[0], isinstance(lhs[0], str))
+            lhs = makeScalar(lhs[0], None)
 
         if not expr:
             return lhs
