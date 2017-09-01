@@ -30,7 +30,7 @@ class   aplQuantity(object):
     """
     def __init__(self, value, dimension=0, string=False):
         try:
-            if dimension == None:
+            if dimension is None:
                 iter(value)
             self._value = value
 
@@ -40,19 +40,49 @@ class   aplQuantity(object):
         self._dimension = dimension
         self._string = string
         self._resolved = False
+        self._hash = None
         self.expressionToGo = None
 
     def __iter__(self):
         return self._value.__iter__()
 
-    def _clone(self, quantity):
+    def __eq__(self, other):
+        if isinstance(other, aplQuantity):
+            return self.__hash__() == other.__hash__()
+
+        return False
+
+    def __hash__(self):
+        if self._hash is None:
+            if self._resolved:
+                for value in self._value:
+                    if isinstance(value, aplQuantity):
+                        value.__hash__()
+
+            else:
+                accumulator = []
+                for value in self._value:
+                    if isinstance(value, aplQuantity):
+                        value.__hash__()
+                    accumulator.append(value)
+
+                if not isinstance(self._value, tuple):
+                    self._value = tuple(accumulator)
+                self._resolved = True
+
+            self._hash = hash(self._value)
+        return self._hash
+
+    def _clone(self, other):
         """
         clone (without realising any promises)
         """
-        self._value = quantity._value
-        self._dimension = quantity._dimension
-        self._string = quantity._string
-        self._resolved = quantity._resolved
+        if isinstance(other, aplQuantity):
+            self._value = other._value
+            self._dimension = other._dimension
+            self._string = other._string
+            self._resolved = other._resolved
+            self._hash = other._hash
 
     def tally(self):
         """
@@ -188,12 +218,19 @@ class   aplQuantity(object):
 
     def resolve(self):
         """
-        realise a promise
+        realise a promise (essentially a deep copy of a lazy APL quantity)
         """
-        if self._resolved:
-            return self
+        if not self._resolved:
+            accumulator = []
+            for value in self._value:
+                if isinstance(value, aplQuantity):
+                    value.resolve()
+                accumulator.append(value)
 
-        return _resolveMap(self)
+            if not isinstance(self._value, tuple):
+                self._value = tuple(accumulator)
+            self._resolved = True
+        return self
 
 # ------------------------------
 
@@ -212,46 +249,6 @@ class   scalarIterator(object):
 
     def __next__(self):
         return self._value
-
-# ------------------------------
-
-class   _resolveIterator(object):
-    """
-    recursive iterator for eager evaluation of a lazy APL quantity B
-    """
-    def __init__(self, B):
-        self._B = B.__iter__()
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        Y = self._B.__next__()
-
-        if isinstance(Y, aplQuantity):
-            if not Y._resolved:
-                return _resolveMap(Y)
-
-        return Y
-
-# --------------
-
-def     _resolveMap(B):
-    """
-    map for eager evaluation of a lazy APL quantity B
-    """
-    if B.isScalar():
-        R = aplQuantity(tuple(_resolveIterator(B)), None, B.isString())
-
-    elif B.isVector():
-        R = aplQuantity(tuple(_resolveIterator(B)), B.dimension(), B.isString())
-
-    else:
-        aplError("RANK ERROR")
-
-    R.expressionToGo = B.expressionToGo
-    R._resolved = True
-    return R
 
 # ------------------------------
 
