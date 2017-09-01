@@ -407,7 +407,7 @@ def     evaluate(expression, cio):
         if lhs == []:
             lhs = None
         elif len(lhs) > 1:
-            lhs = makeVector(tuple(lhs), len(lhs), isinstance(lhs[0], str))
+            lhs = makeVector(tuple(lhs), -1, isinstance(lhs[0], str))
         elif isinstance(lhs[0], aplQuantity):
             lhs = lhs[0]
         else:

@@ -14,6 +14,8 @@
     module are under review.
 """
 
+from systemVariables import confirmInteger
+
 from aplQuantity import aplQuantity
 from aplError import aplError, assertNumeric
 
@@ -43,7 +45,7 @@ def     s2v(Fn, B):
     """
     assertNumeric(B)
 
-    Bpy = B.scalarToPy()
+    Bpy = confirmInteger(B.scalarToPy())
 
     return aplQuantity(Fn(Bpy), Bpy)
 

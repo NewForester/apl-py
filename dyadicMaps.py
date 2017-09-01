@@ -14,6 +14,8 @@
     module are under review.
 """
 
+from systemVariables import confirmInteger
+
 from aplQuantity import aplQuantity
 from aplError import aplError, assertNumeric
 
@@ -103,7 +105,7 @@ def     sv_rho(Fn, A, B):
             Rpy = B.vectorToPy()[0]
 
     else:
-        dimension = A.scalarToPy()
+        dimension = confirmInteger(A.scalarToPy())
 
         if B.dimension() != 0:
             Rpy = Fn(dimension, B.vectorToPy())

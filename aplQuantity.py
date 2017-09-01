@@ -92,7 +92,7 @@ class   aplQuantity(object):
             return 1
 
         if isinstance(self._dimension, int):
-            return self._dimension
+            return self.dimension()
 
         aplError("RANK ERROR ASSERTION")
 
@@ -100,6 +100,11 @@ class   aplQuantity(object):
         """
         the dimension(s) of the quantity
         """
+        if isinstance(self._dimension, int):
+            if self._dimension == -1:
+                if not isinstance(self._value, tuple):
+                    self._value = tuple(self._value)
+                self._dimension = len(self._value)
         return self._dimension
 
     def rank(self):
@@ -112,7 +117,7 @@ class   aplQuantity(object):
 
     def prototype(self):
         """
-        the padding/filling value
+        the quantity's array prototype used for padding/filling
         """
         return ' ' if self.isString() else 0
 
@@ -132,7 +137,7 @@ class   aplQuantity(object):
         """
         true if quantity is a vector
         """
-        return self._dimension is not None
+        return isinstance(self._dimension, int)
 
     def isArray(self):
         """
@@ -144,7 +149,7 @@ class   aplQuantity(object):
         """
         true if quantity is scalar or a vector length 1
         """
-        return self._dimension is None or (isinstance(self._dimension, int) and self._dimension == 1)
+        return self._dimension is None or (isinstance(self._dimension, int) and self.dimension() == 1)
 
     def isVectorLike(self):
         """
@@ -156,13 +161,13 @@ class   aplQuantity(object):
         """
         true if quantity is a vector length 0
         """
-        return isinstance(self._dimension, int) and self._dimension == 0
+        return isinstance(self._dimension, int) and self.dimension() == 0
 
     def scalarToPy(self, error=None):
         """
         return Python numeric
         """
-        if self._dimension is None or self._dimension == 1:
+        if self._dimension is None or self.dimension() == 1:
             return next(iter(self._value))
 
         aplError(error if error else "RANK ERROR")
