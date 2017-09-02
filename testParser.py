@@ -12,6 +12,7 @@
       - scalar invocation of monadic and dyadic functions
       - parentheses to alter order of execution
       - parsing of vector quantities - including mixed/nested vectors
+      - array prototypes
       - parsing of output operators (⎕ ⍞) - but not input operators
       - system variables
       - system commands
@@ -66,7 +67,7 @@ def     parseStrings(expr):
     >>> test(r"'H'")
     H
     >>> test(r"''")
-    <BLANKLINE>
+    ''
 
     >>> test(r'"Hello"')
     Hello
@@ -77,7 +78,7 @@ def     parseStrings(expr):
     >>> test(r'"H"')
     H
     >>> test(r'""')
-    <BLANKLINE>
+    ''
     """
     pass
 
@@ -263,8 +264,8 @@ def     parseMixed():
     1
     >>> test(r"N ≡ 'cba', 3 2 1")
     1
-    >>> test(r"1 ↑ 0 ⍴ N")
-    <BLANKLINE>
+    >>> test(r"'«', (1 ↑ 0 ⍴ N), '»'")
+    « »
     """
     pass
 
@@ -348,6 +349,41 @@ def     parseNested():
     2
     >>> test(r"≡ N")
     2
+    """
+    pass
+
+# ------------------------------
+
+def     parsePrototypes():
+    """
+    >>> test(r"'«', (1 ⍴ ⍬), '»'")
+    « 0 »
+    >>> test(r"'«', (1 ⍴ ''), '»'")
+    « »
+
+    >>> test(r"'«', (1 ↑ 0 ⍴ 1 2 3), '»'")
+    « 0 »
+    >>> test(r"'«', (1 ↑ 0 ⍴ 'Hello'), '»'")
+    « »
+
+    >>> test(r"'«', (1 ↑ 0 ⍴ 1 'a'), '»'")
+    « 0 »
+    >>> test(r"'«', (1 ↑ 0 ⍴ 'a' 1), '»'")
+    « »
+
+    >>> test(r"(0 ⍴ (1 2) (3 4))")
+    (⍬ ⍬)
+    >>> test(r"(0 ⍴ (1 2) '??')")
+    (⍬ ⍬)
+    >>> test(r"(0 ⍴ '!!' (3 4))")
+    ('' '')
+
+    !!! >>> test(r"'«', (1 ↑ 0 ⍴ (1 2) (3 4)), '»'")
+    « (0 0) »
+    !!! >>> test(r"'«', (1 ↑ 0 ⍴ (1 2) '??'), '»'")
+    « (0 0) »
+    !!! >>> test(r"'«', (1 ↑ 0 ⍴ '!!' (3 4)), '»'")
+    « '  ' »
     """
     pass
 

@@ -22,7 +22,7 @@ import readline
 import traceback
 
 from aplQuantity import aplQuantity
-from aplError import aplException, aplQuit, assertError
+from aplError import aplException, aplQuit, assertNotArray
 
 # ------------------------------
 
@@ -199,9 +199,96 @@ class   _outputValue(object):
     """
     def __init__(self, streams, quantity, end=None):
         self._streams = streams
+        self._emptyVector = quantity.isEmptyVector()
         self._printed = 0
 
         self._outputQuantity(quantity, end)
+
+    def _outputQuantity(self, quantity, end):
+        """
+        print an APL quantity recursively
+        """
+        try:
+            string = None
+            separator = ''
+
+            assertNotArray(quantity, "WIP - ARRAY OUTPUT ERROR")
+
+            emptyVector = quantity.isEmptyVector()
+
+            for element in quantity:
+                if isinstance(element, str):
+                    self._output(string, separator)
+
+                    empty = self._emptyVector or emptyVector
+                    string, separator = self._formatCharacter(element, empty)
+
+                elif isinstance(element, aplQuantity):
+                    self._output(string, ' ')
+
+                    empty = self._emptyVector or element.isEmptyVector()
+                    string, separator = self._formatQuantity(element, empty)
+
+                else:
+                    self._output(string, ' ')
+
+                    empty = self._emptyVector or emptyVector
+                    string, separator = self._formatNumber(element, empty)
+
+            self._output(string, end)
+
+        except aplException as error:
+            if not error.expr:
+                error.expr = quantity.expressionToGo
+            if self._printed != 0:
+                _outputString(self._streams, '\b \b'*self._printed, end='')
+                self._printed = 0
+            raise error
+
+    def _formatQuantity(self, quantity, emptyVector):
+        """
+        print an element that itself is an APL quantity
+        """
+        if quantity.isVector():
+            if emptyVector or not quantity.isString():
+                outfix = '()'
+            else:
+                outfix = "''"
+        else:
+            outfix = None
+
+        self._output(outfix[0], '')
+        self._outputQuantity(quantity, '')
+        self._output(outfix[1], '')
+
+        return '', ' '
+
+    @staticmethod
+    def _formatNumber(number, emptyVector):
+        """
+        format a number for output
+        """
+        if emptyVector:
+            string = '⍬'
+        else:
+            string = "{0:.10g}".format(number)
+            string = "0" if string == "-0" else string.replace('-', '¯')
+
+        return string, ' '
+
+    @staticmethod
+    def _formatCharacter(character, emptyVector):
+        """
+        format a character for output
+        """
+        if emptyVector:
+            string = "''"
+            separator = ' '
+        else:
+            string = character
+            separator = ''
+
+        return string, separator
 
     def _output(self, string, end):
         """
@@ -217,59 +304,6 @@ class   _outputValue(object):
                 self._printed = 0
             else:
                 self._printed += len(end)
-
-    def _outputQuantity(self, quantity, end):
-        """
-        print an APL quantity recursively
-        """
-        try:
-            string = None
-            separator = ''
-
-            if quantity.isEmptyVector():
-                string = '⍬' if quantity.prototype() == 0 else ''
-
-            elif quantity.isVectorLike():
-                for element in quantity:
-                    if isinstance(element, str):
-                        self._output(string, separator)
-
-                        string = element
-                        separator = ''
-
-                    elif isinstance(element, aplQuantity):
-                        separator = ' '
-                        self._output(string, separator)
-
-                        if element.isVector():
-                            outfix = "''"  if element.isString() else '()'
-                        else:
-                            outfix = None
-
-                        self._output(outfix[0], '')
-                        self._outputQuantity(element, '')
-                        self._output(outfix[1], '')
-
-                        string = ''
-
-                    else:
-                        separator = ' '
-                        self._output(string, separator)
-
-                        string = "{0:.10g}".format(element)
-                        string = "0" if string == "-0" else string.replace('-', '¯')
-            else:
-                assertError("WIP - ARRAY OUTPUT ERROR")
-
-            self._output(string, end)
-
-        except aplException as error:
-            if not error.expr:
-                error.expr = quantity.expressionToGo
-            if self._printed != 0:
-                _outputString(self._streams, '\b \b'*self._printed, end='')
-                self._printed = 0
-            raise error
 
 # ------------------------------
 

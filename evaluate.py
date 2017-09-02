@@ -203,7 +203,7 @@ def     evaluateBoxTickIO(expr, cio):
 
         rhs = evaluate(texpr[1:], cio) if newStmt else evaluate(texpr[1:], cio).resolve()
 
-        if rhs.prototype() == ' ':
+        if rhs.padFill() == ' ':
             cio.userPromptLength = rhs.dimension()
             cio.printExplicit(rhs, '')
         elif rhs.isVector():
@@ -328,7 +328,7 @@ _ParserFunctions = (
     evaluateSubexpression,
     evaluateBoxIO,
     evaluateBoxTickIO,
-    lambda e, c: (makeEmptyVector(0), 1),
+    lambda e, c: (makeEmptyVector(), 1),
     lambda e, c: (None, len(e)),
 )
 

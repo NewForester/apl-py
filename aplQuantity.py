@@ -20,7 +20,7 @@
     Scalars are stored as a list of length 1 for computational convenience.
 """
 
-from aplError import aplError
+from aplError import aplError, assertNotArray
 
 # ------------------------------
 
@@ -28,7 +28,7 @@ class   aplQuantity(object):
     """
     trivial class that holds an APL quantity
     """
-    def __init__(self, value, dimension=0, prototype=0):
+    def __init__(self, value, dimension=0, prototype=(0,)):
         try:
             if dimension is None:
                 iter(value)
@@ -42,6 +42,9 @@ class   aplQuantity(object):
         self._resolved = False
         self._hash = None
         self.expressionToGo = None
+
+        if dimension == 0:
+            self._value = prototype
 
     def __iter__(self):
         return self._value.__iter__()
@@ -115,7 +118,7 @@ class   aplQuantity(object):
                 self._dimension = len(self._value)
 
                 if self._dimension == 0:
-                    self._value = (self._prototype,)
+                    self._value = self._prototype
             return self._dimension
 
         aplError("RANK ERROR ASSERTION")
@@ -145,15 +148,43 @@ class   aplQuantity(object):
             else:
                 initial = self._value.peek()
 
-            self._prototype = ' ' if isinstance(initial, str) else 0
-
+            self._prototype = (makePrototype(initial),)
         return self._prototype
+
+    def makePrototype(self):
+        """
+        the quantity's array prototype used for padding/filling
+        """
+        if self.isVectorLike():
+            if isinstance(self._value, tuple):
+                prototype = []
+                for element in self._value:
+                    prototype.append(makePrototype(element))
+            else:
+                prototype = self._value.makePrototype()
+
+            return tuple(prototype)
+
+        assertNotArray(self, "WIP - makePrototype PROTOTYPE RANK ERROR")
+
+    def padFill(self):
+        """
+        the pad (aka fill) character/number for a vector quantity
+        """
+        if self.isVectorLike():
+            prototype = self.prototype()
+
+            if isinstance(prototype, aplQuantity):
+                return prototype
+            return prototype[0]
+
+        assertNotArray(self, "WIP - pad PROTOTYPE RANK ERROR")
 
     def isString(self):
         """
         true if quantity really is a string
         """
-        if self.prototype() == 0:
+        if self.padFill() == 0:
             return False
 
         if isinstance(self._value, tuple):
@@ -319,7 +350,7 @@ class   lookAhead(object):
     """
     an iterator to allow peeking at the first few elements of some other iterator
 
-    extended to allow buffering inside some other custom iterator
+    Extended to support other operations including buffering inside some other custom iterator
     """
     def __init__(self, B, N=0, F=None):
         self._B = B.__iter__()
@@ -425,6 +456,25 @@ class   lookAhead(object):
 
         return self._LA[0]
 
+    def makePrototype(self):
+        """
+        return the 'empty' array prototype for APL quantity enclosed in the buffer
+        """
+        P = []
+
+        for Y in self._LA:
+            P.append(makePrototype(Y))
+
+        try:
+            while True:
+                Y = self._pushBuffer(self._B.__next__())
+
+                P.append(makePrototype(Y))
+        except StopIteration:
+            pass
+
+        return P
+
     def isString(self):
         """
         true if a real vector of characters, false if only a mixed vector
@@ -462,10 +512,13 @@ class   lookAhead(object):
 
 # ------------------------------
 
-def     makeScalar(value, prototype=0):
+def     makeScalar(value, prototype=(0,)):
     """
     make an APL scalar quantity from a scalar Python value
     """
+    if isinstance(value, aplQuantity):
+        aplError("makeScalar: needs more thought")
+
     try:
         value = value.__iter__().__next__()
     except AttributeError:
@@ -475,7 +528,7 @@ def     makeScalar(value, prototype=0):
 
 # --------------
 
-def     makeVector(value, length=-1, prototype=0):
+def     makeVector(value, length=-1, prototype=(0,)):
     """
     make an APL vector quantity from a Python list
     """
@@ -494,7 +547,7 @@ def     makeVector(value, length=-1, prototype=0):
         if prototype is None:
             if value.buffered() == 0:
                 aplError("ASSERTION ERROR: makeVector()")
-            prototype = ' ' if isinstance(value.peek(), str) else 0
+            prototype = (makePrototype(value.peek()),)
 
     if length == 0:
         return makeEmptyVector(prototype)
@@ -503,11 +556,18 @@ def     makeVector(value, length=-1, prototype=0):
 
 # --------------
 
-def     makeEmptyVector(prototype):
+def     makeEmptyVector(prototype=(0,)):
     """
     make an empty APL vector quantity (⍬ or '')
     """
-    return aplQuantity((prototype,), 0, prototype)
+    try:
+        prototype.__iter__()
+
+    except AttributeError:
+        print("Change the caller")
+        prototype = (prototype,)
+
+    return aplQuantity(prototype, 0, prototype)
 
 # --------------
 
@@ -528,6 +588,19 @@ def     makeString(value, withDelimiter):
         if length == 1 and delimiter == "'":
             length = None
 
-    return aplQuantity(tuple(value), length, ' ')
+    return aplQuantity(tuple(value), length, (' ',))
+
+# --------------
+
+def     makePrototype(value):
+    """
+    the 'array prototype' for this value
+    """
+    if isinstance(value, aplQuantity):
+        prototype = value.makePrototype()
+
+        return aplQuantity(prototype, len(prototype), prototype)
+
+    return ' ' if isinstance(value, str) else 0
 
 # EOF

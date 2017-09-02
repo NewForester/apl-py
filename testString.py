@@ -261,7 +261,7 @@ def     stringTilda():
     H
 
     >>> test(r"'Hello' ~ 'Hello'")
-    <BLANKLINE>
+    ''
     """
     pass
 
@@ -289,16 +289,16 @@ def     stringIota():
 def     stringDrop():
     """
     >>> test(r'↓ ""')
-    <BLANKLINE>
+    ''
     >>> test(r"↓ 'Hello'")
     ello
     >>> test(r"1 ↓ 'Hello'")
     ello
 
     >>> test(r"¯9 ↓ 'abcdef'")
-    <BLANKLINE>
+    ''
     >>> test(r"¯6 ↓ 'abcdef'")
-    <BLANKLINE>
+    ''
     >>> test(r"¯3 ↓ 'abcdef'")
     abc
     >>> test(r"0 ↓ 'abcdef'")
@@ -306,9 +306,9 @@ def     stringDrop():
     >>> test(r"3 ↓ 'abcdef'")
     def
     >>> test(r"6 ↓ 'abcdef'")
-    <BLANKLINE>
+    ''
     >>> test(r"9 ↓ 'abcdef'")
-    <BLANKLINE>
+    ''
     """
     pass
 
@@ -321,7 +321,7 @@ def     stringTake():
     >>> test(r"↑ 'Hello'")
     H
     >>> test(r'↑ ""')
-    <BLANKLINE>
+    ''
 
     >>> test(r"¯9 ↑ 'abcdef'")
        abcdef
@@ -330,7 +330,7 @@ def     stringTake():
     >>> test(r"¯3 ↑ 'abcdef'")
     def
     >>> test(r"0 ↑ 'abcdef'")
-    <BLANKLINE>
+    ''
     >>> test(r"3 ↑ 'abcdef'")
     abc
     >>> test(r"6 ↑ 'abcdef'")

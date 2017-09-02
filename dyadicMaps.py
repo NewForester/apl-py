@@ -268,6 +268,9 @@ def     vs2v_encode(Fn, A, B):
     if A.isScalar():
         return aplQuantity(Rpy[0], None, False)
 
+    if A.isEmptyVector():
+        return A
+
     if A.isVector():
         return aplQuantity(Rpy, A.dimension(), False)
 

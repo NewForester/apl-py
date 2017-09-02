@@ -79,7 +79,7 @@ def     assertNumeric(X, error="DOMAIN ERROR"):
     """
     throw if quantity is not a number
     """
-    if X.prototype() != 0:
+    if X.padFill() != 0:
         raise aplException(error)
 
 # --------------
