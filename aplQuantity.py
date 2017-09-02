@@ -237,7 +237,7 @@ class   aplQuantity(object):
         """
         infinite iterator for scalars so they may be used with arrays
         """
-        return scalarIterator(self.scalarToPy(), self.expressionToGo)
+        return scalarIterator(self.scalarToPy(), -1, self.expressionToGo)
 
     def resolve(self):
         """
@@ -259,19 +259,137 @@ class   aplQuantity(object):
 
 class   scalarIterator(object):
     """
-    trival iterator for mapping scalar quantities with vector quantities
+    trivial iterator for mapping scalar quantities with vector quantities
 
-    the iterator returns the scalar value ad infinitum
+    The iterator returns the scalar value ad infinitum
     """
-    def __init__(self, value, expressionToGo=None):
+    def __init__(self, value, count=-1, expressionToGo=None):
         self._value = value
+        self._count = count
         self.expressionToGo = expressionToGo
 
     def __iter__(self):
         return self
 
     def __next__(self):
+        if self._count == 0:
+            raise StopIteration
+
+        self._count -= 1
+
         return self._value
+
+# ------------------------------
+
+class   lookAhead(object):
+    """
+    an iterator to allow peeking at the first few elements of some other iterator
+
+    extended to allow buffering inside some other custom iterator
+    """
+    def __init__(self, B, N=0, F=None):
+        self._B = B.__iter__()
+        self._LA = []
+        self._BL = 0
+
+        if F is None:
+            self.buffer(N)
+        else:
+            self.pushThisIn(F, N)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._BL == 0:
+            return self._B.__next__()
+
+        return self._popBuffer()
+
+    def _popBuffer(self):
+        """
+        remove and return item from the front of the buffer
+        """
+        self._BL -= 1
+        return self._LA.pop(0)
+
+    def _pushBuffer(self, Y):
+        """
+        add item to the end of the buffer
+        """
+        self._LA.append(Y)
+        self._BL += 1
+
+        return Y
+
+    def pushThisIn(self, F, N=1):
+        """
+        push F in at the end of buffer N times
+        """
+        while N > 0:
+            N -= 1
+            self._pushBuffer(F)
+
+    def pushThenPop(self):
+        """
+        push another element into the end of the buffer, pop and return the element at the front
+
+        When StopIteration is raised repeated calls do not drain the buffer.
+        """
+        if self._BL == 0:
+            return self._B.__next__()
+
+        self._pushBuffer(self._B.__next__())
+
+        return self._popBuffer()
+
+    def popThenPush(self):
+        """
+        pop (and return) the element at the front, push another element into the end of the buffer
+
+        When StopIteration is raised repeated calls drain the buffer.
+        """
+        if self._BL == 0:
+            return self._B.__next__()
+
+        R = self._popBuffer()
+
+        self._pushBuffer(self._B.__next__())
+
+        return R
+
+    def buffer(self, N):
+        """
+        if possible, ensure at least N elements are in the lookahead buffer
+        """
+        N -= self._BL
+
+        try:
+            while N > 0:
+                N -= 1
+                self._pushBuffer(self._B.__next__())
+        except StopIteration:
+            pass
+
+        return self._BL
+
+    def buffered(self):
+        """
+        how many elements are there in the lookahead buffer ?
+        """
+        return self._BL
+
+    def peek(self):
+        """
+        peek at the next element (return the first element in the lookahead buffer)
+        """
+        if self._BL == 0:
+            try:
+                return self._pushBuffer(self._B.__next__())
+            except StopIteration:
+                return None
+
+        return self._LA[0]
 
 # ------------------------------
 
