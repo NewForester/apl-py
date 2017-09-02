@@ -66,7 +66,7 @@ def     vv2v(Fn, A, B):
 
     Rpy = Fn(A.vectorToPy(), B.vectorToPy())
 
-    return aplQuantity(Rpy, len(Rpy), case == 2)
+    return aplQuantity(Rpy, len(Rpy), A.prototype())
 
 # ------------------------------
 
@@ -107,6 +107,9 @@ def     sv_rho(Fn, A, B):
     else:
         dimension = confirmInteger(A.scalarToPy())
 
+        if dimension == 0:
+            return aplQuantity([], 0, B.prototype())
+
         if B.dimension() != 0:
             Rpy = Fn(dimension, B.vectorToPy())
         elif B.isString():
@@ -127,7 +130,7 @@ def     vv_comma(Fn, A, B):
 
     Rpy = Fn(Apy, Bpy)
 
-    return aplQuantity(Rpy, len(Rpy), A.isString())
+    return aplQuantity(Rpy, len(Rpy), A.prototype())
 
 # ------------------------------
 
@@ -203,7 +206,7 @@ def     sv2vl(Fn, A, B):
     if B.isScalar() and Rpy != []:
         return aplQuantity(Rpy[0], None, B.isString())
 
-    return aplQuantity(Rpy, len(Rpy), B.isString())
+    return aplQuantity(Rpy, len(Rpy), B.prototype())
 
 # ------------------------------
 

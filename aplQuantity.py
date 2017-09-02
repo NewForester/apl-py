@@ -28,7 +28,7 @@ class   aplQuantity(object):
     """
     trivial class that holds an APL quantity
     """
-    def __init__(self, value, dimension=0, string=False):
+    def __init__(self, value, dimension=0, prototype=0):
         try:
             if dimension is None:
                 iter(value)
@@ -38,7 +38,7 @@ class   aplQuantity(object):
             self._value = tuple([value])
 
         self._dimension = dimension
-        self._string = string
+        self._prototype = prototype
         self._resolved = False
         self._hash = None
         self.expressionToGo = None
@@ -80,7 +80,7 @@ class   aplQuantity(object):
         if isinstance(other, aplQuantity):
             self._value = other._value
             self._dimension = other._dimension
-            self._string = other._string
+            self._prototype = other._prototype
             self._resolved = other._resolved
             self._hash = other._hash
 
@@ -107,9 +107,7 @@ class   aplQuantity(object):
                 self._dimension = len(self._value)
 
                 if self._dimension == 0:
-                    self._value = (' ' if self._string else 0,)
-                else:
-                    self._string = isinstance(self._value[0], str)
+                    self._value = (self._prototype,)
         return self._dimension
 
     def rank(self):
@@ -124,17 +122,18 @@ class   aplQuantity(object):
         """
         the quantity's array prototype used for padding/filling
         """
-        return ' ' if self.isString() else 0
+        if self._prototype is None:
+            if not isinstance(self._value, tuple):
+                self._value = tuple(self._value)
+            self._prototype = ' ' if isinstance(self._value[0], str) else 0
+
+        return self._prototype
 
     def isString(self):
         """
         true if quantity is a string
         """
-        if self._string is None:
-            if not isinstance(self._value, tuple):
-                self._value = tuple(self._value)
-            self._string = isinstance(self._value[0], str)
-        return self._string
+        return self.prototype() == ' '
 
     def isScalar(self):
         """
@@ -176,7 +175,7 @@ class   aplQuantity(object):
         """
         return Python numeric
         """
-        self.isString()
+        self.prototype()
 
         if self._dimension is None or self.dimension() <= 1:
             return next(iter(self._value))
@@ -190,7 +189,7 @@ class   aplQuantity(object):
         if self.isEmptyVector():
             return ()
 
-        self.isString()
+        self.prototype()
 
         return self._value
 
@@ -285,7 +284,12 @@ def     makeScalar(value, string=False):
     except AttributeError:
         value = (value,)
 
-    return aplQuantity(value, None, string)
+    if string is None:
+        prototype = None
+    else:
+        prototype = ' ' if string else 0
+
+    return aplQuantity(value, None, prototype)
 
 # --------------
 
@@ -293,7 +297,12 @@ def     makeVector(value, length=-1, string=False):
     """
     make an APL vector quantity from a numeric Python list
     """
-    return aplQuantity(value, length, string)
+    if string is None:
+        prototype = None
+    else:
+        prototype = ' ' if string else 0
+
+    return aplQuantity(value, length, prototype)
 
 # --------------
 
@@ -301,7 +310,12 @@ def     makeEmptyVector(string=False):
     """
     make an empty APL vector quantity (⍬ or '')
     """
-    return aplQuantity((' ' if string else 0,), 0, string)
+    if string is None:
+        prototype = None
+    else:
+        prototype = ' ' if string else 0
+
+    return aplQuantity((' ' if string else 0,), 0, prototype)
 
 # --------------
 
@@ -322,6 +336,6 @@ def     makeString(value, withDelimiter):
         if length == 1 and delimiter == "'":
             length = None
 
-    return aplQuantity(tuple(value), length, True)
+    return aplQuantity(tuple(value), length, ' ')
 
 # EOF

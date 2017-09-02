@@ -60,7 +60,7 @@ def     v_head(Fn, B):
 
     if B.isVector():
         if B.dimension() < 1:
-            return aplQuantity([], 0, B.isString())
+            return aplQuantity([], 0, B.prototype())
 
         if B.isString():
             return aplQuantity([Fn(B.vectorToPy())], None, B.isString())
@@ -80,7 +80,7 @@ def     v_tail(Fn, B):
 
     if B.isVector():
         if B.dimension() <= 1:
-            return aplQuantity([], 0, B.isString())
+            return aplQuantity([], 0, B.prototype())
 
         return aplQuantity(Fn(B.vectorToPy()), B.dimension()-1, B.isString())
 
