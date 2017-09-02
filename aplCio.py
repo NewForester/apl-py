@@ -22,7 +22,7 @@ import readline
 import traceback
 
 from aplQuantity import aplQuantity
-from aplError import aplException, aplQuit
+from aplError import aplException, aplQuit, assertError
 
 # ------------------------------
 
@@ -228,7 +228,8 @@ class   _outputValue(object):
 
             if quantity.isEmptyVector():
                 string = '⍬' if quantity.prototype() == 0 else ''
-            else:
+
+            elif quantity.isVectorLike():
                 for element in quantity:
                     if isinstance(element, str):
                         self._output(string, separator)
@@ -241,15 +242,15 @@ class   _outputValue(object):
                         self._output(string, separator)
 
                         if element.isVector():
-                            outfix = "'"  if element.isString() else '('
-                            self._output(outfix, '')
+                            outfix = "''"  if element.isString() else '()'
+                        else:
+                            outfix = None
 
+                        self._output(outfix[0], '')
                         self._outputQuantity(element, '')
-                        string = ''
+                        self._output(outfix[1], '')
 
-                        if element.isVector():
-                            outfix = "'"  if element.isString() else ')'
-                            self._output(outfix, '')
+                        string = ''
 
                     else:
                         separator = ' '
@@ -257,6 +258,8 @@ class   _outputValue(object):
 
                         string = "{0:.10g}".format(element)
                         string = "0" if string == "-0" else string.replace('-', '¯')
+            else:
+                assertError("WIP - ARRAY OUTPUT ERROR")
 
             self._output(string, end)
 
@@ -393,7 +396,8 @@ class   aplCio(object):
                 elif self.sysin.handle is not None:
                     error.message += self._errorInFile(self.sysin, expr)
 
-            self.printString('\r'+' '*(len(self.prompt)+expr.rfind(error.expr)), end="^\n")
+            if not error.expr is None:
+                self.printString('\r'+' '*(len(self.prompt)+expr.rfind(error.expr)), end="^\n")
             self.printString(error.message)
 
     def read(self, sio):

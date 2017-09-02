@@ -51,7 +51,7 @@ def     ss2v(Fn, A, B):
     """
     evaluate a numeric dyadic function that, given scalar arguments, returns a vector
     """
-    return aplQuantity(Fn(A.scalarToPy(), B.scalarToPy()), A)
+    return aplQuantity(Fn(A.scalarToPy(), B.scalarToPy()), confirmInteger(A.scalarToPy()))
 
 # ------------------------------
 

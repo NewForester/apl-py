@@ -151,9 +151,21 @@ class   aplQuantity(object):
 
     def isString(self):
         """
-        true if quantity is a string
+        true if quantity really is a string
         """
-        return self.prototype() == ' '
+        if self.prototype() == 0:
+            return False
+
+        if isinstance(self._value, tuple):
+            for element in self._value:
+                if not isinstance(element, str):
+                    return False
+            return True
+
+        if not isinstance(self._value, lookAhead):
+            self._value = lookAhead(self._value)
+
+        return self._value.isString()
 
     def isScalar(self):
         """
@@ -412,6 +424,41 @@ class   lookAhead(object):
                 return None
 
         return self._LA[0]
+
+    def isString(self):
+        """
+        true if a real vector of characters, false if only a mixed vector
+        """
+        for Y in self._LA:
+            if not isinstance(Y, str):
+                return False
+
+        try:
+            while True:
+                Y = self._pushBuffer(self._B.__next__())
+
+                if not isinstance(Y, str):
+                    return False
+        except StopIteration:
+            pass
+
+        return True
+
+    def isMatch(self, V):
+        """
+        true if V matches the contents of the buffer exactly, false otherwise
+        """
+        V = V.__iter__()
+
+        try:
+            for Y in self._LA:
+                if Y != V.__next__():
+                    return False
+            V.__next__()
+        except StopIteration:
+            return True
+
+        return False
 
 # ------------------------------
 
