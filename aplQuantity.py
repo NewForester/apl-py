@@ -55,6 +55,12 @@ class   aplQuantity(object):
 
         return False
 
+    def __lt__(self, other):
+        """
+        required by the Python sort() method for sequences
+        """
+        return self._compare(other) < 0
+
     def __hash__(self):
         if self._hash is None:
             if self._resolved:
@@ -88,6 +94,49 @@ class   aplQuantity(object):
             self._hash = other._hash
 
         return self
+
+    def _compare(self, other):
+        """
+        < 0, 0 or > 0 sor the self and other sort correctly
+        """
+        if not isinstance(other, aplQuantity):
+            return 1
+
+        delta = self.resolve().tally() - other.resolve().tally()
+
+        if delta != 0:
+            return delta
+
+        A = self.__iter__()
+        B = other.__iter__()
+        try:
+            while True:
+                X = A.__next__()
+                Y = B.__next__()
+
+                if isinstance(X, aplQuantity):
+                    delta = X.compare(Y)
+
+                elif isinstance(Y, aplQuantity):
+                    delta = -1
+
+                elif isinstance(X, str) and isinstance(Y, str):
+                    delta = ord(X) - ord(Y)
+
+                elif isinstance(X, str):
+                    delta = -1
+
+                elif isinstance(Y, str):
+                    delta = 1
+
+                else:
+                    delta = X - Y
+
+                if delta != 0:
+                    return delta
+
+        except StopIteration:
+            return 0
 
     def _lookAheadDimension(self, lowerBound):
         """
