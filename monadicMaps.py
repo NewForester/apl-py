@@ -56,16 +56,16 @@ def     v_head(Fn, B):
     evaluate a numeric function that, given a vector argument, returns a scalar
     """
     if B.isScalar():
-        return aplQuantity(B.scalarToPy(), None, B.isString())
+        return aplQuantity(B.scalarToPy(), None, B.prototype())
 
     if B.isVector():
         if B.dimension() < 1:
             return aplQuantity([], 0, B.prototype())
 
         if B.isString():
-            return aplQuantity([Fn(B.vectorToPy())], None, B.isString())
+            return aplQuantity([Fn(B.vectorToPy())], None, B.prototype())
 
-        return aplQuantity(Fn(B.vectorToPy()), None, B.isString())
+        return aplQuantity(Fn(B.vectorToPy()), None, B.prototype())
 
     aplError("RANK ERROR")
 
@@ -76,13 +76,13 @@ def     v_tail(Fn, B):
     evaluate a function that, given a vector argument, returns a vector (probably)
     """
     if B.isScalar():
-        return aplQuantity([], 0, B.isString())
+        return aplQuantity([], 0, B.prototype())
 
     if B.isVector():
         if B.dimension() <= 1:
             return aplQuantity([], 0, B.prototype())
 
-        return aplQuantity(Fn(B.vectorToPy()), B.dimension()-1, B.isString())
+        return aplQuantity(Fn(B.vectorToPy()), B.dimension()-1, B.prototype())
 
     aplError("RANK ERROR")
 
@@ -95,10 +95,10 @@ def     v2v(Fn, B):
     Rpy = Fn(B.vectorToPy())
 
     if B.isScalar():
-        return aplQuantity(Rpy[0], B.dimension(), B.isString())
+        return aplQuantity(Rpy[0], B.dimension(), B.prototype())
 
     if B.isVector():
-        return aplQuantity(Rpy, B.dimension(), B.isString())
+        return aplQuantity(Rpy, B.dimension(), B.prototype())
 
     aplError("RANK ERROR")
 
@@ -124,7 +124,7 @@ def     s_comma(_, B):
     """
 
     if B.isScalar():
-        return aplQuantity(B.vectorToPy(), 1, B.isString())
+        return aplQuantity(B.vectorToPy(), 1, B.prototype())
 
     if B.isVector():
         return B

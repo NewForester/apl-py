@@ -275,47 +275,32 @@ class   scalarIterator(object):
 
 # ------------------------------
 
-def     makeScalar(value, string=False):
+def     makeScalar(value, prototype=0):
     """
-    make an APL scalar quantity from a numeric Python value
+    make an APL scalar quantity from a scalar Python value
     """
     try:
         value.__iter__()
     except AttributeError:
         value = (value,)
 
-    if string is None:
-        prototype = None
-    else:
-        prototype = ' ' if string else 0
-
     return aplQuantity(value, None, prototype)
 
 # --------------
 
-def     makeVector(value, length=-1, string=False):
+def     makeVector(value, length=-1, prototype=0):
     """
-    make an APL vector quantity from a numeric Python list
+    make an APL vector quantity from a Python list
     """
-    if string is None:
-        prototype = None
-    else:
-        prototype = ' ' if string else 0
-
     return aplQuantity(value, length, prototype)
 
 # --------------
 
-def     makeEmptyVector(string=False):
+def     makeEmptyVector(prototype):
     """
     make an empty APL vector quantity (⍬ or '')
     """
-    if string is None:
-        prototype = None
-    else:
-        prototype = ' ' if string else 0
-
-    return aplQuantity((' ' if string else 0,), 0, prototype)
+    return aplQuantity((prototype,), 0, prototype)
 
 # --------------
 

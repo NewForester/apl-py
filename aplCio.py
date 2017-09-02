@@ -227,7 +227,7 @@ class   _outputValue(object):
             separator = ''
 
             if quantity.isEmptyVector():
-                string = '' if quantity.isString() else '⍬'
+                string = '⍬' if quantity.prototype() == 0 else ''
             else:
                 for element in quantity:
                     if isinstance(element, str):

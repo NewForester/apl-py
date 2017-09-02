@@ -117,7 +117,7 @@ def     sv_rho(Fn, A, B):
         else:
             Rpy = Fn(dimension, [0])
 
-    return aplQuantity(Rpy, dimension, B.isString())
+    return aplQuantity(Rpy, dimension, B.prototype())
 
 # ------------------------------
 
@@ -156,7 +156,7 @@ def     sv_transpose(Fn, A, B):
 
     Bpy = B.vectorToPy()
 
-    return aplQuantity(Fn(Apy, Bpy), B.dimension(), B.isString())
+    return aplQuantity(Fn(Apy, Bpy), B.dimension(), B.prototype())
 
 # ------------------------------
 
@@ -175,10 +175,10 @@ def     sv2vr(Fn, A, B):
     Rpy = Fn(A.scalarToPy("RANK ERROR"), B.vectorToPy())
 
     if B.isScalar():
-        return aplQuantity(Rpy[0], None, B.isString())
+        return aplQuantity(Rpy[0], None, B.prototype())
 
     if B.isVector():
-        return aplQuantity(Rpy, B.dimension(), B.isString())
+        return aplQuantity(Rpy, B.dimension(), B.prototype())
 
     aplError("RANK ERROR")
 
@@ -194,7 +194,7 @@ def     sv2vl(Fn, A, B):
         if B.isScalar():
             return B
         elif B.isVector():
-            return aplQuantity([], 0, B.isString())
+            return aplQuantity([], 0, B.prototype())
 
         aplError("RANK ERROR")
 
@@ -204,7 +204,7 @@ def     sv2vl(Fn, A, B):
         Rpy = Fn(A.scalarToPy("LENGTH ERROR"), B.vectorToPy(), 0)
 
     if B.isScalar() and Rpy != []:
-        return aplQuantity(Rpy[0], None, B.isString())
+        return aplQuantity(Rpy[0], None, B.prototype())
 
     return aplQuantity(Rpy, len(Rpy), B.prototype())
 
@@ -217,14 +217,14 @@ def     ce2v(Fn, A, B):
     assertNumeric(A)
 
     if A.dimension() == 0 and B.isScalar():
-        return aplQuantity([], 0, B.isString())
+        return aplQuantity([], 0, B.prototype())
 
     if B.isString():
         Rpy = Fn(A.vectorToPy(), B.vectorToPy(), ' ')
     else:
         Rpy = Fn(A.vectorToPy(), B.vectorToPy(), 0)
 
-    return aplQuantity(Rpy, len(Rpy), B.isString())
+    return aplQuantity(Rpy, len(Rpy), B.prototype())
 
 # ------------------------------
 
