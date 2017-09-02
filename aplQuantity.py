@@ -84,6 +84,23 @@ class   aplQuantity(object):
             self._resolved = other._resolved
             self._hash = other._hash
 
+        return self
+
+    def _lookAheadDimension(self, lowerBound):
+        """
+        return a good enough lower bound on the length of a vector
+        """
+        dimension = self._dimension
+
+        if dimension < 0:
+            if isinstance(self._value, tuple):
+                self._dimension = self.tally()
+
+                dimension = self._dimension
+            else:
+                dimension = self._value.buffer(lowerBound)
+        return dimension
+
     def tally(self):
         """
         1 if a scalar, its length if a vector
@@ -92,7 +109,14 @@ class   aplQuantity(object):
             return 1
 
         if isinstance(self._dimension, int):
-            return self.dimension()
+            if self._dimension < 0:
+                if not isinstance(self._value, tuple):
+                    self._value = tuple(self._value)
+                self._dimension = len(self._value)
+
+                if self._dimension == 0:
+                    self._value = (self._prototype,)
+            return self._dimension
 
         aplError("RANK ERROR ASSERTION")
 
@@ -100,14 +124,7 @@ class   aplQuantity(object):
         """
         the dimension(s) of the quantity
         """
-        if isinstance(self._dimension, int):
-            if self._dimension == -1:
-                if not isinstance(self._value, tuple):
-                    self._value = tuple(self._value)
-                self._dimension = len(self._value)
-
-                if self._dimension == 0:
-                    self._value = (self._prototype,)
+        self.tally()    # remove later
         return self._dimension
 
     def rank(self):
@@ -123,9 +140,12 @@ class   aplQuantity(object):
         the quantity's array prototype used for padding/filling
         """
         if self._prototype is None:
-            if not isinstance(self._value, tuple):
-                self._value = tuple(self._value)
-            self._prototype = ' ' if isinstance(self._value[0], str) else 0
+            if isinstance(self._value, tuple):
+                initial = self._value[0]
+            else:
+                initial = self._value.peek()
+
+            self._prototype = ' ' if isinstance(initial, str) else 0
 
         return self._prototype
 
@@ -157,26 +177,30 @@ class   aplQuantity(object):
         """
         true if quantity is scalar or a vector length 1
         """
-        return self._dimension is None or (isinstance(self._dimension, int) and self.dimension() == 1)
+        if isinstance(self._dimension, int):
+            return self._lookAheadDimension(2) == 1
+        return self._dimension is None
 
     def isVectorLike(self):
         """
         true if quantity is scalar or a vector
         """
-        return self._dimension is None or isinstance(self._dimension, int)
+        if isinstance(self._dimension, int):
+            return True
+        return self._dimension is None
 
     def isEmptyVector(self):
         """
         true if quantity is a vector length 0
         """
-        return isinstance(self._dimension, int) and self.dimension() == 0
+        if isinstance(self._dimension, int):
+            return self._lookAheadDimension(1) == 0
+        return False
 
     def scalarToPy(self, error=None):
         """
         return Python numeric
         """
-        self.prototype()
-
         if self._dimension is None or self.dimension() <= 1:
             return next(iter(self._value))
 
@@ -188,8 +212,6 @@ class   aplQuantity(object):
         """
         if self.isEmptyVector():
             return ()
-
-        self.prototype()
 
         return self._value
 
@@ -381,7 +403,7 @@ class   lookAhead(object):
 
     def peek(self):
         """
-        peek at the next element (return the first element in the lookahead buffer)
+        return the first element in the lookahead buffer and leave the buffer unchanged
         """
         if self._BL == 0:
             try:
@@ -398,11 +420,11 @@ def     makeScalar(value, prototype=0):
     make an APL scalar quantity from a scalar Python value
     """
     try:
-        value.__iter__()
+        value = value.__iter__().__next__()
     except AttributeError:
-        value = (value,)
+        pass
 
-    return aplQuantity(value, None, prototype)
+    return aplQuantity((value,), None, prototype)
 
 # --------------
 
@@ -410,6 +432,26 @@ def     makeVector(value, length=-1, prototype=0):
     """
     make an APL vector quantity from a Python list
     """
+    if length is None:
+        length = 1
+
+    if not isinstance(value, (tuple, lookAhead)):
+        if length < 0 or prototype is None:
+            value = lookAhead(value, 1)
+
+    if isinstance(value, lookAhead):
+        if length < 0:
+            if value.buffered() == 0:
+                length = 0
+
+        if prototype is None:
+            if value.buffered() == 0:
+                aplError("ASSERTION ERROR: makeVector()")
+            prototype = ' ' if isinstance(value.peek(), str) else 0
+
+    if length == 0:
+        return makeEmptyVector(prototype)
+
     return aplQuantity(value, length, prototype)
 
 # --------------
