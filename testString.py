@@ -19,6 +19,7 @@
 """
 
 from test.base import preamble, testResult as test
+from test.base import saveIndexOrigin, setIndexOrigin, restoreIndexOrigin
 
 # ------------------------------
 
@@ -272,6 +273,9 @@ def     stringIota():
     >>> test(r"⍳ 'Hello'")
     DOMAIN ERROR
 
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
     >>> test(r"1 ⍳ 'Hello'")
     2 2 2 2 2
     >>> test(r"'Hello' ⍳ 1")
@@ -281,6 +285,8 @@ def     stringIota():
 
     >>> test(r"'Hello' ⍳ 72")
     6
+
+    >>> restoreIndexOrigin(IO)
     """
     pass
 

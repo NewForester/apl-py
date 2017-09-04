@@ -1,0 +1,99 @@
+#!/bin/bash --posix
+
+##
+##  Goal:       run tests for APL functions on a function-by-function basis
+##
+##  Use:        test/function <name> ...
+##
+##  where       name is that name of an APL function
+##
+##  NB:         The name may be that of either the monadic or dyadic function
+##              but the tests for both are run.  See the list of exceptions.
+##
+##  EXCEPTIONS: use lt, le, eq, ge, gt, ne, rho, iota, comma, tilde as appropriate
+##
+##  BEWARE:     notMatch
+##
+##  CAVEAT:     ⊣ ⊢ are not covered:  run testParser.py
+##
+
+# print out header comment &c
+
+usage() { (sed -e "/^###/d" -e "/^##/!d" ${0} && echo -e "\e[35m${0##*/}: \e[31m$@\e[0m") >&2; }
+
+# process options
+
+while [[ "${1::1}" == "-" ]]; do
+    case $1 in
+      (--help)
+        usage "I hope that was helpful";
+        exit 1;
+        ;;
+      (*)
+        flags="${flags} $1";
+        shift;
+        ;;
+      (*)
+        usage "bad option \"$1\"";
+        exit 1;
+        ;;
+    esac
+done
+
+# set the execution context
+
+path=${PWD}/${0};
+path=${path//..\/*\//};
+path=${path//.\//};
+path=${path%/*};
+path=${path%/*};
+
+cd ${path};
+
+PYTHONPATH=${path}:$PYTHONPATH;
+
+# process the parameters
+
+for name; do
+    function=$(sed -e '/^def/!d' -e "/[ _]${name}.*():$/!d" -e 's/():$//' -e 's/^def  *//' test*.py | sort -u);
+
+    case $(echo "${function}" | wc -w) in
+        (0):
+            usage "function name \"${name}\" not recognised";
+            exit 1;
+            ;;
+        (1):
+            ;;
+        (*):
+            for function in ${function}; do
+                for essay in "${function%%_*}" "${function##*_}"; do
+                    if [[ "${essay}" == "${name}" ]]; then
+                        gotit="${name}";
+                        break;
+                    fi
+                done
+                [[ -n "${gotit}" ]] && break;
+
+                length=${#name};
+                for essay in "${function%%_*}" "${function##*_}"; do
+                    if [[ "${essay:0:$length}" == "${name}" ]]; then
+                        gotit="${name}";
+                        break;
+                    fi
+                done
+                [[ -n "${gotit}" ]] && break;
+            done
+
+            if [[ -z "${gotit}" ]]; then
+                usage "function name \"${name}\" ambiguous";
+                exit 1;
+            fi
+            ;;
+    esac
+
+    sed -e "/=/s/function/${function}/" test/function.py > test/testFunction.py;
+
+    python3 test/testFunction.py ${flags};
+done
+
+# EOF

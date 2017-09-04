@@ -26,6 +26,7 @@
 """
 
 from test.base import preamble, testOutput, testCommand, testResult as test
+from test.base import saveIndexOrigin, setIndexOrigin, restoreIndexOrigin
 
 # ------------------------------
 
@@ -218,6 +219,9 @@ def     parseVectors():
     >>> test(r"1 + 2 3")
     3 4
 
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
     >>> test(r"A ← 10")
     10
     >>> test(r"1 A 3")
@@ -226,6 +230,8 @@ def     parseVectors():
     1 5 3
     >>> test(r"1 ⎕IO 3")
     1 1 3
+
+    >>> restoreIndexOrigin(IO)
 
     >>> test(r"A ← 10 20")
     10 20
@@ -461,6 +467,9 @@ def     systemVariable(expr):
     >>> test(r"⎕dummy")
     UNKNOWN SYSTEM VARIABLE
 
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
     >>> test(r"⎕IO")
     1
     >>> test(r"⎕Io←0")
@@ -477,6 +486,8 @@ def     systemVariable(expr):
     1
     >>> test(r"⎕io")
     1
+
+    >>> restoreIndexOrigin(IO)
 
     >>> test(r"⊣ EE←⎕EE")
     0

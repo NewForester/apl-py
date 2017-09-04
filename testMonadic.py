@@ -19,6 +19,7 @@
 """
 
 from test.base import preamble, testResult as test
+from test.base import saveIndexOrigin, setIndexOrigin, restoreIndexOrigin
 
 # ------------------------------
 
@@ -295,6 +296,9 @@ def     monadicNegation():
 
 def     monadicIota():
     """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
     >>> test(r"⍳ 0")
     ⍬
     >>> test(r"⍳ 1")
@@ -306,6 +310,8 @@ def     monadicIota():
 
     >>> test(r"⍳ 1 1")
     RANK ERROR
+
+    >>> restoreIndexOrigin(IO)
     """
     pass
 

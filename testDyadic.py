@@ -19,6 +19,7 @@
 """
 
 from test.base import preamble, testResult as test
+from test.base import saveIndexOrigin, setIndexOrigin, restoreIndexOrigin
 
 # ------------------------------
 
@@ -424,6 +425,9 @@ def     dyadicAnd():
     >>> test(r"1 ∧ 0 1")
     0 1
 
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
     >>> test(r"(⍳10) ∧ 10")
     10 10 30 20 10 30 70 40 90 10
     >>> test(r"(-⍳10) ∧ 10")
@@ -432,6 +436,8 @@ def     dyadicAnd():
     ¯10 ¯10 ¯30 ¯20 ¯10 ¯30 ¯70 ¯40 ¯90 ¯10
     >>> test(r"(-⍳10) ∧ ¯10")
     10 10 30 20 10 30 70 40 90 10
+
+    >>> restoreIndexOrigin(IO)
 
     >>> test(r"7.5 ∧ ¯5 5")
     ¯15 15

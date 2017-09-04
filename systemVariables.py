@@ -131,6 +131,14 @@ def     indexOrigin():
 
 # --------------
 
+def     setIndexOrigin(value):
+    """
+    set the index origin (from command line flags)
+    """
+    return _IO.set(makeScalar(value))
+
+# --------------
+
 def     eagerEvaluation():
     """
     true is evaluation mode is set to eager

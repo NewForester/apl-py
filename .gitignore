@@ -1,2 +1,3 @@
 __pycache__/
+test/testFunction.py
 test/*/case_*.*

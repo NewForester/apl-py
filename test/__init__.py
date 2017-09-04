@@ -40,6 +40,17 @@
 
                     test/<subdir>/run -aa 1 3 5
 
+    - function  Bash script that runs tests on a function-by-function basis.
+
+                This script generates and then runs a Python test script that
+                includes the tests for a given APL function pulled from the
+                functional test modules (monadic, dyadic, string etc. etc.).
+                See also:
+
+                    test/function --help
+
+    - function.py       the template test module used by the function script
+
     - flags/run         tests of CLI flags not covered by other run scripts
 
     - io/run            tests of redirecting input and output

@@ -5,18 +5,18 @@
 
 import sys
 
+import systemVariables
+
 from evaluate import evaluate, evaluateAndPrint
 
-from systemVariables import eagerEvaluation, setEvaluationMode
-
 from aplCio import aplCio
-from aplError import aplException
+from aplError import aplException, aplQuit
 
 # ------------------------------
 
 def     testCommand(expr):
     """
-    evaluate an expression that is a systen command
+    evaluate an expression that is a system command
 
     handle both positive and negative outcomes
     """
@@ -25,7 +25,7 @@ def     testCommand(expr):
     except aplException as error:
         print(error.message)
 
-# ------------------------------
+# --------------
 
 def     testOutput(expr):
     """
@@ -39,7 +39,7 @@ def     testOutput(expr):
     except aplException as error:
         print(error.message)
 
-# ------------------------------
+# --------------
 
 def     testResult(expr, overrideLazy=False):
     """
@@ -54,10 +54,10 @@ def     testResult(expr, overrideLazy=False):
     does not have the desired effect, hence the messing around the with the evaluation mode.
     """
     if overrideLazy:
-        overrideLazy = not eagerEvaluation()
+        overrideLazy = not systemVariables.eagerEvaluation()
 
     if overrideLazy:
-        setEvaluationMode(1)
+        systemVariables.setEvaluationMode(1)
 
     try:
         cio = aplCio()
@@ -66,7 +66,22 @@ def     testResult(expr, overrideLazy=False):
         print(error.message)
 
     if overrideLazy:
-        setEvaluationMode(0)
+        systemVariables.setEvaluationMode(0)
+
+# ------------------------------
+
+def     saveIndexOrigin():
+    return systemVariables.indexOrigin()
+
+# --------------
+
+def     setIndexOrigin(io):
+    systemVariables.setIndexOrigin(io)
+
+# --------------
+
+def     restoreIndexOrigin(io):
+    systemVariables.setIndexOrigin(io)
 
 # ------------------------------
 
@@ -96,15 +111,50 @@ def     parseCommandLineArgs(args):
 
 def     preamble():
     """
-    allows a choice between eager and lazy evaluation
+    process command line flags - see <test-script> -h
     """
     flags, args = parseCommandLineArgs(sys.argv)
 
     for flag in flags:
         if flag in ("-ee=0", "--lazy"):
-            setEvaluationMode(0)
+            systemVariables.setEvaluationMode(0)
 
         elif flag in ("-ee=1", "--eager"):
-            setEvaluationMode(1)
+            systemVariables.setEvaluationMode(1)
+
+        elif flag in ("-io=0"):
+            systemVariables.setIndexOrigin(0)
+
+        elif flag in ("-io=1"):
+            systemVariables.setIndexOrigin(1)
+
+        elif flag in ("-h", "--help"):
+            print(_help())
+            aplQuit(0)
+
+        else:
+            aplQuit(3, "{0} not recognised: perhaps try -h".format(flag))
+
+# ------------------------------
+
+def     _help():
+    """
+APL unit tests implemented in Python all recognise the following flags:
+
+    -ee=0 --lazy        ⎕EE ← 0 ⍝ lazy evaluation mode - default
+    -ee=1 --eager       ⎕EE ← 1 ⍝ eager evaluation mode
+
+    -io=0               ⎕IO ← 0
+    -io=1               ⎕IO ← 1 ⍝ default
+
+    -h --help           print this help text and exit
+
+Note: the command line flags may be used to set the inital values of
+⎕EE and ⎕IO but beware the tests themselves may set one or both of these.
+
+Note: --help may be fielded by a shell script wrapper aroung the Python
+test script so -h is to be preferred.
+    """
+    return _help.__doc__
 
 # EOF
