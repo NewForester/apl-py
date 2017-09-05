@@ -23,59 +23,92 @@ from test.base import saveIndexOrigin, setIndexOrigin, restoreIndexOrigin
 
 # ------------------------------
 
-def     stringMathematical():
+def     conjugate_plus():
     """
-    For the mathematical functions
-        + - × ÷ ⌈ ⌊ |
-        * ⍟ ? ! ⌹ ○
-        ~ ∨ ∧ ⍱ ⍲
-        < ≤ ≥ > = ≠
-
-    and any string argument S:
-
-        fn S
-        S fn S
-        X fn S
-        S fn X
-
-    yield DOMAIN ERROR
-
-    except where the monadic form yields VALENCE ERROR
-
+    >>> test(r"+ 'H'")
+    DOMAIN ERROR
     >>> test(r"+ 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"- 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"× 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"÷ 'Hello'")
-    DOMAIN ERROR
-
-    >>> test(r"'Hello' + 'Goodbye'")
-    DOMAIN ERROR
-    >>> test(r"'Hello' - 'Goodbye'")
-    DOMAIN ERROR
-    >>> test(r"'Hello' × 'Goodbye'")
-    DOMAIN ERROR
-    >>> test(r"'Hello' ÷ 'Goodbye'")
     DOMAIN ERROR
 
     >>> test(r"1 + 'Hello'")
     DOMAIN ERROR
-    >>> test(r"1 - 'Hello'")
+    >>> test(r"'Hello' + 1")
     DOMAIN ERROR
-    >>> test(r"1 × 'Hello'")
-    DOMAIN ERROR
-    >>> test(r"1 ÷ 'Hello'")
+    >>> test(r"'Hello' + 'Hello'")
     DOMAIN ERROR
 
-    >>> test(r"'Hello' + 1")
+    >>> test(r"1 2 3 + 'one'")
+    DOMAIN ERROR
+    >>> test(r"'one' + 1 2 3")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     negate_minus():
+    """
+    >>> test(r"- 'H'")
+    DOMAIN ERROR
+    >>> test(r"- 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 - 'Hello'")
     DOMAIN ERROR
     >>> test(r"'Hello' - 1")
     DOMAIN ERROR
+    >>> test(r"'Hello' - 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 - 'one'")
+    DOMAIN ERROR
+    >>> test(r"'one' - 1 2 3")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     direction_times():
+    """
+    >>> test(r"× 'H'")
+    DOMAIN ERROR
+    >>> test(r"× 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 × 'Hello'")
+    DOMAIN ERROR
     >>> test(r"'Hello' × 1")
     DOMAIN ERROR
+    >>> test(r"'Hello' × 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 × 'one'")
+    DOMAIN ERROR
+    >>> test(r"'one' × 1 2 3")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     reciprocal_divide():
+    """
+    >>> test(r"÷ 'H'")
+    DOMAIN ERROR
+    >>> test(r"÷ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 ÷ 'Hello'")
+    DOMAIN ERROR
     >>> test(r"'Hello' ÷ 1")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ÷ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ÷ 'one'")
+    DOMAIN ERROR
+    >>> test(r"'one' ÷ 1 2 3")
     DOMAIN ERROR
     """
     pass

@@ -37,43 +37,84 @@ def     zilde(expr):
 
 # ------------------------------
 
-def     zildeMathematical():
+def     conjugate_plus():
     """
-    For the mathematical functions
-        + - × ÷ ⌈ ⌊ |
-        * ⍟ ? ! ⌹ ○
-        ~ ∨ ∧ ⍱ ⍲
-        < ≤ ≥ > = ≠
-
-    and any scalar argument S:
-
-        ⍬ ≡ fn ⍬
-        ⍬ ≡ ⍬ fn ⍬
-        ⍬ ≡ S fn ⍬
-        ⍬ ≡ ⍬ fn S
-
-    except where the monadic form yields VALENCE ERROR
-
-    and for every function and any vector argument V:
-
-        V fn ⍬
-        ⍬ fn V
-
-    yield LENGTH ERROR
-
     >>> test(r"+ ⍬")
     ⍬
 
     >>> test(r"⍬ + ⍬")
     ⍬
-    >>> test(r"⍬ + 1")
+    >>> test(r"1.2 + ⍬")
     ⍬
-    >>> test(r"1 + ⍬")
+    >>> test(r"⍬ + 1.2")
     ⍬
 
-    >>> test(r"⍬ + 1 2")
+    >>> test(r"1 2 3 + ⍬")
     LENGTH ERROR
-    >>> test(r"1 2 + ⍬")
+    >>> test(r"⍬ + 1 2 3")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
+def     negate_minus():
+    """
+    >>> test(r"- ⍬")
+    ⍬
+
+    >>> test(r"⍬ - ⍬")
+    ⍬
+    >>> test(r"1.2 - ⍬")
+    ⍬
+    >>> test(r"⍬ - 1.2")
+    ⍬
+
+    >>> test(r"1 2 3 - ⍬")
+    LENGTH ERROR
+    >>> test(r"⍬ - 1 2 3")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
+def     direction_times():
+    """
+    >>> test(r"× ⍬")
+    ⍬
+
+    >>> test(r"⍬ × ⍬")
+    ⍬
+    >>> test(r"1.2 × ⍬")
+    ⍬
+    >>> test(r"⍬ × 1.2")
+    ⍬
+
+    >>> test(r"1 2 3 × ⍬")
+    LENGTH ERROR
+    >>> test(r"⍬ × 1 2 3")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
+def     reciprocal_divide():
+    """
+    >>> test(r"÷ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ÷ ⍬")
+    ⍬
+    >>> test(r"1.2 ÷ ⍬")
+    ⍬
+    >>> test(r"⍬ ÷ 1.2")
+    ⍬
+
+    >>> test(r"1 2 3 ÷ ⍬")
+    LENGTH ERROR
+    >>> test(r"⍬ ÷ 1 2 3")
     LENGTH ERROR
     """
     pass

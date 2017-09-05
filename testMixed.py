@@ -22,6 +22,114 @@ from test.base import preamble, testResult as test
 
 # ------------------------------
 
+def     conjugate_plus():
+    """
+    >>> test(r"M ← 'abc', 1 2 3")
+    abc 1 2 3
+
+    >>> test(r"+ M")
+    DOMAIN ERROR
+
+    >>> test(r"M + M")
+    DOMAIN ERROR
+    >>> test(r"1.2 + M")
+    DOMAIN ERROR
+    >>> test(r"M + 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 + M")
+    DOMAIN ERROR
+    >>> test(r"M + 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"M + ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     negate_minus():
+    """
+    >>> test(r"M ← 'abc', 1 2 3")
+    abc 1 2 3
+
+    >>> test(r"- M")
+    DOMAIN ERROR
+
+    >>> test(r"M - M")
+    DOMAIN ERROR
+    >>> test(r"1.2 - M")
+    DOMAIN ERROR
+    >>> test(r"M - 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 - M")
+    DOMAIN ERROR
+    >>> test(r"M - 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"M - ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     direction_times():
+    """
+    >>> test(r"M ← 'abc', 1 2 3")
+    abc 1 2 3
+
+    >>> test(r"× M")
+    DOMAIN ERROR
+
+    >>> test(r"M × M")
+    DOMAIN ERROR
+    >>> test(r"1.2 × M")
+    DOMAIN ERROR
+    >>> test(r"M × 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 × M")
+    DOMAIN ERROR
+    >>> test(r"M × 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"M × ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     reciprocal_divide():
+    """
+    >>> test(r"M ← 'abc', 1 2 3")
+    abc 1 2 3
+
+    >>> test(r"÷ M")
+    DOMAIN ERROR
+
+    >>> test(r"M ÷ M")
+    DOMAIN ERROR
+    >>> test(r"1.2 ÷ M")
+    DOMAIN ERROR
+    >>> test(r"M ÷ 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ÷ M")
+    DOMAIN ERROR
+    >>> test(r"M ÷ 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"M ÷ ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# ------------------------------
+
 if __name__ == "__main__":
     preamble()
     import doctest
