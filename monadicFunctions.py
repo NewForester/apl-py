@@ -25,7 +25,7 @@ import mpmath
 
 from systemVariables import fuzzyInteger
 
-from aplError import aplError
+from aplError import assertError
 
 # ------------------------------
 
@@ -65,7 +65,7 @@ def     reciprocal(B):
     try:
         return operator.truediv(1.0, B)
     except ZeroDivisionError:
-        aplError("DOMAIN ERROR")
+        assertError("DOMAIN ERROR")
 
 # --------------
 
@@ -118,7 +118,7 @@ def     log(B):
     try:
         return math.log(B)
     except ValueError:
-        aplError("DOMAIN ERROR")
+        assertError("DOMAIN ERROR")
 
 # --------------
 
@@ -134,7 +134,7 @@ def     factorial(B):
 
         return float(mpmath.factorial(B))
     except ValueError:
-        aplError("DOMAIN ERROR")
+        assertError("DOMAIN ERROR")
 
 # --------------
 
@@ -145,7 +145,7 @@ def     roll(B):
     try:
         return random.randint(1, B)
     except ValueError:
-        aplError("DOMAIN ERROR")
+        assertError("DOMAIN ERROR")
 
 # ------------------------------
 
@@ -168,6 +168,6 @@ def     logicalNegation(B):
     if B == 0:
         return 1
 
-    aplError("DOMAIN ERROR")
+    assertError("DOMAIN ERROR")
 
 # EOF

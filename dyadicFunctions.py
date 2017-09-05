@@ -32,7 +32,7 @@ import mpmath
 
 from systemVariables import fuzzyEquals, fuzzyInteger, confirmBoolean, confirmInteger
 
-from aplError import aplError, aplException
+from aplError import aplException, assertError
 
 # ------------------------------
 
@@ -40,6 +40,9 @@ def     add(A, B):
     """
     A + B
     """
+    if isinstance(A, str) or isinstance(B, str):
+        raise TypeError
+
     return operator.add(A, B)
 
 # --------------
@@ -56,6 +59,9 @@ def     multiply(A, B):
     """
     A × B
     """
+    if isinstance(A, str) or isinstance(B, str):
+        raise TypeError
+
     return operator.mul(A, B)
 
 # --------------
@@ -70,7 +76,7 @@ def     divide(A, B):
         if fuzzyEquals(A, 0) and fuzzyEquals(B, 0):
             return 1
 
-        aplError("DOMAIN ERROR")
+        assertError("DOMAIN ERROR")
 
 # --------------
 
@@ -78,6 +84,9 @@ def     maximum(A, B):
     """
     A ⌈ B
     """
+    if isinstance(A, str) or isinstance(B, str):
+        raise TypeError
+
     return max(A, B)
 
 # --------------
@@ -86,6 +95,9 @@ def     minimum(A, B):
     """
     A ⌊ B
     """
+    if isinstance(A, str) or isinstance(B, str):
+        raise TypeError
+
     return min(A, B)
 
 # --------------
@@ -123,7 +135,7 @@ def     exp(A, B):
     try:
         return math.pow(A, B)
     except ValueError:
-        aplError("DOMAIN ERROR")
+        assertError("DOMAIN ERROR")
 
 # --------------
 
@@ -151,7 +163,7 @@ def     log(A, B):
         if fuzzyEquals(A, B):
             return 1.0
 
-    aplError("DOMAIN ERROR")
+    assertError("DOMAIN ERROR")
 
 # --------------
 
@@ -165,7 +177,7 @@ def     binomial(A, B):
 
         return float(mpmath.binomial(B, A))
     except ValueError:
-        aplError("DOMAIN ERROR")
+        assertError("DOMAIN ERROR")
 
 # --------------
 
@@ -179,7 +191,7 @@ def     deal(A, B):
     try:
         return tuple(random.sample(range(1, B+1), A))
     except ValueError:
-        aplError("DOMAIN ERROR")
+        assertError("DOMAIN ERROR")
 
 # ------------------------------
 
@@ -238,16 +250,16 @@ def     circular(A, B):
     A = confirmInteger(A)
 
     if A <= -12 or A >= 12:
-        aplError("DOMAIN ERROR")
+        assertError("DOMAIN ERROR")
 
     function = _CircularFunctions[A+12]
     if function is None:
-        aplError("FUNCTION NOT YET IMPLEMENTED")
+        assertError("FUNCTION NOT YET IMPLEMENTED")
 
     try:
         return function(B)
     except ValueError:
-        aplError("DOMAIN ERROR")
+        assertError("DOMAIN ERROR")
 
 # ------------------------------
 

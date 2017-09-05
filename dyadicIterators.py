@@ -15,7 +15,70 @@ import operator
 
 from systemVariables import confirmInteger, indexOrigin
 
-from aplError import aplError
+from aplQuantity import aplQuantity, makeScalar, scalarIterator
+from aplError import aplError, assertError
+
+# ------------------------------
+
+def _nextPair(A, B):
+    """
+    utility routine to fetch the next pair of values from the iterators
+    """
+    OK = 0
+
+    try:
+        X = A.__next__()
+        OK += 1
+    except StopIteration:
+        if isinstance(B, scalarIterator):
+            raise StopIteration
+
+    try:
+        Y = B.__next__()
+        OK += 1
+    except StopIteration:
+        if isinstance(A, scalarIterator):
+            raise StopIteration
+
+    if OK == 2:
+        return X, Y
+
+    if OK == 0:
+        raise StopIteration
+
+    assertError("LENGTH ERROR")
+
+# ------------------------------
+
+class   maths(object):
+    """
+    the recursive iterator for dyadic mathematical functions
+    """
+    def __init__(self, Map, Fn, A, B):
+        self._map = Map
+        self._fn = Fn
+        self._A = A.__iter__()
+        self._B = B.__iter__()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        X, Y = _nextPair(self._A, self._B)
+
+        if isinstance(X, aplQuantity) and isinstance(Y, aplQuantity):
+            return self._map(self._fn, X, Y)
+
+        if isinstance(X, aplQuantity):
+            return self._map(self._fn, X, makeScalar(Y))
+
+        if isinstance(Y, aplQuantity):
+            return self._map(self._fn, makeScalar(X), Y)
+
+        try:
+            return self._fn(X, Y)
+        except TypeError:
+            assertError("DOMAIN ERROR")
 
 # ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED

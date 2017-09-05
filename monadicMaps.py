@@ -14,10 +14,30 @@
     module are under review.
 """
 
+import monadicIterators as iterator
+
 from systemVariables import confirmInteger
 
-from aplQuantity import aplQuantity
+from aplQuantity import aplQuantity, makeScalar, makeVector
 from aplError import aplError, assertNumeric
+from aplError import aplError, assertNumeric, assertNotArray
+
+# ------------------------------
+
+def     maths(Fn, B):
+    """
+    the basic recursive map for monadic mathematical functions
+    """
+    if B.isScalar():
+        return makeScalar(iterator.maths(maths, Fn, B))
+
+    if B.isEmptyVector():
+        return B
+
+    if B.isVector():
+        return makeVector(iterator.maths(maths, Fn, B), B.dimension())
+
+    assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED

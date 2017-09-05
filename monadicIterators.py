@@ -13,6 +13,34 @@
 
 from systemVariables import confirmInteger, indexOrigin
 
+from aplQuantity import aplQuantity
+from aplError import assertError
+
+# ------------------------------
+
+class   maths(object):
+    """
+    the recursive iterator for monadic mathematical functions
+    """
+    def __init__(self, Map, Fn, B):
+        self._map = Map
+        self._fn = Fn
+        self._B = B.__iter__()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        Y = self._B.__next__()
+
+        if isinstance(Y, aplQuantity):
+            return self._map(self._fn, Y)
+
+        try:
+            return self._fn(Y)
+        except TypeError:
+            assertError("DOMAIN ERROR")
+
 # ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------

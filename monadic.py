@@ -14,6 +14,9 @@
     (mathematical APL functions) or an iterator (other APL functions).
 """
 
+import monadicMaps as mapper
+import monadicFunctions as monadic
+
 from monadicMaps import *
 from monadicFunctions import *
 from monadicIterators import *
@@ -35,13 +38,13 @@ def     _toBeImplemented(_):
 
 _MonadicFunctions = {
     # Arithmetic
-    '+':        lambda B: s2s(identity, B),
-    '-':        lambda B: s2s(negation, B),
-    '×':        lambda B: s2s(signum, B),
-    '÷':        lambda B: s2s(reciprocal, B),
-    '⌈':        lambda B: s2s(ceil, B),
-    '⌊':        lambda B: s2s(floor, B),
-    '|':        lambda B: s2s(magnitude, B),
+    '+':        lambda B: mapper.maths(monadic.identity, B),
+    '-':        lambda B: mapper.maths(monadic.negation, B),
+    '×':        lambda B: mapper.maths(monadic.signum, B),
+    '÷':        lambda B: mapper.maths(monadic.reciprocal, B),
+    '⌈':        lambda B: mapper.maths(monadic.ceil, B),
+    '⌊':        lambda B: mapper.maths(monadic.floor, B),
+    '|':        lambda B: mapper.maths(monadic.magnitude, B),
 
     # Algebraic
     '*':        lambda B: s2s(exp, B),

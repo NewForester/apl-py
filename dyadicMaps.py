@@ -14,10 +14,44 @@
     module are under review.
 """
 
+import dyadicIterators as iterator
+
 from systemVariables import confirmInteger
 
-from aplQuantity import aplQuantity
-from aplError import aplError, assertNumeric
+from aplQuantity import aplQuantity, makeScalar, makeVector
+from aplError import aplError, assertTrue, assertNumeric, assertNotArray
+
+# ------------------------------
+
+def     maths(Fn, A, B):
+    """
+    the basic recursive map for dyadic mathematical functions
+    """
+    if A.isScalar() and B.isScalar():
+        return makeScalar(iterator.maths(maths, Fn, A, B))
+
+    if A.isScalar():
+        if B.isEmptyVector():
+            return B
+
+        return makeVector(
+            iterator.maths(maths, Fn, A.scalarIterator(), B), B.dimension(), B.prototype())
+
+    if B.isScalar():
+        if A.isEmptyVector():
+            return A
+
+        return makeVector(
+            iterator.maths(maths, Fn, A, B.scalarIterator()), A.dimension(), A.prototype())
+
+    if A.isVector() and B.isVector():
+        if B.isEmptyVector():
+            assertTrue(A.isEmptyVector(), "LENGTH ERROR")
+
+        return makeVector(iterator.maths(maths, Fn, A, B), B.dimension(), B.prototype())
+
+    assertNotArray(A, "WIP - RANK ERROR")
+    assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED

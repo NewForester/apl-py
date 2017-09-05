@@ -14,6 +14,9 @@
     (mathematical APL functions) or an iterator (other APL functions).
 """
 
+import dyadicMaps as mapper
+import dyadicFunctions as dyadic
+
 from dyadicMaps import *
 from dyadicFunctions import *
 from dyadicIterators import *
@@ -34,13 +37,13 @@ def     _toBeImplemented(_, __):
 
 _DyadicFunctions = {
     # Arithmetic
-    '+':        lambda A, B: ss2s(add, A, B, True),
-    '-':        lambda A, B: ss2s(subtract, A, B, True),
-    '×':        lambda A, B: ss2s(multiply, A, B, True),
-    '÷':        lambda A, B: ss2s(divide, A, B, True),
-    '⌈':        lambda A, B: ss2s(maximum, A, B, True),
-    '⌊':        lambda A, B: ss2s(minimum, A, B, True),
-    '|':        lambda A, B: ss2s(residue, A, B, True),
+    '+':        lambda A, B: mapper.maths(dyadic.add, A, B),
+    '-':        lambda A, B: mapper.maths(dyadic.subtract, A, B),
+    '×':        lambda A, B: mapper.maths(dyadic.multiply, A, B),
+    '÷':        lambda A, B: mapper.maths(dyadic.divide, A, B),
+    '⌈':        lambda A, B: mapper.maths(dyadic.maximum, A, B),
+    '⌊':        lambda A, B: mapper.maths(dyadic.minimum, A, B),
+    '|':        lambda A, B: mapper.maths(dyadic.residue, A, B),
 
     # Algebraic
     '*':        lambda A, B: ss2s(exp, A, B, True),
