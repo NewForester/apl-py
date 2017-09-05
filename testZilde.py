@@ -119,6 +119,69 @@ def     reciprocal_divide():
     """
     pass
 
+# --------------
+
+def     ceil_maximum():
+    """
+    >>> test(r"⌈ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ⌈ ⍬")
+    ⍬
+    >>> test(r"1.2 ⌈ ⍬")
+    ⍬
+    >>> test(r"⍬ ⌈ 1.2")
+    ⍬
+
+    >>> test(r"1 2 3 ⌈ ⍬")
+    LENGTH ERROR
+    >>> test(r"⍬ ⌈ 1 2 3")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
+def     floor_minimum():
+    """
+    >>> test(r"⌊ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ⌊ ⍬")
+    ⍬
+    >>> test(r"1.2 ⌊ ⍬")
+    ⍬
+    >>> test(r"⍬ ⌊ 1.2")
+    ⍬
+
+    >>> test(r"1 2 3 ⌊ ⍬")
+    LENGTH ERROR
+    >>> test(r"⍬ ⌊ 1 2 3")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
+def     magnitude_residue():
+    """
+    >>> test(r"| ⍬")
+    ⍬
+
+    >>> test(r"⍬ | ⍬")
+    ⍬
+    >>> test(r"1.2 | ⍬")
+    ⍬
+    >>> test(r"⍬ | 1.2")
+    ⍬
+
+    >>> test(r"1 2 3 | ⍬")
+    LENGTH ERROR
+    >>> test(r"⍬ | 1 2 3")
+    LENGTH ERROR
+    """
+    pass
+
 # ------------------------------
 
 def     zildeIota():

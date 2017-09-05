@@ -113,6 +113,75 @@ def     reciprocal_divide():
     """
     pass
 
+# --------------
+
+def     ceil_maximum():
+    """
+    >>> test(r"⌈ 'H'")
+    DOMAIN ERROR
+    >>> test(r"⌈ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 ⌈ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ⌈ 1")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ⌈ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ⌈ 'one'")
+    DOMAIN ERROR
+    >>> test(r"'one' ⌈ 1 2 3")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     floor_minimum():
+    """
+    >>> test(r"⌊ 'H'")
+    DOMAIN ERROR
+    >>> test(r"⌊ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 ⌊ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ⌊ 1")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ⌊ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ⌊ 'one'")
+    DOMAIN ERROR
+    >>> test(r"'one' ⌊ 1 2 3")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     magnitude_residue():
+    """
+    >>> test(r"| 'H'")
+    DOMAIN ERROR
+    >>> test(r"| 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 | 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' | 1")
+    DOMAIN ERROR
+    >>> test(r"'Hello' | 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 | 'one'")
+    DOMAIN ERROR
+    >>> test(r"'one' | 1 2 3")
+    DOMAIN ERROR
+    """
+    pass
+
 # ------------------------------
 
 def     stringCompare():

@@ -128,6 +128,87 @@ def     reciprocal_divide():
     """
     pass
 
+# --------------
+
+def     ceil_maximum():
+    """
+    >>> test(r"M ← 'abc', 1 2 3")
+    abc 1 2 3
+
+    >>> test(r"⌈ M")
+    DOMAIN ERROR
+
+    >>> test(r"M ⌈ M")
+    DOMAIN ERROR
+    >>> test(r"1.2 ⌈ M")
+    DOMAIN ERROR
+    >>> test(r"M ⌈ 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ⌈ M")
+    DOMAIN ERROR
+    >>> test(r"M ⌈ 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"M ⌈ ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     floor_minimum():
+    """
+    >>> test(r"M ← 'abc', 1 2 3")
+    abc 1 2 3
+
+    >>> test(r"⌊ M")
+    DOMAIN ERROR
+
+    >>> test(r"M ⌊ M")
+    DOMAIN ERROR
+    >>> test(r"1.2 ⌊ M")
+    DOMAIN ERROR
+    >>> test(r"M ⌊ 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ⌊ M")
+    DOMAIN ERROR
+    >>> test(r"M ⌊ 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"M ⌊ ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     magnitude_residue():
+    """
+    >>> test(r"M ← 'abc', 1 2 3")
+    abc 1 2 3
+
+    >>> test(r"| M")
+    DOMAIN ERROR
+
+    >>> test(r"M | M")
+    DOMAIN ERROR
+    >>> test(r"1.2 | M")
+    DOMAIN ERROR
+    >>> test(r"M | 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 | M")
+    DOMAIN ERROR
+    >>> test(r"M | 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"M | ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":
