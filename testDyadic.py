@@ -402,9 +402,9 @@ def     roll_deal():
 
 # ------------------------------
 
-def     dyadicTrigonometry():
+def     pi_circular():
     """
-    Only test values that return real number - ignore the imaginary results for now
+    only run tests that return real number - ignore the imaginary results for now
 
     >>> test(r"B ← ○ ¯2 ¯1.5 ¯1 ¯0.5 0 0.5 1 1.5 2")
     ¯6.283185307 ¯4.71238898 ¯3.141592654 ¯1.570796327 0 1.570796327 3.141592654 4.71238898 6.283185307
@@ -457,7 +457,7 @@ def     dyadicTrigonometry():
     1
     >>> test(r"4 ○ B")
     6.362265132 4.817323936 3.296908309 1.862095889 1 1.862095889 3.296908309 4.817323936 6.362265132
-    >>> test(r"¯4 ○ B")
+    >>> test(r"¯4 ○ B", True)
     DOMAIN ERROR
     """
     pass

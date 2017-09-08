@@ -280,7 +280,7 @@ def     roll_deal():
 
 # ------------------------------
 
-def     monadicPi():
+def     pi_circular():
     """
     >>> test(r"○ 1")
     3.141592654

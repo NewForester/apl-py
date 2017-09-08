@@ -268,6 +268,27 @@ def     roll_deal():
 
 # ------------------------------
 
+def     pi_circular():
+    """
+    >>> test(r"○ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ○ ⍬")
+    ⍬
+    >>> test(r"1.2 ○ ⍬")
+    ⍬
+    >>> test(r"⍬ ○ 1.2")
+    ⍬
+
+    >>> test(r"1 2 3 ○ ⍬")
+    LENGTH ERROR
+    >>> test(r"⍬ ○ 1 2 3")
+    LENGTH ERROR
+    """
+    pass
+
+# ------------------------------
+
 def     zildeIota():
     """
     zilde with iota (⍳)

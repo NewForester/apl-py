@@ -276,6 +276,32 @@ def     roll_deal():
 
 # ------------------------------
 
+def     pi_circular():
+    """
+    >>> test(r"○ 'H'")
+    DOMAIN ERROR
+    >>> test(r"○ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 ○ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ○ 1")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ○ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ○ 'one'")
+    DOMAIN ERROR
+    >>> test(r"'one' ○ 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ○ 'Goodbye'")
+    DOMAIN ERROR
+    """
+    pass
+
+# ------------------------------
+
 def     stringCompare():
     """
     >>> test(r"1 = 'Hello'")
