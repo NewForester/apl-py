@@ -47,14 +47,14 @@ _MonadicFunctions = {
     '|':        lambda B: mapper.maths(monadic.magnitude, B),
 
     # Algebraic
-    '*':        lambda B: s2s(exp, B),
-    '⍟':        lambda B: s2s(log, B),
-    '!':        lambda B: s2s(factorial, B),
-    '?':        lambda B: s2s(roll, B),
+    '*':        lambda B: mapper.maths(monadic.exp, B),
+    '⍟':        lambda B: mapper.maths(monadic.log, B),
+    '!':        lambda B: mapper.maths(monadic.factorial, B),
+    '?':        lambda B: mapper.maths(monadic.roll, B),
     '⌹':        _toBeImplemented,       # matrix inverse
 
     # Trigonometric
-    '○':        lambda B: s2s(pi, B),
+    '○':        lambda B: mapper.maths(monadic.pi, B),
 
     # Logical
     '~':        lambda B: s2s(logicalNegation, B),

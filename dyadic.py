@@ -46,14 +46,14 @@ _DyadicFunctions = {
     '|':        lambda A, B: mapper.maths(dyadic.residue, A, B),
 
     # Algebraic
-    '*':        lambda A, B: ss2s(exp, A, B, True),
-    '⍟':        lambda A, B: ss2s(log, A, B, True),
-    '!':        lambda A, B: ss2s(binomial, A, B, True),
-    '?':        lambda A, B: ss2v(deal, A, B),
+    '*':        lambda A, B: mapper.maths(dyadic.exp, A, B),
+    '⍟':        lambda A, B: mapper.maths(dyadic.log, A, B),
+    '!':        lambda A, B: mapper.maths(dyadic.binomial, A, B),
+    '?':        lambda A, B: mapper.deal(dyadic.deal, A, B),
     '⌹':        _toBeImplemented,       # matrix divide
 
     # Trigonometric
-    '○':        lambda A, B: ss2s(circular, A, B, True),
+    '○':        lambda A, B: mapper.maths(dyadic.circular, A, B),
 
     # Logical
     '∨':        lambda A, B: ss2s(orGCD, A, B, True),

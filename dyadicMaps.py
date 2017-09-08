@@ -19,7 +19,7 @@ import dyadicIterators as iterator
 from systemVariables import confirmInteger
 
 from aplQuantity import aplQuantity, makeScalar, makeVector
-from aplError import aplError, assertTrue, assertNumeric, assertNotArray
+from aplError import aplError, assertTrue, assertNumeric, assertNotArray, assertScalarLike
 
 # ------------------------------
 
@@ -54,6 +54,19 @@ def     maths(Fn, A, B):
     assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
+
+def     deal(Fn, A, B):
+    """
+    implement deal (dyadic ?)
+    """
+    assertScalarLike(A, "RANK ERROR")
+    assertScalarLike(B, "RANK ERROR")
+
+    Apy = confirmInteger(A.scalarToPy())
+
+    return makeVector(Fn(Apy, B.scalarToPy()), Apy)
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -78,14 +91,6 @@ def     ss2s(Fn, A, B, numbersOnly):
         return aplQuantity(map(Fn, A, B), B.dimension())
 
     aplError("LENGTH ERROR")
-
-# ------------------------------
-
-def     ss2v(Fn, A, B):
-    """
-    evaluate a numeric dyadic function that, given scalar arguments, returns a vector
-    """
-    return aplQuantity(Fn(A.scalarToPy(), B.scalarToPy()), confirmInteger(A.scalarToPy()))
 
 # ------------------------------
 
