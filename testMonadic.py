@@ -189,7 +189,7 @@ def     valenceError():
 
 # ------------------------------
 
-def     monadicExponential():
+def     exponential_power():
     """
     >>> test(r"* 1 0 ¯1")
     2.718281828 1 0.3678794412
@@ -205,7 +205,7 @@ def     monadicExponential():
 
 # --------------
 
-def     monadicLogarithm():
+def     logarithm():
     """
     >>> test(r"⍟ 0")
     DOMAIN ERROR
@@ -224,7 +224,33 @@ def     monadicLogarithm():
 
 # --------------
 
-def     monadicRoll():
+def     factorial_binomial():
+    """
+    >>> test(r"! -1")
+    DOMAIN ERROR
+    >>> test(r"! 0")
+    1
+
+    >>> test(r"? 1")
+    1
+    >>> test(r"? ,1")
+    1
+
+    >>> test(r"⍴ ? 1")
+    ⍬
+    >>> test(r"⍴ ? ,1")
+    1
+
+    >>> test(r"! 1 2 3 4 5")
+    1 2 6 24 120
+    >>> test(r"! 0.125 0.25 0.5")
+    0.9417426998 0.9064024771 0.8862269255
+    """
+    pass
+
+# --------------
+
+def     roll_deal():
     """
     randomness makes positive testing a little tricky
 
@@ -237,24 +263,18 @@ def     monadicRoll():
     >>> test(r"? 1÷2")
     DOMAIN ERROR
 
-    >>> test(r"⍴ ? ⍳ 6")
-    6
-    """
-    pass
-
-# --------------
-
-def     monadicFactorial():
-    """
-    >>> test(r"! -1")
-    DOMAIN ERROR
-    >>> test(r"! 0")
+    >>> test(r"! 1")
+    1
+    >>> test(r"! ,1")
     1
 
-    >>> test(r"! 1 2 3 4 5")
-    1 2 6 24 120
-    >>> test(r"! 0.125 0.25 0.5")
-    0.9417426998 0.9064024771 0.8862269255
+    >>> test(r"⍴ ! 1")
+    ⍬
+    >>> test(r"⍴ ! ,1")
+    1
+
+    >>> test(r"⍴ ? ⍳ 6")
+    6
     """
     pass
 

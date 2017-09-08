@@ -184,6 +184,98 @@ def     magnitude_residue():
 
 # ------------------------------
 
+def     exponential_power():
+    """
+    >>> test(r"* 'H'")
+    DOMAIN ERROR
+    >>> test(r"* 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 * 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' * 1")
+    DOMAIN ERROR
+    >>> test(r"'Hello' * 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 * 'one'")
+    DOMAIN ERROR
+    >>> test(r"'one' * 1 2 3")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     logarithm():
+    """
+    >>> test(r"⍟ 'H'")
+    DOMAIN ERROR
+    >>> test(r"⍟ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 ⍟ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ⍟ 1")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ⍟ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ⍟ 'one'")
+    DOMAIN ERROR
+    >>> test(r"'one' ⍟ 1 2 3")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     factorial_binomial():
+    """
+    >>> test(r"! 'H'")
+    DOMAIN ERROR
+    >>> test(r"! 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 ! 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ! 1")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ! 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ! 'one'")
+    DOMAIN ERROR
+    >>> test(r"'one' ! 1 2 3")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     roll_deal():
+    """
+    >>> test(r"? 'H'")
+    DOMAIN ERROR
+    >>> test(r"? 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"1 ? 'Hello'")
+    RANK ERROR
+    >>> test(r"'Hello' ? 1")
+    RANK ERROR
+    >>> test(r"'Hello' ? 'Hello'")
+    RANK ERROR
+
+    >>> test(r"1 2 3 ? 'one'")
+    RANK ERROR
+    >>> test(r"'one' ? 1 2 3")
+    RANK ERROR
+    """
+    pass
+
+# ------------------------------
+
 def     stringCompare():
     """
     >>> test(r"1 = 'Hello'")

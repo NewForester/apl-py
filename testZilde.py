@@ -184,6 +184,90 @@ def     magnitude_residue():
 
 # ------------------------------
 
+def     exponential_power():
+    """
+    >>> test(r"* ⍬")
+    ⍬
+
+    >>> test(r"⍬ * ⍬")
+    ⍬
+    >>> test(r"1.2 * ⍬")
+    ⍬
+    >>> test(r"⍬ * 1.2")
+    ⍬
+
+    >>> test(r"1 2 3 * ⍬")
+    LENGTH ERROR
+    >>> test(r"⍬ * 1 2 3")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
+def     logarithm():
+    """
+    >>> test(r"⍟ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ⍟ ⍬")
+    ⍬
+    >>> test(r"1.2 ⍟ ⍬")
+    ⍬
+    >>> test(r"⍬ ⍟ 1.2")
+    ⍬
+
+    >>> test(r"1 2 3 ⍟ ⍬")
+    LENGTH ERROR
+    >>> test(r"⍬ ⍟ 1 2 3")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
+def     factorial_binomial():
+    """
+    >>> test(r"! ⍬")
+    ⍬
+
+    >>> test(r"⍬ ! ⍬")
+    ⍬
+    >>> test(r"1.2 ! ⍬")
+    ⍬
+    >>> test(r"⍬ ! 1.2")
+    ⍬
+
+    >>> test(r"1 2 3 ! ⍬")
+    LENGTH ERROR
+    >>> test(r"⍬ ! 1 2 3")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
+def     roll_deal():
+    """
+    >>> test(r"? ⍬")
+    ⍬
+
+    >>> test(r"⍬ ? ⍬")
+    RANK ERROR
+    >>> test(r"1.2 ? ⍬")
+    RANK ERROR
+    >>> test(r"⍬ ? 1.2")
+    RANK ERROR
+
+    >>> test(r"1 2 3 ? ⍬")
+    RANK ERROR
+    >>> test(r"⍬ ? 1 2 3")
+    RANK ERROR
+    """
+    pass
+
+# ------------------------------
+
 def     zildeIota():
     """
     zilde with iota (⍳)

@@ -257,7 +257,7 @@ def     magnitude_residue():
 
 # ------------------------------
 
-def     dyadicExponential():
+def     exponential_power():
     """
     >>> test(r"0 * ¯1")
     DOMAIN ERROR
@@ -282,7 +282,7 @@ def     dyadicExponential():
 
 # --------------
 
-def     dyadicLogarithm():
+def     logarithm():
     """
     >>> test(r"0 ⍟ ¯1 0 1")
     0 1 0
@@ -322,36 +322,18 @@ def     dyadicLogarithm():
 
 # --------------
 
-def     dyadicDeal():
+def     factorial_binomial():
     """
-    randomness makes positive testing a little tricky
-
-    >>> test(r"1 ? ¯1")
-    DOMAIN ERROR
-    >>> test(r"1 ? 0")
-    DOMAIN ERROR
     >>> test(r"1 ? 1")
     1
+    >>> test(r"1 ? ,1")
+    1
 
-    >>> test(r"0.5 ? 2")
-    DOMAIN ERROR
-    >>> test(r"1 ? 1.5")
-    DOMAIN ERROR
+    >>> test(r"⍴ 1 ? 1")
+    1
+    >>> test(r"⍴ 1 ? ,1")
+    1
 
-    >>> test(r"2 ? 1")
-    DOMAIN ERROR
-
-    >>> test(r"1 ? 10 10")
-    RANK ERROR
-    >>> test(r"1 1 ? 10")
-    RANK ERROR
-    """
-    pass
-
-# --------------
-
-def     dyadicCombinations():
-    """
     >>> test(r"¯1 ! ¯1 0 1")
     1 0 0
     >>> test(r"0 ! ¯1 0 1")
@@ -377,6 +359,44 @@ def     dyadicCombinations():
     1 4 6 4 1
     >>> test(r"0 1 2 3 4 5 ! 5")
     1 5 10 10 5 1
+    """
+    pass
+
+# --------------
+
+def     roll_deal():
+    """
+    randomness makes positive testing a little tricky
+
+    >>> test(r"1 ? 1")
+    1
+    >>> test(r"1 ? ,1")
+    1
+
+    >>> test(r"⍴ 1 ? 1")
+    1
+    >>> test(r"⍴ 1 ? ,1")
+    1
+
+    >>> test(r"1 ? ¯1")
+    DOMAIN ERROR
+    >>> test(r"1 ? 0")
+    DOMAIN ERROR
+    >>> test(r"1 ? 1")
+    1
+
+    >>> test(r"0.5 ? 2")
+    DOMAIN ERROR
+    >>> test(r"1 ? 1.5")
+    DOMAIN ERROR
+
+    >>> test(r"2 ? 1")
+    DOMAIN ERROR
+
+    >>> test(r"1 ? 10 10")
+    RANK ERROR
+    >>> test(r"1 1 ? 10")
+    RANK ERROR
     """
     pass
 

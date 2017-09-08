@@ -211,6 +211,116 @@ def     magnitude_residue():
 
 # ------------------------------
 
+def     exponential_power():
+    """
+    >>> test(r"M ← 'abc', 1 2 3")
+    abc 1 2 3
+
+    >>> test(r"* M")
+    DOMAIN ERROR
+
+    >>> test(r"M * M")
+    DOMAIN ERROR
+    >>> test(r"1.2 * M")
+    DOMAIN ERROR
+    >>> test(r"M * 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 * M")
+    DOMAIN ERROR
+    >>> test(r"M * 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"M * ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     logarithm():
+    """
+    >>> test(r"M ← 'abc', 1 2 3")
+    abc 1 2 3
+
+    >>> test(r"⍟ M")
+    DOMAIN ERROR
+
+    >>> test(r"M ⍟ M")
+    DOMAIN ERROR
+    >>> test(r"1.2 ⍟ M")
+    DOMAIN ERROR
+    >>> test(r"M ⍟ 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ⍟ M")
+    DOMAIN ERROR
+    >>> test(r"M ⍟ 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"M ⍟ ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     factorial_binomial():
+    """
+    >>> test(r"M ← 'abc', 1 2 3")
+    abc 1 2 3
+
+    >>> test(r"! M")
+    DOMAIN ERROR
+
+    >>> test(r"M ! M")
+    DOMAIN ERROR
+    >>> test(r"1.2 ! M")
+    DOMAIN ERROR
+    >>> test(r"M ! 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ! M")
+    DOMAIN ERROR
+    >>> test(r"M ! 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"M ! ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     roll_deal():
+    """
+    randomness makes positive testing a little tricky
+
+    >>> test(r"M ← 'abc', 1 2 3")
+    abc 1 2 3
+
+    >>> test(r"? M")
+    DOMAIN ERROR
+
+    >>> test(r"M ? M")
+    RANK ERROR
+    >>> test(r"1.2 ? M")
+    RANK ERROR
+    >>> test(r"M ? 1.2")
+    RANK ERROR
+
+    >>> test(r"1 2 3 ? M")
+    RANK ERROR
+    >>> test(r"M ? 1 2 3")
+    RANK ERROR
+
+    >>> test(r"M ? ⍳⍴M")
+    RANK ERROR
+    """
+    pass
+
+# ------------------------------
+
 if __name__ == "__main__":
     preamble()
     import doctest
