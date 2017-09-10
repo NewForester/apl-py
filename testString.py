@@ -606,45 +606,69 @@ def     ne():
 
 # ------------------------------
 
-def     stringMatch():
+def     depth_match():
     """
-    >>> test(r"'Hello' ≡ 'H', 'ello'")
+    >>> test(r"≡ ''")
     1
+    >>> test(r"≡ ' '")
+    0
+    >>> test(r"≡ 'Hello'")
+    1
+    >>> test(r"≡ 'H' 'ello'")
+    2
+
     >>> test(r"'Hello' ≡ 'Hello'")
     1
-
-    >>> test(r"'Hello' ≢ 'J', 'ello'")
+    >>> test(r"'Hello' ≡ 'H', 'ello'")
     1
-    >>> test(r"'Hello' ≢ 'Jello'")
-    1
-
-    !>>> test(r"(1 'Hello' 3) ≡ 1 'Jello' 3")
+    >>> test(r"'Hello' ≡ 'J', 'Hello'")
     0
 
-    !>>> test(r"(1 'Hello' 3) ≡ 1 'Hello' 3")
+    >>> test(r"'Hello' ≡ 1.2")
+    0
+    >>> test(r"1.2 ≡ 'Hello'")
+    0
+
+    >>> test(r"'Hello' ≡ 1 2 3")
+    0
+    >>> test(r"1 2 3 ≡ 'Hello'")
+    0
+    """
+    pass
+
+# --------------
+
+def     tally_notMatch():
+    """
+    >>> test(r"≢ ''")
+    0
+    >>> test(r"≢ ' '")
+    1
+    >>> test(r"≢ 'Hello'")
+    5
+    >>> test(r"≢ 'H' 'ello'")
+    2
+
+    >>> test(r"'Hello' ≢ 'Hello'")
+    0
+    >>> test(r"'Hello' ≢ 'H', 'ello'")
+    0
+    >>> test(r"'Hello' ≢ 'J', 'Hello'")
+    1
+
+    >>> test(r"'Hello' ≢ 1.2")
+    1
+    >>> test(r"1.2 ≢ 'Hello'")
+    1
+
+    >>> test(r"'Hello' ≢ 1 2 3")
+    1
+    >>> test(r"1 2 3 ≢ 'Hello'")
     1
     """
     pass
 
 # ------------------------------
-
-def     stringDepthTally():
-    """
-    >>> test(r"≡ 'Hello'")
-    1
-
-    >>> test(r"≡ 1 'Hello' 3")
-    2
-
-    >>> test(r"≢ 'Hello'")
-    5
-
-    >>> test(r"≢ 1 'Hello' 3")
-    3
-    """
-    pass
-
-# --------------
 
 def     stringRho():
     """

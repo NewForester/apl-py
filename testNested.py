@@ -572,6 +572,106 @@ def     ne():
 
 # ------------------------------
 
+def     depth_match():
+    """
+    >>> test(r"≡ 1 (2 3) 4")
+    2
+
+    >>> test(r"≡ 'H' 'ello'")
+    2
+    >>> test(r"≡ 1 'Hello' 3")
+    2
+    >>> test(r"≡ 1 ('Hello') 3")
+    2
+    >>> test(r"≡ 1 'Hello' 'World' 3")
+    2
+    >>> test(r"≡ 1 ('Hello' 'World') 3")
+    3
+    >>> test(r"≡ 1 ('Hello', 'World') 3")
+    2
+    >>> test(r"≡ 1 'Hello', 'World' 3")
+    2
+
+    >>> test(r"8 ≡ 1 (2 3) 4")
+    0
+    >>> test(r"1 (2 3) 4 ≡ 5")
+    0
+    >>> test(r"1 (2 3) 4 ≡ 1 (6 7) 4")
+    0
+    >>> test(r"1 (2 3) 4 ≡ 1 (2 3) 4")
+    1
+
+    >>> test(r"1 (2 3) 4 ≡ (1 2) (3 4)")
+    0
+    >>> test(r"1 (2 3) 4 ≡ 1 (2 0 3) 4")
+    0
+
+    >>> test(r"1 (2 3) 4 ≡ 1 + 0 (1 2) 3")
+    1
+
+    >>> test(r"'Hello' ≡ 'H' 'ello'")
+    0
+    >>> test(r"(1 'Hello' 3) ≡ 1 'Hello' 3")
+    1
+    >>> test(r"(1 'Hello' 3) ≡ 1 ('Hello') 3")
+    1
+    >>> test(r"(1 'Hello' 3) ≡ 1 'Jello' 3")
+    0
+    """
+    pass
+
+# --------------
+
+def     tally_notMatch():
+    """
+    >>> test(r"≢ 1 (2 3) 4")
+    3
+
+    >>> test(r"≢ 'H' 'ello'")
+    2
+    >>> test(r"≢ 1 'Hello' 3")
+    3
+    >>> test(r"≢ 1 ('Hello') 3")
+    3
+    >>> test(r"≢ 1 'Hello' 'World' 3")
+    4
+    >>> test(r"≢ 1 ('Hello' 'World') 3")
+    3
+    >>> test(r"≢ 1 ('Hello', 'World') 3")
+    3
+    >>> test(r"≢ 1 'Hello', 'World' 3")
+    4
+
+    >>> test(r"8 ≢ 1 (2 3) 4")
+    1
+    >>> test(r"1 (2 3) 4 ≢ 5")
+    1
+    >>> test(r"1 (2 3) 4 ≢ 1 (6 7) 4")
+    1
+    >>> test(r"1 (2 3) 4 ≢ 1 (2 3) 4")
+    0
+
+    >>> test(r"1 (2 3) 4 ≢ (1 2) (3 4)")
+    1
+    >>> test(r"1 (2 3) 4 ≢ 1 (2 0 3) 4")
+    1
+
+    >>> test(r"1 (2 3) 4 ≢ 1 + 0 (1 2) 3")
+    0
+
+    >>> test(r"'Hello' ≢ 'H' 'ello'")
+    1
+    >>> test(r"(1 'Hello' 3) ≢ 1 'Hello' 3")
+    0
+    >>> test(r"(1 'Hello' 3) ≢ 1 ('Hello') 3")
+    0
+    >>> test(r"(1 'Hello' 3) ≢ 1 'Jello' 3")
+    1
+    """
+    pass
+
+# ------------------------------
+
 if __name__ == "__main__":
     preamble()
     import doctest

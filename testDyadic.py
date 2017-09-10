@@ -743,27 +743,83 @@ def     ne():
 
 # ------------------------------
 
-def     dyadicMatch():
+def     depth_match():
     """
-    >>> test(r"1 ≡ 1")
+    >>> test(r"1.2 ≡ 1.2")
     1
-    >>> test(r"1 ≢ 1")
+    >>> test(r"1.2 ≡ 2.1")
+    0
+    >>> test(r"1.2 ≡ ,1.2")
     0
 
-    >>> test(r"1 ≡ ,1")
+    >>> test(r"⍴ 1.2 ≡ 1.2")
+    ⍬
+    >>> test(r"⍴ 1.2 ≡ ,1.2")
+    ⍬
+
+    >>> test(r"1 ≡ 1 2 3")
     0
+    >>> test(r"1 2 ≡ 1 2 3")
+    0
+    >>> test(r"1 2 3 ≡ 1 2 3")
+    1
+    >>> test(r"1 2 3 ≡ 1 2")
+    0
+    >>> test(r"1 2 3 ≡ 1")
+    0
+
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"1 2 3 ≡ ⍳ 3")
+    1
+    >>> test(r"2 3 1 ≡ ⍳ 3")
+    0
+    >>> test(r"3 1 2 ≡ ⍳ 3")
+    0
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
+# --------------
+
+def     tally_notMatch():
+    """
+    >>> test(r"1.2 ≢ 1.2")
+    0
+    >>> test(r"1.2 ≢ 2.1")
+    1
+    >>> test(r"1.2 ≢ ,1.2")
+    1
+
+    >>> test(r"⍴ 1.2 ≢ 1.2")
+    ⍬
+    >>> test(r"⍴ 1.2 ≢ ,1.2")
+    ⍬
 
     >>> test(r"1 ≢ 1 2 3")
     1
-    >>> test(r"1 2 3 ≡ ⍳ 3")
+    >>> test(r"1 2 ≢ 1 2 3")
     1
-    >>> test(r"1 2 3 4 ≢ 1 2 3")
+    >>> test(r"1 2 3 ≢ 1 2 3")
+    0
+    >>> test(r"1 2 3 ≢ 1 2")
+    1
+    >>> test(r"1 2 3 ≢ 1")
     1
 
-    >>> test(r"1 2 3 0 ≡ ⍳ 4")
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"1 2 3 ≢ ⍳ 3")
     0
-    >>> test(r"1 2 3 4 ≢ ⍳ 4")
-    0
+    >>> test(r"2 3 1 ≢ ⍳ 3")
+    1
+    >>> test(r"3 1 2 ≢ ⍳ 3")
+    1
+
+    >>> restoreIndexOrigin(IO)
     """
     pass
 

@@ -699,6 +699,64 @@ def     ne():
 
 # ------------------------------
 
+def     depth_match():
+    """
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    >>> test(r"≡ M")
+    1
+
+    >>> test(r"M ≡ M")
+    1
+    >>> test(r"1.2 ≡ M")
+    0
+    >>> test(r"M ≡ 1.2")
+    0
+
+    >>> test(r"1 2 3 ≡ M")
+    0
+    >>> test(r"M ≡ 1 2 3")
+    0
+
+    !!! >>> test(r"M ≡ ⌽ 1 2 3 'abc'")
+    0
+    !!! >>> test(r"M ≡ ⌽ 'cba', 3 2 1")
+    1
+    """
+    pass
+
+# --------------
+
+def     tally_notMatch():
+    """
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    >>> test(r"≢ M")
+    6
+
+    >>> test(r"M ≢ M")
+    0
+    >>> test(r"1.2 ≢ M")
+    1
+    >>> test(r"M ≢ 1.2")
+    1
+
+    >>> test(r"1 2 3 ≢ M")
+    1
+    >>> test(r"M ≢ 1 2 3")
+    1
+
+    !!! >>> test(r"M ≢ ⌽ 1 2 3 'abc'")
+    1
+    !!! >>> test(r"M ≢ ⌽ 'cba', 3 2 1")
+    0
+    """
+    pass
+
+# ------------------------------
+
 if __name__ == "__main__":
     preamble()
     import doctest

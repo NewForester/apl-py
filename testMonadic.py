@@ -388,6 +388,32 @@ def     ne():
 
 # ------------------------------
 
+def     depth_match():
+    """
+    depth function
+
+    >>> test(r"≡ 1.2")
+    0
+    >>> test(r"≡ 1 2 3")
+    1
+    """
+    pass
+
+# --------------
+
+def     tally_notMatch():
+    """
+    tally function
+
+    >>> test(r"≢ 1.2")
+    1
+    >>> test(r"≢ 1 2 3")
+    3
+    """
+    pass
+
+# ------------------------------
+
 def     monadicIota():
     """
     >>> IO = saveIndexOrigin()
@@ -406,22 +432,6 @@ def     monadicIota():
     RANK ERROR
 
     >>> restoreIndexOrigin(IO)
-    """
-    pass
-
-# --------------
-
-def     monadicDepthTally():
-    """
-    >>> test(r"≡ 1")
-    0
-    >>> test(r"≡ 1 2 3")
-    1
-
-    >>> test(r"≢ 1")
-    1
-    >>> test(r"≢ 1 2 3")
-    3
     """
     pass
 

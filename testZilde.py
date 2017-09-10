@@ -499,58 +499,54 @@ def     ne():
 
 # ------------------------------
 
+def     depth_match():
+    """
+    >>> test(r"≡ ⍬")
+    1
+
+    >>> test(r"⍬ ≡ ⍬")
+    1
+    >>> test(r"⍬ ≡ 1.2")
+    0
+    >>> test(r"1.2 ≡ ⍬")
+    0
+
+    >>> test(r"⍬ ≡ 1 2 3")
+    0
+    >>> test(r"1 2 3 ≡ ⍬")
+    0
+    """
+    pass
+
+# --------------
+
+def     tally_notMatch():
+    """
+    >>> test(r"≢ ⍬")
+    0
+
+    >>> test(r"⍬ ≢ ⍬")
+    0
+    >>> test(r"⍬ ≢ 1.2")
+    1
+    >>> test(r"1.2 ≢ ⍬")
+    1
+
+    >>> test(r"⍬ ≢ 1 2 3")
+    1
+    >>> test(r"1 2 3 ≢ ⍬")
+    1
+    """
+    pass
+
+# ------------------------------
+
 def     zildeIota():
     """
     zilde with iota (⍳)
 
     >>> test(r"⍳ 0")
     ⍬
-    """
-    pass
-
-# --------------
-
-def     zildeDepthMatch():
-    """
-    zilde with depth/match (≡)
-
-    >>> test(r"≡ ⍬")
-    1
-
-    >>> test(r"⍬ ≡ ⍬")
-    1
-    >>> test(r"⍬ ≡ 1")
-    0
-    >>> test(r"1 ≡ ⍬")
-    0
-
-    >>> test(r"⍬ ≡ 1 2")
-    0
-    >>> test(r"1 2 ≡ ⍬")
-    0
-    """
-    pass
-
-# --------------
-
-def     zildeTallyNoMatch():
-    """
-    zilde with tally (≢)
-
-    >>> test(r"≢ ⍬")
-    0
-
-    >>> test(r"⍬ ≢ ⍬")
-    0
-    >>> test(r"⍬ ≢ 1")
-    1
-    >>> test(r"1 ≢ ⍬")
-    1
-
-    >>> test(r"⍬ ≢ 1 2")
-    1
-    >>> test(r"1 2 ≢ ⍬")
-    1
     """
     pass
 

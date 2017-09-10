@@ -634,6 +634,36 @@ def     ne():
 
 # ------------------------------
 
+def     depth_match():
+    """
+    >>> test(r"⍬ ≡ ⍬")
+    1
+    >>> test(r"⍬ ≡ ''")
+    0
+    >>> test(r"'' ≡ ⍬")
+    0
+    >>> test(r"'' ≡ ''")
+    1
+    """
+    pass
+
+# --------------
+
+def     tally_notMatch():
+    """
+    >>> test(r"⍬ ≢ ⍬")
+    0
+    >>> test(r"⍬ ≢ ''")
+    1
+    >>> test(r"'' ≢ ⍬")
+    1
+    >>> test(r"'' ≢ ''")
+    0
+    """
+    pass
+
+# ------------------------------
+
 if __name__ == "__main__":
     preamble()
     import doctest
