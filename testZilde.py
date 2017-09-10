@@ -289,6 +289,90 @@ def     pi_circular():
 
 # ------------------------------
 
+def     or_gcd():
+    """
+    >>> test(r"∨ ⍬")
+    VALENCE ERROR
+
+    >>> test(r"⍬ ∨ ⍬")
+    ⍬
+    >>> test(r"⍬ ∨ 1")
+    ⍬
+    >>> test(r"1 ∨ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ∨ 1 2 3")
+    LENGTH ERROR
+    >>> test(r"1 2 3 ∨ ⍬")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
+def     and_lcm():
+    """
+    >>> test(r"∧ ⍬")
+    VALENCE ERROR
+
+    >>> test(r"⍬ ∧ ⍬")
+    ⍬
+    >>> test(r"⍬ ∧ 1")
+    ⍬
+    >>> test(r"1 ∧ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ∧ 1 2 3")
+    LENGTH ERROR
+    >>> test(r"1 2 3 ∧ ⍬")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
+def     nor():
+    """
+    >>> test(r"⍱ ⍬")
+    VALENCE ERROR
+
+    >>> test(r"⍬ ⍱ ⍬")
+    ⍬
+    >>> test(r"⍬ ⍱ 1")
+    ⍬
+    >>> test(r"1 ⍱ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ⍱ 1 2 3")
+    LENGTH ERROR
+    >>> test(r"1 2 3 ⍱ ⍬")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
+def     nand():
+    """
+    >>> test(r"⍲ ⍬")
+    VALENCE ERROR
+
+    >>> test(r"⍬ ⍲ ⍬")
+    ⍬
+    >>> test(r"⍬ ⍲ 1")
+    ⍬
+    >>> test(r"1 ⍲ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ⍲ 1 2 3")
+    LENGTH ERROR
+    >>> test(r"1 2 3 ⍲ ⍬")
+    LENGTH ERROR
+    """
+    pass
+
+# ------------------------------
+
 def     zildeIota():
     """
     zilde with iota (⍳)

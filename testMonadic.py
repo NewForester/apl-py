@@ -139,15 +139,6 @@ def     valenceError():
     """
     symbols for which there is a dyadic but no monadic function
 
-    >>> test(r"∨ 0")
-    VALENCE ERROR
-    >>> test(r"∧ 0")
-    VALENCE ERROR
-    >>> test(r"⍱ 0")
-    VALENCE ERROR
-    >>> test(r"⍲ 0")
-    VALENCE ERROR
-
     >>> test(r"< 0")
     VALENCE ERROR
     >>> test(r"≤ 0")
@@ -296,12 +287,18 @@ def     pi_circular():
 
 # ------------------------------
 
-def     monadicNegation():
+def     tilde():
     """
     >>> test(r"~ 1")
     0
     >>> test(r"~ 0")
     1
+
+    >>> test(r"⍴ ~ 1")
+    ⍬
+    >>> test(r"⍴ ~ ,1")
+    1
+
     >>> test(r"~ ¯1")
     DOMAIN ERROR
     >>> test(r"~ 0.5")
@@ -309,6 +306,42 @@ def     monadicNegation():
 
     >>> test(r"~ 0 1 0 ")
     1 0 1
+    """
+    pass
+
+# --------------
+
+def     or_gcd():
+    """
+    >>> test(r"∨ 1")
+    VALENCE ERROR
+    """
+    pass
+
+# --------------
+
+def     and_lcm():
+    """
+    >>> test(r"∧ 1")
+    VALENCE ERROR
+    """
+    pass
+
+# --------------
+
+def     nor():
+    """
+    >>> test(r"⍱ 1")
+    VALENCE ERROR
+    """
+    pass
+
+# --------------
+
+def     nand():
+    """
+    >>> test(r"⍲ 1")
+    VALENCE ERROR
     """
     pass
 

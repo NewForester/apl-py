@@ -464,20 +464,23 @@ def     pi_circular():
 
 # ------------------------------
 
-def     dyadicOr():
+def     or_gcd():
     """
     >>> test(r"0 ∨ 0 1")
     0 1
     >>> test(r"1 ∨ 0 1")
     1 1
 
-    >>> test(r"(⍳10) ∨ 10")
+    >>> test(r"TEN ← 1 2 3 4 5 6 7 8 9 10")
+    1 2 3 4 5 6 7 8 9 10
+
+    >>> test(r"(TEN) ∨ 10")
     1 2 1 2 5 2 1 2 1 10
-    >>> test(r"(-⍳10) ∨ 10")
+    >>> test(r"(-TEN) ∨ 10")
     1 2 1 2 5 2 1 2 1 10
-    >>> test(r"(⍳10) ∨ ¯10")
+    >>> test(r"(TEN) ∨ ¯10")
     1 2 1 2 5 2 1 2 1 10
-    >>> test(r"(-⍳10) ∨ ¯10")
+    >>> test(r"(-TEN) ∨ ¯10")
     1 2 1 2 5 2 1 2 1 10
 
     >>> test(r"7.5 ∨ ¯5 5")
@@ -489,26 +492,24 @@ def     dyadicOr():
 
 # --------------
 
-def     dyadicAnd():
+def     and_lcm():
     """
     >>> test(r"0 ∧ 0 1")
     0 0
     >>> test(r"1 ∧ 0 1")
     0 1
 
-    >>> IO = saveIndexOrigin()
-    >>> setIndexOrigin(1)
+    >>> test(r"TEN ← 1 2 3 4 5 6 7 8 9 10")
+    1 2 3 4 5 6 7 8 9 10
 
-    >>> test(r"(⍳10) ∧ 10")
+    >>> test(r"(TEN) ∧ 10")
     10 10 30 20 10 30 70 40 90 10
-    >>> test(r"(-⍳10) ∧ 10")
+    >>> test(r"(-TEN) ∧ 10")
     ¯10 ¯10 ¯30 ¯20 ¯10 ¯30 ¯70 ¯40 ¯90 ¯10
-    >>> test(r"(⍳10) ∧ ¯10")
+    >>> test(r"(TEN) ∧ ¯10")
     ¯10 ¯10 ¯30 ¯20 ¯10 ¯30 ¯70 ¯40 ¯90 ¯10
-    >>> test(r"(-⍳10) ∧ ¯10")
+    >>> test(r"(-TEN) ∧ ¯10")
     10 10 30 20 10 30 70 40 90 10
-
-    >>> restoreIndexOrigin(IO)
 
     >>> test(r"7.5 ∧ ¯5 5")
     ¯15 15
@@ -519,7 +520,7 @@ def     dyadicAnd():
 
 # --------------
 
-def     dyadicNor():
+def     nor():
     """
     >>> test(r"0 ⍱ ¯1")
     DOMAIN ERROR
@@ -540,7 +541,7 @@ def     dyadicNor():
 
 # --------------
 
-def     dyadicNand():
+def     nand():
     """
     >>> test(r"0 ⍲ ¯1")
     DOMAIN ERROR

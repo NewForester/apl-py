@@ -302,6 +302,122 @@ def     pi_circular():
 
 # ------------------------------
 
+def     or_gcd():
+    """
+    >>> test(r"∨ 'Hello'")
+    VALENCE ERROR
+
+    >>> test(r"'H' ∨ 72")
+    DOMAIN ERROR
+    >>> test(r'"H" ∨ 72')
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ∨ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ∨ 1")
+    DOMAIN ERROR
+    >>> test(r"1 ∨ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ∨ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"1 2 3 ∨ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ∨ 'Goodbye'")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     and_lcm():
+    """
+    >>> test(r"∧ 'Hello'")
+    VALENCE ERROR
+
+    >>> test(r"'H' ∧ 72")
+    DOMAIN ERROR
+    >>> test(r'"H" ∧ 72')
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ∧ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ∧ 1")
+    DOMAIN ERROR
+    >>> test(r"1 ∧ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ∧ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"1 2 3 ∧ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ∧ 'Goodbye'")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     nor():
+    """
+    >>> test(r"⍱ 'Hello'")
+    VALENCE ERROR
+
+    >>> test(r"'H' ⍱ 72")
+    DOMAIN ERROR
+    >>> test(r'"H" ⍱ 72')
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ⍱ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ⍱ 1")
+    DOMAIN ERROR
+    >>> test(r"1 ⍱ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ⍱ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"1 2 3 ⍱ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ⍱ 'Goodbye'")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     nand():
+    """
+    >>> test(r"⍲ 'Hello'")
+    VALENCE ERROR
+
+    >>> test(r"'H' ⍲ 72")
+    DOMAIN ERROR
+    >>> test(r'"H" ⍲ 72')
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ⍲ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ⍲ 1")
+    DOMAIN ERROR
+    >>> test(r"1 ⍲ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ⍲ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"1 2 3 ⍲ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ⍲ 'Goodbye'")
+    DOMAIN ERROR
+    """
+    pass
+
+# ------------------------------
+
 def     stringCompare():
     """
     >>> test(r"1 = 'Hello'")
@@ -319,9 +435,9 @@ def     stringCompare():
     >>> test(r'"H" ≠ 72')
     1
 
-    >>> test(r"'Hello' = 'Goodbye'")
+    >>> test(r"'Hello' = 'Goodbye'", True)
     LENGTH ERROR
-    >>> test(r"'Hello' ≠ 'Goodbye'")
+    >>> test(r"'Hello' ≠ 'Goodbye'", True)
     LENGTH ERROR
     """
     pass

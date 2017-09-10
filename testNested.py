@@ -312,6 +312,110 @@ def     pi_circular():
 
 # ------------------------------
 
+def     or_gcd():
+    """
+    >>> test(r"∨ 1 (0 1) 0")
+    VALENCE ERROR
+
+    >>> test(r"0 ∨ 1 (0 1) 0")
+    1 (0 1) 0
+    >>> test(r"1 (0 1) 0 ∨ 1")
+    1 (1 1) 1
+    >>> test(r"1 (0 1) 0 ∨ 1 (0 1) 0")
+    1 (0 1) 0
+
+    >>> test(r"1 (0 1) 0 ∨ (1 0) (1 0)", True)
+    LENGTH ERROR
+    >>> test(r"1 (0 1) 0 ∨ 1 (0 0 1) 0", True)
+    LENGTH ERROR
+
+    >>> test(r"1 (0 1) 0 ∨ (1 0) 0 (1 0)")
+    (1 1) (0 1) (1 0)
+    >>> test(r"1 ('Hello') 0 ∨ (1 0) 'Hello' (1 0)", True)
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     and_lcm():
+    """
+    >>> test(r"∧ 1 (0 1) 0")
+    VALENCE ERROR
+
+    >>> test(r"0 ∧ 1 (0 1) 0")
+    0 (0 0) 0
+    >>> test(r"1 (0 1) 0 ∧ 1")
+    1 (0 1) 0
+    >>> test(r"1 (0 1) 0 ∧ 1 (0 1) 0")
+    1 (0 1) 0
+
+    >>> test(r"1 (0 1) 0 ∧ (1 0) (1 0)", True)
+    LENGTH ERROR
+    >>> test(r"1 (0 1) 0 ∧ 1 (0 0 1) 0", True)
+    LENGTH ERROR
+
+    >>> test(r"1 (0 1) 0 ∧ (1 0) 0 (1 0)")
+    (1 0) (0 0) (0 0)
+    >>> test(r"1 ('Hello') 0 ∧ (1 0) 'Hello' (1 0)", True)
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     nor():
+    """
+    >>> test(r"⍱ 1 (0 1) 0")
+    VALENCE ERROR
+
+    >>> test(r"0 ⍱ 1 (0 1) 0")
+    0 (1 0) 1
+    >>> test(r"1 (0 1) 0 ⍱ 1")
+    0 (0 0) 0
+    >>> test(r"1 (0 1) 0 ⍱ 1 (0 1) 0")
+    0 (1 0) 1
+
+    >>> test(r"1 (0 1) 0 ⍱ (1 0) (1 0)", True)
+    LENGTH ERROR
+    >>> test(r"1 (0 1) 0 ⍱ 1 (0 0 1) 0", True)
+    LENGTH ERROR
+
+    >>> test(r"1 (0 1) 0 ⍱ (1 0) 0 (1 0)")
+    (0 0) (1 0) (0 1)
+    >>> test(r"1 ('Hello') 0 ⍱ (1 0) 'Hello' (1 0)", True)
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     nand():
+    """
+    >>> test(r"⍲ 1 (0 1) 0")
+    VALENCE ERROR
+
+    >>> test(r"0 ⍲ 1 (0 1) 0")
+    1 (1 1) 1
+    >>> test(r"1 (0 1) 0 ⍲ 1")
+    0 (1 0) 1
+    >>> test(r"1 (0 1) 0 ⍲ 1 (0 1) 0")
+    0 (1 0) 1
+
+    >>> test(r"1 (0 1) 0 ⍲ (1 0) (1 0)", True)
+    LENGTH ERROR
+    >>> test(r"1 (0 1) 0 ⍲ 1 (0 0 1) 0", True)
+    LENGTH ERROR
+
+    >>> test(r"1 (0 1) 0 ⍲ (1 0) 0 (1 0)")
+    (0 1) (1 1) (1 1)
+    >>> test(r"1 ('Hello') 0 ⍲ (1 0) 'Hello' (1 0)", True)
+    DOMAIN ERROR
+    """
+    pass
+
+# ------------------------------
+
 if __name__ == "__main__":
     preamble()
     import doctest

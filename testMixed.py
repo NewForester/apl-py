@@ -348,6 +348,142 @@ def     pi_circular():
 
 # ------------------------------
 
+def     or_gcd():
+    """
+    >>> test(r"M ← 'abc', 4 5 6")
+    abc 4 5 6
+
+    >>> test(r"∧ M")
+    VALENCE ERROR
+
+    >>> test(r"M ∧ M")
+    DOMAIN ERROR
+    >>> test(r"1.2 ∧ M")
+    DOMAIN ERROR
+    >>> test(r"M ∧ 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ∧ M")
+    DOMAIN ERROR
+    >>> test(r"M ∧ 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"('abc', 1 2 3) ∧ 'abc', 4 5 6")
+    DOMAIN ERROR
+    >>> test(r"('abc', 4 5 6) ∧ 'pqr', 4 5 6")
+    DOMAIN ERROR
+    >>> test(r"('abc', 4 5 6) ∧ 4 5 6, 'abc'")
+    DOMAIN ERROR
+
+    >>> test(r"M ∧ ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     and_lcm():
+    """
+    >>> test(r"M ← 'abc', 4 5 6")
+    abc 4 5 6
+
+    >>> test(r"∧ M")
+    VALENCE ERROR
+
+    >>> test(r"M ∧ M")
+    DOMAIN ERROR
+    >>> test(r"1.2 ∧ M")
+    DOMAIN ERROR
+    >>> test(r"M ∧ 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ∧ M")
+    DOMAIN ERROR
+    >>> test(r"M ∧ 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"('abc', 1 2 3) ∧ 'abc', 4 5 6")
+    DOMAIN ERROR
+    >>> test(r"('abc', 4 5 6) ∧ 'pqr', 4 5 6")
+    DOMAIN ERROR
+    >>> test(r"('abc', 4 5 6) ∧ 4 5 6, 'abc'")
+    DOMAIN ERROR
+
+    >>> test(r"M ∧ ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     nor():
+    """
+    >>> test(r"M ← 'abc', 4 5 6")
+    abc 4 5 6
+
+    >>> test(r"⍱ M")
+    VALENCE ERROR
+
+    >>> test(r"M ⍱ M")
+    DOMAIN ERROR
+    >>> test(r"1.2 ⍱ M")
+    DOMAIN ERROR
+    >>> test(r"M ⍱ 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ⍱ M")
+    DOMAIN ERROR
+    >>> test(r"M ⍱ 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"('abc', 1 2 3) ⍱ 'abc', 4 5 6")
+    DOMAIN ERROR
+    >>> test(r"('abc', 4 5 6) ⍱ 'pqr', 4 5 6")
+    DOMAIN ERROR
+    >>> test(r"('abc', 4 5 6) ⍱ 4 5 6, 'abc'")
+    DOMAIN ERROR
+
+    >>> test(r"M ⍱ ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     nand():
+    """
+    >>> test(r"M ← 'abc', 4 5 6")
+    abc 4 5 6
+
+    >>> test(r"⍲ M")
+    VALENCE ERROR
+
+    >>> test(r"M ⍲ M")
+    DOMAIN ERROR
+    >>> test(r"1.2 ⍲ M")
+    DOMAIN ERROR
+    >>> test(r"M ⍲ 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ⍲ M")
+    DOMAIN ERROR
+    >>> test(r"M ⍲ 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"('abc', 1 2 3) ⍲ 'abc', 4 5 6")
+    DOMAIN ERROR
+    >>> test(r"('abc', 4 5 6) ⍲ 'pqr', 4 5 6")
+    DOMAIN ERROR
+    >>> test(r"('abc', 4 5 6) ⍲ 4 5 6, 'abc'")
+    DOMAIN ERROR
+
+    >>> test(r"M ⍲ ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# ------------------------------
+
 if __name__ == "__main__":
     preamble()
     import doctest
