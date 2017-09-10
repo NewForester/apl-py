@@ -19,6 +19,7 @@
 """
 
 from test.base import preamble, testResult as test
+from test.base import saveIndexOrigin, setIndexOrigin, restoreIndexOrigin
 
 # ------------------------------
 
@@ -479,6 +480,220 @@ def     nand():
 
     >>> test(r"M ⍲ ⍳⍴M")
     DOMAIN ERROR
+    """
+    pass
+
+# ------------------------------
+
+def     lt():
+    """
+    >>> test(r"M ← 'abc', 4 5 6")
+    abc 4 5 6
+
+    >>> test(r"< M")
+    VALENCE ERROR
+
+    >>> test(r"M < M")
+    DOMAIN ERROR
+    >>> test(r"1.2 < M")
+    DOMAIN ERROR
+    >>> test(r"M < 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 < M")
+    DOMAIN ERROR
+    >>> test(r"M < 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"('abc', 1 2 3) < 'abc', 4 5 6")
+    DOMAIN ERROR
+    >>> test(r"('abc', 4 5 6) < 'pqr', 4 5 6")
+    DOMAIN ERROR
+    >>> test(r"('abc', 4 5 6) < 4 5 6, 'abc'")
+    DOMAIN ERROR
+
+    >>> test(r"M < ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     le():
+    """
+    >>> test(r"M ← 'abc', 4 5 6")
+    abc 4 5 6
+
+    >>> test(r"≤ M")
+    VALENCE ERROR
+
+    >>> test(r"M ≤ M")
+    DOMAIN ERROR
+    >>> test(r"1.2 ≤ M")
+    DOMAIN ERROR
+    >>> test(r"M ≤ 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ≤ M")
+    DOMAIN ERROR
+    >>> test(r"M ≤ 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"('abc', 1 2 3) ≤ 'abc', 4 5 6")
+    DOMAIN ERROR
+    >>> test(r"('abc', 4 5 6) ≤ 'pqr', 4 5 6")
+    DOMAIN ERROR
+    >>> test(r"('abc', 4 5 6) ≤ 4 5 6, 'abc'")
+    DOMAIN ERROR
+
+    >>> test(r"M ≤ ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     ge():
+    """
+    >>> test(r"M ← 'abc', 4 5 6")
+    abc 4 5 6
+
+    >>> test(r"≥ M")
+    VALENCE ERROR
+
+    >>> test(r"M ≥ M")
+    DOMAIN ERROR
+    >>> test(r"1.2 ≥ M")
+    DOMAIN ERROR
+    >>> test(r"M ≥ 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ≥ M")
+    DOMAIN ERROR
+    >>> test(r"M ≥ 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"('abc', 1 2 3) ≥ 'abc', 4 5 6")
+    DOMAIN ERROR
+    >>> test(r"('abc', 4 5 6) ≥ 'pqr', 4 5 6")
+    DOMAIN ERROR
+    >>> test(r"('abc', 4 5 6) ≥ 4 5 6, 'abc'")
+    DOMAIN ERROR
+
+    >>> test(r"M ≥ ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     gt():
+    """
+    >>> test(r"M ← 'abc', 4 5 6")
+    abc 4 5 6
+
+    >>> test(r"> M")
+    VALENCE ERROR
+
+    >>> test(r"M > M")
+    DOMAIN ERROR
+    >>> test(r"1.2 > M")
+    DOMAIN ERROR
+    >>> test(r"M > 1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 > M")
+    DOMAIN ERROR
+    >>> test(r"M > 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"('abc', 1 2 3) > 'abc', 4 5 6")
+    DOMAIN ERROR
+    >>> test(r"('abc', 4 5 6) > 'pqr', 4 5 6")
+    DOMAIN ERROR
+    >>> test(r"('abc', 4 5 6) > 4 5 6, 'abc'")
+    DOMAIN ERROR
+
+    >>> test(r"M > ⍳⍴M")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     eq():
+    """
+    >>> test(r"M ← 'abc', 4 5 6")
+    abc 4 5 6
+
+    >>> test(r"= M")
+    VALENCE ERROR
+
+    >>> test(r"M = M")
+    1 1 1 1 1 1
+    >>> test(r"1.2 = M")
+    0 0 0 0 0 0
+    >>> test(r"M = 1.2")
+    0 0 0 0 0 0
+
+    >>> test(r"1 2 3 = M", True)
+    LENGTH ERROR
+    >>> test(r"M = 1 2 3", True)
+    LENGTH ERROR
+
+    >>> test(r"('abc', 1 2 3) = 'abc', 4 5 6")
+    1 1 1 0 0 0
+    >>> test(r"('abc', 4 5 6) = 'pqr', 4 5 6")
+    0 0 0 1 1 1
+    >>> test(r"('abc', 4 5 6) = 4 5 6, 'abc'")
+    0 0 0 0 0 0
+
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"M = ⍳⍴M")
+    0 0 0 1 1 1
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
+# --------------
+
+def     ne():
+    """
+    >>> test(r"M ← 'abc', 4 5 6")
+    abc 4 5 6
+
+    >>> test(r"≠ M")
+    VALENCE ERROR
+
+    >>> test(r"M ≠ M")
+    0 0 0 0 0 0
+    >>> test(r"1.2 ≠ M")
+    1 1 1 1 1 1
+    >>> test(r"M ≠ 1.2")
+    1 1 1 1 1 1
+
+    >>> test(r"1 2 3 ≠ M", True)
+    LENGTH ERROR
+    >>> test(r"M ≠ 1 2 3", True)
+    LENGTH ERROR
+
+    >>> test(r"('abc', 1 2 3) ≠ 'abc', 4 5 6")
+    0 0 0 1 1 1
+    >>> test(r"('abc', 4 5 6) ≠ 'pqr', 4 5 6")
+    1 1 1 0 0 0
+    >>> test(r"('abc', 4 5 6) ≠ 4 5 6, 'abc'")
+    1 1 1 1 1 1
+
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"M ≠ ⍳⍴M")
+    1 1 1 0 0 0
+
+    >>> restoreIndexOrigin(IO)
     """
     pass
 

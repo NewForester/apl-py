@@ -373,6 +373,132 @@ def     nand():
 
 # ------------------------------
 
+def     lt():
+    """
+    >>> test(r"< ⍬")
+    VALENCE ERROR
+
+    >>> test(r"⍬ < ⍬")
+    ⍬
+    >>> test(r"⍬ < 1.2")
+    ⍬
+    >>> test(r"1.2 < ⍬")
+    ⍬
+
+    >>> test(r"⍬ < 1 2 3")
+    LENGTH ERROR
+    >>> test(r"1 2 3 < ⍬")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
+def     le():
+    """
+    >>> test(r"≤ ⍬")
+    VALENCE ERROR
+
+    >>> test(r"⍬ ≤ ⍬")
+    ⍬
+    >>> test(r"⍬ ≤ 1.2")
+    ⍬
+    >>> test(r"1.2 ≤ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ≤ 1 2 3")
+    LENGTH ERROR
+    >>> test(r"1 2 3 ≤ ⍬")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
+def     ge():
+    """
+    >>> test(r"≥ ⍬")
+    VALENCE ERROR
+
+    >>> test(r"⍬ ≥ ⍬")
+    ⍬
+    >>> test(r"⍬ ≥ 1.2")
+    ⍬
+    >>> test(r"1.2 ≥ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ≥ 1 2 3")
+    LENGTH ERROR
+    >>> test(r"1 2 3 ≥ ⍬")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
+def     gt():
+    """
+    >>> test(r"> ⍬")
+    VALENCE ERROR
+
+    >>> test(r"⍬ > ⍬")
+    ⍬
+    >>> test(r"⍬ > 1.2")
+    ⍬
+    >>> test(r"1.2 > ⍬")
+    ⍬
+
+    >>> test(r"⍬ > 1 2 3")
+    LENGTH ERROR
+    >>> test(r"1 2 3 > ⍬")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
+def     eq():
+    """
+    >>> test(r"= ⍬")
+    VALENCE ERROR
+
+    >>> test(r"⍬ = ⍬")
+    ⍬
+    >>> test(r"⍬ = 1.2")
+    ⍬
+    >>> test(r"1.2 = ⍬")
+    ⍬
+
+    >>> test(r"⍬ = 1 2 3")
+    LENGTH ERROR
+    >>> test(r"1 2 3 = ⍬")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
+def     ne():
+    """
+    >>> test(r"≠ ⍬")
+    VALENCE ERROR
+
+    >>> test(r"⍬ ≠ ⍬")
+    ⍬
+    >>> test(r"⍬ ≠ 1.2")
+    ⍬
+    >>> test(r"1.2 ≠ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ≠ 1 2 3")
+    LENGTH ERROR
+    >>> test(r"1 2 3 ≠ ⍬")
+    LENGTH ERROR
+    """
+    pass
+
+# ------------------------------
+
 def     zildeIota():
     """
     zilde with iota (⍳)

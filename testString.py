@@ -418,31 +418,193 @@ def     nand():
 
 # ------------------------------
 
-def     stringCompare():
+def     lt():
     """
-    >>> test(r"1 = 'Hello'")
-    0 0 0 0 0
-    >>> test(r"1 ≠ 'Hello'")
-    1 1 1 1 1
+    >>> test(r"< 'Hello'")
+    VALENCE ERROR
 
-    >>> test(r"'Hello' = 'Hello'")
-    1 1 1 1 1
-    >>> test(r"'hello' ≠ 'Hello'")
-    1 0 0 0 0
+    >>> test(r"'H' < 72")
+    DOMAIN ERROR
+    >>> test(r'"H" < 72')
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' < 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' < 1")
+    DOMAIN ERROR
+    >>> test(r"1 < 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' < 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"1 2 3 < 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' < 'Goodbye'")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     le():
+    """
+    >>> test(r"≤ 'Hello'")
+    VALENCE ERROR
+
+    >>> test(r"'H' ≤ 72")
+    DOMAIN ERROR
+    >>> test(r'"H" ≤ 72')
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ≤ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ≤ 1")
+    DOMAIN ERROR
+    >>> test(r"1 ≤ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ≤ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"1 2 3 ≤ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ≤ 'Goodbye'")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     ge():
+    """
+    >>> test(r"≥ 'Hello'")
+    VALENCE ERROR
+
+    >>> test(r"'H' ≥ 72")
+    DOMAIN ERROR
+    >>> test(r'"H" ≥ 72')
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ≥ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ≥ 1")
+    DOMAIN ERROR
+    >>> test(r"1 ≥ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ≥ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"1 2 3 ≥ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' ≥ 'Goodbye'")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     gt():
+    """
+    >>> test(r"> 'Hello'")
+    VALENCE ERROR
+
+    >>> test(r"'H' > 72")
+    DOMAIN ERROR
+    >>> test(r'"H" > 72')
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' > 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' > 1")
+    DOMAIN ERROR
+    >>> test(r"1 > 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' > 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"1 2 3 > 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'Hello' > 'Goodbye'")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     eq():
+    """
+    >>> test(r"= 'Hello'")
+    VALENCE ERROR
 
     >>> test(r"'H' = 72")
     0
-    >>> test(r'"H" ≠ 72')
+    >>> test(r"⍴ 'H' = 72")
+    ⍬
+    >>> test(r'"H" = 72')
+    0
+    >>> test(r'⍴ "H" = 72')
     1
 
-    >>> test(r"'Hello' = 'Goodbye'", True)
+    >>> test(r"'Hello' = 'Hello'")
+    1 1 1 1 1
+    >>> test(r"'Hello' = 1")
+    0 0 0 0 0
+    >>> test(r"1 = 'Hello'")
+    0 0 0 0 0
+
+    >>> test(r"'Hello' = 'hello'")
+    0 1 1 1 1
+
+    >>> test(r"'Hello' = 1 2 3", True)
     LENGTH ERROR
-    >>> test(r"'Hello' ≠ 'Goodbye'", True)
+    >>> test(r"1 2 3 = 'Hello'", True)
+    LENGTH ERROR
+
+    >>> test(r"'Hello' = 'Goodbye'", True)
     LENGTH ERROR
     """
     pass
 
 # --------------
+
+def     ne():
+    """
+    >>> test(r"≠ 'Hello'")
+    VALENCE ERROR
+
+    >>> test(r"'H' ≠ 72")
+    1
+    >>> test(r"⍴ 'H' ≠ 72")
+    ⍬
+    >>> test(r'"H" ≠ 72')
+    1
+    >>> test(r'⍴ "H" ≠ 72')
+    1
+
+    >>> test(r"'Hello' ≠ 'Hello'")
+    0 0 0 0 0
+    >>> test(r"'Hello' ≠ 1")
+    1 1 1 1 1
+    >>> test(r"1 ≠ 'Hello'")
+    1 1 1 1 1
+
+    >>> test(r"'Hello' ≠ 'hello'")
+    1 0 0 0 0
+
+    >>> test(r"'Hello' ≠ 1 2 3", True)
+    LENGTH ERROR
+    >>> test(r"1 2 3 ≠ 'Hello'", True)
+    LENGTH ERROR
+
+    >>> test(r"'Hello' ≠ 'Goodbye'", True)
+    LENGTH ERROR
+    """
+    pass
+
+# ------------------------------
 
 def     stringMatch():
     """

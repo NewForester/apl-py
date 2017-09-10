@@ -139,19 +139,6 @@ def     valenceError():
     """
     symbols for which there is a dyadic but no monadic function
 
-    >>> test(r"< 0")
-    VALENCE ERROR
-    >>> test(r"≤ 0")
-    VALENCE ERROR
-    >>> test(r"= 0")
-    VALENCE ERROR
-    >>> test(r"≥ 0")
-    VALENCE ERROR
-    >>> test(r"> 0")
-    VALENCE ERROR
-    >>> test(r"≠ 0")
-    VALENCE ERROR
-
     >>> test(r"⍪ 0")
     VALENCE ERROR
     >>> test(r"∩ 0")
@@ -341,6 +328,60 @@ def     nor():
 def     nand():
     """
     >>> test(r"⍲ 1")
+    VALENCE ERROR
+    """
+    pass
+
+# ------------------------------
+
+def     lt():
+    """
+    >>> test(r"< 1")
+    VALENCE ERROR
+    """
+    pass
+
+# --------------
+
+def     le():
+    """
+    >>> test(r"≤ 1")
+    VALENCE ERROR
+    """
+    pass
+
+# --------------
+
+def     ge():
+    """
+    >>> test(r"≥ 1")
+    VALENCE ERROR
+    """
+    pass
+
+# --------------
+
+def     gt():
+    """
+    >>> test(r"> 1")
+    VALENCE ERROR
+    """
+    pass
+
+# --------------
+
+def     eq():
+    """
+    >>> test(r"= 1")
+    VALENCE ERROR
+    """
+    pass
+
+# --------------
+
+def     ne():
+    """
+    >>> test(r"≠ 1")
     VALENCE ERROR
     """
     pass

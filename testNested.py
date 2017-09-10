@@ -416,6 +416,162 @@ def     nand():
 
 # ------------------------------
 
+def     lt():
+    """
+    >>> test(r"< 1 (2 3) 4")
+    VALENCE ERROR
+
+    >>> test(r"2 < 1 (2 3) 4")
+    0 (0 1) 1
+    >>> test(r"1 (2 3) 4 < 3")
+    1 (1 0) 0
+    >>> test(r"1 (2 3) 4 < 5 (2 3) 8")
+    1 (0 0) 1
+
+    >>> test(r"1 (2 3) 4 < (1 2) (3 4)", True)
+    LENGTH ERROR
+    >>> test(r"1 (2 3) 4 < 1 (2 0 3) 4", True)
+    LENGTH ERROR
+
+    >>> test(r"5 (2 3) 8 < (5 6) 0 (7 8)")
+    (0 1) (0 0) (0 0)
+    >>> test(r"5 ('Hello') 8 < (5 6) 'Hello' (7 8)", True)
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     le():
+    """
+    >>> test(r"≤ 1 (2 3) 4")
+    VALENCE ERROR
+
+    >>> test(r"2 ≤ 1 (2 3) 4")
+    0 (1 1) 1
+    >>> test(r"1 (2 3) 4 ≤ 3")
+    1 (1 1) 0
+    >>> test(r"1 (2 3) 4 ≤ 5 (2 3) 8")
+    1 (1 1) 1
+
+    >>> test(r"1 (2 3) 4 ≤ (1 2) (3 4)", True)
+    LENGTH ERROR
+    >>> test(r"1 (2 3) 4 ≤ 1 (2 0 3) 4", True)
+    LENGTH ERROR
+
+    >>> test(r"5 (2 3) 8 ≤ (5 6) 0 (7 8)")
+    (1 1) (0 0) (0 1)
+    >>> test(r"5 ('Hello') 8 ≤ (5 6) 'Hello' (7 8)", True)
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     ge():
+    """
+    >>> test(r"≥ 1 (2 3) 4")
+    VALENCE ERROR
+
+    >>> test(r"2 ≥ 1 (2 3) 4")
+    1 (1 0) 0
+    >>> test(r"1 (2 3) 4 ≥ 3")
+    0 (0 1) 1
+    >>> test(r"1 (2 3) 4 ≥ 5 (2 3) 8")
+    0 (1 1) 0
+
+    >>> test(r"1 (2 3) 4 ≥ (1 2) (3 4)", True)
+    LENGTH ERROR
+    >>> test(r"1 (2 3) 4 ≥ 1 (2 0 3) 4", True)
+    LENGTH ERROR
+
+    >>> test(r"5 (2 3) 8 ≥ (5 6) 0 (7 8)")
+    (1 0) (1 1) (1 1)
+    >>> test(r"5 ('Hello') 8 ≥ (5 6) 'Hello' (7 8)", True)
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     gt():
+    """
+    >>> test(r"> 1 (2 3) 4")
+    VALENCE ERROR
+
+    >>> test(r"2 > 1 (2 3) 4")
+    1 (0 0) 0
+    >>> test(r"1 (2 3) 4 > 3")
+    0 (0 0) 1
+    >>> test(r"1 (2 3) 4 > 5 (2 3) 8")
+    0 (0 0) 0
+
+    >>> test(r"1 (2 3) 4 > (1 2) (3 4)", True)
+    LENGTH ERROR
+    >>> test(r"1 (2 3) 4 > 1 (2 0 3) 4", True)
+    LENGTH ERROR
+
+    >>> test(r"5 (2 3) 8 > (5 6) 0 (7 8)")
+    (0 0) (1 1) (1 0)
+    >>> test(r"5 ('Hello') 8 > (5 6) 'Hello' (7 8)", True)
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
+def     eq():
+    """
+    >>> test(r"= 1 (2 3) 4")
+    VALENCE ERROR
+
+    >>> test(r"2 = 1 (2 3) 4")
+    0 (1 0) 0
+    >>> test(r"1 (2 3) 4 = 3")
+    0 (0 1) 0
+    >>> test(r"1 (2 3) 4 = 5 (2 3) 8")
+    0 (1 1) 0
+
+    >>> test(r"1 (2 3) 4 = (1 2) (3 4)", True)
+    LENGTH ERROR
+    >>> test(r"1 (2 3) 4 = 1 (2 0 3) 4", True)
+    LENGTH ERROR
+
+    >>> test(r"5 (2 3) 8 = (5 6) 0 (7 8)")
+    (1 0) (0 0) (0 1)
+    >>> test(r"5 ('Hello') 8 = (5 6) 'Hello' (7 8)")
+    (1 0) (1 1 1 1 1) (0 1)
+    """
+    pass
+
+# --------------
+
+def     ne():
+    """
+    >>> test(r"≠ 1 (2 3) 4")
+    VALENCE ERROR
+
+    >>> test(r"2 ≠ 1 (2 3) 4")
+    1 (0 1) 1
+    >>> test(r"1 (2 3) 4 ≠ 3")
+    1 (1 0) 1
+    >>> test(r"1 (2 3) 4 ≠ 5 (2 3) 8")
+    1 (0 0) 1
+
+    >>> test(r"1 (2 3) 4 ≠ (1 2) (3 4)", True)
+    LENGTH ERROR
+    >>> test(r"1 (2 3) 4 ≠ 1 (2 0 3) 4", True)
+    LENGTH ERROR
+
+    >>> test(r"5 (2 3) 8 ≠ (5 6) 0 (7 8)")
+    (0 1) (1 1) (1 0)
+    >>> test(r"5 ('Hello') 8 ≠ (5 6) 'Hello' (7 8)")
+    (0 1) (0 0 0 0 0) (1 0)
+    """
+    pass
+
+# ------------------------------
+
 if __name__ == "__main__":
     preamble()
     import doctest
