@@ -56,20 +56,20 @@ _DyadicFunctions = {
     '○':        lambda A, B: mapper.maths(dyadic.circular, A, B),
 
     # Logical
-    '∨':        lambda A, B: ss2s(orGCD, A, B, True),
-    '∧':        lambda A, B: ss2s(andLCM, A, B, True),
-    '⍱':        lambda A, B: ss2s(nor, A, B, True),
-    '⍲':        lambda A, B: ss2s(nand, A, B, True),
+    '∨':        lambda A, B: mapper.maths(dyadic.orGCD, A, B),
+    '∧':        lambda A, B: mapper.maths(dyadic.andLCM, A, B),
+    '⍱':        lambda A, B: mapper.maths(dyadic.nor, A, B),
+    '⍲':        lambda A, B: mapper.maths(dyadic.nand, A, B),
 
     # Comparison
-    '<':        lambda A, B: ss2s(lt, A, B, True),
-    '≤':        lambda A, B: ss2s(le, A, B, True),
-    '≥':        lambda A, B: ss2s(ge, A, B, True),
-    '>':        lambda A, B: ss2s(gt, A, B, True),
-    '=':        lambda A, B: ss2s(eq, A, B, False),
-    '≠':        lambda A, B: ss2s(ne, A, B, False),
-    '≡':        lambda A, B: vv_match(ne, A, B, False),
-    '≢':        lambda A, B: vv_match(ne, A, B, True),
+    '<':        lambda A, B: mapper.maths(dyadic.lt, A, B),
+    '≤':        lambda A, B: mapper.maths(dyadic.le, A, B),
+    '≥':        lambda A, B: mapper.maths(dyadic.ge, A, B),
+    '>':        lambda A, B: mapper.maths(dyadic.gt, A, B),
+    '=':        lambda A, B: mapper.maths(dyadic.eq, A, B),
+    '≠':        lambda A, B: mapper.maths(dyadic.ne, A, B),
+    '≡':        lambda A, B: mapper.match(dyadic.eq, A, B),
+    '≢':        lambda A, B: mapper.noMatch(dyadic.eq, A, B),
 
     # Structural (aka manipulative)
     '⍴':        lambda A, B: sv_rho(reshape, A, B),

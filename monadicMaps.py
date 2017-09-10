@@ -40,23 +40,41 @@ def     maths(Fn, B):
     assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
-# OLD IMPLEMENTATIONS TO BE REPLACED
-# ------------------------------
 
-def     s2s(Fn, B):
+def     depth(Fn, B):
     """
-    evaluate a numeric monadic function that, given a scalar argument, returns a scalar
+    implement monadic ≡
     """
-    assertNumeric(B)
-
     if B.isScalar():
-        return aplQuantity(Fn(B.python()), None)
+        Rpy = Fn(B.vectorToPy())
+
+        Rpy += 1 if Rpy != 0 else 0
 
     if B.isVector():
-        return aplQuantity(map(Fn, B), B.dimension())
+        Rpy = Fn(B.vectorToPy())
 
-    aplError("RANK ERROR")
+        Rpy += 1
 
+    assertNotArray(B, "WIP - RANK ERROR")
+
+    return makeScalar(Rpy)
+
+# ------------------------------
+
+def     tally(_, B):
+    """
+    implement monadic ≢
+    """
+    if B.isScalar():
+        return makeScalar(1)
+
+    if B.isVector():
+        return makeScalar(B.tally())
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
+# OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
 def     s2v(Fn, B):
@@ -150,50 +168,5 @@ def     s_comma(_, B):
         return B
 
     aplError("RANK ERROR")
-
-# ------------------------------
-
-def     v_nest(B):
-    """
-    depth of nesting in B
-    """
-    Rpy = 0
-
-    if B.isScalar():
-        Rpy = 0
-
-    elif B.isVector():
-        Rpy = 1
-        for X in B:
-            if isinstance(X, aplQuantity):
-                Rpy = max (Rpy, 1 + v_nest(X).python())
-                break
-
-    else:
-        aplError("RANK ERROR")
-
-    return aplQuantity(Rpy, None)
-
-# ------------------------------
-
-def     v_tally(B):
-    """
-    number of elements in last axis
-    """
-    Rpy = 0
-
-    if B.isScalar():
-        Rpy = 1
-
-    elif B.isString():
-        Rpy = B.dimension()
-
-    elif B.isVector():
-        Rpy = B.dimension()
-
-    else:
-        aplError("RANK ERROR")
-
-    return aplQuantity(Rpy, None)
 
 # EOF

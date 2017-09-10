@@ -67,31 +67,51 @@ def     deal(Fn, A, B):
     return makeVector(Fn(Apy, B.scalarToPy()), Apy)
 
 # ------------------------------
-# OLD IMPLEMENTATIONS TO BE REPLACED
+
+def     _matchMap(Fn, A, B):
+    """
+    the recursive map for dyadic ≡ and ≢
+
+    returns a Boolean
+    """
+    if A.padFill() != B.padFill():
+        return False
+
+    elif A.isScalar():
+        if B.isScalar():
+            return bool(Fn(A.scalarToPy(), B.scalarToPy()))
+
+    elif A.isVector():
+        if B.isVector():
+            try:
+                filter(lambda X: not X, iterator.match(_matchMap, Fn, A, B)).__next__()
+
+            except StopIteration:
+                return True
+
+    else:
+        assertNotArray(A, "WIP - RANK ERROR")
+
+    return False
+
+# --------------
+
+def     match(Fn, A, B):
+    """
+    recursive implementation of dyadic ≢
+    """
+    return makeScalar(int(_matchMap(Fn, A, B)))
+
+# --------------
+
+def     noMatch(Fn, A, B):
+    """
+    recursive implementation of dyadic ≢
+    """
+    return makeScalar(int(not _matchMap(Fn, A, B)))
+
 # ------------------------------
-
-def     ss2s(Fn, A, B, numbersOnly):
-    """
-    evaluate a dyadic function that, given scalar arguments, returns a scalar
-    """
-    if numbersOnly:
-        assertNumeric(A)
-        assertNumeric(B)
-
-    if A.isScalar() and B.isScalar():
-        return aplQuantity(Fn(A.python(), B.python()), None)
-
-    if A.isScalar():
-        return aplQuantity(map(Fn, A.scalarIterator(), B), B.dimension())
-
-    if B.isScalar():
-        return aplQuantity(map(Fn, A, B.scalarIterator()), A.dimension())
-
-    if A.dimension() == B.dimension():
-        return aplQuantity(map(Fn, A, B), B.dimension())
-
-    aplError("LENGTH ERROR")
-
+# OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
 def     vv2v(Fn, A, B):
@@ -167,9 +187,10 @@ def     vv_comma(Fn, A, B):
     Apy = A.vectorToPy()
     Bpy = B.vectorToPy()
 
+    prototype = A.prototype()
     Rpy = Fn(Apy, Bpy)
 
-    return aplQuantity(Rpy, len(Rpy), A.prototype())
+    return aplQuantity(Rpy, len(Rpy), prototype)
 
 # ------------------------------
 
@@ -264,31 +285,6 @@ def     ce2v(Fn, A, B):
         Rpy = Fn(A.vectorToPy(), B.vectorToPy(), 0)
 
     return aplQuantity(Rpy, len(Rpy), B.prototype())
-
-# ------------------------------
-
-def     vv_match(Fn, A, B, noMatch):
-    """
-    match A and B
-    """
-    Rpy = 0
-
-    if A.isString() != B.isString():
-        Rpy = False
-
-    elif A.dimension() != B.dimension():
-        Rpy = False
-
-    elif A.isScalar():
-        Rpy = A.scalarToPy() == B.scalarToPy()
-
-    elif A.isVector():
-        Rpy = not next(filter(None, ss2s(Fn, A, B, False)), False)
-
-    else:
-        aplError("RANK ERROR")
-
-    return aplQuantity(int(Rpy ^ noMatch), None)
 
 # ------------------------------
 

@@ -16,7 +16,7 @@ import operator
 from systemVariables import confirmInteger, indexOrigin
 
 from aplQuantity import aplQuantity, makeScalar, scalarIterator
-from aplError import aplError, assertError
+from aplError import aplError, aplException, assertError
 
 # ------------------------------
 
@@ -79,6 +79,39 @@ class   maths(object):
             return self._fn(X, Y)
         except TypeError:
             assertError("DOMAIN ERROR")
+
+# ------------------------------
+
+class   match(object):
+    """
+    the recursive iterator for dyadic ≡
+    """
+    def __init__(self, Map, Fn, A, B):
+        self._map = Map
+        self._fn = Fn
+        self._A = A.__iter__()
+        self._B = B.__iter__()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        try:
+            X, Y = _nextPair(self._A, self._B)
+        except aplException as error:
+            if error.message == "LENGTH ERROR":
+                return False
+
+        if isinstance(X, aplQuantity) and isinstance(Y, aplQuantity):
+            return self._map(self._fn, X, Y)
+
+        if isinstance(X, aplQuantity):
+            return False
+
+        if isinstance(Y, aplQuantity):
+            return False
+
+        return self._fn(X, Y)
 
 # ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED

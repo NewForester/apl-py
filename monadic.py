@@ -57,7 +57,7 @@ _MonadicFunctions = {
     '○':        lambda B: mapper.maths(monadic.pi, B),
 
     # Logical
-    '~':        lambda B: s2s(logicalNegation, B),
+    '~':        lambda B: mapper.maths(monadic.logicalNegation, B),
     '∨':        lambda B: aplError("VALENCE ERROR"),
     '∧':        lambda B: aplError("VALENCE ERROR"),
     '⍱':        lambda B: aplError("VALENCE ERROR"),
@@ -73,8 +73,8 @@ _MonadicFunctions = {
 
     # Structural (aka manipulative)
     '⍳':        lambda B: s2v(iota, B),
-    '≡':        lambda B: v_nest(B),
-    '≢':        lambda B: v_tally(B),
+    '≡':        lambda B: mapper.depth(iterator.depth, B),
+    '≢':        lambda B: mapper.tally(None, B),
     '⍴':        lambda B: s_rho(None, B),
     ',':        lambda B: s_comma(None, B),
     '⍪':        lambda B: aplError("VALENCE ERROR"),

@@ -11,6 +11,8 @@
     module are under review.
 """
 
+from functools import reduce
+
 from systemVariables import confirmInteger, indexOrigin
 
 from aplQuantity import aplQuantity
@@ -40,6 +42,15 @@ class   maths(object):
             return self._fn(Y)
         except TypeError:
             assertError("DOMAIN ERROR")
+
+# ------------------------------
+
+def     depth(B):
+    """
+    implement monadic ≡ recursively
+    """
+    return reduce(
+        lambda A, Y: max(A, depth(Y.vectorToPy()) + 1 if isinstance(Y, aplQuantity) else 0), B, 0)
 
 # ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
