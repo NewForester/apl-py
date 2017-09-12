@@ -75,7 +75,7 @@ _MonadicFunctions = {
     '⍳':        lambda B: s2v(iota, B),
     '≡':        lambda B: mapper.depth(iterator.depth, B),
     '≢':        lambda B: mapper.tally(None, B),
-    '⍴':        lambda B: s_rho(None, B),
+    '⍴':        lambda B: mapper.rho(None, B),
     ',':        lambda B: s_comma(None, B),
     '⍪':        lambda B: aplError("VALENCE ERROR"),
     '∊':        _toBeImplemented,       # enlist - as comma but also nested arrays

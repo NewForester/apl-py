@@ -18,7 +18,7 @@ import dyadicIterators as iterator
 
 from systemVariables import confirmInteger
 
-from aplQuantity import aplQuantity, makeScalar, makeVector
+from aplQuantity import aplQuantity, makeScalar, makeVector, makeEmptyVector, scalarIterator
 from aplError import aplError, assertTrue, assertNumeric, assertNotArray, assertScalarLike
 
 # ------------------------------
@@ -111,6 +111,34 @@ def     noMatch(Fn, A, B):
     return makeScalar(int(not _matchMap(Fn, A, B)))
 
 # ------------------------------
+
+def     reshape(Fn, A, B):
+    """
+    implement dyadic ⍴
+    """
+    assertNotArray(A)
+
+    if B.isVectorLike():
+        if A.isEmptyVector():
+            Apy = 1
+
+        else:
+            assertScalarLike(A, "WIP - LENGTH ERROR")
+
+            Apy = confirmInteger(A.scalarToPy())
+
+        assertTrue(Apy >= 0, "DOMAIN ERROR")
+
+        if Apy == 0:
+            return makeEmptyVector(B.prototype())
+
+        Bpy = B.promoteScalarToVectorPy(B.isEmptyVector())
+
+        return makeVector(Fn(Apy, Bpy), Apy, B.prototype())
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -144,39 +172,6 @@ def     vv2s(Fn, A, B):
         return aplQuantity(Rpy, B.dimension())
 
     aplError("RANK ERROR")
-
-# ------------------------------
-
-def     sv_rho(Fn, A, B):
-    """
-    evaluate a dyadic function that may take a scalar/vector and a vector and return a vector
-
-    well, this is for ⍴ and probably will not work for anything else
-    """
-    assertNumeric(A)
-
-    if A.dimension() == 0:
-        dimension = None
-
-        if B.dimension() == 0:
-            Rpy = 0
-        else:
-            Rpy = B.vectorToPy()[0]
-
-    else:
-        dimension = confirmInteger(A.scalarToPy())
-
-        if dimension == 0:
-            return aplQuantity([], 0, B.prototype())
-
-        if B.dimension() != 0:
-            Rpy = Fn(dimension, B.vectorToPy())
-        elif B.isString():
-            Rpy = Fn(dimension, ' ')
-        else:
-            Rpy = Fn(dimension, [0])
-
-    return aplQuantity(Rpy, dimension, B.prototype())
 
 # ------------------------------
 

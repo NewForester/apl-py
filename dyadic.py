@@ -72,7 +72,7 @@ _DyadicFunctions = {
     '≢':        lambda A, B: mapper.noMatch(dyadic.eq, A, B),
 
     # Structural (aka manipulative)
-    '⍴':        lambda A, B: sv_rho(reshape, A, B),
+    '⍴':        lambda A, B: mapper.reshape(iterator.reshape, A, B),
     ',':        lambda A, B: vv_comma(concatenate, A, B),
     '⍪':        lambda A, B: vv_comma(concatenate, A, B),
     '⌽':        lambda A, B: sv2vr(rotateLast, A, B),

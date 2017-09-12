@@ -18,7 +18,7 @@ import monadicIterators as iterator
 
 from systemVariables import confirmInteger
 
-from aplQuantity import aplQuantity, makeScalar, makeVector
+from aplQuantity import aplQuantity, makeScalar, makeVector, makeEmptyVector
 from aplError import aplError, assertNumeric
 from aplError import aplError, assertNumeric, assertNotArray
 
@@ -74,6 +74,20 @@ def     tally(_, B):
     assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
+
+def     rho(_, B):
+    """
+    implement monadic ⍴
+    """
+    if B.isScalar():
+        return makeEmptyVector()
+
+    if B.isVector():
+        return makeVector((B.tally(),), 1)
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -85,7 +99,7 @@ def     s2v(Fn, B):
 
     Bpy = confirmInteger(B.scalarToPy())
 
-    return aplQuantity(Fn(Bpy), Bpy)
+    return aplQuantity(Fn(Bpy), int(Bpy))
 
 # ------------------------------
 
@@ -137,20 +151,6 @@ def     v2v(Fn, B):
 
     if B.isVector():
         return aplQuantity(Rpy, B.dimension(), B.prototype())
-
-    aplError("RANK ERROR")
-
-# ------------------------------
-
-def     s_rho(_, B):
-    """
-    scalar rho - return dimension/rank of B - does not operate on B
-    """
-    if B.isScalar():
-        return aplQuantity([], 0)
-
-    if B.isVector():
-        return aplQuantity([B.dimension()], 1)
 
     aplError("RANK ERROR")
 

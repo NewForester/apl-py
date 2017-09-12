@@ -114,29 +114,49 @@ class   match(object):
         return self._fn(X, Y)
 
 # ------------------------------
+
+class   reshape(object):
+    """
+    the iterator for dyadic ⍴
+    """
+    def __init__(self, A, B):
+        self._A = A
+        if isinstance(B, tuple):
+            self._B = None
+            self._R = B
+        else:
+            self._B = B.__iter__()
+            self._T = []
+            self._R = self._T
+        self._I = self._R.__iter__()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._A <= 0:
+            raise StopIteration
+
+        if not self._B is None:
+            try:
+                Y = self._B.__next__()
+                self._A -= 1
+                self._T.append(Y)
+                return Y
+            except StopIteration:
+                self._B = None
+
+        try:
+            self._A -= 1
+            return self._I.__next__()
+
+        except StopIteration:
+            self._I = self._R.__iter__()
+            return self._I.__next__()
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
-
-def     reshape(A, B):
-    """
-    reshape (list) B to have length A by replication and/or truncation
-    """
-    A = confirmInteger(A)
-
-    if A < 0:
-        aplError("DOMAIN ERROR")
-
-    B = list(B)
-
-    length = len(B)
-
-    tail = A % length
-
-    count = int((A - tail) / length)
-
-    return B * count + B [:tail]
-
-# --------------
 
 def     concatenate(A, B):
     """
