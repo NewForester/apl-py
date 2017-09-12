@@ -139,6 +139,26 @@ def     reshape(Fn, A, B):
     assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
+
+def     concatenate(Fn, A, B):
+    """
+    implement dyadic ,
+    """
+    assertNotArray(A, "WIP - RANK ERROR")
+    assertNotArray(B, "WIP - RANK ERROR")
+
+    prototype = B.prototype() if A.isEmptyVector() else A.prototype()
+
+    Apy = 1 if A.isScalar() else A.dimension()
+    Bpy = 1 if B.isScalar() else B.dimension()
+
+    dimension = -1 if (Apy < 0 or Bpy < 0) else (Apy + Bpy)
+
+    Rpy = Fn(A.vectorToPy(), B.vectorToPy())
+
+    return makeVector(Rpy, dimension, prototype)
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -172,20 +192,6 @@ def     vv2s(Fn, A, B):
         return aplQuantity(Rpy, B.dimension())
 
     aplError("RANK ERROR")
-
-# ------------------------------
-
-def     vv_comma(Fn, A, B):
-    """
-    evaluate a dyadic function that returns a vector
-    """
-    Apy = A.vectorToPy()
-    Bpy = B.vectorToPy()
-
-    prototype = A.prototype()
-    Rpy = Fn(Apy, Bpy)
-
-    return aplQuantity(Rpy, len(Rpy), prototype)
 
 # ------------------------------
 

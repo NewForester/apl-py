@@ -88,6 +88,20 @@ def     rho(_, B):
     assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
+
+def     unravel(_, B):
+    """
+    implement monadic ,
+    """
+    if B.isScalar():
+        return makeVector(B.vectorToPy(), 1, B.prototype())
+
+    if B.isVector():
+        return B
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -151,21 +165,6 @@ def     v2v(Fn, B):
 
     if B.isVector():
         return aplQuantity(Rpy, B.dimension(), B.prototype())
-
-    aplError("RANK ERROR")
-
-# ------------------------------
-
-def     s_comma(_, B):
-    """
-    scalar comma - unravel B and return a vector
-    """
-
-    if B.isScalar():
-        return aplQuantity(B.vectorToPy(), 1, B.prototype())
-
-    if B.isVector():
-        return B
 
     aplError("RANK ERROR")
 

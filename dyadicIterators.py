@@ -155,16 +155,31 @@ class   reshape(object):
             return self._I.__next__()
 
 # ------------------------------
+
+class   concatenate(object):
+    """
+    the iterator for dyadic ,
+    """
+    def __init__(self, A, B):
+        self._A = A.__iter__()
+        self._B = B.__iter__()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if not self._A is None:
+            try:
+                return self._A.__next__()
+
+            except StopIteration:
+                self._A = None
+
+        return self._B.__next__()
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
-
-def     concatenate(A, B):
-    """
-    concatenate (list) B onto the end of (list) A
-    """
-    return list(A) + list(B)
-
-# --------------
 
 def     rotateLast(A, B):
     """

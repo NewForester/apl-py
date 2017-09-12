@@ -73,8 +73,8 @@ _DyadicFunctions = {
 
     # Structural (aka manipulative)
     '⍴':        lambda A, B: mapper.reshape(iterator.reshape, A, B),
-    ',':        lambda A, B: vv_comma(concatenate, A, B),
-    '⍪':        lambda A, B: vv_comma(concatenate, A, B),
+    ',':        lambda A, B: mapper.concatenate(iterator.concatenate, A, B),
+    '⍪':        lambda A, B: mapper.concatenate(iterator.concatenate, A, B),
     '⌽':        lambda A, B: sv2vr(rotateLast, A, B),
     '⊖':        lambda A, B: sv2vr(rotateFirst, A, B),
     '⍉':        lambda A, B: sv_transpose(transpose, A, B),
