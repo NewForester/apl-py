@@ -541,40 +541,43 @@ def     tally_notMatch():
 
 # ------------------------------
 
-def     zildeIota():
+def     rho():
     """
-    zilde with iota (⍳)
-
-    >>> test(r"⍳ 0")
-    ⍬
-    """
-    pass
-
-# --------------
-
-def     zildeRho():
-    """
-    zilde with rho (⍴)
-
     >>> test(r"⍴ ⍬")
     0
-
     >>> test(r"⍴ 1")
     ⍬
 
     >>> test(r"⍬ ⍴ ⍬")
     0
-    >>> test(r"⍬ ⍴ 1")
+    >>> test(r"⍬ ⍴ 1.2")
+    1.2
+    >>> test(r"1.2 ⍴ ⍬")
+    DOMAIN ERROR
+
+    >>> test(r"⍬ ⍴ 1 2 3")
     1
-    >>> test(r"1 ⍴ ⍬")
-    0
+
+    >>> test(r"1 2 3 ⍴ ⍬")
+    WIP - LENGTH ERROR
 
     >>> test(r"6 ⍴ ⍬")
     0 0 0 0 0 0
 
-    >>> test(r"0 ⍴ 1")
+    >>> test(r"0 ⍴ 1.2")
     ⍬
     >>> test(r"0 ⍴ 1 2 3")
+    ⍬
+    """
+    pass
+
+# ------------------------------
+
+def     zildeIota():
+    """
+    zilde with iota (⍳)
+
+    >>> test(r"⍳ 0")
     ⍬
     """
     pass

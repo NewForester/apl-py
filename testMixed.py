@@ -755,6 +755,40 @@ def     tally_notMatch():
     """
     pass
 
+# --------------
+
+def     rho():
+    """
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    >>> test(r"⍴ M")
+    6
+    >>> test(r"⍴ M, M")
+    12
+
+    >>> test(r"1 ⍴ M")
+    1
+    >>> test(r"2 ⍴ M")
+    1 2
+    >>> test(r"3 ⍴ M")
+    1 2 3
+    >>> test(r"4 ⍴ M")
+    1 2 3 a
+    >>> test(r"5 ⍴ M")
+    1 2 3 ab
+    >>> test(r"6 ⍴ M")
+    1 2 3 abc
+
+    >>> test(r"7 ⍴ M")
+    1 2 3 abc 1
+    >>> test(r"11 ⍴ M")
+    1 2 3 abc 1 2 3 ab
+    >>> test(r"13 ⍴ M")
+    1 2 3 abc 1 2 3 abc 1
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

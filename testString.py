@@ -670,19 +670,22 @@ def     tally_notMatch():
 
 # ------------------------------
 
-def     stringRho():
+def     rho():
     """
-    >>> test(r"⍴ 'Hello'")
-    5
-    >>> test(r"⍴ 'Hello' 'Paul'")
-    2
-    >>> test(r"⍴ 1 'Hello' 2")
-    3
-
     >>> test(r"⍴ 'H'")
     ⍬
     >>> test(r'⍴ "H"')
     1
+
+    >>> test(r"⍴ ''")
+    0
+    >>> test(r'⍴ ""')
+    0
+
+    >>> test(r"⍴ 'Hello'")
+    5
+    >>> test(r"⍴ 'Hello' 'Paul'")
+    2
 
     >>> test(r"4 ⍴ 'Hello'")
     Hell
@@ -690,6 +693,21 @@ def     stringRho():
     Hello
     >>> test(r"6 ⍴ 'Hello'")
     HelloH
+
+    >>> test(r"'Hello', (4 ⍴ ''), 'World'")
+    Hello    World
+    >>> test(r'"Hello", (4 ⍴ ""), "World"')
+    Hello    World
+
+    >>> test(r"'!' ⍴ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r'"!" ⍴ "Hello"')
+    DOMAIN ERROR
+
+    >>> test(r"'' ⍴ 'Hello'")
+    H
+    >>> test(r'"" ⍴ "Hello"')
+    H
     """
     pass
 

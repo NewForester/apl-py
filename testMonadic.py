@@ -437,16 +437,14 @@ def     monadicIota():
 
 # --------------
 
-def     monadicRho():
+def     rho():
     """
-    >>> test(r"⍴ 7")
+    >>> test(r"⍴ 1.2")
     ⍬
-
+    >>> test(r"⍴ ,1.2")
+    1
     >>> test(r"⍴ 1 2 3")
     3
-
-    >>> test(r"⍴ ⍬")
-    0
     """
     pass
 
