@@ -571,36 +571,23 @@ def     rho():
     """
     pass
 
-# ------------------------------
-
-def     zildeIota():
-    """
-    zilde with iota (⍳)
-
-    >>> test(r"⍳ 0")
-    ⍬
-    """
-    pass
-
 # --------------
 
-def     zildeComma():
+def     comma():
     """
-    zilde with comma (,)
-
     >>> test(r", ⍬")
     ⍬
 
     >>> test(r"⍬ , ⍬")
     ⍬
-    >>> test(r"⍬ , 1")
-    1
-    >>> test(r"1 , ⍬")
-    1
+    >>> test(r"⍬ , 1.2")
+    1.2
+    >>> test(r"1.2 , ⍬")
+    1.2
 
-    >>> test(r"⍴ ⍬ , 1")
+    >>> test(r"⍴ ⍬ , 1.2")
     1
-    >>> test(r"⍴ 1 , ⍬")
+    >>> test(r"⍴ 1.2 , ⍬")
     1
 
     >>> test(r"⍬ , 1 2 3")
@@ -612,6 +599,17 @@ def     zildeComma():
     3
     >>> test(r"⍴ 1 2 3 , ⍬")
     3
+    """
+    pass
+
+# ------------------------------
+
+def     zildeIota():
+    """
+    zilde with iota (⍳)
+
+    >>> test(r"⍳ 0")
+    ⍬
     """
     pass
 

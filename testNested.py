@@ -713,6 +713,42 @@ def     rho():
     """
     pass
 
+# --------------
+
+def     comma():
+    """
+    >>> test(r", 1 (2 3) 4")
+    1 (2 3) 4
+
+    >>> test(r", 'H' 'ello'")
+    H 'ello'
+    >>> test(r', "H" "ello"')
+    'H' 'ello'
+
+    >>> test(r", 1 'Hello' 3")
+    1 'Hello' 3
+    >>> test(r", 1 ('Hello') 3")
+    1 'Hello' 3
+    >>> test(r", 1 'Hello' 'World' 3")
+    1 'Hello' 'World' 3
+    >>> test(r", 1 ('Hello' 'World') 3")
+    1 ('Hello' 'World') 3
+    >>> test(r", 1 ('Hello', 'World') 3")
+    1 'HelloWorld' 3
+    >>> test(r", 1 'Hello', 'World' 3")
+    1 'Hello' 'World' 3
+
+    >>> test(r"1, 'Hello', 'World', 3")
+    1 HelloWorld 3
+    >>> test(r"1, ('Hello' 'World'), 3")
+    1 'Hello' 'World' 3
+    >>> test(r"1, ('Hello', 'World'), 3")
+    1 HelloWorld 3
+    >>> test(r"(1, 'Hello'), ('World', 3)")
+    1 HelloWorld 3
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

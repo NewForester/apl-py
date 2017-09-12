@@ -450,15 +450,15 @@ def     rho():
 
 # --------------
 
-def     monadicComma():
+def     comma():
     """
-    >>> test(r", 7")
-    7
+    >>> test(r", 1.2")
+    1.2
+    >>> test(r"⍴ , 1.2")
+    1
+
     >>> test(r", 1 2 3")
     1 2 3
-
-    >>> test(r"⍴ , 7")
-    1
     >>> test(r"⍴ , 1 2 3")
     3
     """

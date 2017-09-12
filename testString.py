@@ -711,16 +711,19 @@ def     rho():
     """
     pass
 
-# ------------------------------
+# --------------
 
-def     stringComma():
+def     comma():
     """
+    >>> test(r", '!'")
+    !
     >>> test(r", 'Hello'")
     Hello
+
     >>> test(r", 'Hello' 'Paul'")
     'Hello' 'Paul'
-    >>> test(r", 1 'Hello' 2")
-    1 'Hello' 2
+    >>> test(r"'Hello' , ' ' , 'Paul'")
+    Hello Paul
 
     >>> test(r", 'H'")
     H
@@ -731,18 +734,6 @@ def     stringComma():
     1
     >>> test(r'⍴ , "H"')
     1
-
-    >>> test(r"'Hello' , ' ' , 'Paul'")
-    Hello Paul
-
-    >>> test(r"1 2 3 , 'Hello'")
-    1 2 3 Hello
-    >>> test(r"'Hello' , 1 2 3")
-    Hello 1 2 3
-    >>> test(r"1 2 3 , 'H'")
-    1 2 3 H
-    >>> test(r'1 2 3 , "H"')
-    1 2 3 H
     """
     pass
 
