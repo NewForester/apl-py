@@ -892,6 +892,39 @@ def     comma():
 
 # --------------
 
+def     transpose():
+    """
+    >>> test(r"1.2 ⍉ 1.2")
+    LENGTH ERROR
+    >>> test(r"1.2 ⍉ ,1.2")
+    DOMAIN ERROR
+
+    >>> test(r"1 ⍉ 1.2")
+    LENGTH ERROR
+    >>> test(r"1 ⍉ ,1.2")
+    1.2
+
+    >>> test(r"⍴ 1 ⍉ ,1.2")
+    1
+
+    >>> test(r"1 ⍉ 1 2 3")
+    1 2 3
+    >>> test(r"2 ⍉ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"0 ⍉ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"1.2 ⍉ 1 2 3")
+    DOMAIN ERROR
+
+    >>> test(r"1 1 ⍉ 1 2 3")
+    LENGTH ERROR
+    >>> test(r"1 2 3 ⍉ 1 2 3")
+    LENGTH ERROR
+    """
+    pass
+
+# --------------
+
 def     dyadicRotate():
     """
     >>> test(r"1 ⌽ 3")
@@ -930,29 +963,6 @@ def     dyadicRotate():
     RANK ERROR
     >>> test(r"1.5 ⊖ 1 2 3 4 5 6")
     DOMAIN ERROR
-    """
-    pass
-
-# --------------
-
-def     dyadicTranspose():
-    """
-    >>> test(r"1 ⍉ 1 2 3")
-    1 2 3
-
-    >>> test(r"2 ⍉ 1 2 3")
-    DOMAIN ERROR
-    >>> test(r"0 ⍉ 1 2 3")
-    DOMAIN ERROR
-
-    >>> test(r"1 1 ⍉ 1 2 3")
-    LENGTH ERROR
-    >>> test(r"1 2 3 ⍉ 1 2 3")
-    LENGTH ERROR
-    >>> test(r"1 ⍉ 10")
-    LENGTH ERROR
-    >>> test(r"1 ⍉ ,10")
-    10
     """
     pass
 

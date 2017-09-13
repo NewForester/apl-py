@@ -466,6 +466,23 @@ def     comma():
 
 # --------------
 
+def     transpose():
+    """
+    >>> test(r"⍉ 1.2")
+    1.2
+
+    >>> test(r"⍴ ⍉ 1.2")
+    ⍬
+    >>> test(r"⍴ ⍉ ,1.2")
+    1
+
+    >>> test(r"⍉ 1 2 3")
+    1 2 3
+    """
+    pass
+
+# --------------
+
 def     monadicReverse():
     """
     >>> test(r"⌽ 2")
@@ -477,23 +494,6 @@ def     monadicReverse():
     3 2 1
     >>> test(r"⊖ 0.1 0.2 0.3")
     0.3 0.2 0.1
-    """
-    pass
-
-# --------------
-
-def     monadicTranspose():
-    """
-    >>> test(r"⍉ 11")
-    11
-
-    >>> test(r"⍴ ⍉ 1")
-    ⍬
-    >>> test(r"⍴ ⍉ ,1")
-    1
-
-    >>> test(r"⍉ 1 2 3")
-    1 2 3
     """
     pass
 

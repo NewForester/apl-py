@@ -602,6 +602,30 @@ def     comma():
     """
     pass
 
+# --------------
+
+def     transpose():
+    """
+    >>> test(r"⍉ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ⍉ ⍬")
+    LENGTH ERROR
+    >>> test(r"1 ⍉ ⍬")
+    ⍬
+
+    >>> test(r"1.2 ⍉ ⍬")
+    DOMAIN ERROR
+    >>> test(r"⍬ ⍉ 1.2")
+    1.2
+
+    >>> test(r"⍬ ⍉ 1 2 3")
+    LENGTH ERROR
+    >>> test(r"1 2 3 ⍉ ⍬")
+    LENGTH ERROR
+    """
+    pass
+
 # ------------------------------
 
 def     zildeIota():
@@ -638,24 +662,6 @@ def     zildeReverseRotate():
     RANK ERROR
     >>> test(r"0 ⊖ ⍬")
     ⍬
-    """
-    pass
-
-# --------------
-
-def     zildeTranspose():
-    """
-    zilde with transpose (⍉)
-
-    >>> test(r"⍉ ⍬")
-    ⍬
-
-    >>> test(r"⍬ ⍉ ⍬")
-    LENGTH ERROR
-    >>> test(r"1 ⍉ ⍬")
-    ⍬
-    >>> test(r"⍬ ⍉ 1")
-    1
     """
     pass
 

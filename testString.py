@@ -739,6 +739,23 @@ def     comma():
 
 # --------------
 
+def     transpose():
+    """
+    >>> test(r"⍉ '!'")
+    !
+    >>> test(r"∪ 'Hello'")
+    Helo
+
+    >>> test(r"1 ⍉ 'Hello'")
+    Hello
+
+    >>> test(r"'H' ⍉ 1 2 3")
+    DOMAIN ERROR
+    """
+    pass
+
+# --------------
+
 def     stringRotate():
     """
     >>> test(r"⌽ 'niagara'")
@@ -760,21 +777,6 @@ def     stringRotate():
     DOMAIN ERROR
     >>> test(r"'Hi' ⊖ 'anna'")
     DOMAIN ERROR
-    """
-    pass
-
-# --------------
-
-def     stringTranspose():
-    """
-    >>> test(r"'H' ⍉ 1 2 3")
-    DOMAIN ERROR
-
-    >>> test(r"⍉ 'Hello'")
-    Hello
-
-    >>> test(r"1 ⍉ 'Hello'")
-    Hello
     """
     pass
 

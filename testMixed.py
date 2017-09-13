@@ -825,6 +825,21 @@ def     comma():
     """
     pass
 
+# --------------
+
+def     transpose():
+    """
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    >>> test(r"⍉ M")
+    1 2 3 abc
+
+    >>> test(r"1 ⍉ M")
+    1 2 3 abc
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":
