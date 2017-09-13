@@ -178,6 +178,14 @@ class   concatenate(object):
         return self._B.__next__()
 
 # ------------------------------
+
+def     transpose(_, B):
+    """
+    implement dyadic ⍉ (for arrays - TBD)
+    """
+    return B
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -200,14 +208,6 @@ def     rotateFirst(A, B):
     A = confirmInteger(A) % len(B)
 
     return B[A:] + B[:A]
-
-# --------------
-
-def     transpose(_, B):
-    """
-    transpose B about A
-    """
-    return B
 
 # ------------------------------
 

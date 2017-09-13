@@ -79,9 +79,9 @@ _MonadicFunctions = {
     ',':        lambda B: mapper.unravel(None, B),
     '⍪':        lambda B: aplError("VALENCE ERROR"),
     '∊':        _toBeImplemented,       # enlist - as comma but also nested arrays
+    '⍉':        lambda B: mapper.transpose(iterator.transpose, B),
     '⌽':        lambda B: v2v(reverseLast, B),
     '⊖':        lambda B: v2v(reverseFirst, B),
-    '⍉':        lambda B: v2v(transpose, B),
     '⊃':        _toBeImplemented,       # (disclose) - turn nested scalar into vector (?!?) - mix ?
     '⊂':        _toBeImplemented,       # (enclose) - turn array into nested scalar (?!?)
 

@@ -101,6 +101,20 @@ def     unravel(_, B):
 
     assertNotArray(B, "WIP - RANK ERROR")
 
+# --------------
+
+def     transpose(_, B):
+    """
+    implement monadic ⍉
+    """
+    if B.isScalar():
+        return B
+
+    if B.isVector():
+        return B
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
 # ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------

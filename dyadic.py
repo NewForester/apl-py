@@ -75,9 +75,9 @@ _DyadicFunctions = {
     '⍴':        lambda A, B: mapper.reshape(iterator.reshape, A, B),
     ',':        lambda A, B: mapper.concatenate(iterator.concatenate, A, B),
     '⍪':        lambda A, B: mapper.concatenate(iterator.concatenate, A, B),
+    '⍉':        lambda A, B: mapper.transpose(iterator.transpose, A, B),
     '⌽':        lambda A, B: sv2vr(rotateLast, A, B),
     '⊖':        lambda A, B: sv2vr(rotateFirst, A, B),
-    '⍉':        lambda A, B: sv_transpose(transpose, A, B),
     '⊃':        _toBeImplemented,       # pick (disclose) = picks from an array (?!?)
     '⊂':        _toBeImplemented,       # partitioned enclose - creates an array of vectors (?!?)
 

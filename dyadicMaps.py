@@ -19,7 +19,7 @@ import dyadicIterators as iterator
 from systemVariables import confirmInteger
 
 from aplQuantity import aplQuantity, makeScalar, makeVector, makeEmptyVector, scalarIterator
-from aplError import aplError, assertTrue, assertNumeric, assertNotArray, assertScalarLike
+from aplError import aplError, assertTrue, assertNumeric, assertNotArray, assertScalarLike, assertEmptyVector
 
 # ------------------------------
 
@@ -159,6 +159,30 @@ def     concatenate(Fn, A, B):
     return makeVector(Rpy, dimension, prototype)
 
 # ------------------------------
+
+def     transpose(_, A, B):
+    """
+    implement dyadic ⍉
+    """
+    assertNotArray(A)
+
+    if B.isScalar():
+        assertEmptyVector(A)
+
+        return B
+
+    if B.isVector():
+        assertScalarLike(A)
+
+        Apy = confirmInteger(A.scalarToPy())
+
+        assertTrue(Apy == 1, "DOMAIN ERROR")
+
+        return B
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -192,32 +216,6 @@ def     vv2s(Fn, A, B):
         return aplQuantity(Rpy, B.dimension())
 
     aplError("RANK ERROR")
-
-# ------------------------------
-
-def     sv_transpose(Fn, A, B):
-    """
-    evaluate dyadic transpose (a degenerate function for vectors)
-    """
-    assertNumeric(A)
-
-    if A.dimension() == 0 and B.isScalar():
-        return B
-
-    if A.dimension() == 0 and B.dimension() == 0:
-        aplError("LENGTH ERROR")
-
-    Apy = A.scalarToPy("LENGTH ERROR")
-
-    if Apy != 1:
-        aplError("DOMAIN ERROR")
-
-    if B.isScalar():
-        aplError("LENGTH ERROR")
-
-    Bpy = B.vectorToPy()
-
-    return aplQuantity(Fn(Apy, Bpy), B.dimension(), B.prototype())
 
 # ------------------------------
 

@@ -53,6 +53,14 @@ def     depth(B):
         lambda A, Y: max(A, depth(Y.vectorToPy()) + 1 if isinstance(Y, aplQuantity) else 0), B, 0)
 
 # ------------------------------
+
+def     transpose(B):
+    """
+    implement monadic ⍉ (for arrays - TBD)
+    """
+    return B
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -91,14 +99,6 @@ def     reverseFirst(B):
         V = [X] + V
 
     return V
-
-# --------------
-
-def     transpose(B):
-    """
-    transpose B about its major axis
-    """
-    return B
 
 # ------------------------------
 
