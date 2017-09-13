@@ -15,7 +15,7 @@ import operator
 
 from systemVariables import confirmInteger, indexOrigin
 
-from aplQuantity import aplQuantity, makeScalar, scalarIterator
+from aplQuantity import aplQuantity, lookAhead, makeScalar, scalarIterator
 from aplError import aplError, aplException, assertError
 
 # ------------------------------
@@ -186,29 +186,32 @@ def     transpose(_, B):
     return B
 
 # ------------------------------
-# OLD IMPLEMENTATIONS TO BE REPLACED
+
+class   rotate(object):
+    """
+    the iterator for dyadic ⌽
+    """
+    def __init__(self, A, B):
+        self._B = B.__iter__()
+        self._L = lookAhead(self._B, A)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._B is None:
+            return self._L.__next__()
+
+        try:
+            return self._B.__next__()
+
+        except StopIteration:
+            self._B = None
+
+        return self.__next__()
+
 # ------------------------------
-
-def     rotateLast(A, B):
-    """
-    rotate (vector) B by A elements
-    """
-    B = list(B)
-    A = confirmInteger(A) % len(B)
-
-    return B[A:] + B[:A]
-
-# --------------
-
-def     rotateFirst(A, B):
-    """
-    rotate (vector) B by A elements
-    """
-    B = list(B)
-    A = confirmInteger(A) % len(B)
-
-    return B[A:] + B[:A]
-
+# OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
 def     without(A, B):

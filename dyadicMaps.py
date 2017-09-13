@@ -14,6 +14,8 @@
     module are under review.
 """
 
+import operator
+
 import dyadicIterators as iterator
 
 from systemVariables import confirmInteger
@@ -183,6 +185,31 @@ def     transpose(_, A, B):
     assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
+
+def     rotate(Fn, A, B):
+    """
+    implement dyadic ⌽
+    """
+    assertNotArray(A)
+
+    if B.isVectorLike():
+        assertScalarLike(A, "RANK ERROR")
+
+        Apy = confirmInteger(A.scalarToPy())
+
+        if B.isEmptyVector():
+            return B
+
+        Apy = operator.mod(Apy, B.tally())
+
+        if Apy == 0:
+            return B
+
+        return makeVector(Fn(Apy, B.vectorToPy()), B.dimension(), None)
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -214,30 +241,6 @@ def     vv2s(Fn, A, B):
 
     if B.isVector():
         return aplQuantity(Rpy, B.dimension())
-
-    aplError("RANK ERROR")
-
-# ------------------------------
-
-def     sv2vr(Fn, A, B):
-    """
-    evaluate a dyadic function that returns a vector if B is a vector but a scalar if B is scalar
-    """
-    assertNumeric(A)
-
-    if A.dimension() == 0:
-        aplError("RANK ERROR")
-
-    if B.dimension() == 0:
-        return B
-
-    Rpy = Fn(A.scalarToPy("RANK ERROR"), B.vectorToPy())
-
-    if B.isScalar():
-        return aplQuantity(Rpy[0], None, B.prototype())
-
-    if B.isVector():
-        return aplQuantity(Rpy, B.dimension(), B.prototype())
 
     aplError("RANK ERROR")
 

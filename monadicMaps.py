@@ -101,7 +101,7 @@ def     unravel(_, B):
 
     assertNotArray(B, "WIP - RANK ERROR")
 
-# --------------
+# ------------------------------
 
 def     transpose(_, B):
     """
@@ -112,6 +112,20 @@ def     transpose(_, B):
 
     if B.isVector():
         return B
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
+
+def     reverse(Fn, B):
+    """
+    implement monadic ⌽
+    """
+    if B.isScalarLike() or B.isEmptyVector():
+        return B
+
+    if B.isVector():
+        return makeVector(Fn(B.vectorToPy()), B.dimension(), None)
 
     assertNotArray(B, "WIP - RANK ERROR")
 

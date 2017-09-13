@@ -61,6 +61,44 @@ def     transpose(B):
     return B
 
 # ------------------------------
+
+class   reverse(object):
+    """
+    the iterator for monadic ⌽
+    """
+    def __init__(self, B):
+        self._B = B.__iter__()
+        self._T = None
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._T is None:
+            self._T = reverse._stack(self._B)
+
+        if self._T != []:
+            return self._T.pop(0)
+
+        return self._B.__next__()
+
+    @staticmethod
+    def _stack(B):
+        """
+        stack the all elements in reverse order
+        """
+        T = []
+
+        try:
+            while True:
+                T.insert(0, B.__next__())
+
+        except StopIteration:
+            pass
+
+        return T
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -73,32 +111,6 @@ def     iota(B):
     IO = indexOrigin()
 
     return range(IO, B + IO)
-
-# --------------
-
-def     reverseLast(B):
-    """
-    return B reversed along its last axis
-    """
-    V = []
-
-    for X in B:
-        V = [X] + V
-
-    return V
-
-# --------------
-
-def     reverseFirst(B):
-    """
-    return B reversed along its first axis
-    """
-    V = []
-
-    for X in B:
-        V = [X] + V
-
-    return V
 
 # ------------------------------
 
