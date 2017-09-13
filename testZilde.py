@@ -626,6 +626,32 @@ def     transpose():
     """
     pass
 
+# --------------
+
+def     reverse_rotate():
+    """
+    >>> test(r"⌽ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ⌽ ⍬")
+    RANK ERROR
+    >>> test(r"⍬ ⌽ 1.2")
+    RANK ERROR
+    >>> test(r"1.2 ⌽ ⍬")
+    DOMAIN ERROR
+
+    >>> test(r"⍬ ⌽ 0")
+    RANK ERROR
+    >>> test(r"0 ⌽ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ⌽ 1 2 3")
+    RANK ERROR
+    >>> test(r"1 2 3 ⌽ ⍬")
+    RANK ERROR
+    """
+    pass
+
 # ------------------------------
 
 def     zildeIota():
@@ -633,34 +659,6 @@ def     zildeIota():
     zilde with iota (⍳)
 
     >>> test(r"⍳ 0")
-    ⍬
-    """
-    pass
-
-# --------------
-
-def     zildeReverseRotate():
-    """
-    zilde with reverse/rotate last axis (⌽) and reverse/rotate first axis (⊖)
-
-    >>> test(r"⌽ ⍬")
-    ⍬
-
-    >>> test(r"⍬ ⌽ ⍬")
-    RANK ERROR
-    >>> test(r"⍬ ⌽ 0")
-    RANK ERROR
-    >>> test(r"0 ⌽ ⍬")
-    ⍬
-
-    >>> test(r"⊖ ⍬")
-    ⍬
-
-    >>> test(r"⍬ ⊖ ⍬")
-    RANK ERROR
-    >>> test(r"⍬ ⊖ 0")
-    RANK ERROR
-    >>> test(r"0 ⊖ ⍬")
     ⍬
     """
     pass

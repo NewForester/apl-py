@@ -756,27 +756,38 @@ def     transpose():
 
 # --------------
 
-def     stringRotate():
+def     reverse_rotate():
     """
+    >>> test(r"⌽ '!'")
+    !
+    >>> test(r"⌽ 'Hello'")
+    olleH
+
     >>> test(r"⌽ 'niagara'")
     aragain
-    >>> test(r"⊖ 'nigeria'")
+    >>> test(r'⌽ "nigeria"')
     airegin
+
+    >>> test(r"0 ⌽ '!'")
+    !
+    >>> test(r"1 ⌽ '!'")
+    !
+    >>> test(r"2 ⌽ '!'")
+    !
 
     >>> test(r"1 ⌽ 'nope'")
     open
-    >>> test(r"2 ⊖ 'anna'")
+    >>> test(r"¯7 ⌽ 'nope'")
+    open
+    >>> test(r"6 ⌽ 'anna'")
     naan
-
-    >>> test(r'1 ⌽ "a"')
-    a
-    >>> test(r'2 ⊖ "b"')
-    b
+    >>> test(r"¯2 ⌽ 'anna'")
+    naan
 
     >>> test(r"'H' ⌽ 'nope'")
     DOMAIN ERROR
-    >>> test(r"'Hi' ⊖ 'anna'")
-    DOMAIN ERROR
+    >>> test(r"'Hi' ⌽ 'anna'")
+    RANK ERROR
     """
     pass
 

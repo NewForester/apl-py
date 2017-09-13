@@ -719,9 +719,9 @@ def     depth_match():
     >>> test(r"M ≡ 1 2 3")
     0
 
-    !!! >>> test(r"M ≡ ⌽ 1 2 3 'abc'")
+    >>> test(r"M ≡ ⌽ 1 2 3 'abc'")
     0
-    !!! >>> test(r"M ≡ ⌽ 'cba', 3 2 1")
+    >>> test(r"M ≡ ⌽ 'cba', 3 2 1")
     1
     """
     pass
@@ -748,9 +748,9 @@ def     tally_notMatch():
     >>> test(r"M ≢ 1 2 3")
     1
 
-    !!! >>> test(r"M ≢ ⌽ 1 2 3 'abc'")
+    >>> test(r"M ≢ ⌽ 1 2 3 'abc'")
     1
-    !!! >>> test(r"M ≢ ⌽ 'cba', 3 2 1")
+    >>> test(r"M ≢ ⌽ 'cba', 3 2 1")
     0
     """
     pass
@@ -837,6 +837,28 @@ def     transpose():
 
     >>> test(r"1 ⍉ M")
     1 2 3 abc
+    """
+    pass
+
+# --------------
+
+def     reverse_rotate():
+    """
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    >>> test(r"⌽ M")
+    cba 3 2 1
+
+    >>> test(r"3 ⌽ M")
+    abc 1 2 3
+    >>> test(r"¯3 ⌽ M")
+    abc 1 2 3
+
+    >>> test(r"1 ⌽ M")
+    2 3 abc 1
+    >>> test(r"¯1 ⌽ M")
+    c 1 2 3 ab
     """
     pass
 

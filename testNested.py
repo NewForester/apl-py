@@ -779,6 +779,38 @@ def     transpose():
     """
     pass
 
+# --------------
+
+def     reverse_rotate():
+    """
+    >>> test(r"⌽ 1 (2 3) 4")
+    4 (2 3) 1
+
+    >>> test(r"⌽ 'H' 'ello'")
+    'ello' H
+    >>> test(r"⌽ 1 'Hello' 3")
+    3 'Hello' 1
+    >>> test(r"⌽ 1 'Hello' 'World' 3")
+    3 'World' 'Hello' 1
+    >>> test(r"⌽ 1 ('Hello' 'World') 3")
+    3 ('Hello' 'World') 1
+
+    >>> test(r"1 ⌽ 1 (2 3) 4")
+    (2 3) 4 1
+    >>> test(r"2 ⌽ 1 (2 3) 4")
+    4 1 (2 3)
+    >>> test(r"3 ⌽ 1 (2 3) 4")
+    1 (2 3) 4
+
+    >>> test(r"¯1 ⌽ 'one' 'two' 'three'")
+    'three' 'one' 'two'
+    >>> test(r"¯2 ⌽ 'one' 'two' 'three'")
+    'two' 'three' 'one'
+    >>> test(r"¯3 ⌽ 'one' 'two' 'three'")
+    'one' 'two' 'three'
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":
