@@ -738,6 +738,14 @@ def     reverse_rotate():
 
 # ------------------------------
 
+def     iota():
+    """
+    no tests
+    """
+    pass
+
+# ------------------------------
+
 if __name__ == "__main__":
     preamble()
     import doctest

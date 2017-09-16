@@ -44,7 +44,7 @@ def     conjugate_plus():
     DOMAIN ERROR
 
     >>> test(r"M + ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -71,7 +71,7 @@ def     negate_minus():
     DOMAIN ERROR
 
     >>> test(r"M - ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -98,7 +98,7 @@ def     direction_times():
     DOMAIN ERROR
 
     >>> test(r"M × ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -125,7 +125,7 @@ def     reciprocal_divide():
     DOMAIN ERROR
 
     >>> test(r"M ÷ ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -152,7 +152,7 @@ def     ceil_maximum():
     DOMAIN ERROR
 
     >>> test(r"M ⌈ ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -179,7 +179,7 @@ def     floor_minimum():
     DOMAIN ERROR
 
     >>> test(r"M ⌊ ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -206,7 +206,7 @@ def     magnitude_residue():
     DOMAIN ERROR
 
     >>> test(r"M | ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -233,7 +233,7 @@ def     exponential_power():
     DOMAIN ERROR
 
     >>> test(r"M * ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -260,7 +260,7 @@ def     logarithm():
     DOMAIN ERROR
 
     >>> test(r"M ⍟ ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -287,7 +287,7 @@ def     factorial_binomial():
     DOMAIN ERROR
 
     >>> test(r"M ! ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -316,7 +316,7 @@ def     roll_deal():
     RANK ERROR
 
     >>> test(r"M ? ⍳⍴M")
-    RANK ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -343,7 +343,7 @@ def     pi_circular():
     DOMAIN ERROR
 
     >>> test(r"M ○ ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -377,7 +377,7 @@ def     or_gcd():
     DOMAIN ERROR
 
     >>> test(r"M ∧ ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -411,7 +411,7 @@ def     and_lcm():
     DOMAIN ERROR
 
     >>> test(r"M ∧ ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -445,7 +445,7 @@ def     nor():
     DOMAIN ERROR
 
     >>> test(r"M ⍱ ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -479,7 +479,7 @@ def     nand():
     DOMAIN ERROR
 
     >>> test(r"M ⍲ ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -513,7 +513,7 @@ def     lt():
     DOMAIN ERROR
 
     >>> test(r"M < ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -547,7 +547,7 @@ def     le():
     DOMAIN ERROR
 
     >>> test(r"M ≤ ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -581,7 +581,7 @@ def     ge():
     DOMAIN ERROR
 
     >>> test(r"M ≥ ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -615,7 +615,7 @@ def     gt():
     DOMAIN ERROR
 
     >>> test(r"M > ⍳⍴M")
-    DOMAIN ERROR
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -652,7 +652,7 @@ def     eq():
     >>> setIndexOrigin(1)
 
     >>> test(r"M = ⍳⍴M")
-    0 0 0 1 1 1
+    WIP - LENGTH ERROR
 
     >>> restoreIndexOrigin(IO)
     """
@@ -691,7 +691,7 @@ def     ne():
     >>> setIndexOrigin(1)
 
     >>> test(r"M ≠ ⍳⍴M")
-    1 1 1 0 0 0
+    WIP - LENGTH ERROR
 
     >>> restoreIndexOrigin(IO)
     """
@@ -859,6 +859,42 @@ def     reverse_rotate():
     2 3 abc 1
     >>> test(r"¯1 ⌽ M")
     c 1 2 3 ab
+    """
+    pass
+
+# ------------------------------
+
+def     iota():
+    """
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"⍳ M")
+    WIP - LENGTH ERROR
+
+    >>> test(r"M ⍳ M")
+    1 2 3 4 5 6
+    >>> test(r"1 2 3 ⍳ M")
+    1 2 3 4 4 4
+    >>> test(r"'abc' ⍳ M")
+    4 4 4 1 2 3
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍳ M")
+    WIP - LENGTH ERROR
+
+    >>> test(r"M ⍳ M")
+    0 1 2 3 4 5
+    >>> test(r"1 2 3 ⍳ M")
+    0 1 2 3 3 3
+    >>> test(r"'abc' ⍳ M")
+    3 3 3 0 1 2
+
+    >>> restoreIndexOrigin(IO)
     """
     pass
 

@@ -791,10 +791,57 @@ def     reverse_rotate():
     """
     pass
 
+
+# ------------------------------
+
+def     iota():
+    """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"⍳ '!'")
+    DOMAIN ERROR
+    >>> test(r"⍳ 'Hello'")
+    WIP - LENGTH ERROR
+
+    >>> test(r"1 ⍳ 'Hello'")
+    2 2 2 2 2
+    >>> test(r"'Hello' ⍳ 1")
+    6
+    >>> test(r"'Hello' ⍳ 'hello'")
+    6 2 3 3 5
+
+    >>> test(r"'Hello' ⍳ 72")
+    6
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍳ '!'")
+    DOMAIN ERROR
+    >>> test(r"⍳ 'Hello'")
+    WIP - LENGTH ERROR
+
+    >>> test(r"1 ⍳ 'Hello'")
+    1 1 1 1 1
+    >>> test(r"'Hello' ⍳ 1")
+    5
+    >>> test(r"'Hello' ⍳ 'hello'")
+    5 1 2 2 4
+
+    >>> test(r"'Hello' ⍳ 72")
+    5
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
 # ------------------------------
 
 def     stringTilda():
     """
+    >>> test(r"⎕IO ← 1")
+    1
+
     >>> test(r"~ 'Hello'")
     DOMAIN ERROR
 
@@ -807,30 +854,6 @@ def     stringTilda():
 
     >>> test(r"'Hello' ~ 'Hello'")
     ''
-    """
-    pass
-
-# --------------
-
-def     stringIota():
-    """
-    >>> test(r"⍳ 'Hello'")
-    DOMAIN ERROR
-
-    >>> IO = saveIndexOrigin()
-    >>> setIndexOrigin(1)
-
-    >>> test(r"1 ⍳ 'Hello'")
-    2 2 2 2 2
-    >>> test(r"'Hello' ⍳ 1")
-    6
-    >>> test(r"'Hello' ⍳ 'hello'")
-    6 2 3 3 5
-
-    >>> test(r"'Hello' ⍳ 72")
-    6
-
-    >>> restoreIndexOrigin(IO)
     """
     pass
 

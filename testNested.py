@@ -19,6 +19,7 @@
 """
 
 from test.base import preamble, testResult as test
+from test.base import saveIndexOrigin, setIndexOrigin, restoreIndexOrigin
 
 # ------------------------------
 
@@ -808,6 +809,41 @@ def     reverse_rotate():
     'two' 'three' 'one'
     >>> test(r"¯3 ⌽ 'one' 'two' 'three'")
     'one' 'two' 'three'
+    """
+    pass
+
+# ------------------------------
+
+def     iota():
+    """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"⍳ 1 (2 3) 4")
+    WIP - LENGTH ERROR
+
+    >>> test(r"1 (2 3) 4 ⍳ ⍳4")
+    1 4 4 3
+    >>> test(r"(1 2) (2 3) (3 4) ⍳ 1 (2 3) (4 5)")
+    4 2 4
+
+    >>> test(r"1 ((2 3) (3 4)) 4 ⍳ 10 ((2 3) (3 4)) 40")
+    4 2 4
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍳ 1 (2 3) 4")
+    WIP - LENGTH ERROR
+
+    >>> test(r"1 (2 3) 4 ⍳ ⍳4")
+    3 0 3 3
+    >>> test(r"(1 2) (2 3) (3 4) ⍳ 1 (2 3) (4 5)")
+    3 1 3
+
+    >>> test(r"1 ((2 3) (3 4)) 4 ⍳ 10 ((2 3) (3 4)) 40")
+    3 1 3
+
+    >>> restoreIndexOrigin(IO)
     """
     pass
 

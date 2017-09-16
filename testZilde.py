@@ -19,6 +19,7 @@
 """
 
 from test.base import preamble, testResult as test
+from test.base import saveIndexOrigin, setIndexOrigin, restoreIndexOrigin
 
 # ------------------------------
 
@@ -654,12 +655,44 @@ def     reverse_rotate():
 
 # ------------------------------
 
-def     zildeIota():
+def     iota():
     """
-    zilde with iota (⍳)
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
 
     >>> test(r"⍳ 0")
     ⍬
+
+    >>> test(r"⍬ ⍳ ⍬")
+    ⍬
+    >>> test(r"⍬ ⍳ 1.2")
+    1
+    >>> test(r"1.2 ⍳ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ⍳ 1 2 3")
+    1 1 1
+    >>> test(r"1 2 3 ⍳ ⍬")
+    ⍬
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍳ 0")
+    ⍬
+
+    >>> test(r"⍬ ⍳ ⍬")
+    ⍬
+    >>> test(r"⍬ ⍳ 1.2")
+    0
+    >>> test(r"1.2 ⍳ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ⍳ 1 2 3")
+    0 0 0
+    >>> test(r"1 2 3 ⍳ ⍬")
+    ⍬
+
+    >>> restoreIndexOrigin(IO)
     """
     pass
 

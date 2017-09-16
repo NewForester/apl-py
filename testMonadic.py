@@ -414,11 +414,13 @@ def     tally_notMatch():
 
 # ------------------------------
 
-def     monadicIota():
+def     iota():
     """
     >>> IO = saveIndexOrigin()
     >>> setIndexOrigin(1)
 
+    >>> test(r"⍳ -1")
+    DOMAIN ERROR
     >>> test(r"⍳ 0")
     ⍬
     >>> test(r"⍳ 1")
@@ -429,7 +431,23 @@ def     monadicIota():
     DOMAIN ERROR
 
     >>> test(r"⍳ 1 1")
-    RANK ERROR
+    WIP - LENGTH ERROR
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍳ -1")
+    DOMAIN ERROR
+    >>> test(r"⍳ 0")
+    ⍬
+    >>> test(r"⍳ 1")
+    0
+    >>> test(r"⍳ 2")
+    0 1
+    >>> test(r"⍳ 3.142")
+    DOMAIN ERROR
+
+    >>> test(r"⍳ 1 1")
+    WIP - LENGTH ERROR
 
     >>> restoreIndexOrigin(IO)
     """
