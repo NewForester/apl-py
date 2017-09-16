@@ -252,25 +252,42 @@ class   index(object):
         return self._L + self._IO
 
 # ------------------------------
+
+class   without(object):
+    """
+    the iterator for dyadic ~
+    """
+    def __init__(self, A, B):
+        self._A = A.__iter__()
+        self._B = B.__iter__()
+        self._S = set()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        while True:
+            X = self._A.__next__()
+            if X in self._S:
+                continue
+
+            while not self._B is None:
+                try:
+                    Y = self._B.__next__()
+                    self._S.add(Y)
+
+                    if X == Y:
+                        break
+
+                except StopIteration:
+                    self._B = None
+
+            if self._B is None:
+                return X
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
-
-def     without(A, B):
-    """
-    remove (elements of B) from (list) A
-    """
-    A = list(A)
-
-    for X in B:
-        try:
-            while True:
-                A.remove(X)
-        except ValueError:
-            pass
-
-    return A
-
-# --------------
 
 def     drop(A, B, _):
     """

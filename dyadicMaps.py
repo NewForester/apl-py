@@ -234,6 +234,21 @@ def     index(Fn, A, B):
     assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
+
+def     without(Fn, A, B):
+    """
+    implement dyadic ~
+    """
+    assertNotArray(A)
+
+    if B.isVectorLike():
+        Rpy = Fn(A.vectorToPy(), B.vectorToPy())
+
+        return makeVector(Rpy, -1, A.prototype())
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 

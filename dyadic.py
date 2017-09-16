@@ -83,7 +83,7 @@ _DyadicFunctions = {
 
     # Selection and Set Operations
     '⍳':        lambda A, B: mapper.index(iterator.index, A, B),
-    '~':        lambda A, B: vv2v(without, A, B),
+    '~':        lambda A, B: mapper.without(iterator.without, A, B),
     '↓':        lambda A, B: sv2vl(drop, A, B),
     '↑':        lambda A, B: sv2vl(take, A, B),
     '⌷':        _toBeImplemented,       # index
