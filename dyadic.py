@@ -82,8 +82,8 @@ _DyadicFunctions = {
     '⊂':        _toBeImplemented,       # partitioned enclose - creates an array of vectors (?!?)
 
     # Selection and Set Operations
+    '⍳':        lambda A, B: mapper.index(iterator.index, A, B),
     '~':        lambda A, B: vv2v(without, A, B),
-    '⍳':        lambda A, B: vv2s(index, A, B),
     '↓':        lambda A, B: sv2vl(drop, A, B),
     '↑':        lambda A, B: sv2vl(take, A, B),
     '⌷':        _toBeImplemented,       # index

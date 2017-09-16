@@ -72,7 +72,7 @@ _MonadicFunctions = {
     '≠':        lambda B: aplError("VALENCE ERROR"),
 
     # Structural (aka manipulative)
-    '⍳':        lambda B: s2v(iota, B),
+    '⍳':        lambda B: mapper.iota(iterator.iota, B),
     '≡':        lambda B: mapper.depth(iterator.depth, B),
     '≢':        lambda B: mapper.tally(None, B),
     '⍴':        lambda B: mapper.rho(None, B),

@@ -18,7 +18,7 @@ import operator
 
 import dyadicIterators as iterator
 
-from systemVariables import confirmInteger
+from systemVariables import confirmInteger, indexOrigin
 
 from aplQuantity import aplQuantity, makeScalar, makeVector, makeEmptyVector, scalarIterator
 from aplError import aplError, assertTrue, assertNumeric, assertNotArray, assertScalarLike, assertEmptyVector
@@ -210,6 +210,30 @@ def     rotate(Fn, A, B):
     assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
+
+def     index(Fn, A, B):
+    """
+    implement dyadic ⍳
+    """
+    assertNotArray(A)
+
+    if B.isEmptyVector():
+        return makeEmptyVector(B.prototype())
+
+    if B.isVectorLike():
+        if A.isEmptyVector():
+            Rpy = scalarIterator(indexOrigin(), B.tally(), B.expressionToGo)
+        else:
+            Rpy = Fn(A.vectorToPy(), B.vectorToPy())
+
+        if B.isScalar():
+            return makeScalar(Rpy)
+
+        return makeVector(Rpy, B.dimension())
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -225,24 +249,6 @@ def     vv2v(Fn, A, B):
     Rpy = Fn(A.vectorToPy(), B.vectorToPy())
 
     return aplQuantity(Rpy, len(Rpy), A.prototype())
-
-# ------------------------------
-
-def     vv2s(Fn, A, B):
-    """
-    evaluate a dyadic function that returns a vector if B is a vector but a scalar if B is scalar
-    """
-    case = A.isString() + B.isString()
-
-    Rpy = Fn(A.vectorToPy(), B.vectorToPy(), case == 1)
-
-    if B.isScalar():
-        return aplQuantity(Rpy[0], None)
-
-    if B.isVector():
-        return aplQuantity(Rpy, B.dimension())
-
-    aplError("RANK ERROR")
 
 # ------------------------------
 

@@ -45,6 +45,16 @@ class   maths(object):
 
 # ------------------------------
 
+def     iota(B):
+    """
+    the iterator for monadic ⍳
+    """
+    IO = indexOrigin()
+
+    return range(IO, B + IO)
+
+# ------------------------------
+
 def     depth(B):
     """
     implement monadic ≡ recursively
@@ -100,18 +110,6 @@ class   reverse(object):
 
 # ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
-# ------------------------------
-
-def     iota(B):
-    """
-    [1, B] or [0, B) depending on ⎕IO
-    """
-    B = confirmInteger(B)
-
-    IO = indexOrigin()
-
-    return range(IO, B + IO)
-
 # ------------------------------
 
 def     head(B):

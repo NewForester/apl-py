@@ -211,6 +211,47 @@ class   rotate(object):
         return self.__next__()
 
 # ------------------------------
+
+class   index(object):
+    """
+    the iterator for dyadic ⍳
+    """
+    def __init__(self, A, B):
+        self._A = A.__iter__()
+        self._B = B.__iter__()
+        self._L = -1
+        self._V = []
+        self._IO = indexOrigin()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        Y = self._B.__next__()
+
+        try:
+            return self._V.index(Y) + self._IO
+        except ValueError:
+            pass
+
+        while not self._A is None:
+            try:
+                X = self._A.__next__()
+                if isinstance(X, aplQuantity):
+                    X.__hash__()
+
+                self._L += 1
+                self._V.append(X)
+
+                if X == Y:
+                    return self._L + self._IO
+            except StopIteration:
+                self._A = None
+                self._L += 1
+
+        return self._L + self._IO
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -228,28 +269,6 @@ def     without(A, B):
             pass
 
     return A
-
-# --------------
-
-def     index(A, B, mixed):
-    """
-    index(es) of (elements of) B in (list) A
-    """
-    V = []
-    IO = indexOrigin()
-
-    A = list(A)
-
-    for X in B:
-        if mixed:
-            V.append(len(A) + IO)
-        else:
-            try:
-                V.append(A.index(X) + IO)
-            except ValueError:
-                V.append(len(A) + IO)
-
-    return V
 
 # --------------
 

@@ -19,8 +19,7 @@ import monadicIterators as iterator
 from systemVariables import confirmInteger
 
 from aplQuantity import aplQuantity, makeScalar, makeVector, makeEmptyVector
-from aplError import aplError, assertNumeric
-from aplError import aplError, assertNumeric, assertNotArray
+from aplError import aplError, assertTrue, assertNumeric, assertNotArray, assertNotVector
 
 # ------------------------------
 
@@ -38,6 +37,24 @@ def     maths(Fn, B):
         return makeVector(iterator.maths(maths, Fn, B), B.dimension())
 
     assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
+
+def     iota(Fn, B):
+    """
+    implement monadic ⍳
+
+    the operand is scalar: there is no map as such
+    """
+    if B.isScalar():
+        Bpy = confirmInteger(B.scalarToPy())
+
+        assertTrue(Bpy >= 0, "DOMAIN ERROR")
+
+        return makeVector(Fn(Bpy), Bpy)
+
+    assertNotVector(B, "WIP - LENGTH ERROR")
+    assertNotArray(B)
 
 # ------------------------------
 
@@ -131,18 +148,6 @@ def     reverse(Fn, B):
 
 # ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
-# ------------------------------
-
-def     s2v(Fn, B):
-    """
-    evaluate a numeric monadic function that, given a scalar argument, returns a vector
-    """
-    assertNumeric(B)
-
-    Bpy = confirmInteger(B.scalarToPy())
-
-    return aplQuantity(Fn(Bpy), int(Bpy))
-
 # ------------------------------
 
 def     v_head(Fn, B):
