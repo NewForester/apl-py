@@ -696,11 +696,12 @@ def     iota():
     """
     pass
 
-# ------------------------------
+# --------------
 
-def     zildeWithout():
+def     tilde():
     """
-    zilde with without (~)
+    >>> test(r"~ ⍬")
+    ⍬
 
     >>> test(r"⍬ ~ ⍬")
     ⍬

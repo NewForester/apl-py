@@ -835,13 +835,12 @@ def     iota():
     """
     pass
 
-# ------------------------------
+# --------------
 
-def     stringTilda():
+def     tilde():
     """
-    >>> test(r"⎕IO ← 1")
-    1
-
+    >>> test(r"~ '!'")
+    DOMAIN ERROR
     >>> test(r"~ 'Hello'")
     DOMAIN ERROR
 

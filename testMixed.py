@@ -898,6 +898,28 @@ def     iota():
     """
     pass
 
+# --------------
+
+def     tilde():
+    """
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    >>> test(r"~ M")
+    DOMAIN ERROR
+
+    >>> test(r"1 2 3 ~ M")
+    ⍬
+    >>> test(r"'abc' ~ M")
+    ''
+
+    >>> test(r"M ~ 2 'b'")
+    1 3 ac
+    >>> test(r"M ~ 2, 'b'")
+    1 3 ac
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":
