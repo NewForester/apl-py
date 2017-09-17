@@ -249,6 +249,22 @@ def     without(Fn, A, B):
     assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
+
+def     set2set(Fn, A, B):
+    """
+    implement dyadic ∪ and ∩
+    """
+    assertNotArray(A)
+    assertNotArray(B)
+
+    if A.isEmptyVector() and B.isEmptyVector():
+        return B
+
+    Rpy = Fn(A.vectorToPy(), B.vectorToPy())
+
+    return makeVector(Rpy, -1, A.prototype())
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 

@@ -286,6 +286,35 @@ class   without(object):
                 return X
 
 # ------------------------------
+
+class   union(object):
+    """
+    the iterator for dyadic ∪
+    """
+    def __init__(self, A, B):
+        self._A = A.__iter__()
+        self._B = B.__iter__()
+        self._S = set()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if not self._A is None:
+            try:
+                X = self._A.__next__()
+                self._S.add(X)
+                return X
+
+            except StopIteration:
+                self._A = None
+
+        while True:
+            Y = self._B.__next__()
+            if Y not in self._S:
+                return Y
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -333,27 +362,6 @@ def     take(A, B, pad):
             R = B[:A]
 
     return R
-
-# --------------
-
-def     union(A, B):
-    """
-    return union of B with A
-
-    NB  only good for homogeneous operands
-    """
-    V = []
-
-    A = list(A)
-
-    for X in A:
-        V.append(X)
-
-    for X in B:
-        if X not in A:
-            V.append(X)
-
-    return V
 
 # --------------
 

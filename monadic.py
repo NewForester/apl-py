@@ -86,11 +86,11 @@ _MonadicFunctions = {
     '⊂':        _toBeImplemented,       # (enclose) - turn array into nested scalar (?!?)
 
     # Selection and Set Operations
+    '∪':        lambda B: mapper.unique(iterator.unique, B),
+    '∩':        lambda B: aplError("VALENCE ERROR"),
     '↑':        lambda B: v_head(head, B),
     '↓':        lambda B: v_tail(tail, B),
     '⌷':        lambda B: aplError("VALENCE ERROR"),
-    '∪':        lambda B: v2v(unique, B),
-    '∩':        lambda B: aplError("VALENCE ERROR"),
     '/':        lambda B: aplError("VALENCE ERROR"),
     '⌿':        lambda B: aplError("VALENCE ERROR"),
     '\\':       lambda B: aplError("VALENCE ERROR"),

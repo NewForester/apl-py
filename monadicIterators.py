@@ -109,6 +109,27 @@ class   reverse(object):
         return T
 
 # ------------------------------
+
+class   unique(object):
+    """
+    the iterator for monadic ∪
+    """
+    def __init__(self, B):
+        self._B = B.__iter__()
+        self._S = set()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        while True:
+            Y = self._B.__next__()
+
+            if Y not in self._S:
+                self._S.add(Y)
+                return Y
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -125,19 +146,5 @@ def     tail(B):
     return everything but the first element of B
     """
     return list(B)[1:]
-
-# --------------
-
-def     unique(B):
-    """
-    return B with duplicate values removed
-    """
-    V = []
-
-    for X in B:
-        if X not in V:
-            V.append(X)
-
-    return V
 
 # EOF
