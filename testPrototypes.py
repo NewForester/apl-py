@@ -771,6 +771,19 @@ def     unique_union():
     """
     pass
 
+# --------------
+
+def     intersection():
+    """
+    only dyadic
+
+    >>> test(r"(,0) ≡ 1 ⍴ 1 'a' ∩ '!' 2")
+    1
+    >>> test(r"(,' ') ≡ 1 ⍴ '!' 2 ∩ 1 'a'")
+    1
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

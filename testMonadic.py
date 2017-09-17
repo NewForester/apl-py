@@ -531,6 +531,15 @@ def     unique_union():
     """
     pass
 
+# --------------
+
+def     intersection():
+    """
+    >>> test(r"∩ 1")
+    VALENCE ERROR
+    """
+    pass
+
 # ------------------------------
 
 def     monadicDrop():

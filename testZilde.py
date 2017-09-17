@@ -740,6 +740,29 @@ def     unique_union():
 
 # --------------
 
+def     intersection():
+    """
+    only dyadic
+
+    >>> test(r"∩ ⍬")
+    VALENCE ERROR
+
+    >>> test(r"⍬ ∩ ⍬")
+    ⍬
+    >>> test(r"⍬ ∩ 1.2")
+    ⍬
+    >>> test(r"1.2 ∩ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ∩ 1 2 3")
+    ⍬
+    >>> test(r"1 2 3 ∩ ⍬")
+    ⍬
+    """
+    pass
+
+# ------------------------------
+
 def     zildeDrop():
     """
     zilde with drop (↓)
@@ -794,24 +817,6 @@ def     zildeTake():
     >>> test(r"0 ↑ 1")
     ⍬
     >>> test(r"0 ↑ 1 2 3")
-    ⍬
-    """
-    pass
-
-# --------------
-
-def     zildeIntersection():
-    """
-    zilde with intersection (∩)
-
-    >>> test(r"⍬ ∩ ⍬")
-    ⍬
-    >>> test(r"⍬ ∩ 1 2 3")
-    ⍬
-    >>> test(r"1 2 3 ∩ ⍬")
-    ⍬
-
-    >>> test(r"1 ∩ 2")
     ⍬
     """
     pass

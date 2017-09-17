@@ -882,6 +882,34 @@ def     unique_union():
 
 # --------------
 
+def     intersection():
+    """
+    only dyadic
+
+    >>> test(r"∩ '!'")
+    VALENCE ERROR
+    >>> test(r"∩ 'Hello'")
+    VALENCE ERROR
+
+    >>> test(r"'Hi' ∩ 'Hello'")
+    H
+    >>> test(r"'Hello' ∩ 'Hi'")
+    H
+
+    >>> test(r"'ll' ∩ 'Hello'")
+    ll
+    >>> test(r"'l' ∩ 'Hello'")
+    l
+    >>> test(r"'Hello' ∩ 'l'")
+    ll
+
+    >>> test(r"'Hi' ∩ 1 2 3")
+    ''
+    """
+    pass
+
+# --------------
+
 def     stringDrop():
     """
     >>> test(r'↓ ""')
@@ -933,22 +961,6 @@ def     stringTake():
     abcdef
     >>> test(r"(9 ↑ 'abcdef'), '!'")
     abcdef   !
-    """
-    pass
-
-# --------------
-
-def     stringIntersection():
-    """
-    >>> test(r"'Hi' ∩ 'Hello'")
-    H
-    >>> test(r"'ll' ∩ 'Hello'")
-    ll
-    >>> test(r"'l' ∩ 'Hello'")
-    l
-
-    !!! test(r""Hi" ∩ 1 2 3")
-    ⍬
     """
     pass
 

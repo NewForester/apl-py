@@ -942,6 +942,30 @@ def     unique_union():
     """
     pass
 
+# --------------
+
+def     intersection():
+    """
+    only dyadic
+
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    >>> test(r"∩ M")
+    VALENCE ERROR
+
+    >>> test(r"1 2 3 ∩ M")
+    1 2 3
+    >>> test(r"'abc' ∩ M")
+    abc
+
+    >>> test(r"M ∩ 4 5 6, 'abc'")
+    abc
+    >>> test(r"M ∩ 1 2 3, 'pqr'")
+    1 2 3
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

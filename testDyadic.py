@@ -1092,6 +1092,32 @@ def     unique_union():
 
 # --------------
 
+def     intersection():
+    """
+    >>> test(r"1.2 ∩ 1.2")
+    1.2
+    >>> test(r"1.2 ∩ ,1.2")
+    1.2
+
+    >>> test(r"⍴ 1.2 ∩ 1.2")
+    1
+    >>> test(r"⍴ 1.2 ∩ ,1.2")
+    1
+
+    >>> test(r"1 2 3 ∩ 6 5 4")
+    ⍬
+    >>> test(r"1 2 3 ∩ 3 2 1")
+    1 2 3
+
+    >>> test(r"1 1 1 ∩ 1")
+    1 1 1
+    >>> test(r"1 ∩ 1 1 1")
+    1
+    """
+    pass
+
+# --------------
+
 def     dyadicDrop():
     """
     >>> test(r"3 ↓ 1 2 3 4 5 6")
@@ -1132,28 +1158,6 @@ def     dyadicTake():
     DOMAIN ERROR
     >>> test(r"3 3 ↑ 1 2 3 4 5 6")
     LENGTH ERROR
-    """
-    pass
-
-# --------------
-
-def     dyadicIntersection():
-    """
-    >>> test(r"3 ∩ 3")
-    3
-    >>> test(r"⍴ 3 ∩ 3")
-    1
-    >>> test(r"⍴ 2 ∩ 4")
-    0
-
-    >>> test(r"1 2 3 ∩ 3 2 1")
-    1 2 3
-    >>> test(r"1 2 3 ∩ 6 5 4")
-    ⍬
-    >>> test(r"1 1 1 ∩ 1")
-    1 1 1
-    >>> test(r"1 ∩ 1 1 1")
-    1
     """
     pass
 
