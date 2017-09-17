@@ -920,6 +920,28 @@ def     tilde():
     """
     pass
 
+# --------------
+
+def     unique_union():
+    """
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    >>> test(r"∪ M")
+    1 2 3 abc
+
+    >>> test(r"1 2 3 ∪ M")
+    1 2 3 abc
+    >>> test(r"'abc' ∪ M")
+    abc 1 2 3
+
+    >>> test(r"M ∪ 4 5 6")
+    1 2 3 abc 4 5 6
+    >>> test(r"M ∪ 'pqr'")
+    1 2 3 abcpqr
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

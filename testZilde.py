@@ -719,6 +719,27 @@ def     tilde():
 
 # --------------
 
+def     unique_union():
+    """
+    >>> test(r"∪ ⍬")
+    ⍬
+
+    >>> test(r"⍬ ∪ ⍬")
+    ⍬
+    >>> test(r"⍬ ∪ 1.2")
+    1.2
+    >>> test(r"1.2 ∪ ⍬")
+    1.2
+
+    >>> test(r"⍬ ∪ 1 2 3")
+    1 2 3
+    >>> test(r"1 2 3 ∪ ⍬")
+    1 2 3
+    """
+    pass
+
+# --------------
+
 def     zildeDrop():
     """
     zilde with drop (↓)
@@ -774,24 +795,6 @@ def     zildeTake():
     ⍬
     >>> test(r"0 ↑ 1 2 3")
     ⍬
-    """
-    pass
-
-# --------------
-
-def     zildeUniqueUnion():
-    """
-    zilde with unique/union (∪)
-
-    >>> test(r"∪ ⍬")
-    ⍬
-
-    >>> test(r"⍬ ∪ ⍬")
-    ⍬
-    >>> test(r"⍬ ∪ 1 2 3")
-    1 2 3
-    >>> test(r"1 2 3 ∪ ⍬")
-    1 2 3
     """
     pass
 

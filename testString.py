@@ -858,6 +858,30 @@ def     tilde():
 
 # --------------
 
+def     unique_union():
+    """
+    >>> test(r"∪ '!'")
+    !
+    >>> test(r"∪ 'Hello'")
+    Helo
+
+    >>> test(r"'Hi' ∪ 'Hello'")
+    Hiello
+    >>> test(r"'Hello' ∪ 'Hi'")
+    Helloi
+
+    >>> test(r"'ll' ∪ 'Hello'")
+    llHeo
+    >>> test(r"'l' ∪ 'Hello'")
+    lHeo
+
+    >>> test(r"'Hi' ∪ 1 2 3")
+    Hi 1 2 3
+    """
+    pass
+
+# --------------
+
 def     stringDrop():
     """
     >>> test(r'↓ ""')
@@ -909,22 +933,6 @@ def     stringTake():
     abcdef
     >>> test(r"(9 ↑ 'abcdef'), '!'")
     abcdef   !
-    """
-    pass
-
-# --------------
-
-def     stringUnion():
-    """
-    >>> test(r"'Hi' ∪ 'Hello'")
-    Hiello
-    >>> test(r"'ll' ∪ 'Hello'")
-    llHeo
-    >>> test(r"'l' ∪ 'Hello'")
-    lHeo
-
-    !!! test(r""Hi" ∪ 1 2 3")
-    "Hi" 1 2 3
     """
     pass
 
