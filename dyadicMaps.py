@@ -268,21 +268,6 @@ def     set2set(Fn, A, B):
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
-def     vv2v(Fn, A, B):
-    """
-    evaluate a dyadic function that returns a vector
-    """
-    case = A.isString() + B.isString()
-
-    if case == 1:
-        return A
-
-    Rpy = Fn(A.vectorToPy(), B.vectorToPy())
-
-    return aplQuantity(Rpy, len(Rpy), A.prototype())
-
-# ------------------------------
-
 def     sv2vl(Fn, A, B):
     """
     evaluate a dyadic function that returns a vector if B is a vector but a scalar if B is scalar

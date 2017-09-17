@@ -315,6 +315,37 @@ class   union(object):
                 return Y
 
 # ------------------------------
+
+class   intersection(object):
+    """
+    the iterator for dyadic ∩
+    """
+    def __init__(self, A, B):
+        self._A = A.__iter__()
+        self._B = B.__iter__()
+        self._S = set()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        while True:
+            X = self._A.__next__()
+            if X in self._S:
+                return X
+
+            while not self._B is None:
+                try:
+                    Y = self._B.__next__()
+                    self._S.add(Y)
+
+                    if X == Y:
+                        return X
+
+                except StopIteration:
+                    self._B = None
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -362,22 +393,6 @@ def     take(A, B, pad):
             R = B[:A]
 
     return R
-
-# --------------
-
-def     intersection(A, B):
-    """
-    return intersection of of B with A
-
-    NB  only good for homogeneous operands
-    """
-    V = []
-
-    for X in A:
-        if X in B:
-            V.append(X)
-
-    return V
 
 # --------------
 
