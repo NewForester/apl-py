@@ -178,25 +178,17 @@ def     tail(Fn, B):
     assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
-# OLD IMPLEMENTATIONS TO BE REPLACED
-# ------------------------------
 
-def     v_head(Fn, B):
+def     head(Fn, B):
     """
-    evaluate a numeric function that, given a vector argument, returns a scalar
+    implement monadic ↑
     """
-    if B.isScalar():
-        return aplQuantity(B.scalarToPy(), None, B.prototype())
+    if B.isScalar() or B.isEmptyVector():
+        return B
 
     if B.isVector():
-        if B.dimension() < 1:
-            return aplQuantity([], 0, B.prototype())
+        return makeScalar(Fn(B.vectorToPy()), B.prototype())
 
-        if B.isString():
-            return aplQuantity([Fn(B.vectorToPy())], None, B.prototype())
-
-        return aplQuantity(Fn(B.vectorToPy()), None, B.prototype())
-
-    aplError("RANK ERROR")
+    assertNotArray(B, "WIP - RANK ERROR")
 
 # EOF

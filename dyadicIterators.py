@@ -369,36 +369,46 @@ class   drop(object):
         return self._B.__next__()
 
 # ------------------------------
+
+class   take(object):
+    """
+    the iterator for dyadic ↑
+    """
+    def __init__(self, A, B, P):
+        self._A = A
+        self._B = B.__iter__() if A >= 0 else lookAhead(B, -A, P)
+        self._P = P
+
+        if A < 0:
+            try:
+                while True:
+                    self._B.pushThenPop()
+            except StopIteration:
+                pass
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._A < 0:
+            return self._B.__next__()
+
+        if self._A == 0:
+            raise StopIteration
+
+        self._A -= 1
+
+        if not self._B is None:
+            try:
+                return self._B.__next__()
+            except StopIteration:
+                self._B = None
+
+        return self._P
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
-
-def     take(A, B, pad):
-    """
-    take A elements from B
-    """
-    A = confirmInteger(A)
-
-    B = list(B)
-    LB = len(B)
-
-    if A < 0:
-        length = LB + A
-
-        if length < 0:
-            R = ([pad] * (0 - length)) + B
-        else:
-            R = B[length:]
-    else:
-        length = LB - A
-
-        if length < 0:
-            R = B + ([pad] * (0 - length))
-        else:
-            R = B[:A]
-
-    return R
-
-# --------------
 
 def     compress(A, B, pad):
     """

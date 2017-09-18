@@ -89,7 +89,7 @@ _MonadicFunctions = {
     '∪':        lambda B: mapper.unique(iterator.unique, B),
     '∩':        lambda B: aplError("VALENCE ERROR"),
     '↓':        lambda B: mapper.tail(iterator.tail, B),
-    '↑':        lambda B: v_head(head, B),
+    '↑':        lambda B: mapper.head(iterator.head, B),
     '⌷':        lambda B: aplError("VALENCE ERROR"),
     '/':        lambda B: aplError("VALENCE ERROR"),
     '⌿':        lambda B: aplError("VALENCE ERROR"),

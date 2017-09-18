@@ -148,13 +148,13 @@ class   tail(object):
         return self._B.__next__()
 
 # ------------------------------
-# OLD IMPLEMENTATIONS TO BE REPLACED
-# ------------------------------
 
 def     head(B):
     """
-    return the first element of B
+    the iterator for monadic ↑
+
+    The first element of B
     """
-    return list(B)[0]
+    return B.__iter__().__next__()
 
 # EOF

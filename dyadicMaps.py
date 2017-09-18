@@ -304,33 +304,33 @@ def     drop(Fn, A, B):
     assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
-# OLD IMPLEMENTATIONS TO BE REPLACED
-# ------------------------------
 
-def     sv2vl(Fn, A, B):
+def     take(Fn, A, B):
     """
-    evaluate a dyadic function that returns a vector if B is a vector but a scalar if B is scalar
+    implement dyadic ↑
     """
-    assertNumeric(A)
+    assertNotArray(A)
 
-    if A.dimension() == 0:
-        if B.isScalar():
+    if B.isScalar() or B.isEmptyVector():
+        if A.isEmptyVector():
             return B
-        elif B.isVector():
-            return aplQuantity([], 0, B.prototype())
 
-        aplError("RANK ERROR")
+    if B.isVectorLike():
+        assertScalarLike(A)
 
-    if B.isString():
-        Rpy = Fn(A.scalarToPy("LENGTH ERROR"), B.vectorToPy(), ' ')
-    else:
-        Rpy = Fn(A.scalarToPy("LENGTH ERROR"), B.vectorToPy(), 0)
+        Apy = confirmInteger(A.scalarToPy())
 
-    if B.isScalar() and Rpy != []:
-        return aplQuantity(Rpy[0], None, B.prototype())
+        if Apy == 0:
+            return makeEmptyVector(B.prototype())
 
-    return aplQuantity(Rpy, len(Rpy), B.prototype())
+        Rpy = Fn(Apy, B.vectorToPy(), B.padFill())
 
+        return makeVector(Rpy, abs(Apy), B.prototype())
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
+# OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
 def     ce2v(Fn, A, B):
