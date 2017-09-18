@@ -940,29 +940,36 @@ def     tail_drop():
 
 # --------------
 
-def     stringTake():
+def     head_take():
     """
-    >>> test(r"1 ↑ 'Hello'")
-    H
-    >>> test(r"↑ 'Hello'")
-    H
     >>> test(r'↑ ""')
     ''
+    >>> test(r"↑ '!'")
+    !
+    >>> test(r"↑ 'Hello'")
+    H
+    >>> test(r"1 ↑ 'Hello'")
+    H
 
-    >>> test(r"¯9 ↑ 'abcdef'")
-       abcdef
-    >>> test(r"¯6 ↑ 'abcdef'")
-    abcdef
-    >>> test(r"¯3 ↑ 'abcdef'")
-    def
-    >>> test(r"0 ↑ 'abcdef'")
-    ''
-    >>> test(r"3 ↑ 'abcdef'")
-    abc
-    >>> test(r"6 ↑ 'abcdef'")
-    abcdef
-    >>> test(r"(9 ↑ 'abcdef'), '!'")
-    abcdef   !
+    >>> test(r"'«', (¯9 ↑ ''), '»'")
+    «         »
+    >>> test(r"'«', (9 ↑ ''), '»'")
+    «         »
+
+    >>> test(r"'«', (¯9 ↑ 'abcdef'), '»'")
+    «   abcdef»
+    >>> test(r"'«', (¯6 ↑ 'abcdef'), '»'")
+    «abcdef»
+    >>> test(r"'«', (¯3 ↑ 'abcdef'), '»'")
+    «def»
+    >>> test(r"'«', (0 ↑ 'abcdef'), '»'")
+    «»
+    >>> test(r"'«', (3 ↑ 'abcdef'), '»'")
+    «abc»
+    >>> test(r"'«', (6 ↑ 'abcdef'), '»'")
+    «abcdef»
+    >>> test(r"'«', (9 ↑ 'abcdef'), '»'")
+    «abcdef   »
     """
     pass
 

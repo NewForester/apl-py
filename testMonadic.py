@@ -555,7 +555,7 @@ def     tail_drop():
 
 # --------------
 
-def     monadicTake():
+def     head_take():
     """
     >>> test(r"↑ 1")
     1

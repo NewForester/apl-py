@@ -1146,7 +1146,7 @@ def     tail_drop():
 
 # --------------
 
-def     dyadicTake():
+def     head_take():
     """
     >>> test(r"3 ↑ 1 2 3 4 5 6")
     1 2 3

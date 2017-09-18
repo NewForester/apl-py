@@ -791,19 +791,18 @@ def     tail_drop():
     """
     pass
 
+
 # --------------
 
-def     zildeTake():
+def     head_take():
     """
-    zilde with take (↑)
-
     >>> test(r"↑ ⍬")
     ⍬
 
     >>> test(r"⍬ ↑ ⍬")
     ⍬
-    >>> test(r"⍬ ↑ 1")
-    1
+    >>> test(r"⍬ ↑ 1.2")
+    1.2
     >>> test(r"1 ↑ ⍬")
     0
     >>> test(r"2 ↑ ⍬")
