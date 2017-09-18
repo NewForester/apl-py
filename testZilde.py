@@ -761,12 +761,10 @@ def     intersection():
     """
     pass
 
-# ------------------------------
+# --------------
 
-def     zildeDrop():
+def     tail_drop():
     """
-    zilde with drop (↓)
-
     >>> test(r"↓ ⍬")
     ⍬
 
@@ -777,11 +775,9 @@ def     zildeDrop():
 
     >>> test(r"⍬ ↓ ⍬")
     ⍬
-    >>> test(r"⍬ ↓ 1")
-    1
+    >>> test(r"⍬ ↓ 1.2")
+    1.2
     >>> test(r"1 ↓ ⍬")
-    ⍬
-    >>> test(r"⍬ ↓ ,1")
     ⍬
 
     >>> test(r"3 ↓ 1 2 3")
@@ -792,7 +788,6 @@ def     zildeDrop():
     ⍬
     >>> test(r"¯6 ↓ 1 2 3")
     ⍬
-
     """
     pass
 

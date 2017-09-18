@@ -910,9 +910,11 @@ def     intersection():
 
 # --------------
 
-def     stringDrop():
+def     tail_drop():
     """
     >>> test(r'↓ ""')
+    ''
+    >>> test(r"↓ '!'")
     ''
     >>> test(r"↓ 'Hello'")
     ello

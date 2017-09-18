@@ -1118,8 +1118,18 @@ def     intersection():
 
 # --------------
 
-def     dyadicDrop():
+def     tail_drop():
     """
+    >>> test(r"1 ↓ 1.2")
+    ⍬
+    >>> test(r"1 ↓ ,1.2")
+    ⍬
+
+    >>> test(r"⍴ 1 ↓ 1.2")
+    0
+    >>> test(r"⍴ 1 ↓ ,1.2")
+    0
+
     >>> test(r"3 ↓ 1 2 3 4 5 6")
     4 5 6
     >>> test(r"¯3 ↓ 1 2 3 4 5 6")

@@ -966,6 +966,34 @@ def     intersection():
     """
     pass
 
+# --------------
+
+def     tail_drop():
+    """
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    >>> test(r"↓ M")
+    2 3 abc
+    >>> test(r"↓ ⌽M")
+    ba 3 2 1
+
+    >>> test(r"0 ↓ M")
+    1 2 3 abc
+    >>> test(r"2 ↓ M")
+    3 abc
+    >>> test(r"¯2 ↓ M")
+    1 2 3 a
+
+    >>> test(r"0 ↓ ⌽M")
+    cba 3 2 1
+    >>> test(r"2 ↓ ⌽M")
+    a 3 2 1
+    >>> test(r"¯2 ↓ ⌽M")
+    cba 3
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

@@ -540,9 +540,9 @@ def     intersection():
     """
     pass
 
-# ------------------------------
+# --------------
 
-def     monadicDrop():
+def     tail_drop():
     """
     >>> test(r"↓ 1 2 3")
     2 3
