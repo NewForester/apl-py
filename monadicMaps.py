@@ -161,6 +161,23 @@ def     unique(Fn, B):
     assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
+
+def     tail(Fn, B):
+    """
+    implement monadic ↓
+    """
+    if B.isScalarLike():
+        return makeEmptyVector(B.prototype())
+
+    if B.isEmptyVector():
+        return B
+
+    if B.isVector():
+        return makeVector(Fn(B.vectorToPy()), B.dimension()-1, B.prototype())
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -179,23 +196,6 @@ def     v_head(Fn, B):
             return aplQuantity([Fn(B.vectorToPy())], None, B.prototype())
 
         return aplQuantity(Fn(B.vectorToPy()), None, B.prototype())
-
-    aplError("RANK ERROR")
-
-# ------------------------------
-
-def     v_tail(Fn, B):
-    """
-    evaluate a function that, given a vector argument, returns a vector (probably)
-    """
-    if B.isScalar():
-        return aplQuantity([], 0, B.prototype())
-
-    if B.isVector():
-        if B.dimension() <= 1:
-            return aplQuantity([], 0, B.prototype())
-
-        return aplQuantity(Fn(B.vectorToPy()), B.dimension()-1, B.prototype())
 
     aplError("RANK ERROR")
 

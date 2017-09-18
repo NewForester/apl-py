@@ -265,6 +265,45 @@ def     set2set(Fn, A, B):
     return makeVector(Rpy, -1, A.prototype())
 
 # ------------------------------
+
+def     drop(Fn, A, B):
+    """
+    implement dyadic ↓
+    """
+    assertNotArray(A)
+
+    if B.isScalar():
+        if A.isEmptyVector():
+            return B
+
+        assertScalarLike(A)
+
+        Apy = confirmInteger(A.scalarToPy())
+
+        if Apy == 0:
+            return makeVector(B.vectorToPy(), 1, B.prototype())
+
+        return makeEmptyVector(B.prototype())
+
+    if B.isVector():
+        if A.isEmptyVector():
+            Apy = 1
+
+        else:
+            assertScalarLike(A)
+
+            Apy = confirmInteger(A.scalarToPy())
+
+            if Apy == 0:
+                return B
+
+        Rpy = Fn(Apy, B.vectorToPy())
+
+        return makeVector(Rpy, -1, B.prototype())
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 

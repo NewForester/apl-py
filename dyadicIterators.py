@@ -346,27 +346,31 @@ class   intersection(object):
                     self._B = None
 
 # ------------------------------
+
+class   drop(object):
+    """
+    the iterator for dyadic ↓
+    """
+    def __init__(self, A, B):
+        self._A = A
+        self._B = B.__iter__() if A >= 0 else lookAhead(B, -A)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._A < 0:
+            return self._B.pushThenPop()
+
+        while self._A > 0:
+            self._A -= 1
+            self._B.__next__()
+
+        return self._B.__next__()
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
-
-def     drop(A, B, _):
-    """
-    drop A elements from B
-    """
-    A = confirmInteger(A)
-    if not isinstance(B, str):
-        B = list(B)
-    LB = len(B)
-
-    if A >= 0:
-        return B[A:]
-
-    if LB + A >= 0:
-        return B[:LB + A]
-
-    return []
-
-# --------------
 
 def     take(A, B, pad):
     """

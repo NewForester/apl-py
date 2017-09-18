@@ -130,6 +130,24 @@ class   unique(object):
                 return Y
 
 # ------------------------------
+
+class   tail(object):
+    """
+    the iterator for monadic ↓
+
+    Everything but the first element of B
+    """
+    def __init__(self, B):
+        self._B = B.__iter__()
+        self._B.__next__()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return self._B.__next__()
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
@@ -138,13 +156,5 @@ def     head(B):
     return the first element of B
     """
     return list(B)[0]
-
-# --------------
-
-def     tail(B):
-    """
-    return everything but the first element of B
-    """
-    return list(B)[1:]
 
 # EOF
