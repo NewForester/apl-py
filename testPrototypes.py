@@ -821,6 +821,19 @@ def     head_take():
     """
     pass
 
+# --------------
+
+def     compress_replicate():
+    """
+    only dyadic
+
+    >>> test(r"(,0) ≡ 1 ⍴ 0 / 1 '!' 3")
+    1
+    >>> test(r"(,' ') ≡ 1 ⍴ 0 / 'a' 1 'c'")
+    1
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

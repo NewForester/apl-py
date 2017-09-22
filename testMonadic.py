@@ -576,6 +576,15 @@ def     head_take():
     """
     pass
 
+# --------------
+
+def     compress_replicate():
+    """
+    >>> test(r"/ 1")
+    VALENCE ERROR
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

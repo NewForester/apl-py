@@ -975,14 +975,24 @@ def     head_take():
 
 # --------------
 
-def     stringCompress():
+def     compress_replicate():
     """
+    only dyadic
+
+    >>> test(r"/ 'Hello'")
+    VALENCE ERROR
+
     >>> test(r"1 0 1 / 'ABC'")
     AC
     >>> test(r"1 2 3 / 'ABC'")
     ABBCCC
     >>> test(r"1 ¯2 3 / 'ABC'")
     A  CCC
+
+    >>> test(r"'!' / 1 2 3")
+    DOMAIN ERROR
+    >>> test(r'"!" / 1 2 3')
+    DOMAIN ERROR
     """
     pass
 

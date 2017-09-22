@@ -817,14 +817,19 @@ def     head_take():
 
 # --------------
 
-def     zildeCompress():
+def     compress_replicate():
     """
-    zilde with compress (/)
+    only dyadic
+
+    >>> test(r"/ ⍬")
+    VALENCE ERROR
 
     >>> test(r"⍬ / ⍬")
     ⍬
-    >>> test(r"⍬ / 1")
+    >>> test(r"⍬ / 1.2")
     ⍬
+    >>> test(r"1.2 / ⍬")
+    DOMAIN ERROR
     >>> test(r"1 / ⍬")
     ⍬
 
@@ -833,7 +838,7 @@ def     zildeCompress():
     >>> test(r"⍬ / 1 2 3")
     LENGTH ERROR
 
-    !!! >>> test(r"0 / 1 2 3")
+    >>> test(r"0 / 1 2 3")
     ⍬
     >>> test(r"0 0 0 / 1 2 3")
     ⍬

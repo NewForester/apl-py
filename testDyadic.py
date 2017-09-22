@@ -1173,13 +1173,13 @@ def     head_take():
 
 # --------------
 
-def     dyadicCompress():
+def     compress_replicate():
     """
     >>> test(r"1 1 1 / 1 2 3")
     1 2 3
-    >>> test(r"1 1 / 1 2 3")
+    >>> test(r"1 1 / 1 2 3", True)
     LENGTH ERROR
-    >>> test(r"1 1 1 1 / 1 2 3")
+    >>> test(r"1 1 1 1 / 1 2 3", True)
     LENGTH ERROR
     >>> test(r"1 0 1 / 1 2 3")
     1 3
@@ -1189,10 +1189,12 @@ def     dyadicCompress():
     >>> test(r"1 ¯2 3 / 1 2 3")
     1 0 0 3 3 3
 
-    !>>> test(r"0 / 1 2 3")
+    >>> test(r"0 / 1 2 3")
     ⍬
-    !>>> test(r"1 / 1 2 3")
+    >>> test(r"1 / 1 2 3")
     1 2 3
+    >>> test(r"¯1 / 1 2 3")
+    0 0 0
     """
     pass
 
