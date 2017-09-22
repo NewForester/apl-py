@@ -348,25 +348,33 @@ def     compress(Fn, A, B):
     assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
-# OLD IMPLEMENTATIONS TO BE REPLACED
+
+def     expand(Fn, A, B):
+    """
+    implement dyadic / and \
+    """
+    assertNotArray(A)
+
+    if B.isScalar() and A.isEmptyVector():
+        return makeEmptyVector(B.prototype())
+
+    if B.isVectorLike():
+        if A.isScalar():
+            Apy = confirmInteger(A.scalarToPy())
+
+            assertTrue(Apy >= 0, "LENGTH ERROR")
+
+            if Apy == 0:
+                return makeVector(B.prototype(), 1, B.prototype())
+
+        Rpy = Fn(A.promoteScalarToVectorPy(), B.vectorToPy(), B.padFill())
+
+        return makeVector(Rpy, -1, B.prototype())
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
 # ------------------------------
-
-def     ce2v(Fn, A, B):
-    """
-    compress or expand a vector yielding another
-    """
-    assertNumeric(A)
-
-    if A.dimension() == 0 and B.isScalar():
-        return aplQuantity([], 0, B.prototype())
-
-    if B.isString():
-        Rpy = Fn(A.vectorToPy(), B.vectorToPy(), ' ')
-    else:
-        Rpy = Fn(A.vectorToPy(), B.vectorToPy(), 0)
-
-    return aplQuantity(Rpy, len(Rpy), B.prototype())
-
+# OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
 def     vs2v_encode(Fn, A, B):

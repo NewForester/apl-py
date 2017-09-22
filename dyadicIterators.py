@@ -468,43 +468,78 @@ class   compress(object):
                 return self._P
 
 # ------------------------------
-# OLD IMPLEMENTATIONS TO BE REPLACED
-# ------------------------------
 
-def     expand(A, B, pad):
+class   expand(object):
     """
-    expand B using A as the template
+    the iterator for dyadic \
     """
-    V = []
+    def __init__(self, A, B, P):
+        self._A = A.__iter__()
+        self._B = B.__iter__()
+        self._P = P
+        self._T = 0
+        self._X = 0
+        self._Y = None
 
-    I = B.__iter__()
+    def __iter__(self):
+        return self
 
-    try:
-        for X in A:
-            X = confirmInteger(X)
+    def __next__(self):
+        while True:
+            if self._X == 0:
+                self._nextPair()
 
-            if X > 0:
-                S = I.__next__()
-                for _ in range(X):
-                    V.append(S)
-            elif X < 0:
-                for _ in range(-X):
-                    V.append(pad)
+            if self._X > 0:
+                self._X -= 1
+                return self._Y
+
+            if self._X < 0:
+                self._X += 1
+                return self._P
+
+    def _nextPair(self):
+        """
+        fetch the next pair of values from the iterators
+        """
+        OK = 0
+        try:
+            self._X = confirmInteger(self._A.__next__())
+            if self._X > 0:
+                self._T += 1
+                if self._T == 0:
+                    return
+
+            elif self._X == 0:
+                self._X -= 1
+
+            OK += 1
+        except StopIteration:
+            pass
+
+        if self._X < 0 and self._T < 0:
+            return
+
+        try:
+            self._Y = self._B.__next__()
+            self._T -= 1
+
+            OK += 1
+        except StopIteration:
+            pass
+
+        if self._X < 0 and self._T == 0:
+            return
+
+        if OK != 2:
+            if isinstance(self._A, scalarIterator):
+                assertTrue(self._T == 1, "LENGTH ERROR")
             else:
-                V.append(pad)
+                assertTrue(self._T == 0, "LENGTH ERROR")
 
-    except StopIteration:
-        aplError("LENGTH ERROR")
+            raise StopIteration
 
-    try:
-        S = I.__next__()
-    except StopIteration:
-        pass
-    else:
-        aplError("LENGTH ERROR")
-
-    return V
-
+# ------------------------------
+# OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
 def     encode(A, B):

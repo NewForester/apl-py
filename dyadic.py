@@ -90,9 +90,9 @@ _DyadicFunctions = {
     '↑':        lambda A, B: mapper.take(iterator.take, A, B),
     '/':        lambda A, B: mapper.compress(iterator.compress, A, B),
     '⌿':        lambda A, B: mapper.compress(iterator.compress, A, B),
+    '\\':       lambda A, B: mapper.expand(iterator.expand, A, B),
+    '⍀':        lambda A, B: mapper.expand(iterator.expand, A, B),
     '⌷':        _toBeImplemented,       # index
-    '\\':       lambda A, B: ce2v(expand, A, B),
-    '⍀':        lambda A, B: ce2v(expand, A, B),
 
     # Miscellaneous
     '∊':        _toBeImplemented,       # membership - is A in B (also characters)
