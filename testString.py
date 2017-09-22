@@ -998,14 +998,24 @@ def     compress_replicate():
 
 # --------------
 
-def     stringExpand():
+def     expand():
     """
+    only dyadic
+
+    >>> test(r"\\ 'Hello'")
+    VALENCE ERROR
+
     >>> test(r"1 0 1 0 1 \\ 'ABC'")
     A B C
     >>> test(r"1 0 2 0 3 \\ 'ABC'")
     A BB CCC
     >>> test(r"¯1 1 ¯2 1 ¯3 1 \\ 'ABC'")
      A  B   C
+
+    >>> test(r"'!' \\ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r'"!" \\ 1 2 3')
+    DOMAIN ERROR
     """
     pass
 

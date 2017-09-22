@@ -1064,6 +1064,37 @@ def     compress_replicate():
 
 # ------------------------------
 
+def     expand():
+    """
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    only dyadic
+
+    >>> test(r"\\ M")
+    VALENCE ERROR
+
+    >>> test(r"0 1 0 1 0 1 0 1 0 1 0 1 \\ M")
+    0 1 0 2 0 3 0 a 0 b 0 c
+    >>> test(r"2 1 2 1 2 1 \\ M")
+    1 1 2 3 3 abbc
+    >>> test(r"¯2 1 ¯2 1 ¯2 1 ¯2 1 ¯2 1 ¯2 1 \\ M")
+    0 0 1 0 0 2 0 0 3 0 0 a 0 0 b 0 0 c
+
+    >>> test(r"0 1 0 1 0 1 0 1 0 1 0 1 \\ ⌽ M")
+     c b a  3   2   1
+    >>> test(r"2 1 2 1 2 1 \\ ⌽ M")
+    ccbaa 3 2 2 1
+    >>> test(r"¯2 1 ¯2 1 ¯2 1 ¯2 1 ¯2 1 ¯2 1 \\ ⌽ M")
+      c  b  a   3    2    1
+
+    >>> test(r"M \\ M", True)
+    DOMAIN ERROR
+    """
+    pass
+
+# ------------------------------
+
 if __name__ == "__main__":
     preamble()
     import doctest

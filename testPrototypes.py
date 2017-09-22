@@ -834,6 +834,19 @@ def     compress_replicate():
     """
     pass
 
+# --------------
+
+def     expand():
+    """
+    only dyadic
+
+    >>> test(r"(,0) ≡ 1 ⍴ 0 \\ ⍬")
+    1
+    >>> test(r"(,' ') ≡ 1 ⍴ 0 \\ ''")
+    1
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

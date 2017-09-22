@@ -585,6 +585,15 @@ def     compress_replicate():
     """
     pass
 
+# --------------
+
+def     expand():
+    """
+    >>> test(r"\\ 1")
+    VALENCE ERROR
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

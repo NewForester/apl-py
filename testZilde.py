@@ -847,13 +847,20 @@ def     compress_replicate():
 
 # --------------
 
-def     zildeExpand():
+def     expand():
     """
-    zilde with expand (\\)
+    only dyadic
+
+    >>> test(r"\\ ⍬")
+    VALENCE ERROR
 
     >>> test(r"⍬ \\ ⍬")
     ⍬
-    >>> test(r"⍬ \\ 21")
+    >>> test(r"⍬ \\ 1.2")
+    ⍬
+    >>> test(r"1.2 \\ ⍬")
+    DOMAIN ERROR
+    >>> test(r"1 \\ ⍬")
     ⍬
 
     >>> test(r"⍬ \\ 1 2 3")
