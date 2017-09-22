@@ -16,7 +16,7 @@ import operator
 from systemVariables import confirmInteger, indexOrigin
 
 from aplQuantity import aplQuantity, lookAhead, makeScalar, scalarIterator
-from aplError import aplError, aplException, assertError
+from aplError import aplError, aplException, assertError, assertTrue
 
 # ------------------------------
 
@@ -28,6 +28,38 @@ def _nextPair(A, B):
 
     try:
         X = A.__next__()
+        OK += 1
+    except StopIteration:
+        if isinstance(B, scalarIterator):
+            raise StopIteration
+
+    try:
+        Y = B.__next__()
+        OK += 1
+    except StopIteration:
+        if isinstance(A, scalarIterator):
+            raise StopIteration
+
+    if OK == 2:
+        return X, Y
+
+    if OK == 0:
+        raise StopIteration
+
+    assertError("LENGTH ERROR")
+
+# --------------
+
+def _nextPairWithInteger(A, B):
+    """
+    utility routine to fetch the next pair of values from the iterators
+
+    The first of the pair must be an integer
+    """
+    OK = 0
+
+    try:
+        X = confirmInteger(A.__next__())
         OK += 1
     except StopIteration:
         if isinstance(B, scalarIterator):
@@ -407,47 +439,37 @@ class   take(object):
         return self._P
 
 # ------------------------------
+
+class   compress(object):
+    """
+    the iterator for dyadic /
+    """
+    def __init__(self, A, B, P):
+        self._A = A.__iter__()
+        self._B = B.__iter__()
+        self._P = P
+        self._X = 0
+        self._Y = None
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        while True:
+            if self._X == 0:
+                self._X, self._Y = _nextPairWithInteger(self._A, self._B)
+
+            if self._X > 0:
+                self._X -= 1
+                return self._Y
+
+            if self._X < 0:
+                self._X += 1
+                return self._P
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
-
-def     compress(A, B, pad):
-    """
-    compress/replicate B using A as the template
-    """
-
-    R = []
-
-    I = B.__iter__()
-
-    try:
-        for X in A:
-            X = confirmInteger(X)
-
-            V = I.__next__()
-
-            if X > 0:
-                for _ in range(X):
-                    R.append(V)
-            elif X < 0:
-                for _ in range(-X):
-                    R.append(pad)
-            else:
-                pass
-
-    except StopIteration:
-        if len(A) > 1:
-            aplError("LENGTH ERROR")
-
-    try:
-        V = I.__next__()
-    except StopIteration:
-        pass
-    else:
-        aplError("LENGTH ERROR")
-
-    return R
-
-# --------------
 
 def     expand(A, B, pad):
     """

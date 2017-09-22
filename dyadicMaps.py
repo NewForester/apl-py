@@ -330,6 +330,24 @@ def     take(Fn, A, B):
     assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
+
+def     compress(Fn, A, B):
+    """
+    implement dyadic / and \
+    """
+    assertNotArray(A)
+
+    if B.isScalar() and A.isEmptyVector():
+        return makeEmptyVector(B.prototype())
+
+    if B.isVectorLike():
+        Rpy = Fn(A.promoteScalarToVectorPy(), B.vectorToPy(), B.padFill())
+
+        return makeVector(Rpy, -1, B.prototype())
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 

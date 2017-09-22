@@ -88,9 +88,9 @@ _DyadicFunctions = {
     '∩':        lambda A, B: mapper.set2set(iterator.intersection, A, B),
     '↓':        lambda A, B: mapper.drop(iterator.drop, A, B),
     '↑':        lambda A, B: mapper.take(iterator.take, A, B),
+    '/':        lambda A, B: mapper.compress(iterator.compress, A, B),
+    '⌿':        lambda A, B: mapper.compress(iterator.compress, A, B),
     '⌷':        _toBeImplemented,       # index
-    '/':        lambda A, B: ce2v(compress, A, B),
-    '⌿':        lambda A, B: ce2v(compress, A, B),
     '\\':       lambda A, B: ce2v(expand, A, B),
     '⍀':        lambda A, B: ce2v(expand, A, B),
 
