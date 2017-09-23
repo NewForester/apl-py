@@ -596,6 +596,15 @@ def     expand():
 
 # ------------------------------
 
+def     encode():
+    """
+    >>> test(r"⊤ 1")
+    VALENCE ERROR
+    """
+    pass
+
+# ------------------------------
+
 if __name__ == "__main__":
     preamble()
     import doctest

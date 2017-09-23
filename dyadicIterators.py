@@ -578,7 +578,7 @@ class   encode(object):
             return T.__iter__()
 
         except TypeError:
-            aplError("DOMAIN ERROR")
+            assertError("DOMAIN ERROR")
 
 # ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED

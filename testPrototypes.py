@@ -849,6 +849,24 @@ def     expand():
 
 # ------------------------------
 
+def     encode():
+    """
+    only dyadic
+
+    >>> test(r"⍬ ≡ 1 2 3 ⊤ ⍬")
+    1
+    >>> test(r"⍬ ≡ ⍬ ⊤ 1 2 3")
+    1
+
+    >>> test(r"⍬ ≡ 1 2 3 ⊤ ''")
+    1
+    >>> test(r"⍬ ≡ '' ⊤ 1 2 3")
+    1
+    """
+    pass
+
+# ------------------------------
+
 if __name__ == "__main__":
     preamble()
     import doctest

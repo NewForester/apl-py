@@ -875,17 +875,25 @@ def     expand():
     """
     pass
 
-# --------------
+# ------------------------------
 
-def     zildeEncode():
+def     encode():
     """
-    zilde with encode (⊤)
+    only dyadic
+
+    >>> test(r"⊤ ⍬")
+    VALENCE ERROR
 
     >>> test(r"⍬ ⊤ ⍬")
     ⍬
     >>> test(r"⍬ ⊤ 17")
     ⍬
     >>> test(r"16 ⊤ ⍬")
+    ⍬
+
+    >>> test(r"1 2 3 ⊤ ⍬")
+    ⍬
+    >>> test(r"⍬ ⊤ 1 2 3")
     ⍬
     """
     pass

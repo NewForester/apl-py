@@ -1095,6 +1095,26 @@ def     expand():
 
 # ------------------------------
 
+def     encode():
+    """
+    only dyadic
+
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    >>> test(r"⊤ M")
+    VALENCE ERROR
+
+    >>> test(r"M ⊤ 13579")
+    DOMAIN ERROR
+
+    >>> test(r"M ⊤ M")
+    WIP - LENGTH ERROR
+    """
+    pass
+
+# ------------------------------
+
 if __name__ == "__main__":
     preamble()
     import doctest

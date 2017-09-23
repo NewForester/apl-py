@@ -1019,15 +1019,31 @@ def     expand():
     """
     pass
 
+# ------------------------------
+
+def     encode():
+    """
+    only dyadic
+
+    >>> test(r"/ 'Hello'")
+    VALENCE ERROR
+
+    >>> test(r"'Hello' ⊤ 17")
+    DOMAIN ERROR
+    >>> test(r"16 16 ⊤ 'Hello'")
+    WIP - LENGTH ERROR
+
+    >>> test(r"'!' ⊤ 17")
+    DOMAIN ERROR
+    >>> test(r"16 ⊤ '!'")
+    DOMAIN ERROR
+    """
+    pass
+
 # --------------
 
 def     stringEncodeDecode():
     """
-    >>> test(r"'Hello' ⊤ 17")
-    DOMAIN ERROR
-    >>> test(r"16 16 ⊤ 'Hello'")
-    DOMAIN ERROR
-
     >>> test(r"'Hello' ⊥ 1 1")
     DOMAIN ERROR
     >>> test(r"16 16 ⊥ 'Hello'")
