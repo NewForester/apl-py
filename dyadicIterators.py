@@ -580,24 +580,26 @@ class   encode(object):
         except TypeError:
             assertError("DOMAIN ERROR")
 
-# ------------------------------
-# OLD IMPLEMENTATIONS TO BE REPLACED
-# ------------------------------
+# --------------
 
 def     decode(A, B):
     """
-    decode (vector) B using (vector) A as base
+    the non-iterator for dyadic ⊥
     """
+    A = A.__iter__()
+    B = B.__iter__()
     S = 0
 
-    I = B.__iter__()
-
     try:
-        for X in A:
-            S = S * X + I.__next__()
-    except StopIteration:
-        pass
+        while True:
+            X, Y = _nextPair(A, B)
 
-    return S
+            S = operator.add(operator.mul(S, X), Y)
+
+    except StopIteration:
+        return S
+
+    except TypeError:
+        assertError("DOMAIN ERROR")
 
 # EOF

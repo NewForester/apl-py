@@ -397,21 +397,29 @@ def     encode(Fn, A, B):
     assertNotVector(B, "WIP - LENGTH ERROR")
 
 # ------------------------------
-# OLD IMPLEMENTATIONS TO BE REPLACED
-# ------------------------------
 
-def     vv2s_decode(Fn, A, B):
+def     decode(Fn, A, B):
     """
-    decode B from base A
+    implement dyadic ⊥
     """
-    assertNumeric(A)
-    assertNumeric(B)
+    assertNotArray(A)
 
-    if A.isScalar():
-        Rpy = Fn(A.scalarIterator(), B.vectorToPy())
-    else:
-        Rpy = Fn(A.vectorToPy()[-B.dimension():], B.vectorToPy())
+    if B.isScalar():
+        assertNumeric(B)
 
-    return aplQuantity(Rpy, None, False)
+        if A.isScalar():
+            assertNumeric(A)
+
+            return B
+
+        return makeScalar(Fn(A.vectorToPy(), B.scalarIterator()))
+
+    if B.isVector():
+        if A.isEmptyVector() or B.isEmptyVector():
+            return makeScalar(0)
+
+        return makeScalar(Fn(A.promoteScalarToVectorPy(), B.vectorToPy()))
+
+    assertNotArray(B, "WIP - RANK ERROR")
 
 # EOF
