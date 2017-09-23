@@ -57,7 +57,7 @@ def     parseNumbers():
 
 # ------------------------------
 
-def     parseStrings(expr):
+def     parseStrings():
     """
     >>> test(r"'Hello'")
     Hello
@@ -395,7 +395,7 @@ def     parsePrototypes():
 
 # ------------------------------
 
-def     parseOutput(expr):
+def     parseOutput():
     """
     >>> testOutput(r"'Hello' ⍝ end of line comments are ignored")
     Hello
@@ -462,7 +462,7 @@ def     parseOutput(expr):
 
 # ------------------------------
 
-def     systemVariable(expr):
+def     systemVariable():
     """
     >>> test(r"⎕dummy")
     UNKNOWN SYSTEM VARIABLE
@@ -511,7 +511,7 @@ def     systemVariable(expr):
 
 # ------------------------------
 
-def     systemCommand(expr):
+def     systemCommand():
     """
     >>> testCommand(")dummy")
     UNKNOWN SYSTEM COMMAND
@@ -522,7 +522,8 @@ def     systemCommand(expr):
 
 if __name__ == "__main__":
     preamble()
-    import doctest
-    doctest.testmod()
+    if test and testOutput and testCommand:
+        import doctest
+        doctest.testmod()
 
 # EOF

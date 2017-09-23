@@ -1,19 +1,26 @@
 """
-    iterator functions for monadic APL functions
+    iterator objects and functions for monadic APL functions
 
     UNDER DEVELOPMENT
 
-    This module contains functions that implement vector versions of monadic
-    APL non-mathematical functions.  Each takes two Python quantities and
-    returns a third.
+    The objects in this module implement monadic APL functions for vectors in
+    conjunction with map functions defined in monadicMaps
 
-    WIP - the implementation of lazy evaluation means all functions in this
-    module are under review.
+    Each object takes a Python 'iterable' and logically returns another but
+    the implementation uses the Python iterator protocol to return the vector
+    one scalar at a time so implementing lazy evaluation.
+
+    Nested vectors are handled by lazy recursion with the iterator calling the
+    map function, which returns a nested iterator.  The map function is the
+    first parameter to the object's __init__ method.
+
+    For several functions, an iterator object is not appropriate.  A Python
+    function is used instead but the calling map function in unaware of this.
 """
 
 from functools import reduce
 
-from systemVariables import confirmInteger, indexOrigin
+from systemVariables import indexOrigin
 
 from aplQuantity import aplQuantity
 from aplError import assertError

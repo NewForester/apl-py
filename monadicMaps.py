@@ -3,23 +3,32 @@
 
     UNDER DEVELOPMENT
 
-    This module contains functions that map mathematical scalar functions over
-    vectors and higher order arrays with the help of iterators functions.  It
-    also contains functions that map non-mathematical vector functions.
+    The functions in this module implement mathematical and non-mathematical
+    monadic APL functions for vectors in conjunction with an iterator object
+    defined in monadicIterators.
 
-    The external view is a map function but internally the functions delegate.
-    Their task is a validate parameters and handle degenerate cases.
+    Each function takes an APL quantity and returns another.  The quantity
+    returned is generally an iterator so implementing lazy evaluation.
 
-    WIP - the implementation of lazy evaluation means all functions in this
-    module are under review.
+    The mathematical APL functions are handled by the generic map.  The
+    pertinent scalar mathematical function is the first parameter.
+
+    The non-mathematical APL functions the handled by special purpose map
+    functions.  The pertinent iterator is the first parameter.
+
+    Nested vectors are handled by recursion with the map function calling the
+    iterator, which calls the map function.
+
+    There are, of course, exceptions.  Scalar quantities are also handled as
+    special cases.
 """
 
 import monadicIterators as iterator
 
 from systemVariables import confirmInteger
 
-from aplQuantity import aplQuantity, makeScalar, makeVector, makeEmptyVector
-from aplError import aplError, assertTrue, assertNumeric, assertNotArray, assertNotVector
+from aplQuantity import makeScalar, makeVector, makeEmptyVector
+from aplError import assertTrue, assertNotVector, assertNotArray
 
 # ------------------------------
 

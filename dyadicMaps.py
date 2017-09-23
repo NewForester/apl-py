@@ -3,15 +3,24 @@
 
     UNDER DEVELOPMENT
 
-    This module contains functions that map mathematical scalar functions over
-    vectors and higher order arrays with the help of iterators functions.  It
-    also contains functions that map non-mathematical vector functions.
+    The functions in this module implement mathematical and non-mathematical
+    dyadic APL functions for vectors in conjunction with an iterator object
+    defined in dyadicIterators.
 
-    The external view is a map function but internally the functions delegate.
-    Their task is a validate parameters and handle degenerate cases.
+    Each function takes two APL quantities and returns a third.  The quantity
+    returned is generally an iterator so implementing lazy evaluation.
 
-    WIP - the implementation of lazy evaluation means all functions in this
-    module are under review.
+    The mathematical APL functions are handled by the generic dyadicMap.  The
+    pertinent scalar mathematical function is the first parameter.
+
+    The non-mathematical APL functions the handled by special purpose map
+    functions.  The pertinent iterator is the first parameter.
+
+    Nested vectors are handled by recursion with the map function calling the
+    iterator, which calls the map function.
+
+    There are, of course, exceptions.  Scalar quantities are also handled as
+    special cases.
 """
 
 import operator
@@ -20,8 +29,9 @@ import dyadicIterators as iterator
 
 from systemVariables import confirmInteger, indexOrigin
 
-from aplQuantity import aplQuantity, makeScalar, makeVector, makeEmptyVector, scalarIterator
-from aplError import aplError, assertTrue, assertNumeric, assertNotArray, assertNotVector, assertScalarLike, assertEmptyVector
+from aplQuantity import scalarIterator, makeScalar, makeVector, makeEmptyVector
+from aplError import assertTrue, assertNumeric, assertScalarLike, assertEmptyVector
+from aplError import assertNotVector, assertNotArray
 
 # ------------------------------
 

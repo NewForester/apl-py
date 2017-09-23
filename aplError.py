@@ -1,8 +1,8 @@
 """
     a simple exception class for APL and wrappers for Python's sys.exit()
 
-    An exception is raised explicity by calling the routine aplError() or
-    calling one of a small number of conditional assert routines.
+    An exception is raised explicity by calling the routine assertError() or
+    one of a small number of conditional assert routines.
 """
 
 import sys
@@ -17,14 +17,6 @@ class   aplException(Exception):
         Exception.__init__(self)
         self.message = message
         self.expr = expr
-
-# ------------------------------
-
-def     aplError(message, expr=None):
-    """
-    raise an exception so aborting the current operation
-    """
-    raise aplException(message, expr)
 
 # ------------------------------
 

@@ -1072,7 +1072,8 @@ def     decode():
 
 if __name__ == "__main__":
     preamble()
-    import doctest
-    doctest.testmod()
+    if test and __name__:
+        import doctest
+        doctest.testmod()
 
 # EOF

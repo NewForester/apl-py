@@ -16,13 +16,10 @@
 
 import monadicMaps as mapper
 import monadicFunctions as monadic
-
-from monadicMaps import *
-from monadicFunctions import *
-from monadicIterators import *
+import monadicIterators as iterator
 
 from aplQuantity import makeScalar
-from aplError import aplError
+from aplError import assertError
 
 # ------------------------------
 
@@ -32,7 +29,7 @@ def     _toBeImplemented(_):
 
     raises FUNCTION NOT YET IMPLEMENTED
     """
-    aplError("FUNCTION NOT YET IMPLEMENTED")
+    assertError("FUNCTION NOT YET IMPLEMENTED")
 
 # ------------------------------
 
@@ -58,18 +55,18 @@ _MonadicFunctions = {
 
     # Logical
     '~':        lambda B: mapper.maths(monadic.logicalNegation, B),
-    '∨':        lambda B: aplError("VALENCE ERROR"),
-    '∧':        lambda B: aplError("VALENCE ERROR"),
-    '⍱':        lambda B: aplError("VALENCE ERROR"),
-    '⍲':        lambda B: aplError("VALENCE ERROR"),
+    '∨':        lambda B: assertError("VALENCE ERROR"),
+    '∧':        lambda B: assertError("VALENCE ERROR"),
+    '⍱':        lambda B: assertError("VALENCE ERROR"),
+    '⍲':        lambda B: assertError("VALENCE ERROR"),
 
     # Comparison
-    '<':        lambda B: aplError("VALENCE ERROR"),
-    '≤':        lambda B: aplError("VALENCE ERROR"),
-    '=':        lambda B: aplError("VALENCE ERROR"),
-    '≥':        lambda B: aplError("VALENCE ERROR"),
-    '>':        lambda B: aplError("VALENCE ERROR"),
-    '≠':        lambda B: aplError("VALENCE ERROR"),
+    '<':        lambda B: assertError("VALENCE ERROR"),
+    '≤':        lambda B: assertError("VALENCE ERROR"),
+    '=':        lambda B: assertError("VALENCE ERROR"),
+    '≥':        lambda B: assertError("VALENCE ERROR"),
+    '>':        lambda B: assertError("VALENCE ERROR"),
+    '≠':        lambda B: assertError("VALENCE ERROR"),
 
     # Structural (aka manipulative)
     '⍳':        lambda B: mapper.iota(iterator.iota, B),
@@ -77,7 +74,7 @@ _MonadicFunctions = {
     '≢':        lambda B: mapper.tally(None, B),
     '⍴':        lambda B: mapper.rho(None, B),
     ',':        lambda B: mapper.unravel(None, B),
-    '⍪':        lambda B: aplError("VALENCE ERROR"),
+    '⍪':        lambda B: assertError("VALENCE ERROR"),
     '∊':        _toBeImplemented,       # enlist - as comma but also nested arrays
     '⍉':        lambda B: mapper.transpose(iterator.transpose, B),
     '⌽':        lambda B: mapper.reverse(iterator.reverse, B),
@@ -87,24 +84,24 @@ _MonadicFunctions = {
 
     # Selection and Set Operations
     '∪':        lambda B: mapper.unique(iterator.unique, B),
-    '∩':        lambda B: aplError("VALENCE ERROR"),
+    '∩':        lambda B: assertError("VALENCE ERROR"),
     '↓':        lambda B: mapper.tail(iterator.tail, B),
     '↑':        lambda B: mapper.head(iterator.head, B),
-    '⌷':        lambda B: aplError("VALENCE ERROR"),
-    '/':        lambda B: aplError("VALENCE ERROR"),
-    '⌿':        lambda B: aplError("VALENCE ERROR"),
-    '\\':       lambda B: aplError("VALENCE ERROR"),
-    '⍀':        lambda B: aplError("VALENCE ERROR"),
+    '/':        lambda B: assertError("VALENCE ERROR"),
+    '⌿':        lambda B: assertError("VALENCE ERROR"),
+    '\\':       lambda B: assertError("VALENCE ERROR"),
+    '⍀':        lambda B: assertError("VALENCE ERROR"),
+    '⌷':        lambda B: assertError("VALENCE ERROR"),
 
     # Miscellaneous
-    '⍷':        lambda B: aplError("VALENCE ERROR"),
+    '⍷':        lambda B: assertError("VALENCE ERROR"),
     '⍋':        _toBeImplemented,       # grade up (ascending sort indicies)
     '⍒':        _toBeImplemented,       # grade down (descending sort indicies)
-    '⍺':        lambda B: aplError("VALENCE ERROR"),
+    '⍺':        lambda B: assertError("VALENCE ERROR"),
     '⍕':        _toBeImplemented,       # monadic format
     '⍎':        _toBeImplemented,       # execute
-    '⊤':        lambda B: aplError("VALENCE ERROR"),
-    '⊥':        lambda B: aplError("VALENCE ERROR"),
+    '⊤':        lambda B: assertError("VALENCE ERROR"),
+    '⊥':        lambda B: assertError("VALENCE ERROR"),
     '⊣':        lambda B: makeScalar(0),
     '⊢':        lambda B: B,
 }
@@ -120,6 +117,6 @@ def     monadicFunction(symbol):
     try:
         return _MonadicFunctions[symbol[0]]
     except KeyError:
-        aplError("INVALID TOKEN", symbol)
+        assertError("INVALID TOKEN")
 
 # EOF

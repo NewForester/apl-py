@@ -16,12 +16,9 @@
 
 import dyadicMaps as mapper
 import dyadicFunctions as dyadic
+import dyadicIterators as iterator
 
-from dyadicMaps import *
-from dyadicFunctions import *
-from dyadicIterators import *
-
-from aplError import aplError
+from aplError import assertError
 
 # ------------------------------
 
@@ -31,7 +28,7 @@ def     _toBeImplemented(_, __):
 
     raises FUNCTION NOT YET IMPLEMENTED
     """
-    aplError("FUNCTION NOT YET IMPLEMENTED")
+    assertError("FUNCTION NOT YET IMPLEMENTED")
 
 # ------------------------------
 
@@ -119,6 +116,6 @@ def     dyadicFunction(symbol):
     try:
         return _DyadicFunctions[symbol[0]]
     except KeyError:
-        aplError("INVALID TOKEN", symbol)
+        assertError("INVALID TOKEN")
 
 # EOF

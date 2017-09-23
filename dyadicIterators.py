@@ -1,14 +1,21 @@
 """
-    iterator functions for dyadic APL functions
+    iterator objects and functions for dyadic APL functions
 
     UNDER DEVELOPMENT
 
-    This module contains functions that implement vector versions of dyadic
-    APL non-mathematical functions.  Each takes two Python quantities and
-    returns a third.
+    The objects in this module implement dyadic APL functions for vectors in
+    conjunction with map functions defined in dyadicMaps
 
-    WIP - the implementation of lazy evaluation means all functions in this
-    module are under review.
+    Each object takes two Python 'iterables' and logically returns a third but
+    the implementation uses the Python iterator protocol to return the vector
+    one scalar at a time so implementing lazy evaluation.
+
+    Nested vectors are handled by lazy recursion with the iterator calling the
+    map function, which returns a nested iterator.  The map function is the
+    first parameter to the object's __init__ method.
+
+    For a few functions, an iterator object is not appropriate.  A Python
+    function is used instead but the calling map function in unaware of this.
 """
 
 import operator
@@ -17,8 +24,8 @@ from monadicIterators import reverse
 
 from systemVariables import confirmInteger, indexOrigin
 
-from aplQuantity import aplQuantity, lookAhead, makeScalar, scalarIterator
-from aplError import aplError, aplException, assertError, assertTrue
+from aplQuantity import aplQuantity, scalarIterator, lookAhead, makeScalar
+from aplError import aplException, assertError, assertTrue
 
 # ------------------------------
 

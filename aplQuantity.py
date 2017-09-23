@@ -1,58 +1,96 @@
 """
-    a Python type that can hold APL scalar and vector quantities, both numeric and string
+    a Python type that can hold APL scalar and vector quantities, numeric, string and mixed
 
     UNDER DEVELOPMENT
 
     APL quantities have:
         - prototype - rank and dimensions
-        - type - numeric, string, nested
+        - type - numeric, string, mixed
         - depth - degree of nesting
         - empty - an APL quantity may have no values but may still have the other properties
 
-    The current version supports
+    The current version of this module supports:
         - numeric and string scalars
             - scalars comprise a single value and have neither rank nor dimension
         - numeric, string and mixed vectors
-            - vectors comprise a (Python) list of values and have no rank but a single dimension
+            - vectors comprise a (Python) sequence of values and have no rank but a single dimension
 
-    Strings are represented by a tuple of single characters, each of which has Python type str.
+    Strings are represented by a sequence of single characters, each of which has Python type str.
 
-    Scalars are stored as a list of length 1 for computational convenience.
+    Scalars are stored as a sequence of length 1 for computational convenience.
+
+    Empty vector is also stored as a sequence of length 1.  This is a provisional representation
+    for 'array prototypes'.
+
+    APL quantities may be recursive.  Several methods are therefore recursive.
+
+    Under eager evaluation rules, sequences are tuples containing concrete values.  Under lazy
+    evaluation rules, the sequence are more likely to be an iterator type.   Think of the Python
+    map() function and then think of special purpose, custom built, map-like functions.
+
+    Such iterator types can yield concrete values only once.  This is usually done implicitly in
+    calling code after a call to the python(), scalarToPy(), vectorToPy() or scalarIterator()
+    methods.
+
+    The comments below speak of 'promises' and of 'realising a promise'.  Apologies in advance.
+
+    A lazy, iterable, APL quantity may be explicitly converted (in-place) to an eager, concrete,
+    quantity by calling the resolve() method.  Again, apologies for the inconsistent terminology.
+
+    In general terms, under lazy evaluation, an ordinary APL expression is parsed producing a
+    sequence of promises and the sequence is then evaluated.  Most APL quantities live and die
+    as promises.  Only when the quantity is needed more than once is it explicitly realised.
+    For example, when an expression is assigned to a workspace variable.
+
+    To support Python set operations, the APL quantity class implements the __hash__ method.
+    Python hash() values for sequences only make sense for immutable sequences therefore the
+    __hash__ method implicitly realises the quantity, converting promises to concrete values.
+
+    Other than the APL quantity class itself, this module contains the implementation of a couple
+    of iterators (implemented here to avoid circular module references) and four helper routines
+    for the creation of APL quantities.  The class constructor should never be invoked directly by
+    code outside this module.  The iterator classes are.
+
+    The four helper functions and many of the class methods are designed to keep calling code (in
+    monadicMaps and dyadicMaps, for example) simple and hopefully self-documenting.  A further
+    group of assert routines are implemented in aplError (to avoid circular module references).
+
+    The module has been complicated with the introduction of the lookAhead iterator.  The aim was
+    to avoid the principle of lazy evaluation being compromised by the implementation.
 """
 
-from aplError import aplError, assertNotArray
+from aplError import assertError, assertNotArray
 
 # ------------------------------
 
 class   aplQuantity(object):
     """
-    trivial class that holds an APL quantity
+    class that holds an APL quantity
+
+    There a many query methods (most of them trivial) and very few behavioural methods.
+
+    Methods may also alter the internal state.  This is because the state is lazy.
     """
     def __init__(self, value, dimension=0, prototype=(0,)):
-        try:
-            if dimension is None:
-                iter(value)
-            self._value = value
-
-        except TypeError:
-            self._value = tuple([value])
-
+        self._value = value
         self._dimension = dimension
         self._prototype = prototype
         self._resolved = False
         self._hash = None
         self.expressionToGo = None
 
-        if dimension == 0:
-            self._value = prototype
-
     def __iter__(self):
+        """
+        required by the Python sort operation
+        """
         return self._value.__iter__()
 
     def __eq__(self, other):
+        """
+        required by the Python sequence operations 'in' and 'not in'
+        """
         if isinstance(other, aplQuantity):
             return self.__hash__() == other.__hash__()
-
         return False
 
     def __lt__(self, other):
@@ -62,6 +100,9 @@ class   aplQuantity(object):
         return self._compare(other) < 0
 
     def __hash__(self):
+        """
+        required by the Python 'set' type
+        """
         if self._hash is None:
             if self._resolved:
                 for value in self._value:
@@ -84,7 +125,7 @@ class   aplQuantity(object):
 
     def _clone(self, other):
         """
-        clone (without realising any promises)
+        take on the attributes of some othe APL quantity (without realising any promises)
         """
         if isinstance(other, aplQuantity):
             self._value = other._value
@@ -92,6 +133,8 @@ class   aplQuantity(object):
             self._prototype = other._prototype
             self._resolved = other._resolved
             self._hash = other._hash
+        else:
+            assertError("ASSERTION ERROR: aplQuantity._clone()")
 
         return self
 
@@ -140,7 +183,7 @@ class   aplQuantity(object):
 
     def _lookAheadDimension(self, lowerBound):
         """
-        return a good enough lower bound on the length of a vector
+        return a good enough lower bound for the length of a vector
         """
         dimension = self._dimension
 
@@ -170,13 +213,12 @@ class   aplQuantity(object):
                     self._value = self._prototype
             return self._dimension
 
-        aplError("RANK ERROR ASSERTION")
+        assertError("ASSERTION ERROR: aplQuantity.length()")
 
     def dimension(self):
         """
         the dimension(s) of the quantity
         """
-        self.tally()    # remove later
         return self._dimension
 
     def rank(self):
@@ -267,7 +309,7 @@ class   aplQuantity(object):
 
     def isScalarLike(self):
         """
-        true if quantity is scalar or a vector length 1
+        true if quantity is scalar or a vector of length 1
         """
         if isinstance(self._dimension, int):
             return self._lookAheadDimension(2) == 1
@@ -283,25 +325,28 @@ class   aplQuantity(object):
 
     def isEmptyVector(self):
         """
-        true if quantity is a vector length 0
+        true if quantity is a vector of length 0
         """
         if isinstance(self._dimension, int):
             return self._lookAheadDimension(1) == 0
         return False
 
-    def scalarToPy(self, error=None):
+    def scalarToPy(self):
         """
-        return Python numeric
+        return Python scalar (a single number or character)
         """
-        if self._dimension is None or self.dimension() <= 1:
-            return next(iter(self._value))
+        if self.isArray():
+            assertError("ASSERTION ERROR: aplQuantity.scalarToPy()")
 
-        aplError(error if error else "RANK ERROR")
+        return self._value.__iter__().__next__()
 
     def vectorToPy(self):
         """
-        return Python list
+        return Python sequence (or a promise thereof)
         """
+        if self.isArray():
+            assertError("ASSERTION ERROR: aplQuantity.vectorToPy()")
+
         if self.isEmptyVector():
             return ()
 
@@ -320,7 +365,7 @@ class   aplQuantity(object):
         if self.isVector():
             return self.vectorToPy()
 
-        aplError("RANK ASSERTION ERROR")
+        assertError("ASSERTION ERROR: aplQuantity.promoteScalarToVectorPy()")
 
     def python(self):
         """
@@ -332,7 +377,7 @@ class   aplQuantity(object):
         if self.isVector():
             return self.vectorToPy()
 
-        aplError("RANK ERROR")
+        assertError("ASSERTION ERROR: aplQuantity.python()")
 
     def safeScalar(self):
         """
@@ -566,7 +611,7 @@ def     makeScalar(value, prototype=(0,)):
     make an APL scalar quantity from a scalar Python value
     """
     if isinstance(value, aplQuantity):
-        aplError("makeScalar: needs more thought")
+        assertError("makeScalar: needs more thought")
 
     try:
         value = value.__iter__().__next__()
@@ -595,7 +640,7 @@ def     makeVector(value, length=-1, prototype=(0,)):
 
         if prototype is None:
             if value.buffered() == 0:
-                aplError("ASSERTION ERROR: makeVector()")
+                assertError("ASSERTION ERROR: makeVector()")
             prototype = (makePrototype(value.peek()),)
 
     if length == 0:
@@ -609,13 +654,6 @@ def     makeEmptyVector(prototype=(0,)):
     """
     make an empty APL vector quantity (⍬ or '')
     """
-    try:
-        prototype.__iter__()
-
-    except AttributeError:
-        print("Change the caller")
-        prototype = (prototype,)
-
     return aplQuantity(prototype, 0, prototype)
 
 # --------------
