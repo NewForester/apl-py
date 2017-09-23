@@ -133,38 +133,6 @@ def     magnitude_residue():
     """
     pass
 
-# --------------
-
-def     valenceError():
-    """
-    symbols for which there is a dyadic but no monadic function
-
-    >>> test(r"⍪ 0")
-    VALENCE ERROR
-    >>> test(r"∩ 0")
-    VALENCE ERROR
-
-    >>> test(r"/ 0")
-    VALENCE ERROR
-    >>> test(r"⌿ 0")
-    VALENCE ERROR
-    >>> test(r"\\ 0")
-    VALENCE ERROR
-    >>> test(r"⍀ 0")
-    VALENCE ERROR
-
-    >>> test(r"⍷ 0")
-    VALENCE ERROR
-    >>> test(r"⍺ 0")
-    VALENCE ERROR
-
-    >>> test(r"⊤ 0")
-    VALENCE ERROR
-    >>> test(r"⊥ 0")
-    VALENCE ERROR
-"""
-    pass
-
 # ------------------------------
 
 def     exponential_power():
@@ -599,6 +567,15 @@ def     expand():
 def     encode():
     """
     >>> test(r"⊤ 1")
+    VALENCE ERROR
+    """
+    pass
+
+# --------------
+
+def     decode():
+    """
+    >>> test(r"⊥ 1")
     VALENCE ERROR
     """
     pass

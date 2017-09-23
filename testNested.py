@@ -1009,6 +1009,24 @@ def     encode():
     """
     pass
 
+# --------------
+
+def     decode():
+    """
+    only dyadic
+
+    >>> test(r"⊥ 1 (2 3) 4")
+    VALENCE ERROR
+
+    >>> test(r"1 (2 3) 4 ⊥ 1 (2 3) 4")
+    DOMAIN ERROR
+    >>> test(r"1 (2 3) 4 ⊥ 17")
+    DOMAIN ERROR
+    >>> test(r"16 ⊥ 1 (2 3) 4")
+    DOMAIN ERROR
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

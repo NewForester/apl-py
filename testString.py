@@ -1042,11 +1042,28 @@ def     encode():
 
 # --------------
 
-def     stringEncodeDecode():
+def     decode():
     """
+    only dyadic
+
+    >>> test(r"⊥ 'Hello'")
+    VALENCE ERROR
+
+    >>> test(r"'!' ⊥ '!'")
+    DOMAIN ERROR
+    >>> test(r"'!' ⊥ 17")
+    DOMAIN ERROR
+    >>> test(r"17 ⊥ '!'")
+    DOMAIN ERROR
+
     >>> test(r"'Hello' ⊥ 1 1")
     DOMAIN ERROR
     >>> test(r"16 16 ⊥ 'Hello'")
+    DOMAIN ERROR
+
+    >>> test(r"'!' ⊥ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r'"!" ⊥ 1 2 3')
     DOMAIN ERROR
     """
     pass

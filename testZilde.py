@@ -900,9 +900,12 @@ def     encode():
 
 # --------------
 
-def     zildeDecode():
+def     decode():
     """
-    zilde with decode (⊥)
+    only dyadic
+
+    >>> test(r"⊥ ⍬")
+    VALENCE ERROR
 
     >>> test(r"⍬ ⊥ ⍬")
     0
@@ -910,6 +913,16 @@ def     zildeDecode():
     0
     >>> test(r"16 16 ⊥ ⍬")
     0
+
+    >>> test(r"1 2 3 ⊥ ⍬")
+    0
+    >>> test(r"⍬ ⊥ 1 2 3")
+    0
+
+    >>> test(r"0 ⊥ 1 2 3")
+    3
+    >>> test(r"0 0 0 ⊥ 1 2 3")
+    3
     """
     pass
 

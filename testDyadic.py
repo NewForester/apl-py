@@ -1259,20 +1259,21 @@ def     encode():
 
 # --------------
 
-def     dyadicDecode():
+def     decode():
     """
-
     >>> test(r"16 16 ⊥ 1 1")
     17
     >>> test(r"16 8 ⊥ 2 1")
     17
     >>> test(r"16 16 8 ⊥ 2 1")
-    17
+    LENGTH ERROR
 
     >>> test(r"8 ⊥ 2 1")
     17
     >>> test(r"8 ⊥ 1")
     1
+    >>> test(r"8 8 ⊥ 1")
+    9
 
     >>> test(r"16 16 8 ⊥ 1 2 1")
     145

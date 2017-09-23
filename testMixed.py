@@ -1113,6 +1113,29 @@ def     encode():
     """
     pass
 
+# --------------
+
+def     decode():
+    """
+    only dyadic
+
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    >>> test(r"⊥ M")
+    VALENCE ERROR
+
+    >>> test(r"1 2 3 ⊥ M")
+    LENGTH ERROR
+    >>> test(r"1 2 3 ⊥ ⌽ M")
+    DOMAIN ERROR
+    >>> test(r"'abc' ⊥ M")
+    DOMAIN ERROR
+    >>> test(r"1 2 3 4 5 6 ⊥ M")
+    DOMAIN ERROR
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":
