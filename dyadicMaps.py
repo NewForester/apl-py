@@ -21,7 +21,7 @@ import dyadicIterators as iterator
 from systemVariables import confirmInteger, indexOrigin
 
 from aplQuantity import aplQuantity, makeScalar, makeVector, makeEmptyVector, scalarIterator
-from aplError import aplError, assertTrue, assertNumeric, assertNotArray, assertScalarLike, assertEmptyVector
+from aplError import aplError, assertTrue, assertNumeric, assertNotArray, assertNotVector, assertScalarLike, assertEmptyVector
 
 # ------------------------------
 
@@ -374,32 +374,30 @@ def     expand(Fn, A, B):
     assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
-# OLD IMPLEMENTATIONS TO BE REPLACED
-# ------------------------------
 
-def     vs2v_encode(Fn, A, B):
+def     encode(Fn, A, B):
     """
-    encode B to base A
+    implement dyadic ⊤
     """
-    assertNumeric(A)
-    assertNumeric(B)
+    assertNotArray(A)
 
-    if B.dimension() == 0:
-        return aplQuantity([])
+    if B.isEmptyVector():
+        return makeEmptyVector()
 
-    Rpy = Fn(A.vectorToPy(), B.scalarToPy())
-
-    if A.isScalar():
-        return aplQuantity(Rpy[0], None, False)
+    assertNotArray(B)
 
     if A.isEmptyVector():
-        return A
+        return makeEmptyVector()
 
-    if A.isVector():
-        return aplQuantity(Rpy, A.dimension(), False)
+    if B.isScalarLike():
+        Rpy = Fn(A.vectorToPy(), B.scalarToPy())
 
-    aplError("RANK ERROR")
+        return makeVector(Rpy, A.dimension())
 
+    assertNotVector(B, "WIP - LENGTH ERROR")
+
+# ------------------------------
+# OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
 
 def     vv2s_decode(Fn, A, B):

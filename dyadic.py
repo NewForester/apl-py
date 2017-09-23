@@ -102,7 +102,7 @@ _DyadicFunctions = {
     '⍺':        _toBeImplemented,       # picture format
     '⍕':        _toBeImplemented,       # dyadic (specification) format
     '⍎':        _toBeImplemented,       # dyadic execute
-    '⊤':        lambda A, B: vs2v_encode(encode, A, B),
+    '⊤':        lambda A, B: mapper.encode(iterator.encode, A, B),
     '⊥':        lambda A, B: vv2s_decode(decode, A, B),
     '⊣':        lambda A, B: A,
     '⊢':        lambda A, B: B,

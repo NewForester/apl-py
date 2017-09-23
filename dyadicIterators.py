@@ -13,6 +13,8 @@
 
 import operator
 
+from monadicIterators import reverse
+
 from systemVariables import confirmInteger, indexOrigin
 
 from aplQuantity import aplQuantity, lookAhead, makeScalar, scalarIterator
@@ -539,26 +541,48 @@ class   expand(object):
             raise StopIteration
 
 # ------------------------------
+
+class   encode(object):
+    """
+    the iterator for dyadic ⊤ - overkill
+    """
+    def __init__(self, A, B):
+        self._A = A.__iter__()
+        self._B = B
+        self._I = None
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._I is None:
+            self._I = encode._encode(reverse(self._A), self._B)
+
+        return self._I.__next__()
+
+    @staticmethod
+    def _encode(I, B):
+        """
+        encode B to the base given by the values of the iterator I and return a new iterator
+        """
+        try:
+            T = []
+            while True:
+                J = I.__next__()
+
+                T = [operator.mod(B, J) if J != 0 else B] + T
+
+                B = operator.floordiv(B, J) if J != 0 else 0
+
+        except StopIteration:
+            return T.__iter__()
+
+        except TypeError:
+            aplError("DOMAIN ERROR")
+
+# ------------------------------
 # OLD IMPLEMENTATIONS TO BE REPLACED
 # ------------------------------
-
-def     encode(A, B):
-    """
-    encode (scalar) B using (vector) A as base
-    """
-    V = []
-
-    for X in reversed(A):
-        if X != 0:
-            V = [operator.mod(B, X)] + V
-            B = operator.floordiv(B, X)
-        else:
-            V = [B] + V
-            B = 0
-
-    return V
-
-# --------------
 
 def     decode(A, B):
     """
