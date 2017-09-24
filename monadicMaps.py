@@ -27,7 +27,7 @@ import monadicIterators as iterator
 
 from systemVariables import confirmInteger
 
-from aplQuantity import makeScalar, makeVector, makeEmptyVector
+from aplQuantity import aplQuantity, makeScalar, makeVector, makeEmptyVector
 from aplError import assertTrue, assertNotVector, assertNotArray
 
 # ------------------------------
@@ -152,6 +152,20 @@ def     reverse(Fn, B):
 
     if B.isVector():
         return makeVector(Fn(B.vectorToPy()), B.dimension(), None)
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
+
+def     enclose(_, B):
+    """
+    implement monadic ⊂
+    """
+    if B.isScalar():
+        return B
+
+    if B.isVector():
+        return makeScalar((B,), None)
 
     assertNotArray(B, "WIP - RANK ERROR")
 

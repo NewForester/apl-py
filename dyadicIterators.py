@@ -24,7 +24,8 @@ from monadicIterators import reverse
 
 from systemVariables import confirmInteger, indexOrigin
 
-from aplQuantity import aplQuantity, scalarIterator, lookAhead, makeScalar
+from aplQuantity import aplQuantity, scalarIterator, lookAhead
+from aplQuantity import makeScalar, makeVector, makePrototype
 from aplError import aplException, assertError, assertTrue
 
 # ------------------------------
@@ -263,6 +264,55 @@ class   rotate(object):
             self._B = None
 
         return self.__next__()
+
+# ------------------------------
+
+class   partition(object):
+    """
+    the iterator for dyadic ⊂
+    """
+    def __init__(self, A, B):
+        self._A = A.__iter__()
+        self._B = B.__iter__()
+        self._V = []
+        self._I = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        while True:
+            try:
+                X, Y = _nextPairWithInteger(self._A, self._B)
+            except StopIteration:
+                return self._aplVector(None)
+
+            if X > self._I:
+                self._I = X
+                try:
+                    return self._aplVector(Y)
+                except StopIteration:
+                    pass
+
+            if X > 0:
+                self._V.append(Y)
+            elif X < 0:
+                assertError("DOMAIN ERROR")
+
+            self._I = X
+
+    def _aplVector(self, Y):
+        """
+        create, for return, a non-empty APL vector quantity else raise StopIteration)
+        """
+        V = self._V
+
+        if V == []:
+            raise StopIteration
+
+        self._V = [] if Y is None else [Y]
+
+        return makeVector(tuple(V), len(V), (makePrototype(V[0]),))
 
 # ------------------------------
 

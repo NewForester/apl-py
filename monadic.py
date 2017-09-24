@@ -79,8 +79,8 @@ _MonadicFunctions = {
     '⍉':        lambda B: mapper.transpose(iterator.transpose, B),
     '⌽':        lambda B: mapper.reverse(iterator.reverse, B),
     '⊖':        lambda B: mapper.reverse(iterator.reverse, B),
+    '⊂':        lambda B: mapper.enclose(None, B),
     '⊃':        _toBeImplemented,       # (disclose) - turn nested scalar into vector (?!?) - mix ?
-    '⊂':        _toBeImplemented,       # (enclose) - turn array into nested scalar (?!?)
 
     # Selection and Set Operations
     '∪':        lambda B: mapper.unique(iterator.unique, B),

@@ -29,9 +29,10 @@ import dyadicIterators as iterator
 
 from systemVariables import confirmInteger, indexOrigin
 
-from aplQuantity import scalarIterator, makeScalar, makeVector, makeEmptyVector
-from aplError import assertTrue, assertNumeric, assertScalarLike, assertEmptyVector
-from aplError import assertNotVector, assertNotArray
+from aplQuantity import aplQuantity, scalarIterator, makeScalar, makeVector, makeEmptyVector
+from aplError import assertError, assertTrue, assertNotTrue
+from aplError import assertNotScalar, assertNotVector, assertNotArray
+from aplError import assertNumeric, assertScalarLike, assertEmptyVector
 
 # ------------------------------
 
@@ -216,6 +217,32 @@ def     rotate(Fn, A, B):
             return B
 
         return makeVector(Fn(Apy, B.vectorToPy()), B.dimension(), None)
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
+
+def     partition(Fn, A, B):
+    """
+    implement dyadic ⊂
+    """
+    assertNotArray(A)
+
+    assertNotTrue(B.isScalar(), "RANK ERROR")
+
+    if B.isEmptyVector() and A.isEmptyVector():
+        return B
+
+    if B.isVector():
+        if A.isScalar():
+            Apy = confirmInteger(A.scalarToPy())
+
+            if Apy == 0:
+                return makeEmptyVector()
+
+            return makeScalar((B,), B.prototype())
+
+        return makeVector(Fn(A.vectorToPy(), B.vectorToPy()), -1, B.prototype())
 
     assertNotArray(B, "WIP - RANK ERROR")
 
