@@ -19,6 +19,7 @@
 """
 
 from test.base import preamble, testResult as test
+from test.base import saveIndexOrigin, setIndexOrigin, restoreIndexOrigin
 
 # ------------------------------
 
@@ -769,6 +770,38 @@ def     enclose_partition():
     1
     >>> test(r"(,⊂ '  ' 0) ≡ 1 ⍴ 0 0 ⊂ ('!!' 1) ('??' 2)")
     1
+    """
+    pass
+
+# --------------
+
+def     disclose_pick():
+    """
+    >>> test(r"⍬ ≡ ⊃ ⍬")
+    1
+    >>> test(r"'' ≡ ⊃ ''")
+    1
+    >>> test(r"⍬ ≡ ⊃⊂ ⍬")
+    1
+    >>> test(r"'' ≡ ⊃⊂ ''")
+    1
+
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"(,0) ≡ 1 ⍴ 2 ⊃ 'One' ⍬ 'Three'")
+    1
+    >>> test(r"(,' ') ≡ 1 ⍴ 2 ⊃ 1 '' 3")
+    1
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"(,0) ≡ 1 ⍴ 1 ⊃ 'One' ⍬ 'Three'")
+    1
+    >>> test(r"(,' ') ≡ 1 ⍴ 1 ⊃ 1 '' 3")
+    1
+
+    >>> restoreIndexOrigin(IO)
     """
     pass
 

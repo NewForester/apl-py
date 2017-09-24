@@ -853,6 +853,75 @@ def     enclose_partition():
     """
     pass
 
+# --------------
+
+def     disclose_pick():
+    """
+    >>> test(r"⊃ 1 (2 3) 4")
+    WIP - LENGTH ERROR
+    >>> test(r"⊃ ⊃ 1 (2 3) 4")
+    WIP - LENGTH ERROR
+
+    >>> test(r"⊃ 'Hello'")
+    Hello
+    >>> test(r"⊃ ⊃ 'Hello'")
+    Hello
+
+    >>> test(r"⊃ 'H' 'ello'")
+    WIP - LENGTH ERROR
+    >>> test(r"⊃ 'Hell' 'o'")
+    WIP - LENGTH ERROR
+
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"1 ⊃ 1 (2 3) 4")
+    1
+    >>> test(r"2 ⊃ 1 (2 3) 4")
+    2 3
+    >>> test(r"3 ⊃ 1 (2 3) 4")
+    4
+
+    >>> test(r"2 2 ⊃ 1 (2 3) 4")
+    3
+
+    >>> test(r"1 ⊃ 'Hello' '&' 'Goodbye'")
+    Hello
+    >>> test(r"2 ⊃ 'Hello' '&' 'Goodbye'")
+    &
+    >>> test(r"3 ⊃ 'Hello' '&' 'Goodbye'")
+    Goodbye
+
+    >>> test(r"1 1 ⊃ 'Hello' '&' 'Goodbye'")
+    H
+    >>> test(r"2 2 ⊃ 'Hello' '&' 'Goodbye'")
+    RANK ERROR
+    >>> test(r"3 3 ⊃ 'Hello' '&' 'Goodbye'")
+    o
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"0 ⊃ 1 (2 3) 4")
+    1
+    >>> test(r"1 ⊃ 1 (2 3) 4")
+    2 3
+    >>> test(r"2 ⊃ 1 (2 3) 4")
+    4
+
+    >>> test(r"1 1 ⊃ 1 (2 3) 4")
+    3
+
+    >>> test(r"0 1 ⊃ 'Hello' '&' 'Goodbye'")
+    e
+    >>> test(r"1 2 ⊃ 'Hello' '&' 'Goodbye'")
+    RANK ERROR
+    >>> test(r"2 3 ⊃ 'Hello' '&' 'Goodbye'")
+    d
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
 # ------------------------------
 
 def     iota():

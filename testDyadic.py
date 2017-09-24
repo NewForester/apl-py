@@ -1010,6 +1010,48 @@ def     enclose_partition():
     """
     pass
 
+# --------------
+
+def     disclose_pick():
+    """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"1 ⊃ 10")
+    RANK ERROR
+    >>> test(r"1 ⊃ ,10")
+    10
+    >>> test(r"1.2 ⊃ ,10")
+    DOMAIN ERROR
+
+    >>> test(r"0 ⊃ 10 20 30")
+    INDEX ERROR
+    >>> test(r"1 ⊃ 10 20 30")
+    10
+    >>> test(r"2 ⊃ 10 20 30")
+    20
+    >>> test(r"3 ⊃ 10 20 30")
+    30
+    >>> test(r"4 ⊃ 10 20 30")
+    INDEX ERROR
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"¯1 ⊃ 10 20 30")
+    INDEX ERROR
+    >>> test(r"0 ⊃ 10 20 30")
+    10
+    >>> test(r"1 ⊃ 10 20 30")
+    20
+    >>> test(r"2 ⊃ 10 20 30")
+    30
+    >>> test(r"3 ⊃ 10 20 30")
+    INDEX ERROR
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
 # ------------------------------
 
 def     iota():

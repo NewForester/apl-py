@@ -685,6 +685,34 @@ def     enclose_partition():
     """
     pass
 
+# --------------
+
+def     disclose_pick():
+    """
+    >>> test(r"⊃ ⍬")
+    ⍬
+    >>> test(r"⊃ ⍬ ⍬")
+    WIP - LENGTH ERROR
+
+    >>> test(r"⍬ ⊃ 10")
+    10
+    >>> test(r"⍬ ⊃ ,10")
+    10
+    >>> test(r"⍬ ⊃ 10 20 30")
+    10 20 30
+
+    >>> test(r"⍬ ⊃ ⍬")
+    ⍬
+
+    >>> test(r"-1 ⊃ ⍬")
+    INDEX ERROR
+    >>> test(r"0 ⊃ ⍬")
+    INDEX ERROR
+    >>> test(r"1 ⊃ ⍬")
+    INDEX ERROR
+    """
+    pass
+
 # ------------------------------
 
 def     iota():

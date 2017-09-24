@@ -886,6 +886,38 @@ def     enclose_partition():
     """
     pass
 
+# --------------
+
+def     disclose_pick():
+    """
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    >>> test(r"⊃ M")
+    1 2 3 abc
+    >>> test(r"⊃ ⌽ M")
+    cba 3 2 1
+
+    >>> test(r"M ≡ ⊃⊂ M")
+    1
+    >>> test(r"M ≡ ⌽ ⊃⊂ ⌽ M")
+    1
+
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"3 ⊂ M")
+    (1 2 3 abc)
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"3 ⊂ M")
+    (1 2 3 abc)
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
 # ------------------------------
 
 def     iota():

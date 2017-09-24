@@ -835,6 +835,80 @@ def     enclose_partition():
     """
     pass
 
+# --------------
+
+def     disclose_pick():
+    """
+    >>> test(r"⊃ '!'")
+    !
+    >>> test(r'⊃ "!"')
+    !
+    >>> test(r"⊃ 'Hello'")
+    Hello
+
+    >>> test(r"⍴ ⊃ '!'")
+    ⍬
+    >>> test(r'⍴ ⊃ "!"')
+    1
+    >>> test(r"⍴ ⊃ 'Hello'")
+    5
+
+    >>> test(r"'!' ≡ ⊃⊂ '!'")
+    1
+    >>> test(r'"!" ≡ ⊃⊂ "!"')
+    1
+    >>> test(r"'Hello' ≡ ⊃⊂ 'Hello'")
+    1
+
+    >>> test(r"⊃ 'Hello' 'Paul'")
+    WIP - LENGTH ERROR
+
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"1 ⊃ '!'")
+    RANK ERROR
+    >>> test(r'1 ⊃ "!"')
+    !
+
+    >>> test(r"0 ⊃ 'pig'")
+    INDEX ERROR
+    >>> test(r"1 ⊃ 'pig'")
+    p
+    >>> test(r"2 ⊃ 'pig'")
+    i
+    >>> test(r"3 ⊃ 'pig'")
+    g
+    >>> test(r"4 ⊃ 'pig'")
+    INDEX ERROR
+
+    >>> test(r"1 1 ⊃ 'One' 'Two' 'Three'")
+    O
+    >>> test(r"2 2 ⊃ 'One' 'Two' 'Three'")
+    w
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"¯1 ⊃ 'pig'")
+    INDEX ERROR
+    >>> test(r"0 ⊃ 'pig'")
+    p
+    >>> test(r"1 ⊃ 'pig'")
+    i
+    >>> test(r"2 ⊃ 'pig'")
+    g
+    >>> test(r"3 ⊃ 'pig'")
+    INDEX ERROR
+
+    >>> test(r"1 1 ⊃ 'One' 'Two' 'Three'")
+    w
+    >>> test(r"2 2 ⊃ 'One' 'Two' 'Three'")
+    r
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
 # ------------------------------
 
 def     iota():
