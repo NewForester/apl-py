@@ -23,7 +23,7 @@ from functools import reduce
 from systemVariables import indexOrigin
 
 from aplQuantity import aplQuantity
-from aplError import assertError
+from aplError import aplException, assertError
 
 # ------------------------------
 
@@ -35,20 +35,27 @@ class   maths(object):
         self._map = Map
         self._fn = Fn
         self._B = B.__iter__()
+        self._expresso = B.expressionToGo
 
     def __iter__(self):
         return self
 
     def __next__(self):
-        Y = self._B.__next__()
-
-        if isinstance(Y, aplQuantity):
-            return self._map(self._fn, Y)
-
         try:
-            return self._fn(Y)
-        except TypeError:
-            assertError("DOMAIN ERROR")
+            Y = self._B.__next__()
+
+            if isinstance(Y, aplQuantity):
+                return self._map(self._fn, Y)
+
+            try:
+                return self._fn(Y)
+            except TypeError:
+                assertError("DOMAIN ERROR")
+
+        except aplException as error:
+            if error.expr is None:
+                error.expr = self._expresso
+            raise error
 
 # ------------------------------
 

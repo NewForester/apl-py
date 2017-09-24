@@ -100,26 +100,33 @@ class   maths(object):
         self._fn = Fn
         self._A = A.__iter__()
         self._B = B.__iter__()
+        self._expresso = B.expressionToGo
 
     def __iter__(self):
         return self
 
     def __next__(self):
-        X, Y = _nextPair(self._A, self._B)
-
-        if isinstance(X, aplQuantity) and isinstance(Y, aplQuantity):
-            return self._map(self._fn, X, Y)
-
-        if isinstance(X, aplQuantity):
-            return self._map(self._fn, X, makeScalar(Y))
-
-        if isinstance(Y, aplQuantity):
-            return self._map(self._fn, makeScalar(X), Y)
-
         try:
-            return self._fn(X, Y)
-        except TypeError:
-            assertError("DOMAIN ERROR")
+            X, Y = _nextPair(self._A, self._B)
+
+            if isinstance(X, aplQuantity) and isinstance(Y, aplQuantity):
+                return self._map(self._fn, X, Y)
+
+            if isinstance(X, aplQuantity):
+                return self._map(self._fn, X, makeScalar(Y))
+
+            if isinstance(Y, aplQuantity):
+                return self._map(self._fn, makeScalar(X), Y)
+
+            try:
+                return self._fn(X, Y)
+            except TypeError:
+                assertError("DOMAIN ERROR")
+
+        except aplException as error:
+            if error.expr is None:
+                error.expr = self._expresso
+            raise error
 
 # ------------------------------
 
@@ -132,6 +139,7 @@ class   match(object):
         self._fn = Fn
         self._A = A.__iter__()
         self._B = B.__iter__()
+        self._expresso = B.expressionToGo
 
     def __iter__(self):
         return self
@@ -139,20 +147,25 @@ class   match(object):
     def __next__(self):
         try:
             X, Y = _nextPair(self._A, self._B)
+
+            if isinstance(X, aplQuantity) and isinstance(Y, aplQuantity):
+                return self._map(self._fn, X, Y)
+
+            if isinstance(X, aplQuantity):
+                return False
+
+            if isinstance(Y, aplQuantity):
+                return False
+
+            return self._fn(X, Y)
+
         except aplException as error:
             if error.message == "LENGTH ERROR":
                 return False
 
-        if isinstance(X, aplQuantity) and isinstance(Y, aplQuantity):
-            return self._map(self._fn, X, Y)
-
-        if isinstance(X, aplQuantity):
-            return False
-
-        if isinstance(Y, aplQuantity):
-            return False
-
-        return self._fn(X, Y)
+            if error.expr is None:
+                error.expr = self._expresso
+            raise error
 
 # ------------------------------
 

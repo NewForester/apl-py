@@ -125,18 +125,26 @@ def     evaluateName(expr, cio):
     if match:
         name = match.group(0)
         if name:
-            rhs_expr = expr[len(name):].lstrip()
-            if rhs_expr and rhs_expr[0] == '←':
-                if cio.newStmt:
-                    cio.hushImplicit = True
-                    cio.newStmt = False
+            try:
+                rhs_expr = expr[len(name):].lstrip()
+                if rhs_expr and rhs_expr[0] == '←':
+                    if cio.newStmt:
+                        cio.hushImplicit = True
+                        cio.newStmt = False
 
-                rhs = evaluate(rhs_expr[1:].lstrip(), cio)
-                lhs = workspaceVariable(name, rhs)
-                return (lhs, len(expr))
-            else:
-                lhs = workspaceVariable(name)
-                return (lhs, len(name))
+                    rhs = evaluate(rhs_expr[1:].lstrip(), cio)
+                    lhs = workspaceVariable(name, rhs)
+                    consumed = len(expr)
+                else:
+                    lhs = workspaceVariable(name)
+                    consumed = len(name)
+
+                return lhs, consumed
+
+            except aplException as error:
+                if not error.expr:
+                    error.expr = expr
+                raise error
 
     return None, 0
 
@@ -245,20 +253,26 @@ def     evaluateSystemVariable(expr, cio):
     if match:
         name = match.group(0)
         if name:
-            rhs_expr = expr[len(name)+1:].lstrip()
-            if rhs_expr and rhs_expr[0] == '←':
-                if cio.newStmt:
-                    cio.hushImplicit = True
-                    cio.newStmt = False
+            try:
+                rhs_expr = expr[len(name)+1:].lstrip()
+                if rhs_expr and rhs_expr[0] == '←':
+                    if cio.newStmt:
+                        cio.hushImplicit = True
+                        cio.newStmt = False
 
-                rhs = evaluate(rhs_expr[1:], cio)
-                lhs = systemVariable(name, rhs)
-                consumed = len(expr)
-            else:
-                lhs = systemVariable(name)
-                consumed = len(name)+1
+                    rhs = evaluate(rhs_expr[1:], cio)
+                    lhs = systemVariable(name, rhs)
+                    consumed = len(expr)
+                else:
+                    lhs = systemVariable(name)
+                    consumed = len(name)+1
 
-            return lhs, consumed
+                return lhs, consumed
+
+            except aplException as error:
+                if not error.expr:
+                    error.expr = expr
+                raise error
 
     return None, 0
 
