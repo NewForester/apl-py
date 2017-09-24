@@ -862,6 +862,30 @@ def     reverse_rotate():
     """
     pass
 
+# --------------
+
+def     enclose_partition():
+    """
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    >>> test(r"⊂ M")
+    (1 2 3 abc)
+    >>> test(r"⊂ ⌽ M")
+    (cba 3 2 1)
+
+    >>> test(r"1 1 1 2 2 2 ⊂ M")
+    (1 2 3) 'abc'
+    >>> test(r"1 0 1 2 0 2 ⊂ M")
+    (1) (3) 'a' 'c'
+    >>> test(r"1 ¯1 1 2 ¯2 2 ⊂ M")
+    DOMAIN ERROR
+
+    >>> test(r"1 1 2 2 3 3 ⊂ M")
+    (1 2) (3 a) 'bc'
+    """
+    pass
+
 # ------------------------------
 
 def     iota():

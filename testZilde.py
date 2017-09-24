@@ -653,6 +653,38 @@ def     reverse_rotate():
     """
     pass
 
+# --------------
+
+def     enclose_partition():
+    """
+    >>> test(r"⊂ ⍬")
+    (⍬)
+    >>> test(r"≡ ⊂ ⍬")
+    2
+    >>> test(r"≢ ⊂ ⍬")
+    1
+
+    >>> test(r"⍬ ⊂ ⍬")
+    ⍬
+    >>> test(r"⍬ ⊂ 1.2")
+    RANK ERROR
+    >>> test(r"1.2 ⊂ ⍬")
+    DOMAIN ERROR
+
+    >>> test(r"⍬ ⊂ 0")
+    RANK ERROR
+    >>> test(r"0 ⊂ ⍬")
+    ⍬
+    >>> test(r"1 ⊂ ⍬")
+    (⍬)
+
+    >>> test(r"⍬ ⊂ 1 2 3")
+    LENGTH ERROR
+    >>> test(r"1 2 3 ⊂ ⍬")
+    LENGTH ERROR
+    """
+    pass
+
 # ------------------------------
 
 def     iota():

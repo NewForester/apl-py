@@ -469,6 +469,33 @@ def     transpose():
 
 # --------------
 
+def     enclose_partition():
+    """
+    >>> test(r"⊂ 1.2")
+    1.2
+    >>> test(r"≡ ⊂ 1.2")
+    0
+    >>> test(r"≢ ⊂ 1.2")
+    1
+
+    >>> test(r"⊂ ,1.2")
+    (1.2)
+    >>> test(r"≡ ⊂ ,1.2")
+    2
+    >>> test(r"≢ ⊂ ,1.2")
+    1
+
+    >>> test(r"⊂ 1 2 3")
+    (1 2 3)
+    >>> test(r"≡ ⊂ 1 2 3")
+    2
+    >>> test(r"≢ ⊂ 1 2 3")
+    1
+    """
+    pass
+
+# --------------
+
 def     reverse_rotate():
     """
     >>> test(r"⌽ 1.2")

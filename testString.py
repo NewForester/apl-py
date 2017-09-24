@@ -792,6 +792,49 @@ def     reverse_rotate():
     pass
 
 
+# --------------
+
+def     enclose_partition():
+    """
+    >>> test(r"⊂ ''")
+    ('')
+    >>> test(r"≡ ⊂ ''")
+    2
+    >>> test(r"≢ ⊂ ''")
+    1
+
+    >>> test(r"⊂ 'H'")
+    H
+    >>> test(r"≡ ⊂ 'H'")
+    0
+    >>> test(r"≢ ⊂ 'H'")
+    1
+
+    >>> test(r'⊂ "H"')
+    'H'
+    >>> test(r'≡ ⊂ "H"')
+    2
+    >>> test(r'≢ ⊂ "H"')
+    1
+
+    >>> test(r"⊂ 'Hello'")
+    'Hello'
+    >>> test(r"≡ ⊂ 'Hello'")
+    2
+    >>> test(r"≢ ⊂ 'Hello'")
+    1
+
+    >>> test(r"1 2 3 ⊂ 'Hello'", True)
+    LENGTH ERROR
+    >>> test(r"1 2 3 4 5 ⊂ 'Hello'")
+    'H' 'e' 'l' 'l' 'o'
+    >>> test(r"1 1 2 0 3 ⊂ 'Hello'")
+    'He' 'l' 'o'
+    >>> test(r"1 0 ⊂ 'Hello' 'Paul'")
+    ('Hello')
+    """
+    pass
+
 # ------------------------------
 
 def     iota():
