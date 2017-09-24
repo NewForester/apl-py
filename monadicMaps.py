@@ -171,6 +171,28 @@ def     enclose(_, B):
 
 # ------------------------------
 
+def     disclose(Fn, B):
+    """
+    implement monadic ⊃
+    """
+    if B.isScalar():
+        Bpy = B.scalarToPy()
+
+        if isinstance(Bpy, aplQuantity):
+            return Bpy
+
+        return makeScalar(Bpy, None)
+
+    if B.isEmptyVector():
+        return B
+
+    if B.isVector():
+        return makeVector(Fn(B.vectorToPy()), B.dimension(), B.prototype())
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
+
 def     unique(Fn, B):
     """
     implement monadic ∪

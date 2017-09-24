@@ -124,6 +124,26 @@ class   reverse(object):
 
 # ------------------------------
 
+class   disclose(object):
+    """
+    the iterator for monadic ⊃
+    """
+    def __init__(self, B):
+        self._B = B.__iter__()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        Y = self._B.__next__()
+
+        if isinstance(Y, aplQuantity):
+            assertError("WIP - LENGTH ERROR")
+
+        return Y
+
+# ------------------------------
+
 class   unique(object):
     """
     the iterator for monadic ∪

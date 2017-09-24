@@ -76,7 +76,7 @@ _DyadicFunctions = {
     '⌽':        lambda A, B: mapper.rotate(iterator.rotate, A, B),
     '⊖':        lambda A, B: mapper.rotate(iterator.rotate, A, B),
     '⊂':        lambda A, B: mapper.partition(iterator.partition, A, B),
-    '⊃':        _toBeImplemented,       # pick (disclose) = picks from an array (?!?)
+    '⊃':        lambda A, B: mapper.pick(None, A, B),
 
     # Selection and Set Operations
     '⍳':        lambda A, B: mapper.index(iterator.index, A, B),

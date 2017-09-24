@@ -248,6 +248,43 @@ def     partition(Fn, A, B):
 
 # ------------------------------
 
+def     pick(_, A, B):
+    """
+    implement dyadic ⊃
+    """
+    assertNotArray(A)
+
+    if A.isEmptyVector():
+        return B
+
+    assertNotScalar(B)
+
+    if B.isVector():
+        IO = indexOrigin()
+
+        try:
+            for X in A.vectorToPy():
+                X = confirmInteger(X)
+
+                assertTrue(X >= IO, "INDEX ERROR")
+
+                if isinstance(B, aplQuantity):
+                    B = B.vectorToPy()[X-IO]
+                else:
+                    assertError("RANK ERROR")
+
+        except IndexError:
+            assertError("INDEX ERROR")
+
+        if isinstance(B, aplQuantity):
+            return B
+
+        return makeScalar((B,), None)
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
+
 def     index(Fn, A, B):
     """
     implement dyadic ⍳
