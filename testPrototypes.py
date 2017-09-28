@@ -707,6 +707,27 @@ def     comma():
 
 # --------------
 
+def     enlist_membership():
+    """
+    >>> test(r"⍬ ≡ ∊ ⍬")
+    1
+    >>> test(r"'' ≡ ∊ ''")
+    1
+
+    >>> test(r"⍬ ≡ 0 ⍴ ∊ 1")
+    1
+    >>> test(r"'' ≡ 0 ⍴ ∊ 'a'")
+    1
+
+    >>> test(r"⍬ ≡ 0 ⍴ 11 ∊ 'Hello'")
+    1
+    >>> test(r"'' ≡ 0 ⍴ 'Hello' ∊ 1000000")
+    1
+    """
+    pass
+
+# --------------
+
 def     transpose():
     """
     >>> test(r"⍬ ≡ ⍉ ⍬")

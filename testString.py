@@ -739,6 +739,40 @@ def     comma():
 
 # --------------
 
+def     enlist_membership():
+    """
+    >>> test(r"∊ '!'")
+    !
+    >>> test(r"≢ ∊ '!'")
+    1
+    >>> test(r"≡ ∊ '!'")
+    1
+
+    >>> test(r"∊ 'Hello'")
+    Hello
+    >>> test(r"≢ ∊ 'Hello'")
+    5
+    >>> test(r"≡ ∊ 'Hello'")
+    1
+
+    >>> test(r"∊ 'Hello' 'Paul'")
+    HelloPaul
+    >>> test(r"≢ ∊ 'Hello' 'Paul'")
+    9
+    >>> test(r"≡ ∊ 'Hello' 'Paul'")
+    1
+
+    >>> test(r"'Paul' ∊ 'Hello Paul'")
+    1 1 1 1
+    >>> test(r"'Paul' ∊ 'Hello'")
+    0 0 0 1
+    >>> test(r"'Paul' ∊ 'Hello' 'Paul'")
+    0 0 0 0
+    """
+    pass
+
+# --------------
+
 def     transpose():
     """
     >>> test(r"⍉ '!'")

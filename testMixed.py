@@ -827,6 +827,49 @@ def     comma():
 
 # --------------
 
+def     enlist_membership():
+    """
+    >>> test(r"∊ 1 2 3 , 'Hello'")
+    1 2 3 Hello
+    >>> test(r"≢ ∊ 1 2 3 , 'Hello'")
+    8
+    >>> test(r"≡ ∊ 1 2 3 , 'Hello'")
+    1
+
+    >>> test(r"∊ 'Hello' , 1 2 3")
+    Hello 1 2 3
+    >>> test(r"≢ ∊ 'Hello' , 1 2 3")
+    8
+    >>> test(r"≡ ∊ 'Hello' , 1 2 3")
+    1
+
+    >>> test(r"∊ 1 2 3 'Hello'")
+    1 2 3 Hello
+    >>> test(r"≢ ∊ 1 2 3 'Hello'")
+    8
+    >>> test(r"≡ ∊ 1 2 3 'Hello'")
+    1
+
+    >>> test(r"∊ 'Hello' 1 2 3")
+    Hello 1 2 3
+    >>> test(r"≢ ∊ 'Hello' 1 2 3")
+    8
+    >>> test(r"≡ ∊ 'Hello' 1 2 3")
+    1
+
+    >>> test(r"2 4 6 ∊ 1 2 3 , 'Hello'")
+    1 0 0
+    >>> test(r"'Hell' ∊ 1 2 3 , 'Hello'")
+    1 1 1 1
+    >>> test(r"2 4 6 'Hell' ∊ 1 2 3 , 'Hello'")
+    1 0 0 0
+    >>> test(r"(2 4 6, 'Hell') ∊ 1 2 3 , 'Hello'")
+    1 0 0 1 1 1 1
+    """
+    pass
+
+# --------------
+
 def     transpose():
     """
     >>> test(r"M ← 1 2 3, 'abc'")

@@ -452,6 +452,26 @@ def     comma():
 
 # --------------
 
+def     enlist_membership():
+    """
+    >>> test(r"∊ 1.2")
+    1.2
+    >>> test(r"≢ ∊ 1.2")
+    1
+    >>> test(r"≡ ∊ 1.2")
+    1
+
+    >>> test(r"∊ 1 2 3")
+    1 2 3
+    >>> test(r"≢ ∊ 1 2 3")
+    3
+    >>> test(r"≡ ∊ 1 2 3")
+    1
+    """
+    pass
+
+# --------------
+
 def     transpose():
     """
     >>> test(r"⍉ 1.2")
