@@ -75,7 +75,8 @@ _MonadicFunctions = {
     '⍴':        lambda B: mapper.rho(None, B),
     ',':        lambda B: mapper.unravel(None, B),
     '⍪':        lambda B: assertError("VALENCE ERROR"),
-    '∊':        _toBeImplemented,       # enlist - as comma but also nested arrays
+    '∊':        lambda B: mapper.enlist(iterator.enlist, B),
+    '⍷':        lambda B: assertError("VALENCE ERROR"),
     '⍉':        lambda B: mapper.transpose(iterator.transpose, B),
     '⌽':        lambda B: mapper.reverse(iterator.reverse, B),
     '⊖':        lambda B: mapper.reverse(iterator.reverse, B),
@@ -94,7 +95,6 @@ _MonadicFunctions = {
     '⌷':        lambda B: assertError("VALENCE ERROR"),
 
     # Miscellaneous
-    '⍷':        lambda B: assertError("VALENCE ERROR"),
     '⍋':        _toBeImplemented,       # grade up (ascending sort indicies)
     '⍒':        _toBeImplemented,       # grade down (descending sort indicies)
     '⍺':        lambda B: assertError("VALENCE ERROR"),

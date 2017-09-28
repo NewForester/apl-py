@@ -285,6 +285,26 @@ def     pick(_, A, B):
 
 # ------------------------------
 
+def     membership(Fn, A, B):
+    """
+    implement dyadic ∊
+    """
+    if A.isEmptyVector():
+        return A
+
+    if A.isVectorLike() and B.isVectorLike():
+        Rpy = Fn(A.vectorToPy(), B.vectorToPy())
+
+        if A.isScalar():
+            return makeScalar(Rpy, A.prototype())
+
+        return makeVector(Rpy, A.dimension(), A.prototype())
+
+    assertNotArray(A, "WIP - RANK ERROR")
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
+
 def     index(Fn, A, B):
     """
     implement dyadic ⍳

@@ -129,6 +129,20 @@ def     unravel(_, B):
 
 # ------------------------------
 
+def     enlist(Fn, B):
+    """
+    implement monadic ∊
+    """
+    if B.isEmptyVector():
+        return B
+
+    if B.isVectorLike():
+        return makeVector(Fn(B.vectorToPy()), -1, B.prototype())
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
+
 def     transpose(_, B):
     """
     implement monadic ⍉

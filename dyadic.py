@@ -79,6 +79,8 @@ _DyadicFunctions = {
     '⊃':        lambda A, B: mapper.pick(None, A, B),
 
     # Selection and Set Operations
+    '∊':        lambda A, B: mapper.membership(iterator.membership, A, B),
+    '⍷':        lambda A, B: mapper.find(iterator.find, A, B),
     '⍳':        lambda A, B: mapper.index(iterator.index, A, B),
     '~':        lambda A, B: mapper.without(iterator.without, A, B),
     '∪':        lambda A, B: mapper.set2set(iterator.union, A, B),
@@ -92,8 +94,6 @@ _DyadicFunctions = {
     '⌷':        _toBeImplemented,       # index
 
     # Miscellaneous
-    '∊':        _toBeImplemented,       # membership - is A in B (also characters)
-    '⍷':        _toBeImplemented,       # find (look for a substring)
     '⍋':        _toBeImplemented,       # sort ascending with specified collating sequence
     '⍒':        _toBeImplemented,       # sort descending with specified collating sequence
     '⍺':        _toBeImplemented,       # picture format

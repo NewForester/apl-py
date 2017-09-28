@@ -78,6 +78,34 @@ def     depth(B):
 
 # ------------------------------
 
+class   enlist(object):
+    """
+    the iterator for monadic ∊
+    """
+    def __init__(self, B):
+        self._B = B.__iter__()
+        self._Y = None
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        while True:
+            if self._Y is None:
+                Y = self._B.__next__()
+
+                if not isinstance(Y, aplQuantity):
+                    return Y
+
+                self._Y = enlist(Y)
+
+            try:
+                return self._Y.__next__()
+            except StopIteration:
+                self._Y = None
+
+# ------------------------------
+
 def     transpose(B):
     """
     implement monadic ⍉ (for arrays - TBD)

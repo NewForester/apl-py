@@ -316,6 +316,39 @@ class   partition(object):
 
 # ------------------------------
 
+class   membership(object):
+    """
+    the iterator for dyadic ∊
+    """
+    def __init__(self, A, B):
+        self._A = A.__iter__()
+        self._B = B.__iter__()
+        self._S = set()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        X = self._A.__next__()
+
+        if X in self._S:
+            return 1
+
+        while not self._B is None:
+            try:
+                Y = self._B.__next__()
+                self._S.add(Y)
+
+                if X == Y:
+                    return 1
+
+            except StopIteration:
+                self._B = None
+
+        return 0
+
+# ------------------------------
+
 class   index(object):
     """
     the iterator for dyadic ⍳
