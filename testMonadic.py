@@ -472,6 +472,15 @@ def     enlist_membership():
 
 # --------------
 
+def     find():
+    """
+    >>> test(r"⍷ 1")
+    VALENCE ERROR
+    """
+    pass
+
+# --------------
+
 def     transpose():
     """
     >>> test(r"⍉ 1.2")

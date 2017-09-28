@@ -638,6 +638,33 @@ def     enlist_membership():
 
 # --------------
 
+def     find():
+    """
+    only dyadic
+
+    >>> test(r"1 ⍷ ⍬")
+    ⍬
+    >>> test(r"⍴ 1 ⍷ ⍬")
+    0
+
+    >>> test(r"1 2 3 ⍷ ⍬")
+    ⍬
+    >>> test(r"⍴ 1 2 3 ⍷ ⍬")
+    0
+
+    >>> test(r"⍬ ⍷ 1")
+    0
+    >>> test(r"⍴ ⍬ ⍷ 1")
+    ⍬
+    >>> test(r"⍬ ⍷ 1 2 3")
+    0 0 0
+    >>> test(r"⍴ ⍬ ⍷ 1 2 3")
+    3
+    """
+    pass
+
+# --------------
+
 def     transpose():
     """
     >>> test(r"⍉ ⍬")
