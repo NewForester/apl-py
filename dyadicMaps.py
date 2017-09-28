@@ -305,6 +305,25 @@ def     membership(Fn, A, B):
 
 # ------------------------------
 
+def     find(Fn, A, B):
+    """
+    implement dyadic ∊
+    """
+    A.resolve()
+
+    if B.isVectorLike() and A.isVectorLike():
+        Rpy = Fn(A.vectorToPy(), B.vectorToPy())
+
+        if B.isScalar():
+            return makeScalar(Rpy, B.prototype())
+
+        return makeVector(Rpy, B.dimension(), B.prototype())
+
+    assertNotArray(A, "WIP - RANK ERROR")
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
+
 def     index(Fn, A, B):
     """
     implement dyadic ⍳

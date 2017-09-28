@@ -349,6 +349,38 @@ class   membership(object):
 
 # ------------------------------
 
+class   find(object):
+    """
+    the iterator for dyadic ⍷
+    """
+    def __init__(self, A, B):
+        self._A = A
+        self._B = lookAhead(B)
+        self._L = len(A)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._L == 0:
+            self._B.__next__()
+            return 0
+
+        if self._B.buffered() == 0:
+            self._B.buffer(self._L)
+        else:
+            try:
+                self._B.popThenPush()
+            except StopIteration:
+                pass
+
+        if self._B.buffered() == 0:
+            raise StopIteration
+
+        return int(self._B.isMatch(self._A))
+
+# ------------------------------
+
 class   index(object):
     """
     the iterator for dyadic ⍳
