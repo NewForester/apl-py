@@ -1010,6 +1010,64 @@ def     decode():
     """
     pass
 
+# --------------
+
+def     gradeUp():
+    """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"⍬ ≡ ⍋ ⍬")
+    1
+    >>> test(r"⍬ ≡ ⍋ ''")
+    1
+
+    >>> test(r"⍬ ≡ '' ⍋ ''")
+    1
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍬ ≡ ⍋ ⍬")
+    1
+    >>> test(r"⍬ ≡ ⍋ ''")
+    1
+
+    >>> test(r"⍬ ≡ '' ⍋ ''")
+    1
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
+# --------------
+
+def     gradeDown():
+    """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"⍬ ≡ ⍒ ⍬")
+    1
+    >>> test(r"⍬ ≡ ⍒ ''")
+    1
+
+    >>> test(r"⍬ ≡ '' ⍒ ''")
+    1
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍬ ≡ ⍒ ⍬")
+    1
+    >>> test(r"⍬ ≡ ⍒ ''")
+    1
+
+    >>> test(r"⍬ ≡ '' ⍒ ''")
+    1
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

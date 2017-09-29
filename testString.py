@@ -1239,6 +1239,156 @@ def     decode():
     """
     pass
 
+# --------------
+
+def     gradeUp():
+    """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"⍋ 'azbycx'")
+    1 3 5 6 4 2
+    >>> test(r"⍋ 'xcybza'")
+    6 4 2 1 3 5
+
+    >>> test(r"⍋ '!'")
+    DOMAIN ERROR
+    >>> test(r'⍋ "!"')
+    1
+
+    >>> test(r"A ← 'abcdefghijklmnopqrstuvwxyz'")
+    abcdefghijklmnopqrstuvwxyz
+
+    >>> test(r"A ⍋ 'azbycx'")
+    1 3 5 6 4 2
+    >>> test(r"A ⍋ 'xcybza'")
+    6 4 2 1 3 5
+
+    >>> test(r"A ⍋ 'aZbYcX'")
+    1 3 5 2 4 6
+    >>> test(r"A ⍋ 'XcYbZa'")
+    6 4 2 1 3 5
+
+    >>> test(r"A ← ⌽A")
+    zyxwvutsrqponmlkjihgfedcba
+
+    >>> test(r"A ⍋ 'azbycx'")
+    2 4 6 5 3 1
+    >>> test(r"A ⍋ 'xcybza'")
+    5 3 1 2 4 6
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍋ 'azbycx'")
+    0 2 4 5 3 1
+    >>> test(r"⍋ 'xcybza'")
+    5 3 1 0 2 4
+
+    >>> test(r"⍋ '!'")
+    DOMAIN ERROR
+    >>> test(r'⍋ "!"')
+    0
+
+    >>> test(r"A ← 'abcdefghijklmnopqrstuvwxyz'")
+    abcdefghijklmnopqrstuvwxyz
+
+    >>> test(r"A ⍋ 'azbycx'")
+    0 2 4 5 3 1
+    >>> test(r"A ⍋ 'xcybza'")
+    5 3 1 0 2 4
+
+    >>> test(r"A ⍋ 'aZbYcX'")
+    0 2 4 1 3 5
+    >>> test(r"A ⍋ 'XcYbZa'")
+    5 3 1 0 2 4
+
+    >>> test(r"A ← ⌽A")
+    zyxwvutsrqponmlkjihgfedcba
+
+    >>> test(r"A ⍋ 'azbycx'")
+    1 3 5 4 2 0
+    >>> test(r"A ⍋ 'xcybza'")
+    4 2 0 1 3 5
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
+# --------------
+
+def     gradeDown():
+    """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"⍒ 'azbycx'")
+    2 4 6 5 3 1
+    >>> test(r"⍒ 'xcybza'")
+    5 3 1 2 4 6
+
+    >>> test(r"⍒ '!'")
+    DOMAIN ERROR
+    >>> test(r'⍒ "!"')
+    1
+
+    >>> test(r"A ← 'abcdefghijklmnopqrstuvwxyz'")
+    abcdefghijklmnopqrstuvwxyz
+
+    >>> test(r"A ⍒ 'azbycx'")
+    2 4 6 5 3 1
+    >>> test(r"A ⍒ 'xcybza'")
+    5 3 1 2 4 6
+
+    >>> test(r"A ⍒ 'aZbYcX'")
+    2 4 6 5 3 1
+    >>> test(r"A ⍒ 'XcYbZa'")
+    1 3 5 2 4 6
+
+    >>> test(r"A ← ⌽A")
+    zyxwvutsrqponmlkjihgfedcba
+
+    >>> test(r"A ⍒ 'azbycx'")
+    1 3 5 6 4 2
+    >>> test(r"A ⍒ 'xcybza'")
+    6 4 2 1 3 5
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍒ 'azbycx'")
+    1 3 5 4 2 0
+    >>> test(r"⍒ 'xcybza'")
+    4 2 0 1 3 5
+
+    >>> test(r"⍒ '!'")
+    DOMAIN ERROR
+    >>> test(r'⍒ "!"')
+    0
+
+    >>> test(r"A ← 'abcdefghijklmnopqrstuvwxyz'")
+    abcdefghijklmnopqrstuvwxyz
+
+    >>> test(r"A ⍒ 'azbycx'")
+    1 3 5 4 2 0
+    >>> test(r"A ⍒ 'xcybza'")
+    4 2 0 1 3 5
+
+    >>> test(r"A ⍒ 'aZbYcX'")
+    1 3 5 4 2 0
+    >>> test(r"A ⍒ 'XcYbZa'")
+    0 2 4 1 3 5
+
+    >>> test(r"A ← ⌽A")
+    zyxwvutsrqponmlkjihgfedcba
+
+    >>> test(r"A ⍒ 'azbycx'")
+    0 2 4 5 3 1
+    >>> test(r"A ⍒ 'xcybza'")
+    5 3 1 0 2 4
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

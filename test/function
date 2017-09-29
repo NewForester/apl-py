@@ -12,7 +12,7 @@
 ##
 ##  EXCEPTIONS: use lt, le, eq, ge, gt, ne, rho, iota, comma, tilde as appropriate
 ##
-##  BEWARE:     notMatch
+##  BEWARE:     notMatch, gradeUp and gradeDown
 ##
 ##  CAVEAT:     ⊣ ⊢ are not covered:  run testParser.py
 ##

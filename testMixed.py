@@ -1252,6 +1252,98 @@ def     decode():
     """
     pass
 
+# --------------
+
+def     gradeUp():
+    """
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"⍋ M")
+    4 5 6 1 2 3
+    >>> test(r"⍋ ⌽M")
+    3 2 1 6 5 4
+
+    >>> test(r"M ⍋ M")
+    DOMAIN ERROR
+    >>> test(r"M ⍋ ⌽M")
+    DOMAIN ERROR
+
+    >>> test(r"M ⍋ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ⍋ M")
+    DOMAIN ERROR
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍋ M")
+    3 4 5 0 1 2
+    >>> test(r"⍋ ⌽M")
+    2 1 0 5 4 3
+
+    >>> test(r"M ⍋ M")
+    DOMAIN ERROR
+    >>> test(r"M ⍋ ⌽M")
+    DOMAIN ERROR
+
+    >>> test(r"M ⍋ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ⍋ M")
+    DOMAIN ERROR
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
+# --------------
+
+def     gradeDown():
+    """
+    >>> test(r"M ← 1 2 3, 'abc'")
+    1 2 3 abc
+
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"⍒ M")
+    3 2 1 6 5 4
+    >>> test(r"⍒ ⌽M")
+    4 5 6 1 2 3
+
+    >>> test(r"M ⍒ M")
+    DOMAIN ERROR
+    >>> test(r"M ⍒ ⌽M")
+    DOMAIN ERROR
+
+    >>> test(r"M ⍒ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ⍒ M")
+    DOMAIN ERROR
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍒ M")
+    2 1 0 5 4 3
+    >>> test(r"⍒ ⌽M")
+    3 4 5 0 1 2
+
+    >>> test(r"M ⍒ M")
+    DOMAIN ERROR
+    >>> test(r"M ⍒ ⌽M")
+    DOMAIN ERROR
+
+    >>> test(r"M ⍒ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ⍒ M")
+    DOMAIN ERROR
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

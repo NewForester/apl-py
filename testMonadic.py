@@ -663,6 +663,100 @@ def     decode():
     """
     pass
 
+# --------------
+
+def     gradeUp():
+    """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"⍋ 1 2 3 4 5 6")
+    1 2 3 4 5 6
+    >>> test(r"⍋ 6 5 4 3 2 1")
+    6 5 4 3 2 1
+
+    >>> test(r"⍋ 1 6 2 5 3 4")
+    1 3 5 6 4 2
+    >>> test(r"⍋ 1.1 6.6 2.2 5.5 3.3 4.4")
+    1 3 5 6 4 2
+    >>> test(r"⍋ ¯1 ¯6 ¯2 ¯5 ¯3 ¯4")
+    2 4 6 5 3 1
+
+    >>> test(r"⍋ 1")
+    DOMAIN ERROR
+    >>> test(r"⍋ ,1")
+    1
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍋ 1 2 3 4 5 6")
+    0 1 2 3 4 5
+    >>> test(r"⍋ 6 5 4 3 2 1")
+    5 4 3 2 1 0
+
+    >>> test(r"⍋ 1 6 2 5 3 4")
+    0 2 4 5 3 1
+    >>> test(r"⍋ 1.1 6.6 2.2 5.5 3.3 4.4")
+    0 2 4 5 3 1
+    >>> test(r"⍋ ¯1 ¯6 ¯2 ¯5 ¯3 ¯4")
+    1 3 5 4 2 0
+
+    >>> test(r"⍋ 1")
+    DOMAIN ERROR
+    >>> test(r"⍋ ,1")
+    0
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
+# --------------
+
+def     gradeDown():
+    """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"⍒ 1 2 3 4 5 6")
+    6 5 4 3 2 1
+    >>> test(r"⍒ 6 5 4 3 2 1")
+    1 2 3 4 5 6
+
+    >>> test(r"⍒ 1 6 2 5 3 4")
+    2 4 6 5 3 1
+    >>> test(r"⍒ 1.1 6.6 2.2 5.5 3.3 4.4")
+    2 4 6 5 3 1
+    >>> test(r"⍒ ¯1 ¯6 ¯2 ¯5 ¯3 ¯4")
+    1 3 5 6 4 2
+
+    >>> test(r"⍒ 1")
+    DOMAIN ERROR
+    >>> test(r"⍒ ,1")
+    1
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍒ 1 2 3 4 5 6")
+    5 4 3 2 1 0
+    >>> test(r"⍒ 6 5 4 3 2 1")
+    0 1 2 3 4 5
+
+    >>> test(r"⍒ 1 6 2 5 3 4")
+    1 3 5 4 2 0
+    >>> test(r"⍒ 1.1 6.6 2.2 5.5 3.3 4.4")
+    1 3 5 4 2 0
+    >>> test(r"⍒ ¯1 ¯6 ¯2 ¯5 ¯3 ¯4")
+    0 2 4 5 3 1
+
+    >>> test(r"⍒ 1")
+    DOMAIN ERROR
+    >>> test(r"⍒ ,1")
+    0
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":

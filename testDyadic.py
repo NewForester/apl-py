@@ -770,14 +770,12 @@ def     depth_match():
 
     >>> IO = saveIndexOrigin()
     >>> setIndexOrigin(1)
-
     >>> test(r"1 2 3 ≡ ⍳ 3")
     1
     >>> test(r"2 3 1 ≡ ⍳ 3")
     0
     >>> test(r"3 1 2 ≡ ⍳ 3")
     0
-
     >>> restoreIndexOrigin(IO)
     """
     pass
@@ -811,14 +809,12 @@ def     tally_notMatch():
 
     >>> IO = saveIndexOrigin()
     >>> setIndexOrigin(1)
-
     >>> test(r"1 2 3 ≢ ⍳ 3")
     0
     >>> test(r"2 3 1 ≢ ⍳ 3")
     1
     >>> test(r"3 1 2 ≢ ⍳ 3")
     1
-
     >>> restoreIndexOrigin(IO)
     """
     pass
@@ -1434,6 +1430,60 @@ def     decode():
     3.141592654
     >>> test(r"8.5 8.5 ⊥ 2 0")
     17
+    """
+    pass
+
+# --------------
+
+def     gradeUp():
+    """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"1 2 3 ⍋ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"'xcybza' ⍋ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"1 2 3 ⍋ 'xcybza'")
+    DOMAIN ERROR
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"1 2 3 ⍋ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"'xcybza' ⍋ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"1 2 3 ⍋ 'xcybza'")
+    DOMAIN ERROR
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
+# --------------
+
+def     gradeDown():
+    """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"1 2 3 ⍒ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"'xcybza' ⍒ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"1 2 3 ⍒ 'xcybza'")
+    DOMAIN ERROR
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"1 2 3 ⍒ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"'xcybza' ⍒ 1 2 3")
+    DOMAIN ERROR
+    >>> test(r"1 2 3 ⍒ 'xcybza'")
+    DOMAIN ERROR
+
+    >>> restoreIndexOrigin(IO)
     """
     pass
 

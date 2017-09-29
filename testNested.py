@@ -1196,6 +1196,132 @@ def     decode():
     """
     pass
 
+# --------------
+
+def     gradeUp():
+    """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"⍋ 1 (2 3) 4")
+    1 3 2
+    >>> test(r"⍋ 1 'Hello' 3")
+    1 3 2
+
+    >>> test(r"⍋ 'one' 'two' 'three' 'four' 'five' 'six' 'seven' 'eight' 'nine' 'ten'")
+    1 6 10 2 5 4 9 8 7 3
+    >>> test(r"⍋ (3 2 1) (6 5 4) (5 4 3 3 1) (4 3 2 2) (4 3 3 3) (5 4 3) (5 4 3 2 1) (5 4 3 2 6) (4 3 2 1) (4 3 2)")
+    1 10 6 2 9 4 5 7 8 3
+
+    >>> test(r"⍋ (1 2) 'XY' (3 4)")
+    2 1 3
+    >>> test(r"⍋ 'Hello' (1 2 3 4 5) 'World'")
+    1 3 2
+
+    >>> test(r"'Hello' ⍋ 1 (2 3) 4")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ⍋ 1 'Hello' 3")
+    DOMAIN ERROR
+
+    >>> test(r"1 (2 3) 4 ⍋ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"1 'Hello' 3 ⍋ 'Hello'")
+    DOMAIN ERROR
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍋ 1 (2 3) 4")
+    0 2 1
+    >>> test(r"⍋ 1 'Hello' 3")
+    0 2 1
+
+    >>> test(r"⍋ 'one' 'two' 'three' 'four' 'five' 'six' 'seven' 'eight' 'nine' 'ten'")
+    0 5 9 1 4 3 8 7 6 2
+    >>> test(r"⍋ (3 2 1) (6 5 4) (5 4 3 3 1) (4 3 2 2) (4 3 3 3) (5 4 3) (5 4 3 2 1) (5 4 3 2 6) (4 3 2 1) (4 3 2)")
+    0 9 5 1 8 3 4 6 7 2
+
+    >>> test(r"⍋ (1 2) 'XY' (3 4)")
+    1 0 2
+    >>> test(r"⍋ 'Hello' (1 2 3 4 5) 'World'")
+    0 2 1
+
+    >>> test(r"'Hello' ⍋ 1 (2 3) 4")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ⍋ 1 'Hello' 3")
+    DOMAIN ERROR
+
+    >>> test(r"1 (2 3) 4 ⍋ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"1 'Hello' 3 ⍋ 'Hello'")
+    DOMAIN ERROR
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
+# --------------
+
+def     gradeDown():
+    """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"⍒ 1 (2 3) 4")
+    2 3 1
+    >>> test(r"⍒ 1 'Hello' 3")
+    2 3 1
+
+    >>> test(r"⍒ 'one' 'two' 'three' 'four' 'five' 'six' 'seven' 'eight' 'nine' 'ten'")
+    3 7 8 9 4 5 2 10 6 1
+    >>> test(r"⍒ (3 2 1) (6 5 4) (5 4 3 3 1) (4 3 2 2) (4 3 3 3) (5 4 3) (5 4 3 2 1) (5 4 3 2 6) (4 3 2 1) (4 3 2)")
+    3 8 7 5 4 9 2 6 10 1
+
+    >>> test(r"⍒ (1 2) 'XY' (3 4)")
+    3 1 2
+    >>> test(r"⍒ 'Hello' (1 2 3 4 5) 'World'")
+    2 3 1
+
+    >>> test(r"'Hello' ⍒ 1 (2 3) 4")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ⍒ 1 'Hello' 3")
+    DOMAIN ERROR
+
+    >>> test(r"1 (2 3) 4 ⍒ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"1 'Hello' 3 ⍒ 'Hello'")
+    DOMAIN ERROR
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍒ 1 (2 3) 4")
+    1 2 0
+    >>> test(r"⍒ 1 'Hello' 3")
+    1 2 0
+
+    >>> test(r"⍒ 'one' 'two' 'three' 'four' 'five' 'six' 'seven' 'eight' 'nine' 'ten'")
+    2 6 7 8 3 4 1 9 5 0
+    >>> test(r"⍒ (3 2 1) (6 5 4) (5 4 3 3 1) (4 3 2 2) (4 3 3 3) (5 4 3) (5 4 3 2 1) (5 4 3 2 6) (4 3 2 1) (4 3 2)")
+    2 7 6 4 3 8 1 5 9 0
+
+    >>> test(r"⍒ (1 2) 'XY' (3 4)")
+    2 0 1
+    >>> test(r"⍒ 'Hello' (1 2 3 4 5) 'World'")
+    1 2 0
+
+    >>> test(r"'Hello' ⍒ 1 (2 3) 4")
+    DOMAIN ERROR
+    >>> test(r"'Hello' ⍒ 1 'Hello' 3")
+    DOMAIN ERROR
+
+    >>> test(r"1 (2 3) 4 ⍒ 'Hello'")
+    DOMAIN ERROR
+    >>> test(r"1 'Hello' 3 ⍒ 'Hello'")
+    DOMAIN ERROR
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
 # ------------------------------
 
 if __name__ == "__main__":
