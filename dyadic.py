@@ -91,11 +91,11 @@ _DyadicFunctions = {
     '⌿':        lambda A, B: mapper.compress(iterator.compress, A, B),
     '\\':       lambda A, B: mapper.expand(iterator.expand, A, B),
     '⍀':        lambda A, B: mapper.expand(iterator.expand, A, B),
+    '⍋':        lambda A, B: mapper.grade(False, A, B),
+    '⍒':        lambda A, B: mapper.grade(True, A, B),
     '⌷':        _toBeImplemented,       # index
 
     # Miscellaneous
-    '⍋':        _toBeImplemented,       # sort ascending with specified collating sequence
-    '⍒':        _toBeImplemented,       # sort descending with specified collating sequence
     '⍺':        _toBeImplemented,       # picture format
     '⍕':        _toBeImplemented,       # dyadic (specification) format
     '⍎':        _toBeImplemented,       # dyadic execute

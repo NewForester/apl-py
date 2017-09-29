@@ -22,7 +22,7 @@ from functools import reduce
 
 from systemVariables import indexOrigin
 
-from aplQuantity import aplQuantity
+from aplQuantity import aplQuantity, lookAhead
 from aplError import aplException, assertError
 
 # ------------------------------
@@ -219,4 +219,20 @@ def     head(B):
     """
     return B.__iter__().__next__()
 
-# EOF
+# ------------------------------
+
+class   grade(object):
+    """
+    the iterator for monadic ⍒ and ⍋
+    """
+    def __init__(self, B):
+        self._B = B.__iter__()
+        self._IO = indexOrigin()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return self._B.__next__() + self._IO
+
+ # EOF

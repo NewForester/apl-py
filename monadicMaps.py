@@ -28,7 +28,7 @@ import monadicIterators as iterator
 from systemVariables import confirmInteger
 
 from aplQuantity import aplQuantity, makeScalar, makeVector, makeEmptyVector
-from aplError import assertTrue, assertNotVector, assertNotArray
+from aplError import assertTrue, assertNotScalar, assertNotVector, assertNotArray
 
 # ------------------------------
 
@@ -247,6 +247,40 @@ def     head(Fn, B):
 
     if B.isVector():
         return makeScalar(Fn(B.vectorToPy()), B.prototype())
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
+
+def     grade(descending, B):
+    """
+    implement monadic ⍒ and ⍋
+    """
+    def _sortKey(X):
+        """
+        sort key depends on type as well value
+        """
+        Y = Bpy[X]
+
+        if isinstance(Y, aplQuantity):
+            return 2 * Y.tally(), Y
+
+        if isinstance(Y, str):
+            return 0, ord(Y)
+
+        return 1, Y
+
+    assertNotScalar(B, "DOMAIN ERROR")
+
+    if B.isVector():
+        B.resolve()
+        Len = B.tally()
+        Bpy = B.vectorToPy()
+
+        S = list(range(Len))
+        S.sort(key=_sortKey, reverse=descending)
+
+        return makeVector(iterator.grade(S), Len)
 
     assertNotArray(B, "WIP - RANK ERROR")
 

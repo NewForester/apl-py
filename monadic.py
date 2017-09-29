@@ -92,11 +92,11 @@ _MonadicFunctions = {
     '⌿':        lambda B: assertError("VALENCE ERROR"),
     '\\':       lambda B: assertError("VALENCE ERROR"),
     '⍀':        lambda B: assertError("VALENCE ERROR"),
+    '⍋':        lambda B: mapper.grade(False, B),
+    '⍒':        lambda B: mapper.grade(True, B),
     '⌷':        lambda B: assertError("VALENCE ERROR"),
 
     # Miscellaneous
-    '⍋':        _toBeImplemented,       # grade up (ascending sort indicies)
-    '⍒':        _toBeImplemented,       # grade down (descending sort indicies)
     '⍺':        lambda B: assertError("VALENCE ERROR"),
     '⍕':        _toBeImplemented,       # monadic format
     '⍎':        _toBeImplemented,       # execute

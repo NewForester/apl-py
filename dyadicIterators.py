@@ -737,4 +737,20 @@ def     decode(A, B):
     except TypeError:
         assertError("DOMAIN ERROR")
 
+# ------------------------------
+
+class   grade(object):
+    """
+    the iterator for dyadic ⍒ and ⍋
+    """
+    def __init__(self, B):
+        self._B = B.__iter__()
+        self._IO = indexOrigin()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return self._B.__next__() + self._IO
+
 # EOF

@@ -535,4 +535,39 @@ def     decode(Fn, A, B):
 
     assertNotArray(B, "WIP - RANK ERROR")
 
+# ------------------------------
+
+def     grade(descending, A, B):
+    """
+    implement dyadic ⍒ and ⍋
+    """
+    def _sortKey(X):
+        """
+        sort key is the collation sequence index
+        """
+        Y = Bpy[X]
+        try:
+            return Apy.index(Y)
+        except ValueError:
+            return Len
+
+    assertNotScalar(B, "DOMAIN ERROR")
+
+    if B.isVectorLike():
+        A.resolve()
+        assertTrue(A.isString(), "DOMAIN ERROR")
+        Apy = A.vectorToPy()
+
+        B.resolve()
+        assertTrue(B.isString(), "DOMAIN ERROR")
+        Len = B.tally()
+        Bpy = B.vectorToPy()
+
+        S = list(range(Len))
+        S.sort(key=_sortKey, reverse=descending)
+
+        return makeVector(iterator.grade(S), Len)
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
 # EOF
