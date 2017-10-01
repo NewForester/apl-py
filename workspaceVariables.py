@@ -49,20 +49,20 @@ def     workspaceVariable(name, quantity=None):
     """
     if quantity is None:
         try:
-            apl_var = _WorkspaceVariables[name]
+            WV = _WorkspaceVariables[name]
         except KeyError:
             assertError("UNKNOWN VARIABLE")
     else:
         quantity = quantity.resolve()
         try:
-            apl_var = _WorkspaceVariables[name]
+            WV = _WorkspaceVariables[name]
 
-            apl_var.set(quantity)
+            WV.set(quantity)
         except KeyError:
-            apl_var = _workspaceVariable(quantity)
+            WV = _workspaceVariable(quantity)
 
-            _WorkspaceVariables[name] = apl_var
+            _WorkspaceVariables[name] = WV
 
-    return apl_var.get()
+    return WV.get()
 
 # EOF

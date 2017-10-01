@@ -126,13 +126,13 @@ def     evaluateName(expr, cio):
         name = match.group(0)
         if name:
             try:
-                rhs_expr = expr[len(name):].lstrip()
-                if rhs_expr and rhs_expr[0] == '←':
+                rhsExpr = expr[len(name):].lstrip()
+                if rhsExpr and rhsExpr[0] == '←':
                     if cio.newStmt:
                         cio.hushImplicit = True
                         cio.newStmt = False
 
-                    rhs = evaluate(rhs_expr[1:].lstrip(), cio)
+                    rhs = evaluate(rhsExpr[1:].lstrip(), cio)
                     lhs = workspaceVariable(name, rhs)
                     consumed = len(expr)
                 else:
@@ -254,13 +254,13 @@ def     evaluateSystemVariable(expr, cio):
         name = match.group(0)
         if name:
             try:
-                rhs_expr = expr[len(name)+1:].lstrip()
-                if rhs_expr and rhs_expr[0] == '←':
+                rhsExpr = expr[len(name)+1:].lstrip()
+                if rhsExpr and rhsExpr[0] == '←':
                     if cio.newStmt:
                         cio.hushImplicit = True
                         cio.newStmt = False
 
-                    rhs = evaluate(rhs_expr[1:], cio)
+                    rhs = evaluate(rhsExpr[1:], cio)
                     lhs = systemVariable(name, rhs)
                     consumed = len(expr)
                 else:
