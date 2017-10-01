@@ -1,0 +1,14 @@
+#!/bin/bash --posix
+
+##
+##  Goal:       set environment for test scripts
+##
+##  Use:        source test.rc
+##
+##              Run this once from the source code directory in order to
+##              run test scripts in the test subdirectory.
+##
+
+PYTHONPATH=$PWD:$PYTHONPATH;
+
+# EOF
