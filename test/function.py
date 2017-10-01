@@ -12,13 +12,13 @@
 from test.base import preamble, testResult as test
 from test.base import saveIndexOrigin, setIndexOrigin, restoreIndexOrigin
 
-import testMonadic    as monadic
-import testDyadic     as dyadic
-import testString     as string
-import testZilde      as zilde
-import testMixed      as mixed
-import testNested     as nested
-import testPrototypes as prototypes
+import monadic
+import dyadic
+import strings
+import zilde
+import mixed
+import nested
+import prototypes
 
 # ------------------------------
 
@@ -26,15 +26,20 @@ if __name__ == "__main__":
     preamble()
 
     __test__ = {}
-    __test__["monadic"]     = monadic.function
-    __test__["dyadic"]      = dyadic.function
-    __test__["string"]      = string.function
-    __test__["zilde"]       = zilde.function
-    __test__["mixed"]       = mixed.function
-    __test__["nested"]      = nested.function
-    __test__["prototypes"]  = prototypes.function
+    __test__["monadic"]     = monadic.function          # pylint: disable=no-member, bad-whitespace
+    __test__["dyadic"]      = dyadic.function           # pylint: disable=no-member, bad-whitespace
+    __test__["strings"]     = strings.function          # pylint: disable=no-member, bad-whitespace
+    __test__["zilde"]       = zilde.function            # pylint: disable=no-member, bad-whitespace
+    __test__["mixed"]       = mixed.function            # pylint: disable=no-member, bad-whitespace
+    __test__["nested"]      = nested.function           # pylint: disable=no-member, bad-whitespace
+    __test__["prototypes"]  = prototypes.function       # pylint: disable=no-member, bad-whitespace
 
-    import doctest
-    doctest.testmod()
+    if test and __name__:
+        import doctest
+        doctest.testmod()
+    else:
+        IO = saveIndexOrigin()
+        setIndexOrigin(0)
+        restoreIndexOrigin(IO)
 
 # EOF

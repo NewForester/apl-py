@@ -525,5 +525,9 @@ if __name__ == "__main__":
     if test and testOutput and testCommand:
         import doctest
         doctest.testmod()
+    else:
+        IO = saveIndexOrigin()
+        setIndexOrigin(0)
+        restoreIndexOrigin(IO)
 
 # EOF

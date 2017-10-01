@@ -71,16 +71,25 @@ def     testResult(expr, overrideLazy=False):
 # ------------------------------
 
 def     saveIndexOrigin():
+    """
+    return ⎕IO so the test function can save it
+    """
     return systemVariables.indexOrigin()
 
 # --------------
 
 def     setIndexOrigin(io):
+    """
+    set ⎕IO:  it is assumed the test function has saved and will restore the original value
+    """
     systemVariables.setIndexOrigin(io)
 
 # --------------
 
 def     restoreIndexOrigin(io):
+    """
+    restore ⎕IO previously retrieved by the test function using saveIndexOrigin
+    """
     systemVariables.setIndexOrigin(io)
 
 # ------------------------------
@@ -122,10 +131,10 @@ def     preamble():
         elif flag in ("-ee=1", "--eager"):
             systemVariables.setEvaluationMode(1)
 
-        elif flag in ("-io=0"):
+        elif flag in "-io=0":
             systemVariables.setIndexOrigin(0)
 
-        elif flag in ("-io=1"):
+        elif flag in "-io=1":
             systemVariables.setIndexOrigin(1)
 
         elif flag in ("-h", "--help"):

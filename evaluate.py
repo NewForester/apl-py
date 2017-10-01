@@ -15,8 +15,8 @@ import re
 from copy import copy as shallowcopy
 from functools import reduce
 
-from monadic import monadicFunction
-from dyadic import dyadicFunction
+from monadicLookup import monadicFunction
+from dyadicLookup import dyadicFunction
 
 from systemCommands import systemCommand
 from systemVariables import systemVariable, eagerEvaluation

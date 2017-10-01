@@ -55,7 +55,8 @@ PYTHONPATH=${path}:$PYTHONPATH;
 # process the parameters
 
 for name; do
-    function=$(sed -e '/^def/!d' -e "/[ _]${name}.*():$/!d" -e 's/():$//' -e 's/^def  *//' test*.py | sort -u);
+    sources=$(find test -executable -a -name '*.py' -a -type f);
+    function=$(sed -e '/^def/!d' -e "/[ _]${name}.*():$/!d" -e 's/():$//' -e 's/^def  *//' ${sources} | sort -u);
 
     case $(echo "${function}" | wc -w) in
         (0):
