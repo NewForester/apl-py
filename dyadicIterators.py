@@ -19,6 +19,7 @@
 """
 
 import operator
+from functools import reduce
 
 from monadicIterators import reverse
 
@@ -175,7 +176,11 @@ class   reshape(object):
     the iterator for dyadic ⍴
     """
     def __init__(self, A, B):
-        self._A = A
+        if isinstance(A, tuple):
+            self._A = reduce(operator.mul, A, 1)
+        else:
+            self._A = A
+
         if isinstance(B, tuple):
             self._B = None
             self._R = B

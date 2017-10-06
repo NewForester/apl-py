@@ -105,13 +105,13 @@ def     rho(_, B):
     """
     implement monadic ⍴
     """
-    if B.isScalar():
-        return makeEmptyVector()
+    if B.isArray():
+        return makeVector(B.dimension(), B.rank())
 
     if B.isVector():
         return makeVector((B.tally(),), 1)
 
-    assertNotArray(B, "WIP - RANK ERROR")
+    return makeEmptyVector()
 
 # ------------------------------
 
@@ -119,13 +119,13 @@ def     unravel(_, B):
     """
     implement monadic ,
     """
-    if B.isScalar():
-        return makeVector(B.vectorToPy(), 1, B.prototype())
+    if B.isArray():
+        return makeVector(B.arrayToPy(), B.elementCount(), B.prototype())
 
     if B.isVector():
         return B
 
-    assertNotArray(B, "WIP - RANK ERROR")
+    return makeVector(B.vectorToPy(), 1, B.prototype())
 
 # ------------------------------
 

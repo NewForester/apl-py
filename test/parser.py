@@ -12,6 +12,7 @@
       - scalar invocation of monadic and dyadic functions
       - parentheses to alter order of execution
       - parsing of vector quantities - including mixed/nested vectors
+      - printing of array quantities
       - array prototypes
       - parsing of output operators (⎕ ⍞) - but not input operators
       - system variables
@@ -244,6 +245,27 @@ def     parseVectors():
     1 'Hello' 2
     >>> test(r"'Hello' (19 20) 'Paul'")
     'Hello' (19 20) 'Paul'
+    """
+    pass
+
+# ------------------------------
+
+def     printArrays():
+    """
+    >>> test(r"⍳ 4")
+    1 2 3 4
+    >>> test(r"2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r", 2 2 ⍴ ⍳ 4")
+    1 2 3 4
+
+    >>> test(r"⍴ ⍳ 4")
+    4
+    >>> test(r"⍴ 2 2 ⍴ ⍳ 4")
+    2 2
+    >>> test(r"⍴ , 2 2 ⍴ ⍳ 4")
+    4
     """
     pass
 

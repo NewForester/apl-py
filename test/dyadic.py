@@ -854,7 +854,7 @@ def     rho():
     1 2 3 4 1
 
     >>> test(r"1 2 ⍴ 1 2")
-    WIP - LENGTH ERROR
+    WIP - MATRIX ERROR
 
     >>> test(r"15 ⍴ 0 + 1 2 3 4 5 6")
     1 2 3 4 5 6 1 2 3 4 5 6 1 2 3

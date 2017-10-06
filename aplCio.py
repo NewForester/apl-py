@@ -208,12 +208,17 @@ class   _outputValue(object):
         """
         print an APL quantity recursively
         """
+        elementsPerLine = 1
+
+        if quantity.isVector():
+            elementsPerLine = quantity.tally()
+        elif quantity.isArray():
+            elementsPerLine = quantity.dimension()[-1]
+
         try:
+            count = 0
             string = None
             separator = ''
-
-            assertNotArray(quantity, "WIP - ARRAY OUTPUT ERROR")
-
             emptyVector = quantity.isEmptyVector()
 
             for element in quantity:
@@ -224,16 +229,21 @@ class   _outputValue(object):
                     string, separator = self._formatCharacter(element, empty)
 
                 elif isinstance(element, aplQuantity):
-                    self._output(string, ' ')
+                    self._output(string, '\n' if (separator == '\n') else ' ');
 
                     empty = self._emptyVector or element.isEmptyVector()
                     string, separator = self._formatQuantity(element, empty)
 
                 else:
-                    self._output(string, ' ')
+                    self._output(string, '\n' if (separator == '\n') else ' ');
 
                     empty = self._emptyVector or emptyVector
                     string, separator = self._formatNumber(element, empty)
+
+                count += 1
+                if (elementsPerLine != 0):
+                    if (count % elementsPerLine == 0):
+                        separator = '\n'
 
             self._output(string, end)
 

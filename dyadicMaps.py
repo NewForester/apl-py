@@ -29,7 +29,7 @@ import dyadicIterators as iterator
 
 from systemVariables import confirmInteger, indexOrigin
 
-from aplQuantity import aplQuantity, scalarIterator, makeScalar, makeVector, makeEmptyVector
+from aplQuantity import aplQuantity, scalarIterator, makeScalar, makeVector, makeEmptyVector, makeArray
 from aplError import assertError, assertTrue, assertNotTrue
 from aplError import assertNotScalar, assertNotVector, assertNotArray
 from aplError import assertNumeric, assertScalarLike, assertEmptyVector
@@ -131,14 +131,8 @@ def     reshape(Fn, A, B):
     """
     assertNotArray(A)
 
-    if B.isVectorLike():
-        if A.isEmptyVector():
-            Apy = 1
-
-        else:
-            assertScalarLike(A, "WIP - LENGTH ERROR")
-
-            Apy = confirmInteger(A.scalarToPy())
+    if A.isScalarLike():
+        Apy = confirmInteger(A.scalarToPy())
 
         assertTrue(Apy >= 0, "DOMAIN ERROR")
 
@@ -149,7 +143,21 @@ def     reshape(Fn, A, B):
 
         return makeVector(Fn(Apy, Bpy), Apy, B.prototype())
 
-    assertNotArray(B, "WIP - RANK ERROR")
+    if A.isEmptyVector():
+        Bpy = B.promoteScalarToVectorPy(B.isEmptyVector())
+
+        return makeVector(Fn(1, Bpy), 1, B.prototype())
+
+    Apy = tuple([confirmInteger(I) for I in A.vectorToPy()])
+
+    assertTrue(Apy == (2, 2), "WIP - MATRIX ERROR")
+
+    for I in Apy:
+        assertTrue(I >= 0, "DOMAIN ERROR")
+
+    Bpy = B.promoteScalarToVectorPy(B.isEmptyVector())
+
+    return makeArray(Fn(Apy, Bpy), Apy, 2 * B.prototype())
 
 # ------------------------------
 

@@ -59,6 +59,9 @@
     to avoid the principle of lazy evaluation being compromised by the implementation.
 """
 
+import operator
+from functools import reduce
+
 from aplError import assertError, assertNotArray
 
 # ------------------------------
@@ -196,6 +199,18 @@ class   aplQuantity(object):
                 dimension = self._value.buffer(lowerBound)
         return dimension
 
+    def elementCount(self):
+        """
+        the dimension(s) of the quantity
+        """
+        if isinstance(self._dimension, tuple):
+            return reduce(operator.mul, self._dimension, 1)
+
+        elif isinstance(self._dimension, int):
+            return self._dimension
+
+        return 1
+
     def tally(self):
         """
         1 if a scalar, its length if a vector
@@ -213,7 +228,7 @@ class   aplQuantity(object):
                     self._value = self._prototype
             return self._dimension
 
-        assertError("ASSERTION ERROR: aplQuantity.length()")
+        assertError("ASSERTION ERROR: aplQuantity.tally()")
 
     def dimension(self):
         """
@@ -351,6 +366,15 @@ class   aplQuantity(object):
             return ()
 
         return self._value
+
+    def arrayToPy(self):
+        """
+        return the Python sequence (or a promise thereof) that represents an array
+        """
+        if self.isArray():
+            return self._value
+
+        assertError("ASSERTION ERROR: aplQuantity.arrayToPy()")
 
     def promoteScalarToVectorPy(self, specialEmpty=False):
         """
@@ -647,6 +671,11 @@ def     makeVector(value, length=-1, prototype=(0,)):
         return makeEmptyVector(prototype)
 
     return aplQuantity(value, length, prototype)
+
+# --------------
+
+def     makeArray(value, dimensions, prototype=(0,)):
+    return aplQuantity(value, dimensions, prototype)
 
 # --------------
 

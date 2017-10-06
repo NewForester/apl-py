@@ -560,7 +560,7 @@ def     rho():
     1
 
     >>> test(r"1 2 3 ⍴ ⍬")
-    WIP - LENGTH ERROR
+    WIP - MATRIX ERROR
 
     >>> test(r"6 ⍴ ⍬")
     0 0 0 0 0 0
