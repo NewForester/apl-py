@@ -435,6 +435,12 @@ def     evaluate(expression, cio):
                 cio.hushImplicit = True
             cio.newStmt = False
 
+        if lhs is None:
+            ii = r"/\⌿⍀".find(expr[1:].lstrip()[0])
+            if ii != -1:
+                print("Looks like an operator '{}'".format((r"/\⌿⍀")[ii]))
+
+
         function = monadicFunction(expr) if lhs is None else dyadicFunction(expr)
 
         rhs = evaluate(expr[1:], cio)
