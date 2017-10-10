@@ -25,7 +25,7 @@ from monadicIterators import reverse
 
 from systemVariables import confirmInteger, indexOrigin
 
-from aplQuantity import aplQuantity, scalarIterator, lookAhead
+from aplQuantity import aplQuantity, aplIterator, lookAhead
 from aplQuantity import makeScalar, makeVector, makePrototype
 from aplError import aplException, assertError, assertTrue
 
@@ -41,14 +41,14 @@ def _nextPair(A, B):
         X = A.__next__()
         OK += 1
     except StopIteration:
-        if isinstance(B, scalarIterator):
+        if isinstance(B, aplIterator):
             raise StopIteration
 
     try:
         Y = B.__next__()
         OK += 1
     except StopIteration:
-        if isinstance(A, scalarIterator):
+        if isinstance(A, aplIterator):
             raise StopIteration
 
     if OK == 2:
@@ -73,14 +73,14 @@ def _nextPairWithInteger(A, B):
         X = confirmInteger(A.__next__())
         OK += 1
     except StopIteration:
-        if isinstance(B, scalarIterator):
+        if isinstance(B, aplIterator):
             raise StopIteration
 
     try:
         Y = B.__next__()
         OK += 1
     except StopIteration:
-        if isinstance(A, scalarIterator):
+        if isinstance(A, aplIterator):
             raise StopIteration
 
     if OK == 2:
@@ -673,7 +673,7 @@ class   expand(object):
             return
 
         if OK != 2:
-            if isinstance(self._A, scalarIterator):
+            if isinstance(self._A, aplIterator):
                 assertTrue(self._T == 1, "LENGTH ERROR")
             else:
                 assertTrue(self._T == 0, "LENGTH ERROR")

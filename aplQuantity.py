@@ -422,6 +422,12 @@ class   aplQuantity(object):
         """
         return scalarIterator(self.scalarToPy(), -1, self.expressionToGo)
 
+    def vectorIterator(self):
+        """
+        infinite iterator for vectors so they may be used with arrays
+        """
+        return vectorIterator(self.vectorToPy(), -1, self.expressionToGo)
+
     def resolve(self):
         """
         realise a promise (essentially a deep copy of a lazy APL quantity)
@@ -440,9 +446,14 @@ class   aplQuantity(object):
 
 # ------------------------------
 
-class   scalarIterator(object):
+class   aplIterator(object):
+    pass
+
+# ------------------------------
+
+class   scalarIterator(aplIterator):
     """
-    trivial iterator for mapping scalar quantities with vector quantities
+    trivial iterator for mapping scalar quantities with vector and array quantities
 
     The iterator returns the scalar value ad infinitum
     """
@@ -461,6 +472,46 @@ class   scalarIterator(object):
         self._count -= 1
 
         return self._value
+
+# ------------------------------
+
+class   vectorIterator(aplIterator):
+    """
+    trivial iterator for mapping vector quantities with array quantities
+
+    The iterator returns the vector elemment by element, over and over
+    """
+    def __init__(self, value, count=-1, expressionToGo=None):
+        self._original = value
+        self._iterator = value.__iter__()
+        self._repeater = []
+        self._count = count
+        self.expressionToGo = expressionToGo
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._count == 0:
+            raise StopIteration
+
+        self._count -= 1
+
+        if not self._original is None:
+            try:
+                element = self._iterator.__next__()
+                self._repeater.append(element)
+                return element
+            except StopIteration:
+                self._original = None
+                self._iterator = self._repeater.__iter__()
+
+        try:
+            return self._iterator.__next__()
+
+        except StopIteration:
+            self._iterator = self._repeater.__iter__()
+            return self._iterator.__next__()
 
 # ------------------------------
 

@@ -40,31 +40,55 @@ def     maths(Fn, A, B):
     """
     the basic recursive map for dyadic mathematical functions
     """
-    if A.isScalar() and B.isScalar():
-        return makeScalar(iterator.maths(maths, Fn, A, B))
+    if B.isArray():
+        if A.isArray():
+            # Check ranks are equal
+            Rpy = iterator.maths(maths, Fn, A, B)
 
-    if A.isScalar():
-        if B.isEmptyVector():
+        elif A.isVector():
+            # Check length is compatible
+            Rpy = iterator.maths(maths, Fn, A.vectorIterator(), B)
+
+        else:
+            Rpy = iterator.maths(maths, Fn, A.scalarIterator(), B)
+
+        return makeArray(Rpy, B.dimension(), B.prototype())
+
+    if A.isArray():
+        if B.isVector():
+            # Check length is compatible
+            Rpy = iterator.maths(maths, Fn, A, B.vectorIterator())
+
+        else:
+            Rpy = iterator.maths(maths, Fn, A, B.scalarIterator())
+
+        return makeArray(Rpy, A.dimension(), A.prototype())
+
+    if B.isVector():
+        if A.isVector():
+            if B.isEmptyVector():
+                assertTrue(A.isEmptyVector(), "LENGTH ERROR")
+
+            Rpy = iterator.maths(maths, Fn, A, B)
+
+        elif B.isEmptyVector():
             return B
 
-        return makeVector(
-            iterator.maths(maths, Fn, A.scalarIterator(), B), B.dimension(), B.prototype())
+        else:
+            Rpy = iterator.maths(maths, Fn, A.scalarIterator(), B)
 
-    if B.isScalar():
+        return makeVector(Rpy, B.dimension(), B.prototype())
+
+    if A.isVector():
         if A.isEmptyVector():
             return A
 
-        return makeVector(
-            iterator.maths(maths, Fn, A, B.scalarIterator()), A.dimension(), A.prototype())
+        else:
+            Rpy = iterator.maths(maths, Fn, A, B.scalarIterator())
 
-    if A.isVector() and B.isVector():
-        if B.isEmptyVector():
-            assertTrue(A.isEmptyVector(), "LENGTH ERROR")
+        return makeVector(Rpy, A.dimension(), A.prototype())
 
-        return makeVector(iterator.maths(maths, Fn, A, B), B.dimension(), B.prototype())
-
-    assertNotArray(A, "WIP - RANK ERROR")
-    assertNotArray(B, "WIP - RANK ERROR")
+    return makeScalar(iterator.maths(maths, Fn, A, B))
 
 # ------------------------------
 

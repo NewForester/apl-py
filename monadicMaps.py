@@ -27,7 +27,7 @@ import monadicIterators as iterator
 
 from systemVariables import confirmInteger
 
-from aplQuantity import aplQuantity, makeScalar, makeVector, makeEmptyVector
+from aplQuantity import aplQuantity, makeScalar, makeVector, makeEmptyVector, makeArray
 from aplError import assertTrue, assertNotScalar, assertNotVector, assertNotArray
 
 # ------------------------------
@@ -36,16 +36,13 @@ def     maths(Fn, B):
     """
     the basic recursive map for monadic mathematical functions
     """
-    if B.isScalar():
-        return makeScalar(iterator.maths(maths, Fn, B))
-
-    if B.isEmptyVector():
-        return B
+    if B.isArray():
+        return makeArray(iterator.maths(maths, Fn, B), B.dimension())
 
     if B.isVector():
-        return makeVector(iterator.maths(maths, Fn, B), B.dimension())
+        return makeVector(iterator.maths(maths, Fn, B), B.dimension(), B.prototype())
 
-    assertNotArray(B, "WIP - RANK ERROR")
+    return makeScalar(iterator.maths(maths, Fn, B))
 
 # ------------------------------
 

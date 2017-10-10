@@ -88,11 +88,11 @@ def     parseStrings():
 
 def     parseNames():
     """
-    >>> test(r"A")
+    >>> test(r"B")
     UNKNOWN VARIABLE
-    >>> test(r"A←2.5")
+    >>> test(r"B←2.5")
     2.5
-    >>> test(r"A")
+    >>> test(r"B")
     2.5
 
     >>> test(r"Banana←3.5")
@@ -102,13 +102,13 @@ def     parseNames():
     >>> test(r"27M←5.5")
     INVALID TOKEN
 
-    >>> test(r"A")
+    >>> test(r"B")
     2.5
-    >>> test(r"A-1")
+    >>> test(r"B-1")
     1.5
-    >>> test(r"1-A")
+    >>> test(r"1-B")
     ¯1.5
-    >>> test(r"÷A")
+    >>> test(r"÷B")
     0.4
 
     >>> test(r"name←'Heather'")
@@ -250,7 +250,7 @@ def     parseVectors():
 
 # ------------------------------
 
-def     printArrays():
+def     arkMatrices():
     """
     >>> test(r"⍳ 4")
     1 2 3 4
@@ -266,6 +266,32 @@ def     printArrays():
     2 2
     >>> test(r"⍴ , 2 2 ⍴ ⍳ 4")
     4
+
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"+ A")
+    1 2
+    3 4
+
+    >>> test(r"A + A")
+    2 4
+    6 8
+    >>> test(r"A + 0 1")
+    1 3
+    3 5
+    >>> test(r"(1 0) + A")
+    2 2
+    4 4
+    >>> test(r"A + 3")
+    4 5
+    6 7
+    >>> test(r"2 + A")
+    3 4
+    5 6
     """
     pass
 
