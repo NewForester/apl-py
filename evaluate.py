@@ -8,6 +8,7 @@
         system commands, system variables and workspace variables
         strings - parsing, printing and their use in expressions
         output using the ⎕← and ⍞← operators
+        reduce and scan operators (+/ et al)
 """
 
 import re
@@ -17,6 +18,7 @@ from functools import reduce
 
 from monadicLookup import monadicFunction
 from dyadicLookup import dyadicFunction
+from operatorLookup import operatorFunction
 
 from systemCommands import systemCommand
 from systemVariables import systemVariable, eagerEvaluation
@@ -435,18 +437,23 @@ def     evaluate(expression, cio):
                 cio.hushImplicit = True
             cio.newStmt = False
 
-        if lhs is None:
-            ii = r"/\⌿⍀".find(expr[1:].lstrip()[0])
-            if ii != -1:
-                print("Looks like an operator '{}'".format((r"/\⌿⍀")[ii]))
+        operator = operatorFunction(expr[1:].lstrip()) if lhs is None else None
 
+        if operator is None and lhs is None:
+            function = monadicFunction(expr)
+        else:
+            identity, function = dyadicFunction(expr)
 
-        function = monadicFunction(expr) if lhs is None else dyadicFunction(expr)
+        if not operator is None:
+            expr = expr[1:].lstrip()
 
         rhs = evaluate(expr[1:], cio)
         rhs.expressionToGo = expr
 
-        result = function(rhs) if lhs is None else function(lhs, rhs)
+        if operator is None:
+            result = function(rhs) if lhs is None else function(lhs, rhs)
+        else:
+            result = operator(function, identity, rhs)
 
         return result.resolve() if eagerEvaluation() else result
 

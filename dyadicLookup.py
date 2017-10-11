@@ -113,8 +113,12 @@ def     dyadicFunction(symbol):
 
     raises INVALID TOKEN if the symbol is not recognised
     """
+
+# // need identity for ⍬ - so prepend it to the table and return it
+# // what follows is a temporary hack
+
     try:
-        return _DyadicFunctions[symbol[0]]
+        return 0, _DyadicFunctions[symbol[0]]
     except KeyError:
         assertError("INVALID TOKEN")
 

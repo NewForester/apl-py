@@ -14,6 +14,7 @@
       - parsing of vector quantities - including mixed/nested vectors
       - printing of array quantities
       - array prototypes
+      - scan and reduce operators
       - parsing of output operators (⎕ ⍞) - but not input operators
       - system variables
       - system commands
@@ -438,6 +439,26 @@ def     parsePrototypes():
     « (0 0) »
     >>> test(r"'«', (1 ↑ 0 ⍴ '!!' (3 4)), '»'")
     « '  ' »
+    """
+    pass
+
+# ------------------------------
+
+def     parseOperators():
+    """
+    >>> test(r"+/ 1 2 3")
+    6
+    >>> test(r"+/ (1 2) (3 4)")
+    (4 6)
+    >>> test(r"+/ 1 (2 3) (4 5) 6")
+    (13 15)
+
+    >>> test(r"⍴ +/ 1 (2 3) (4 5) 6")
+    ⍬
+    >>> test(r"≢ +/ 1 (2 3) (4 5) 6")
+    1
+    >>> test(r"≡ +/ 1 (2 3) (4 5) 6")
+    2
     """
     pass
 
