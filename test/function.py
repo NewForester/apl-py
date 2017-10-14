@@ -19,6 +19,7 @@ import zilde
 import mixed
 import nested
 import prototypes
+import matrix
 
 # ------------------------------
 
@@ -33,6 +34,7 @@ if __name__ == "__main__":
     __test__["mixed"]       = mixed.function            # pylint: disable=no-member, bad-whitespace
     __test__["nested"]      = nested.function           # pylint: disable=no-member, bad-whitespace
     __test__["prototypes"]  = prototypes.function       # pylint: disable=no-member, bad-whitespace
+    __test__["matrix"]      = matrix.function           # pylint: disable=no-member, bad-whitespace
 
     if test and __name__:
         import doctest
