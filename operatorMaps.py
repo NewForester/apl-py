@@ -18,7 +18,7 @@
 
 import operatorIterators as iterator
 
-from aplQuantity import makeScalar
+from aplQuantity import makeScalar, makeVector
 from aplError import assertError, assertNotArray
 
 # ------------------------------
@@ -44,6 +44,26 @@ def     reduceFirst(Fn, A, B):
         Rpy = iterator.reduceVector(Fn, makeScalar(A), B)
 
         return makeScalar(Rpy)
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
+
+def     scanLast(Fn, A, B):
+    if B.isVectorLike():
+        Rpy = iterator.scanVector(Fn, makeScalar(A), B)
+
+        return makeVector(Rpy, B.dimension(), B.prototype())
+
+    assertNotArray(B, "WIP - RANK ERROR")
+
+# ------------------------------
+
+def     scanFirst(Fn, A, B):
+    if B.isVectorLike():
+        Rpy = iterator.scanVector(Fn, makeScalar(A), B)
+
+        return makeVector(Rpy, B.dimension(), B.prototype())
 
     assertNotArray(B, "WIP - RANK ERROR")
 

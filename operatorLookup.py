@@ -23,6 +23,8 @@ _OperatorFunctions = {
     # scan and reduce
     '/':        mapper.reduceLast,
     '⌿':        mapper.reduceFirst,
+    '\\':       mapper.scanLast,
+    '⍀':        mapper.scanFirst,
 }
 
 # ------------------------------

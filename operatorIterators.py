@@ -38,4 +38,36 @@ def reduceVector(Fn, A, B):
             error.expr = B.expressionToGo
         raise error
 
+# ------------------------------
+
+class   scanVector(object):
+    """
+    the iterator for the scan operator applied to a vector
+    """
+    def __init__(self, Fn, A, B):
+        self._Fn = Fn
+        self._A = A
+        self._B = B.__iter__()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        try:
+            Y = self._B.__next__()
+
+            if isinstance(Y, aplQuantity):
+                X = self._Fn(self._A, Y).resolve()
+            else:
+                X = self._Fn(self._A, makeScalar(Y))
+
+            self._A = X
+
+            return X.scalarToPy() if X.isScalar() else X
+
+        except aplException as error:
+            if error.expr is None:
+                error.expr = B.expressionToGo
+            raise error
+
 # EOF
