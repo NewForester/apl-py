@@ -701,6 +701,17 @@ def     ne():
 
 def     depth_match():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"≡ A")
+    1
+
+    >>> test(r"A ≡ A")
+    1
     """
     pass
 
@@ -708,6 +719,17 @@ def     depth_match():
 
 def     tally_notMatch():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"≢ A")
+    2
+
+    >>> test(r"A ≢ A")
+    0
     """
     pass
 
@@ -715,6 +737,17 @@ def     tally_notMatch():
 
 def     rho():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"⍴ A")
+    2 2
+
+    >>> test(r"A ⍴ A")
+    RANK ERROR
     """
     pass
 
@@ -722,6 +755,17 @@ def     rho():
 
 def     comma():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r", A")
+    1 2 3 4
+
+    >>> test(r"A , A")
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -729,6 +773,18 @@ def     comma():
 
 def     enlist_membership():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"∊ A")
+    1 2 3 4
+
+    >>> test(r"A ∊ A")
+    1 1
+    1 1
     """
     pass
 
@@ -736,6 +792,18 @@ def     enlist_membership():
 
 def     find():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"∊ A")
+    VALENCE ERROR
+
+    >>> test(r"A ∊ A")
+    1 0
+    0 0
     """
     pass
 
@@ -743,6 +811,18 @@ def     find():
 
 def     transpose():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"⍉ A")
+    1 3
+    2 4
+
+    >>> test(r"A ⍉ A")
+    RANK ERROR
     """
     pass
 
@@ -750,6 +830,23 @@ def     transpose():
 
 def     reverse_rotate():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"⌽ A")
+    2 1
+    4 3
+    >>> test(r"⊖ A")
+    3 4
+    1 2
+
+    >>> test(r"A ⌽ A")
+    RANK ERROR
+    >>> test(r"A ⊖ A")
+    RANK ERROR
     """
     pass
 
@@ -757,6 +854,18 @@ def     reverse_rotate():
 
 def     enclose_partition():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"⊂ A")
+    (1 3
+     2 4)
+
+    >>> test(r"A ⊂ A")
+    RANK ERROR
     """
     pass
 
@@ -764,6 +873,18 @@ def     enclose_partition():
 
 def     disclose_pick():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"⊃ A")
+    1 3
+    2 4
+
+    >>> test(r"A ⊃ A")
+    RANK ERROR
     """
     pass
 
@@ -774,9 +895,31 @@ def     iota():
     >>> IO = saveIndexOrigin()
     >>> setIndexOrigin(1)
 
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"⍳ A")
+    RANK ERROR
+
+    >>> test(r"A ⍳ A")
+    RANK ERROR
 
     >>> setIndexOrigin(0)
 
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    0 1
+    2 3
+    >>> test(r"A")
+    0 1
+    2 3
+    >>> test(r"⍳ A")
+    RANK ERROR
+
+    >>> test(r"A ⍳ A")
+    RANK ERROR
 
     >>> restoreIndexOrigin(IO)
     """
@@ -786,6 +929,18 @@ def     iota():
 
 def     tilde():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"~ 2 2 ⍴ 1")
+    0 0
+    0 0
+
+    >>> test(r"A ~ A")
+    RANK ERROR
     """
     pass
 
@@ -793,6 +948,17 @@ def     tilde():
 
 def     unique_union():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"∪ A")
+    RANK ERROR
+
+    >>> test(r"A ∪ A")
+    RANK ERROR
     """
     pass
 
@@ -800,6 +966,17 @@ def     unique_union():
 
 def     intersection():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"∩ A")
+    VALENCE ERROR
+
+    >>> test(r"A ∩ A")
+    RANK ERROR
     """
     pass
 
@@ -807,6 +984,17 @@ def     intersection():
 
 def     tail_drop():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"↓ A")
+    OUR OWN IMPLEMENTATION
+
+    >>> test(r"A ↓ A")
+    RANK ERROR
     """
     pass
 
@@ -815,6 +1003,17 @@ def     tail_drop():
 
 def     head_take():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"↑ A")
+    QUOI - LOOKS LIKE unravel done first !
+
+    >>> test(r"A ↑ A")
+    RANK ERROR
     """
     pass
 
@@ -822,6 +1021,17 @@ def     head_take():
 
 def     compress_replicate():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"/ A")
+    SYNTAX ERROR
+
+    >>> test(r"A / A")
+    RANK ERROR
     """
     pass
 
@@ -829,6 +1039,17 @@ def     compress_replicate():
 
 def     expand():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"\ A")
+    SYNTAX ERROR
+
+    >>> test(r"A \ A")
+    RANK ERROR
     """
     pass
 
@@ -836,6 +1057,17 @@ def     expand():
 
 def     encode():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"⊤ A")
+    VALENCE ERROR
+
+    >>> test(r"A ⊤ A")
+    RANK ERROR
     """
     pass
 
@@ -843,6 +1075,18 @@ def     encode():
 
 def     decode():
     """
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    1 2
+    3 4
+    >>> test(r"A")
+    1 2
+    3 4
+    >>> test(r"⊥ A")
+    VALENCE ERROR
+
+    >>> test(r"A ⊥ A")
+    5 8
+    7 12
     """
     pass
 
@@ -853,9 +1097,31 @@ def     gradeUp():
     >>> IO = saveIndexOrigin()
     >>> setIndexOrigin(1)
 
+    >>> test(r"A ← 2 2 ⍴ 'ABCD'")
+    AB
+    CD
+    >>> test(r"A")
+    AB
+    CD
+    >>> test(r"⍋ A")
+    1 2
+
+    >>> test(r"A ⍋ A")
+    1 2
 
     >>> setIndexOrigin(0)
 
+    >>> test(r"A ← 2 2 ⍴ 'ABCD'")
+    AB
+    CD
+    >>> test(r"A")
+    AB
+    CD
+    >>> test(r"⍋ A")
+    0 1
+
+    >>> test(r"A ⍋ A")
+    0 1
 
     >>> restoreIndexOrigin(IO)
     """
@@ -868,9 +1134,31 @@ def     gradeDown():
     >>> IO = saveIndexOrigin()
     >>> setIndexOrigin(1)
 
+    >>> test(r"A ← 2 2 ⍴ 'ABCD'")
+    AB
+    CD
+    >>> test(r"A")
+    AB
+    CD
+    >>> test(r"⍒ A")
+    2 1
+
+    >>> test(r"A ⍒ A")
+    2 1
 
     >>> setIndexOrigin(0)
 
+    >>> test(r"A ← 2 2 ⍴ 'ABCD'")
+    AB
+    CD
+    >>> test(r"A")
+    AB
+    CD
+    >>> test(r"⍋ A")
+    1 0
+
+    >>> test(r"A ⍋ A")
+    1 0
 
     >>> restoreIndexOrigin(IO)
     """
