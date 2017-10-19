@@ -10,64 +10,69 @@
     iterator modules.  It is experimental and may be replaced.
 """
 
+from monadicIterators import reverse
+
 from aplQuantity import aplQuantity, makeScalar
 from aplError import aplException
 
 # ------------------------------
 
-def reduceVector(Fn, A, B):
+def reduceVector(Fn, B):
     """
-    the iterator for the reduce operator applied to a vector
+    the iterator for the reduce operator when applied to a vector
     """
-    I = B.__iter__()
+    I = reverse(B).__iter__()
+    Y = I.__next__()
+
+    if not isinstance(Y, aplQuantity):
+        Y = makeScalar(Y)
 
     try:
         while True:
-            Y = I.__next__()
+            X = I.__next__()
 
-            if isinstance(Y, aplQuantity):
-                A = Fn(A, Y)
-            else:
-                A = Fn(A, makeScalar(Y))
+            if not isinstance(X, aplQuantity):
+                X = makeScalar(X)
+
+            Y = Fn(X, Y).resolve()
 
     except StopIteration:
-        return A.scalarToPy() if A.isScalar() else (A,)
+        pass
 
-    except aplException as error:
-        if error.expr is None:
-            error.expr = B.expressionToGo
-        raise error
+    return Y
 
 # ------------------------------
 
 class   scanVector(object):
     """
-    the iterator for the scan operator applied to a vector
+    the iterator for the scan operator when applied to a vector
     """
-    def __init__(self, Fn, A, B):
+    def __init__(self, Fn, B):
         self._Fn = Fn
-        self._A = A
         self._B = B.__iter__()
+        self._expresso = B.expressionToGo
+
+        self._A = []
 
     def __iter__(self):
         return self
 
     def __next__(self):
+        Y = self._B.__next__()
+
+        if self._A == []:
+            self._A.append(Y)
+            return (Y)
+
+        self._A.append(Y)
+
         try:
-            Y = self._B.__next__()
-
-            if isinstance(Y, aplQuantity):
-                X = self._Fn(self._A, Y).resolve()
-            else:
-                X = self._Fn(self._A, makeScalar(Y))
-
-            self._A = X
-
-            return X.scalarToPy() if X.isScalar() else X
-
+            Y = reduceVector(self._Fn, self._A)
         except aplException as error:
             if error.expr is None:
-                error.expr = B.expressionToGo
+                error.expr = self._expresso
             raise error
+
+        return Y.scalarToPy() if Y.isScalar() else Y
 
 # EOF

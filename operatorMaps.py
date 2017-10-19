@@ -18,8 +18,8 @@
 
 import operatorIterators as iterator
 
-from aplQuantity import makeScalar, makeVector
-from aplError import assertError, assertNotArray
+from aplQuantity import makeScalar, makeVector, makePrototype
+from aplError import assertNotTrue, assertNotArray
 
 # ------------------------------
 
@@ -27,10 +27,21 @@ def     reduceLast(Fn, A, B):
     """
     the map for the / (reduce along last axis) operator
     """
-    if B.isVectorLike():
-        Rpy = iterator.reduceVector(Fn, makeScalar(A), B)
+    if B.isScalar():
+        return B
 
-        return makeScalar(Rpy)
+    if B.isVector():
+        if B.isEmptyVector():
+            assertNotTrue(A is None, "DOMAIN ERROR")
+
+            return makeScalar(A)
+
+        Rpy = iterator.reduceVector(Fn, B)
+
+        if Rpy.isScalar():
+            return Rpy
+
+        return makeScalar((Rpy,), makePrototype(Rpy))
 
     assertNotArray(B, "WIP - RANK ERROR")
 
@@ -40,18 +51,38 @@ def     reduceFirst(Fn, A, B):
     """
     the map for the ⌿ (reduce along first axis) operator
     """
-    if B.isVectorLike():
-        Rpy = iterator.reduceVector(Fn, makeScalar(A), B)
+    if B.isScalar():
+        return B
 
-        return makeScalar(Rpy)
+    if B.isVector():
+        if B.isEmptyVector():
+            assertNotTrue(A is None, "DOMAIN ERROR")
+
+            return makeScalar(A)
+
+        Rpy = iterator.reduceVector(Fn, B)
+
+        if Rpy.isScalar():
+            return Rpy
+
+        return makeScalar((Rpy,), makePrototype(Rpy))
 
     assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
 
 def     scanLast(Fn, A, B):
-    if B.isVectorLike():
-        Rpy = iterator.scanVector(Fn, makeScalar(A), B)
+    if B.isScalar():
+        return B
+
+    if B.isVector():
+        if B.isEmptyVector():
+            return B
+
+        if B.isScalarLike():
+            return makeScalar(B.scalarToPy())
+
+        Rpy = iterator.scanVector(Fn, B)
 
         return makeVector(Rpy, B.dimension(), B.prototype())
 
@@ -60,8 +91,17 @@ def     scanLast(Fn, A, B):
 # ------------------------------
 
 def     scanFirst(Fn, A, B):
-    if B.isVectorLike():
-        Rpy = iterator.scanVector(Fn, makeScalar(A), B)
+    if B.isScalar():
+        return B
+
+    if B.isVector():
+        if B.isEmptyVector():
+            return B
+
+        if B.isScalarLike():
+            return makeScalar(B.scalarToPy())
+
+        Rpy = iterator.scanVector(Fn, B)
 
         return makeVector(Rpy, B.dimension(), B.prototype())
 
