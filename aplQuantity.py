@@ -376,20 +376,32 @@ class   aplQuantity(object):
 
         assertError("ASSERTION ERROR: aplQuantity.arrayToPy()")
 
-    def promoteScalarToVectorPy(self, specialEmpty=False):
+    def promoteScalarToVectorPy(self):
         """
         return a scalar as a scalar iterator but a vector as a sequence (promise)
         """
         if self.isScalar():
             return self.scalarIterator()
 
-        if specialEmpty and self.isEmptyVector():
-            return self.scalarIterator()
-
         if self.isVector():
             return self.vectorToPy()
 
         assertError("ASSERTION ERROR: aplQuantity.promoteScalarToVectorPy()")
+
+    def castToVectorPy(self):
+        """
+        return a Pyton vector (or promise thereof) regardless of the APL quantities type
+        """
+        if self.isScalar():
+            return self.scalarIterator()
+
+        if self.isEmptyVector():
+            return self.scalarIterator()
+
+        if self.isEmptyVector():
+            return ()
+
+        return self._value
 
     def python(self):
         """

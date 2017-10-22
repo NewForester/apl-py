@@ -163,12 +163,12 @@ def     reshape(Fn, A, B):
         if Apy == 0:
             return makeEmptyVector(B.prototype())
 
-        Bpy = B.promoteScalarToVectorPy(B.isEmptyVector())
+        Bpy = B.castToVectorPy()
 
         return makeVector(Fn(Apy, Bpy), Apy, B.prototype())
 
     if A.isEmptyVector():
-        Bpy = B.promoteScalarToVectorPy(B.isEmptyVector())
+        Bpy = B.castToVectorPy()
 
         return makeVector(Fn(1, Bpy), 1, B.prototype())
 
@@ -179,7 +179,7 @@ def     reshape(Fn, A, B):
     for I in Apy:
         assertTrue(I >= 0, "DOMAIN ERROR")
 
-    Bpy = B.promoteScalarToVectorPy(B.isEmptyVector())
+    Bpy = B.castToVectorPy()
 
     return makeArray(Fn(Apy, Bpy), Apy, 2 * B.prototype())
 
@@ -285,6 +285,7 @@ def     pick(_, A, B):
     implement dyadic ⊃
     """
     assertNotArray(A)
+    assertNotArray(B)
 
     if A.isEmptyVector():
         return B
@@ -312,8 +313,6 @@ def     pick(_, A, B):
             return B
 
         return makeScalar((B,), None)
-
-    assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
 
@@ -478,7 +477,7 @@ def     take(Fn, A, B):
 
 def     compress(Fn, A, B):
     """
-    implement dyadic / and \
+    implement dyadic /
     """
     assertNotArray(A)
 
@@ -496,7 +495,7 @@ def     compress(Fn, A, B):
 
 def     expand(Fn, A, B):
     """
-    implement dyadic / and \
+    implement dyadic /
     """
     assertNotArray(A)
 
@@ -524,12 +523,18 @@ def     encode(Fn, A, B):
     """
     implement dyadic ⊤
     """
-    assertNotArray(A)
+    if B.isArray():
+        assertNotArray(A)
+
+        assertError("WIP - RANK ERROR")
+
+    if A.isArray():
+        assertNotArray(B)
+
+        assertError("WIP - RANK ERROR")
 
     if B.isEmptyVector():
         return makeEmptyVector()
-
-    assertNotArray(B)
 
     if A.isEmptyVector():
         return makeEmptyVector()
@@ -547,8 +552,6 @@ def     decode(Fn, A, B):
     """
     implement dyadic ⊥
     """
-    assertNotArray(A)
-
     if B.isScalar():
         assertNumeric(B)
 

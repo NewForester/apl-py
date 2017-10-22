@@ -748,6 +748,14 @@ def     rho():
 
     >>> test(r"A ⍴ A")
     RANK ERROR
+    >>> test(r"A ⍴ 0 1")
+    RANK ERROR
+    >>> test(r"A ⍴ 3")
+    RANK ERROR
+    >>> test(r"1 1 ⍴ A")
+    WIP - MATRIX ERROR
+    >>> test(r"2 ⍴ A")
+    1 2
     """
     pass
 
@@ -765,7 +773,7 @@ def     comma():
     1 2 3 4
 
     >>> test(r"A , A")
-    WIP - LENGTH ERROR
+    WIP - RANK ERROR
     """
     pass
 
@@ -798,10 +806,10 @@ def     find():
     >>> test(r"A")
     1 2
     3 4
-    >>> test(r"∊ A")
+    >>> test(r"⍷ A")
     VALENCE ERROR
 
-    >>> test(r"A ∊ A")
+    >>> test(r"A ⍷ A")
     1 0
     0 0
     """
@@ -811,7 +819,7 @@ def     find():
 
 def     transpose():
     """
-    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    #>>> test(r"A ← 2 2 ⍴ ⍳ 4")
     1 2
     3 4
     >>> test(r"A")
@@ -823,6 +831,15 @@ def     transpose():
 
     >>> test(r"A ⍉ A")
     RANK ERROR
+    >>> test(r"A ⍉ 0 1")
+    RANK ERROR
+    >>> test(r"A ⍉ 3")
+    RANK ERROR
+
+    >>> test(r"(1 1) ⍉ A")
+    1 4
+    >>> test(r"2 ⍉ A")
+    LENGTH ERROR
     """
     pass
 
@@ -845,8 +862,33 @@ def     reverse_rotate():
 
     >>> test(r"A ⌽ A")
     RANK ERROR
+    >>> test(r"A ⌽ 0 1")
+    RANK ERROR
+    >>> test(r"A ⌽ 3")
+    RANK ERROR
+
+    >>> test(r"(1 0) ⌽ A")
+    2 1
+    3 4
+    >>> test(r"2 ⌽ A")
+    1 2
+    3 4
+
     >>> test(r"A ⊖ A")
     RANK ERROR
+    >>> test(r"A ⊖ A")
+    RANK ERROR
+    >>> test(r"A ⊖ 0 1")
+    RANK ERROR
+    >>> test(r"A ⊖ 3")
+    RANK ERROR
+
+    >>> test(r"(1 0) ⊖ A")
+    3 2
+    1 4
+    >>> test(r"2 ⊖ A")
+    1 2
+    3 4
     """
     pass
 
@@ -866,6 +908,17 @@ def     enclose_partition():
 
     >>> test(r"A ⊂ A")
     RANK ERROR
+    >>> test(r"A ⊂ 0 1")
+    RANK ERROR
+    >>> test(r"A ⊂ 3")
+    RANK ERROR
+
+    >>> test(r"(1 0) ⊂ A")
+    (1
+    3)
+    >>> test(r"2 ⊂ A")
+    (1 2
+    3 4)
     """
     pass
 
@@ -884,6 +937,14 @@ def     disclose_pick():
     2 4
 
     >>> test(r"A ⊃ A")
+    RANK ERROR
+    >>> test(r"A ⊃ 0 1")
+    RANK ERROR
+    >>> test(r"(1 0) ⊃ A")
+    RANK ERROR
+    >>> test(r"A ⊃ 3")
+    RANK ERROR
+    >>> test(r"2 ⊃ A")
     RANK ERROR
     """
     pass
@@ -906,6 +967,17 @@ def     iota():
 
     >>> test(r"A ⍳ A")
     RANK ERROR
+    >>> test(r"A ⍳ 0 1")
+    RANK ERROR
+    >>> test(r"A ⍳ 3")
+    RANK ERROR
+
+    >>> test(r"(1 0) ⍳ A")
+    1 3
+    3 3
+    >>> test(r"2 ⍳ A")
+    2 1
+    2 2
 
     >>> setIndexOrigin(0)
 
@@ -920,6 +992,17 @@ def     iota():
 
     >>> test(r"A ⍳ A")
     RANK ERROR
+    >>> test(r"A ⍳ 0 1")
+    RANK ERROR
+    >>> test(r"A ⍳ 3")
+    RANK ERROR
+
+    >>> test(r"(1 0) ⍳ A")
+    0 2
+    2 2
+    >>> test(r"2 ⍳ A")
+    1 0
+    1 1
 
     >>> restoreIndexOrigin(IO)
     """
@@ -941,6 +1024,15 @@ def     tilde():
 
     >>> test(r"A ~ A")
     RANK ERROR
+    >>> test(r"A ~ 0 1")
+    RANK ERROR
+    >>> test(r"A ~ 3")
+    RANK ERROR
+
+    >>> test(r"(1 0) ~ A")
+    0
+    >>> test(r"2 ~ A")
+    ⍬
     """
     pass
 
@@ -958,6 +1050,14 @@ def     unique_union():
     RANK ERROR
 
     >>> test(r"A ∪ A")
+    RANK ERROR
+    >>> test(r"A ∪ 0 1")
+    RANK ERROR
+    >>> test(r"(1 0) ∪ A")
+    RANK ERROR
+    >>> test(r"A ∪ 3")
+    RANK ERROR
+    >>> test(r"2 ∪ A")
     RANK ERROR
     """
     pass
@@ -977,6 +1077,14 @@ def     intersection():
 
     >>> test(r"A ∩ A")
     RANK ERROR
+    >>> test(r"A ∩ 0 1")
+    RANK ERROR
+    >>> test(r"(1 0) ∩ A")
+    RANK ERROR
+    >>> test(r"A ∩ 3")
+    RANK ERROR
+    >>> test(r"2 ∩ A")
+    RANK ERROR
     """
     pass
 
@@ -991,13 +1099,21 @@ def     tail_drop():
     1 2
     3 4
     >>> test(r"↓ A")
-    OUR OWN IMPLEMENTATION
+    RANK ERROR
 
     >>> test(r"A ↓ A")
     RANK ERROR
+    >>> test(r"A ↓ 0 1")
+    RANK ERROR
+    >>> test(r"A ↓ 3")
+    RANK ERROR
+
+    >>> test(r"(1 0) ↓ A")
+    3 4
+    >>> test(r"2 ↓ A")
+    LENGTH ERROR
     """
     pass
-
 
 # --------------
 
@@ -1010,10 +1126,19 @@ def     head_take():
     1 2
     3 4
     >>> test(r"↑ A")
-    QUOI - LOOKS LIKE unravel done first !
+    1
 
     >>> test(r"A ↑ A")
     RANK ERROR
+    >>> test(r"A ↑ 0 1")
+    RANK ERROR
+    >>> test(r"A ↑ 3")
+    RANK ERROR
+
+    >>> test(r"(1 1) ↑ A")
+    1
+    >>> test(r"2 ↑ A")
+    LENGTH ERROR
     """
     pass
 
@@ -1032,6 +1157,16 @@ def     compress_replicate():
 
     >>> test(r"A / A")
     RANK ERROR
+    >>> test(r"A / 0 1")
+    RANK ERROR
+    >>> test(r"A / 3")
+    RANK ERROR
+
+    >>> test(r"(1 0) / A")
+    1
+    3
+    >>> test(r"2 / A")
+    WIP - RANK ERROR
     """
     pass
 
@@ -1050,6 +1185,16 @@ def     expand():
 
     >>> test(r"A \ A")
     RANK ERROR
+    >>> test(r"A \ 0 1")
+    RANK ERROR
+    >>> test(r"A \ 3")
+    RANK ERROR
+
+    >>> test(r"(1 0 1) \ A")
+    1 0 2
+    3 0 4
+    >>> test(r"2 \ A")
+    DOMAIN ERROR ?
     """
     pass
 
@@ -1068,6 +1213,18 @@ def     encode():
 
     >>> test(r"A ⊤ A")
     RANK ERROR
+
+    >>> test(r"A ⊤ 0 1")
+    WIP - RANK ERROR
+    >>> test(r"(1 0) ⊤ A")
+    WIP - RANK ERROR
+
+    >>> test(r"A ⊤ 3")
+    0 0
+    0 3
+    >>> test(r"2 ⊤ A")
+    1 0
+    1 0
     """
     pass
 

@@ -208,13 +208,12 @@ def     unique(Fn, B):
     """
     implement monadic ∪
     """
+    assertNotArray(B, "RANK ERROR")
+
     if B.isScalarLike() or B.isEmptyVector():
         return B
 
-    if B.isVector():
-        return makeVector(Fn(B.vectorToPy()), -1, B.prototype())
-
-    assertNotArray(B, "WIP - RANK ERROR")
+    return makeVector(Fn(B.vectorToPy()), -1, B.prototype())
 
 # ------------------------------
 
@@ -222,16 +221,15 @@ def     tail(Fn, B):
     """
     implement monadic ↓
     """
+    assertNotArray(B, "RANK ERROR")
+
     if B.isScalarLike():
         return makeEmptyVector(B.prototype())
 
     if B.isEmptyVector():
         return B
 
-    if B.isVector():
-        return makeVector(Fn(B.vectorToPy()), B.dimension()-1, B.prototype())
-
-    assertNotArray(B, "WIP - RANK ERROR")
+    return makeVector(Fn(B.vectorToPy()), B.dimension()-1, B.prototype())
 
 # ------------------------------
 
@@ -243,9 +241,9 @@ def     head(Fn, B):
         return B
 
     if B.isVector():
-        return makeScalar(Fn(B.vectorToPy()), B.prototype())
+        return makeScalar(Fn(B.vectorToPy()), Fn(B.prototype()))
 
-    assertNotArray(B, "WIP - RANK ERROR")
+    return makeScalar(Fn(B.arrayToPy()), Fn(B.prototype()))
 
 # ------------------------------
 
