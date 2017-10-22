@@ -1158,7 +1158,7 @@ def     compress_replicate():
     only dyadic
 
     >>> test(r"/ M")
-    VALENCE ERROR
+    SYNTAX ERROR
 
     >>> test(r"0 1 0 1 0 1 / M")
     2 ac
@@ -1188,7 +1188,7 @@ def     expand():
     only dyadic
 
     >>> test(r"\\ M")
-    VALENCE ERROR
+    SYNTAX ERROR
 
     >>> test(r"0 1 0 1 0 1 0 1 0 1 0 1 \\ M")
     0 1 0 2 0 3 0 a 0 b 0 c

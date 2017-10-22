@@ -942,7 +942,7 @@ def     compress_replicate():
     only dyadic
 
     >>> test(r"/ ⍬")
-    VALENCE ERROR
+    SYNTAX ERROR
 
     >>> test(r"⍬ / ⍬")
     ⍬
@@ -972,7 +972,7 @@ def     expand():
     only dyadic
 
     >>> test(r"\\ ⍬")
-    VALENCE ERROR
+    SYNTAX ERROR
 
     >>> test(r"⍬ \\ ⍬")
     ⍬

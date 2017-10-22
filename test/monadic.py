@@ -632,7 +632,10 @@ def     head_take():
 def     compress_replicate():
     """
     >>> test(r"/ 1")
-    VALENCE ERROR
+    SYNTAX ERROR
+
+    >>> test(r"⌿ 1")
+    SYNTAX ERROR
     """
     pass
 
@@ -641,7 +644,10 @@ def     compress_replicate():
 def     expand():
     """
     >>> test(r"\\ 1")
-    VALENCE ERROR
+    SYNTAX ERROR
+
+    >>> test(r"⍀ 1")
+    SYNTAX ERROR
     """
     pass
 

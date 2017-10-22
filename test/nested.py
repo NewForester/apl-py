@@ -1124,7 +1124,7 @@ def     compress_replicate():
     only dyadic
 
     >>> test(r"/ 1 (2 3) 4")
-    VALENCE ERROR
+    SYNTAX ERROR
 
     >>> test(r"0 1 0 1 0 / 1 (2 3) 4 (5 6) 7")
     (2 3) (5 6)
@@ -1145,7 +1145,7 @@ def     expand():
     only dyadic
 
     >>> test(r"\\ 1 (2 3) 4")
-    VALENCE ERROR
+    SYNTAX ERROR
 
     >>> test(r"0 1 0 1 0 1 0 1 0 1 0 \\ 1 (2 3) 4 (5 6) 7")
     0 1 0 (2 3) 0 4 0 (5 6) 0 7 0

@@ -1151,7 +1151,7 @@ def     compress_replicate():
     only dyadic
 
     >>> test(r"/ 'Hello'")
-    VALENCE ERROR
+    SYNTAX ERROR
 
     >>> test(r"1 0 1 / 'ABC'")
     AC
@@ -1174,7 +1174,7 @@ def     expand():
     only dyadic
 
     >>> test(r"\\ 'Hello'")
-    VALENCE ERROR
+    SYNTAX ERROR
 
     >>> test(r"1 0 1 0 1 \\ 'ABC'")
     A B C
@@ -1197,7 +1197,7 @@ def     encode():
     only dyadic
 
     >>> test(r"/ 'Hello'")
-    VALENCE ERROR
+    SYNTAX ERROR
 
     >>> test(r"'Hello' ⊤ 17")
     DOMAIN ERROR
