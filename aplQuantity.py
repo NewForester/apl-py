@@ -733,7 +733,10 @@ def     makeVector(value, length=-1, prototype=(0,)):
     if length == 0:
         return makeEmptyVector(prototype)
 
-    return aplQuantity(value, length, prototype)
+    if not isinstance(value, (tuple, lookAhead)):
+        value = lookAhead(value, 1)
+
+    return aplQuantity(value, length, None)
 
 # --------------
 

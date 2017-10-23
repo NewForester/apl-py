@@ -721,7 +721,7 @@ def     enlist_membership():
 
     >>> test(r"⍬ ≡ 0 ⍴ 11 ∊ 'Hello'")
     1
-    >>> test(r"'' ≡ 0 ⍴ 'Hello' ∊ 1000000")
+    >>> test(r"⍬ ≡ 0 ⍴ 'Hello' ∊ 1000000")
     1
     """
     pass
@@ -732,7 +732,7 @@ def     find():
     """
     only dyadic
 
-    >>> test(r"'' ≡ 0 ⍴ 'll' ⍷ 'Hello'")
+    >>> test(r"⍬ ≡ 0 ⍴ 'll' ⍷ 'Hello'")
     1
     >>> test(r"⍬ ≡ 0 ⍴ 2 ⍷ 1 2 3")
     1
