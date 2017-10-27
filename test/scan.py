@@ -425,6 +425,267 @@ def     ne():
 
 # ------------------------------
 
+def     depth_match():
+    """
+    >>> test(r"≡\ ⍬")
+    ⍬
+
+    >>> test(r"≡\ 7")
+    7
+    >>> test(r"≡\ 0 1")
+    0 0
+    >>> test(r"≡\ 1 2")
+    1 0
+    >>> test(r"≡\ 1 2 3")
+    1 0 0
+    """
+    pass
+
+# --------------
+
+def     tally_notMatch():
+    """
+    >>> test(r"≢\ ⍬")
+    ⍬
+
+    >>> test(r"≢\ 7")
+    7
+    >>> test(r"≢\ 0 1")
+    0 1
+    >>> test(r"≢\ 1 2")
+    1 1
+    >>> test(r"≢\ 1 2 3")
+    1 1 0
+    """
+    pass
+
+# ------------------------------
+
+def     rho():
+    """
+    >>> test(r"⍴ ⍬")
+    0
+    """
+    pass
+
+# --------------
+
+def     comma():
+    """
+    >>> test(r", ⍬")
+    ⍬
+    """
+    pass
+
+# --------------
+
+def     enlist_membership():
+    """
+    >>> test(r"∊\ ⍬")
+    ⍬
+
+    >>> test(r"∊\ 7")
+    7
+    >>> test(r"∊\ 0 1")
+    0 0
+    >>> test(r"∊\ 1 2")
+    1 0
+    >>> test(r"∊\ 1 2 3")
+    1 0 0
+    """
+    pass
+
+# --------------
+
+def     find():
+    """
+    >>> test(r"⍷\ ⍬")
+    ⍬
+
+    >>> test(r"⍷\ 7")
+    7
+    >>> test(r"⍷\ 0 1")
+    0 0
+    >>> test(r"⍷\ 1 2")
+    1 0
+    >>> test(r"⍷\ 1 2 3")
+    1 0 0
+    """
+    pass
+
+# --------------
+
+def     transpose():
+    """
+    >>> test(r"⍉ ⍬")
+    ⍬
+    """
+    pass
+
+# --------------
+
+def     reverse_rotate():
+    """
+    >>> test(r"⌽ ⍬")
+    ⍬
+    """
+    pass
+
+# --------------
+
+def     enclose_partition():
+    """
+    >>> test(r"⊂ ⍬")
+    (⍬)
+    """
+    pass
+
+# --------------
+
+def     disclose_pick():
+    """
+    >>> test(r"⊃ ⍬")
+    ⍬
+    """
+    pass
+
+# ------------------------------
+
+def     iota():
+    """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"⍳ 0")
+    ⍬
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍳ 0")
+    ⍬
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
+# --------------
+
+def     tilde():
+    """
+    >>> test(r"~ ⍬")
+    ⍬
+    """
+    pass
+
+# --------------
+
+def     unique_union():
+    """
+    >>> test(r"∪ ⍬")
+    ⍬
+    """
+    pass
+
+# --------------
+
+def     intersection():
+    """
+    >>> test(r"∩ ⍬")
+    VALENCE ERROR
+    """
+    pass
+
+# --------------
+
+def     tail_drop():
+    """
+    >>> test(r"↓ ⍬")
+    ⍬
+    """
+    pass
+
+# --------------
+
+def     head_take():
+    """
+    >>> test(r"↑ ⍬")
+    ⍬
+    """
+    pass
+
+# --------------
+
+def     compress_replicate():
+    """
+    >>> test(r"/ ⍬")
+    SYNTAX ERROR
+    """
+    pass
+
+# --------------
+
+def     expand():
+    """
+    >>> test(r"\\ ⍬")
+    SYNTAX ERROR
+    """
+    pass
+
+# ------------------------------
+
+def     encode():
+    """
+    >>> test(r"⊤ ⍬")
+    VALENCE ERROR
+    """
+    pass
+
+# --------------
+
+def     decode():
+    """
+    >>> test(r"⊥ ⍬")
+    VALENCE ERROR
+    """
+    pass
+
+# --------------
+
+def     gradeUp():
+    """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"⍋ ⍬")
+    ⍬
+
+    >>> setIndexOrigin(0)
+
+    >>> test(r"⍋ ⍬")
+    ⍬
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
+# --------------
+
+def     gradeDown():
+    """
+    >>> IO = saveIndexOrigin()
+    >>> setIndexOrigin(1)
+
+    >>> test(r"⍒ ⍬")
+    ⍬
+
+    >>> setIndexOrigin(0)
+
+    >>> restoreIndexOrigin(IO)
+    """
+    pass
+
+# ------------------------------
+
 if __name__ == "__main__":
     preamble()
     if test and __name__:
