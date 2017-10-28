@@ -64,23 +64,11 @@ def     iota(Fn, B):
 
 # ------------------------------
 
-def     depth(Fn, B):
+def     depth(_, B):
     """
     implement monadic ≡
     """
-    if B.isScalar():
-        Rpy = Fn(B.vectorToPy())
-
-        Rpy += 1 if Rpy != 0 else 0
-
-    if B.isVector():
-        Rpy = Fn(B.vectorToPy())
-
-        Rpy += 1
-
-    assertNotArray(B, "WIP - RANK ERROR")
-
-    return makeScalar(Rpy)
+    return makeScalar(B.depth())
 
 # ------------------------------
 
@@ -88,13 +76,7 @@ def     tally(_, B):
     """
     implement monadic ≢
     """
-    if B.isScalar():
-        return makeScalar(1)
-
-    if B.isVector():
-        return makeScalar(B.tally())
-
-    assertNotArray(B, "WIP - RANK ERROR")
+    return makeScalar(B.tally())
 
 # ------------------------------
 

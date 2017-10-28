@@ -70,7 +70,7 @@ _MonadicFunctions = {
 
     # Structural (aka manipulative)
     '⍳':        lambda B: mapper.iota(iterator.iota, B),
-    '≡':        lambda B: mapper.depth(iterator.depth, B),
+    '≡':        lambda B: mapper.depth(None, B),
     '≢':        lambda B: mapper.tally(None, B),
     '⍴':        lambda B: mapper.rho(None, B),
     ',':        lambda B: mapper.unravel(None, B),

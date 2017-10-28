@@ -712,6 +712,14 @@ def     depth_match():
 
     >>> test(r"A ≡ A")
     1
+    >>> test(r"1 2 ≡ A")
+    0
+    >>> test(r"A ≡ 3 4")
+    0
+    >>> test(r"2 ≡ A")
+    0
+    >>> test(r"A ≡ 3")
+    0
     """
     pass
 
@@ -730,6 +738,14 @@ def     tally_notMatch():
 
     >>> test(r"A ≢ A")
     0
+    >>> test(r"1 2 ≢ A")
+    1
+    >>> test(r"A ≢ 3 4")
+    1
+    >>> test(r"2 ≢ A")
+    1
+    >>> test(r"A ≢ 3")
+    1
     """
     pass
 

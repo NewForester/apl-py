@@ -18,7 +18,7 @@
     function is used instead but the calling map function in unaware of this.
 """
 
-from functools import reduce
+# pylint: disable=too-few-public-methods
 
 from systemVariables import indexOrigin
 
@@ -66,15 +66,6 @@ def     iota(B):
     IO = indexOrigin()
 
     return range(IO, B + IO)
-
-# ------------------------------
-
-def     depth(B):
-    """
-    implement monadic ≡ recursively
-    """
-    return reduce(
-        lambda A, Y: max(A, depth(Y.vectorToPy()) + 1 if isinstance(Y, aplQuantity) else 0), B, 0)
 
 # ------------------------------
 

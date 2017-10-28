@@ -199,24 +199,38 @@ class   aplQuantity(object):
                 dimension = self._value.buffer(lowerBound)
         return dimension
 
-    def elementCount(self):
+    def depth(self):
         """
-        the dimension(s) of the quantity
+        the depth to which the quantity is nested
+
+        not resolved so do not use internally
         """
-        if isinstance(self._dimension, tuple):
-            return reduce(operator.mul, self._dimension, 1)
+        if self.isEmptyVector():
+            return 1
 
-        elif isinstance(self._dimension, int):
-            return self._dimension
+        depth = reduce(lambda A, Y: max(A, Y.depth() if isinstance(Y, aplQuantity) else 0), self._value, 0)
 
-        return 1
+        if self.isScalar() and depth == 0:
+            return 0
+
+        return 1 + depth
 
     def tally(self):
         """
         1 if a scalar, its length if a vector
+
+        not resolved so do not use internally
         """
-        if self._dimension is None:
-            return 1
+        if isinstance(self._dimension, tuple):
+            if self._dimension[0] < 0:
+                assertError("tally: needs more thought")
+                if not isinstance(self._value, tuple):
+                    self._value = tuple(self._value)
+                self._dimension[0] = len(self._value)   ## wrong
+
+                if self._dimension[0] == 0:
+                    self._value = self._prototype
+            return self._dimension[0]
 
         if isinstance(self._dimension, int):
             if self._dimension < 0:
@@ -228,7 +242,19 @@ class   aplQuantity(object):
                     self._value = self._prototype
             return self._dimension
 
-        assertError("ASSERTION ERROR: aplQuantity.tally()")
+        return 1
+
+    def elementCount(self):
+        """
+        the dimension(s) of the quantity
+        """
+        if isinstance(self._dimension, tuple):
+            return reduce(operator.mul, self._dimension, 1)
+
+        elif isinstance(self._dimension, int):
+            return self._dimension
+
+        return 1
 
     def dimension(self):
         """
@@ -284,7 +310,7 @@ class   aplQuantity(object):
                 return prototype
             return prototype[0]
 
-        assertNotArray(self, "WIP - pad PROTOTYPE RANK ERROR")
+        return self.prototype()
 
     def isString(self):
         """

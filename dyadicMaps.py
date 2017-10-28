@@ -127,7 +127,8 @@ def     _matchMap(Fn, A, B):
                 return True
 
     else:
-        assertNotArray(A, "WIP - RANK ERROR")
+        if A.isArray():
+            return all(iterator.match(_matchMap, Fn, A, B))
 
     return False
 
