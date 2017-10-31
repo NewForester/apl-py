@@ -463,8 +463,17 @@ def     tally_notMatch():
 
 def     rho():
     """
-    >>> test(r"⍴ ⍬")
-    0
+    >>> test(r"⍴\ ⍬")
+    ⍬
+
+    >>> test(r"⍴\ 7")
+    7
+    >>> test(r"(0 (0⍴1)) ≡ ⍴\ 0 1")
+    1
+    >>> test(r"(1 (1⍴2)) ≡ ⍴\ 1 2")
+    1
+    >>> test(r"(1 (1⍴2) (1⍴2⍴3)) ≡ ⍴\ 1 2 3")
+    1
     """
     pass
 
@@ -472,8 +481,17 @@ def     rho():
 
 def     comma():
     """
-    >>> test(r", ⍬")
+    >>> test(r",\ ⍬")
     ⍬
+
+    >>> test(r",\ 7")
+    7
+    >>> test(r",\ 0 1")
+    0 (0 1)
+    >>> test(r",\ 1 2")
+    1 (1 2)
+    >>> test(r",\ 1 2 3")
+    1 (1 2) (1 2 3)
     """
     pass
 
@@ -517,8 +535,17 @@ def     find():
 
 def     transpose():
     """
-    >>> test(r"⍉ ⍬")
+    >>> test(r"⍉\ ⍬")
     ⍬
+
+    >>> test(r"⍉\ 7")
+    7
+    >>> test(r"⍉\ 0 1")
+    LENGTH ERROR
+    >>> test(r"⍉\ 1 2")
+    LENGTH ERROR
+    >>> test(r"⍉\ 1 2 3")
+    LENGTH ERROR
     """
     pass
 
@@ -526,8 +553,17 @@ def     transpose():
 
 def     reverse_rotate():
     """
-    >>> test(r"⌽ ⍬")
+    >>> test(r"⌽\ ⍬")
     ⍬
+
+    >>> test(r"⌽\ 7")
+    7
+    >>> test(r"⌽\ 0 1")
+    0 1
+    >>> test(r"⌽\ 1 2")
+    1 2
+    >>> test(r"⌽\ 1 2 3")
+    1 2 3
     """
     pass
 

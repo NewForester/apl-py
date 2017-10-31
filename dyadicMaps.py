@@ -116,15 +116,11 @@ def     _matchMap(Fn, A, B):
 
     elif A.isScalar():
         if B.isScalar():
-            return bool(Fn(A.scalarToPy(), B.scalarToPy()))
+            return all(iterator.match(_matchMap, Fn, A, B))
 
     elif A.isVector():
         if B.isVector():
-            try:
-                filter(lambda X: not X, iterator.match(_matchMap, Fn, A, B)).__next__()
-
-            except StopIteration:
-                return True
+            return all(iterator.match(_matchMap, Fn, A, B))
 
     else:
         if A.isArray():
