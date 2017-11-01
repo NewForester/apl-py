@@ -809,6 +809,16 @@ def     enlist_membership():
     >>> test(r"A ∊ A")
     1 1
     1 1
+    >>> test(r"1 2 ∊ A")
+    1 1
+    >>> test(r"A ∊ 3 4")
+    0 0
+    1 1
+    >>> test(r"2 ∊ A")
+    1
+    >>> test(r"A ∊ 3")
+    0 0
+    1 0
     """
     pass
 
@@ -828,6 +838,16 @@ def     find():
     >>> test(r"A ⍷ A")
     1 0
     0 0
+    >>> test(r"1 2 ⍷ A")
+    1 0
+    0 0
+    >>> test(r"A ⍷ 3 4")
+    0 0
+    >>> test(r"2 ⍷ A")
+    0 1
+    0 0
+    >>> test(r"A ⍷ 3")
+    0
     """
     pass
 

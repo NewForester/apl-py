@@ -320,16 +320,18 @@ def     membership(Fn, A, B):
     if A.isEmptyVector():
         return A
 
-    if A.isVectorLike() and B.isVectorLike():
-        Rpy = Fn(A.vectorToPy(), B.vectorToPy())
+    Apy = A.arrayToPy() if A.isArray() else A.vectorToPy()
+    Bpy = B.arrayToPy() if B.isArray() else B.vectorToPy()
 
-        if A.isScalar():
-            return makeScalar(Rpy, A.prototype())
+    Rpy = Fn(Apy, Bpy)
 
+    if A.isArray():
+        return makeArray(Rpy, A.dimension(), A.prototype())
+
+    if A.isVector():
         return makeVector(Rpy, A.dimension(), A.prototype())
 
-    assertNotArray(A, "WIP - RANK ERROR")
-    assertNotArray(B, "WIP - RANK ERROR")
+    return makeScalar(Rpy, A.prototype())
 
 # ------------------------------
 
@@ -339,16 +341,18 @@ def     find(Fn, A, B):
     """
     A.resolve()
 
-    if B.isVectorLike() and A.isVectorLike():
-        Rpy = Fn(A.vectorToPy(), B.vectorToPy())
+    Apy = A.arrayToPy() if A.isArray() else A.vectorToPy()
+    Bpy = B.arrayToPy() if B.isArray() else B.vectorToPy()
 
-        if B.isScalar():
-            return makeScalar(Rpy, B.prototype())
+    Rpy = Fn(Apy, Bpy)
 
+    if B.isArray():
+        return makeArray(Rpy, B.dimension(), B.prototype())
+
+    if B.isVector():
         return makeVector(Rpy, B.dimension(), B.prototype())
 
-    assertNotArray(A, "WIP - RANK ERROR")
-    assertNotArray(B, "WIP - RANK ERROR")
+    return makeScalar(Rpy, B.prototype())
 
 # ------------------------------
 

@@ -118,7 +118,7 @@ def     enlist(Fn, B):
     if B.isVectorLike():
         return makeVector(Fn(B.vectorToPy()), -1, B.prototype())
 
-    assertNotArray(B, "WIP - RANK ERROR")
+    return makeVector(Fn(B.arrayToPy()), -1, B.prototype())
 
 # ------------------------------
 
