@@ -571,8 +571,17 @@ def     reverse_rotate():
 
 def     enclose_partition():
     """
-    >>> test(r"⊂ ⍬")
-    (⍬)
+    >>> test(r"⊂\ ⍬")
+    ⍬
+
+    >>> test(r"⊂\ 7")
+    7
+    >>> test(r"⊂\ 0 1")
+    RANK ERROR
+    >>> test(r"⊂\ 1 2")
+    RANK ERROR
+    >>> test(r"⊂\ 1 2 3")
+    RANK ERROR
     """
     pass
 
@@ -580,8 +589,17 @@ def     enclose_partition():
 
 def     disclose_pick():
     """
-    >>> test(r"⊃ ⍬")
+    >>> test(r"⊃\ ⍬")
     ⍬
+
+    >>> test(r"⊃\ 7")
+    7
+    >>> test(r"⊃\ 0 1")
+    RANK ERROR
+    >>> test(r"⊃\ 1 2")
+    RANK ERROR
+    >>> test(r"⊃\ 1 2 3")
+    RANK ERROR
     """
     pass
 
@@ -592,13 +610,31 @@ def     iota():
     >>> IO = saveIndexOrigin()
     >>> setIndexOrigin(1)
 
-    >>> test(r"⍳ 0")
+    >>> test(r"⍳\ ⍬")
     ⍬
+
+    >>> test(r"⍳\ 7")
+    7
+    >>> test(r"⍳\ 0 1")
+    0 2
+    >>> test(r"⍳\ 1 2")
+    1 2
+    >>> test(r"⍳\ 1 2 3")
+    1 2 2
 
     >>> setIndexOrigin(0)
 
-    >>> test(r"⍳ 0")
+    >>> test(r"⍳\ ⍬")
     ⍬
+
+    >>> test(r"⍳\ 7")
+    7
+    >>> test(r"⍳\ 0 1")
+    0 1
+    >>> test(r"⍳\ 1 2")
+    1 1
+    >>> test(r"⍳\ 1 2 3")
+    1 1 0
 
     >>> restoreIndexOrigin(IO)
     """
@@ -608,8 +644,17 @@ def     iota():
 
 def     tilde():
     """
-    >>> test(r"~ ⍬")
+    >>> test(r"~\ ⍬")
     ⍬
+
+    >>> test(r"~\ 7")
+    7
+    >>> test(r"~\ 0 1")
+    0 (0)
+    >>> test(r"~\ 1 2")
+    1 (1)
+    >>> test(r"~\ 1 2 3")
+    1 (1) (1)
     """
     pass
 
