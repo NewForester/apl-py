@@ -365,18 +365,22 @@ def     index(Fn, A, B):
     if B.isEmptyVector():
         return makeEmptyVector(B.prototype())
 
-    if B.isVectorLike():
-        if A.isEmptyVector():
-            Rpy = scalarIterator(indexOrigin(), B.tally(), B.expressionToGo)
-        else:
-            Rpy = Fn(A.vectorToPy(), B.vectorToPy())
+    if A.isEmptyVector():
+        Rpy = scalarIterator(indexOrigin(), B.elementCount(), B.expressionToGo)
 
-        if B.isScalar():
-            return makeScalar(Rpy)
+    elif B.isArray():
+        Rpy = Fn(A.vectorToPy(), B.arrayToPy())
 
+    else:
+        Rpy = Fn(A.vectorToPy(), B.vectorToPy())
+
+    if B.isArray():
+        return makeArray(Rpy, B.dimension())
+
+    if B.isVector():
         return makeVector(Rpy, B.dimension())
 
-    assertNotArray(B, "WIP - RANK ERROR")
+    return makeScalar(Rpy)
 
 # ------------------------------
 
@@ -386,12 +390,13 @@ def     without(Fn, A, B):
     """
     assertNotArray(A)
 
-    if B.isVectorLike():
+    if B.isArray():
+        Rpy = Fn(A.vectorToPy(), B.arrayToPy())
+
+    else:
         Rpy = Fn(A.vectorToPy(), B.vectorToPy())
 
-        return makeVector(Rpy, -1, A.prototype())
-
-    assertNotArray(B, "WIP - RANK ERROR")
+    return makeVector(Rpy, -1, A.prototype())
 
 # ------------------------------
 

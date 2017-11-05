@@ -1003,17 +1003,23 @@ def     iota():
 
     >>> test(r"A ⍳ A")
     RANK ERROR
-    >>> test(r"A ⍳ 0 1")
+    >>> test(r"A ⍳ 3 4")
     RANK ERROR
     >>> test(r"A ⍳ 3")
     RANK ERROR
 
-    >>> test(r"(1 0) ⍳ A")
-    1 3
+    >>> test(r"5 6 7 ⍳ A")
+    4 4
+    4 4
+    >>> test(r"1 2 ⍳ A")
+    1 2
     3 3
     >>> test(r"2 ⍳ A")
     2 1
     2 2
+    >>> test(r"⍬ ⍳ A")
+    1 1
+    1 1
 
     >>> setIndexOrigin(0)
 
@@ -1028,17 +1034,23 @@ def     iota():
 
     >>> test(r"A ⍳ A")
     RANK ERROR
-    >>> test(r"A ⍳ 0 1")
+    >>> test(r"A ⍳ 2 3")
     RANK ERROR
-    >>> test(r"A ⍳ 3")
+    >>> test(r"A ⍳ 2")
     RANK ERROR
 
-    >>> test(r"(1 0) ⍳ A")
-    0 2
+    >>> test(r"5 6 7 ⍳ A")
+    3 3
+    3 3
+    >>> test(r"0 1 ⍳ A")
+    0 1
     2 2
-    >>> test(r"2 ⍳ A")
+    >>> test(r"1 ⍳ A")
     1 0
     1 1
+    >>> test(r"⍬ ⍳ A")
+    0 0
+    0 0
 
     >>> restoreIndexOrigin(IO)
     """
@@ -1060,15 +1072,21 @@ def     tilde():
 
     >>> test(r"A ~ A")
     RANK ERROR
-    >>> test(r"A ~ 0 1")
+    >>> test(r"A ~ 3 4")
     RANK ERROR
     >>> test(r"A ~ 3")
     RANK ERROR
 
-    >>> test(r"(1 0) ~ A")
-    0
+    >>> test(r"5 1 2 3 4 5 ~ A")
+    5 5
+    >>> test(r"1 2 ~ A")
+    ⍬
     >>> test(r"2 ~ A")
     ⍬
+    >>> test(r"5 6 ~ A")
+    5 6
+    >>> test(r"5 ~ A")
+    5
     """
     pass
 
