@@ -655,8 +655,17 @@ def     tilde():
 
 def     unique_union():
     """
-    >>> test(r"∪ ⍬")
-    ⍬
+    >>> test(r"∪/ ⍬")
+    DOMAIN ERROR
+
+    >>> test(r"∪/ 7")
+    7
+    >>> test(r"∪/ 0 1")
+    (0 1)
+    >>> test(r"∪/ 1 2")
+    (1 2)
+    >>> test(r"∪/ 1 2 3")
+    (1 2 3)
     """
     pass
 
@@ -664,8 +673,17 @@ def     unique_union():
 
 def     intersection():
     """
-    >>> test(r"∩ ⍬")
-    VALENCE ERROR
+    >>> test(r"∩/ ⍬")
+    DOMAIN ERROR
+
+    >>> test(r"∩/ 7")
+    7
+    >>> test(r"∩/ 0 1")
+    (⍬)
+    >>> test(r"∩/ 1 2")
+    (⍬)
+    >>> test(r"∩/ 1 2 3")
+    (⍬)
     """
     pass
 
@@ -673,20 +691,38 @@ def     intersection():
 
 def     tail_drop():
     """
-    >>> test(r"↓ ⍬")
-    ⍬
+    >>> test(r"↓/ ⍬")
+    DOMAIN ERROR
+
+    >>> test(r"↓/ 7")
+    7
+    >>> test(r"↓/ 0 1")
+    (1)
+    >>> test(r"↓/ 1 2")
+    (⍬)
+    >>> test(r"↓/ 1 2 3")
+    (⍬)
     """
     pass
-
 
 # --------------
 
 def     head_take():
     """
-    >>> test(r"↑ ⍬")
-    ⍬
+    >>> test(r"↑/ ⍬")
+    DOMAIN ERROR
+
+    >>> test(r"↑/ 7")
+    7
+    >>> test(r"↑/ 0 1")
+    (⍬)
+    >>> test(r"↑/ 1 2")
+    (2)
+    >>> test(r"↑/ 1 2 3")
+    (3)
     """
     pass
+
 
 # --------------
 
