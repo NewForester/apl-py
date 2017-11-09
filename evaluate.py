@@ -25,7 +25,9 @@ from systemVariables import systemVariable, eagerEvaluation
 
 from workspaceVariables import workspaceVariable
 
-from aplQuantity import aplQuantity, makeScalar, makeVector, makeEmptyVector, makeString
+from makeQuantity import makeScalar, makeVector, makeEmptyVector, makeString
+
+from aplQuantity import aplQuantity
 from aplError import aplException, assertError
 
 # ------------------------------

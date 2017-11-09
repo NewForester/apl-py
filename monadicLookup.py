@@ -18,7 +18,8 @@ import monadicMaps as mapper
 import monadicFunctions as monadic
 import monadicIterators as iterator
 
-from aplQuantity import makeScalar
+from makeQuantity import makeScalar
+
 from aplError import assertError
 
 # ------------------------------

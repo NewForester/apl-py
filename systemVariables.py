@@ -12,7 +12,9 @@
 import math
 import operator
 
-from aplQuantity import aplQuantity, makeScalar
+from makeQuantity import makeScalar
+
+from aplQuantity import aplQuantity
 from aplError import assertError
 
 # ------------------------------

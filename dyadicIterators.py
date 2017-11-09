@@ -21,12 +21,12 @@
 import operator
 from functools import reduce
 
-from monadicIterators import reverse
-
 from systemVariables import confirmInteger, indexOrigin
 
-from aplQuantity import aplQuantity, aplIterator, lookAhead
-from aplQuantity import makeScalar, makeVector, makePrototype
+from makeQuantity import makeScalar, makeVector, makePrototype
+
+from aplQuantity import aplQuantity
+from aplIterators import aplIterator, lookAhead, stack
 from aplError import aplException, assertError, assertTrue
 
 # ------------------------------
@@ -696,7 +696,7 @@ class   encode(object):
 
     def __next__(self):
         if self._I is None:
-            self._I = encode._encode(reverse(self._A), self._B)
+            self._I = encode._encode(stack(self._A), self._B)
 
         return self._I.__next__()
 

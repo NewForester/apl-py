@@ -29,7 +29,10 @@ import dyadicIterators as iterator
 
 from systemVariables import confirmInteger, indexOrigin
 
-from aplQuantity import aplQuantity, scalarIterator, makeScalar, makeVector, makeEmptyVector, makeArray
+from makeQuantity import makeScalar, makeVector, makeEmptyVector, makeArray
+
+from aplQuantity import aplQuantity
+from aplIterators import scalarIterator
 from aplError import assertError, assertTrue, assertNotTrue
 from aplError import assertNotScalar, assertNotVector, assertNotArray
 from aplError import assertNumeric, assertScalarLike, assertEmptyVector

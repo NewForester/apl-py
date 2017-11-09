@@ -18,7 +18,8 @@
 
 import operatorIterators as iterator
 
-from aplQuantity import makeScalar, makeVector, makePrototype
+from makeQuantity import makeScalar, makeVector, makePrototype
+
 from aplError import assertNotTrue, assertNotArray
 
 # ------------------------------

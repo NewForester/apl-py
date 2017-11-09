@@ -1,5 +1,5 @@
 """
-    a Python type that can hold APL scalar and vector quantities, numeric, string and mixed
+    a Python type that can hold APL scalar, vector and array quantities, numeric, string and mixed
 
     UNDER DEVELOPMENT
 
@@ -46,22 +46,16 @@
     Python hash() values for sequences only make sense for immutable sequences therefore the
     __hash__ method implicitly realises the quantity, converting promises to concrete values.
 
-    Other than the APL quantity class itself, this module contains the implementation of a couple
-    of iterators (implemented here to avoid circular module references) and four helper routines
-    for the creation of APL quantities.  The class constructor should never be invoked directly by
-    code outside this module.  The iterator classes are.
-
-    The four helper functions and many of the class methods are designed to keep calling code (in
-    monadicMaps and dyadicMaps, for example) simple and hopefully self-documenting.  A further
-    group of assert routines are implemented in aplError (to avoid circular module references).
-
-    The module has been complicated with the introduction of the lookAhead iterator.  The aim was
-    to avoid the principle of lazy evaluation being compromised by the implementation.
+    The class constructor should never be invoked directly by code outside this module.  Instead
+    the factory routines in the makeQuantity module should be used.
 """
 
 import operator
 from functools import reduce
 
+import makeQuantity # makePrototype
+
+from aplIterators import lookAhead, scalarIterator, vectorIterator
 from aplError import assertError, assertNotArray
 
 # ------------------------------
@@ -280,7 +274,7 @@ class   aplQuantity(object):
             else:
                 initial = self._value.peek()
 
-            self._prototype = (makePrototype(initial),)
+            self._prototype = (makeQuantity.makePrototype(initial),)
         return self._prototype
 
     def makePrototype(self):
@@ -291,7 +285,7 @@ class   aplQuantity(object):
             if isinstance(self._value, tuple):
                 prototype = []
                 for element in self._value:
-                    prototype.append(makePrototype(element))
+                    prototype.append(makeQuantity.makePrototype(element))
             else:
                 prototype = self._value.makePrototype()
 
@@ -481,334 +475,5 @@ class   aplQuantity(object):
                 self._value = tuple(accumulator)
             self._resolved = True
         return self
-
-# ------------------------------
-
-class   aplIterator(object):
-    pass
-
-# ------------------------------
-
-class   scalarIterator(aplIterator):
-    """
-    trivial iterator for mapping scalar quantities with vector and array quantities
-
-    The iterator returns the scalar value ad infinitum
-    """
-    def __init__(self, value, count=-1, expressionToGo=None):
-        self._value = value
-        self._count = count
-        self.expressionToGo = expressionToGo
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self._count == 0:
-            raise StopIteration
-
-        self._count -= 1
-
-        return self._value
-
-# ------------------------------
-
-class   vectorIterator(aplIterator):
-    """
-    trivial iterator for mapping vector quantities with array quantities
-
-    The iterator returns the vector elemment by element, over and over
-    """
-    def __init__(self, value, count=-1, expressionToGo=None):
-        self._original = value
-        self._iterator = value.__iter__()
-        self._repeater = []
-        self._count = count
-        self.expressionToGo = expressionToGo
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self._count == 0:
-            raise StopIteration
-
-        self._count -= 1
-
-        if not self._original is None:
-            try:
-                element = self._iterator.__next__()
-                self._repeater.append(element)
-                return element
-            except StopIteration:
-                self._original = None
-                self._iterator = self._repeater.__iter__()
-
-        try:
-            return self._iterator.__next__()
-
-        except StopIteration:
-            self._iterator = self._repeater.__iter__()
-            return self._iterator.__next__()
-
-# ------------------------------
-
-class   lookAhead(object):
-    """
-    an iterator to allow peeking at the first few elements of some other iterator
-
-    Extended to support other operations including buffering inside some other custom iterator
-    """
-    def __init__(self, B, N=0, F=None):
-        self._B = B.__iter__()
-        self._LA = []
-        self._BL = 0
-
-        if F is None:
-            self.buffer(N)
-        else:
-            self.pushThisIn(F, N)
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self._BL == 0:
-            return self._B.__next__()
-
-        return self._popBuffer()
-
-    def _popBuffer(self):
-        """
-        remove and return item from the front of the buffer
-        """
-        self._BL -= 1
-        return self._LA.pop(0)
-
-    def _pushBuffer(self, Y):
-        """
-        add item to the end of the buffer
-        """
-        self._LA.append(Y)
-        self._BL += 1
-
-        return Y
-
-    def pushThisIn(self, F, N=1):
-        """
-        push F in at the end of buffer N times
-        """
-        while N > 0:
-            N -= 1
-            self._pushBuffer(F)
-
-    def pushThenPop(self):
-        """
-        push another element into the end of the buffer, pop and return the element at the front
-
-        When StopIteration is raised repeated calls do not drain the buffer.
-        """
-        if self._BL == 0:
-            return self._B.__next__()
-
-        self._pushBuffer(self._B.__next__())
-
-        return self._popBuffer()
-
-    def popThenPush(self):
-        """
-        pop (and return) the element at the front, push another element into the end of the buffer
-
-        When StopIteration is raised repeated calls drain the buffer.
-        """
-        if self._BL == 0:
-            return self._B.__next__()
-
-        R = self._popBuffer()
-
-        self._pushBuffer(self._B.__next__())
-
-        return R
-
-    def buffer(self, N):
-        """
-        if possible, ensure at least N elements are in the lookahead buffer
-        """
-        N -= self._BL
-
-        try:
-            while N > 0:
-                N -= 1
-                self._pushBuffer(self._B.__next__())
-        except StopIteration:
-            pass
-
-        return self._BL
-
-    def buffered(self):
-        """
-        how many elements are there in the lookahead buffer ?
-        """
-        return self._BL
-
-    def peek(self):
-        """
-        return the first element in the lookahead buffer and leave the buffer unchanged
-        """
-        if self._BL == 0:
-            try:
-                return self._pushBuffer(self._B.__next__())
-            except StopIteration:
-                return None
-
-        return self._LA[0]
-
-    def makePrototype(self):
-        """
-        return the 'empty' array prototype for APL quantity enclosed in the buffer
-        """
-        P = []
-
-        for Y in self._LA:
-            P.append(makePrototype(Y))
-
-        try:
-            while True:
-                Y = self._pushBuffer(self._B.__next__())
-
-                P.append(makePrototype(Y))
-        except StopIteration:
-            pass
-
-        return P
-
-    def isString(self):
-        """
-        true if a real vector of characters, false if only a mixed vector
-        """
-        for Y in self._LA:
-            if not isinstance(Y, str):
-                return False
-
-        try:
-            while True:
-                Y = self._pushBuffer(self._B.__next__())
-
-                if not isinstance(Y, str):
-                    return False
-        except StopIteration:
-            pass
-
-        return True
-
-    def isMatch(self, V):
-        """
-        true if V matches the contents of the buffer exactly, false otherwise
-        """
-        V = V.__iter__()
-
-        try:
-            for Y in self._LA:
-                if Y != V.__next__():
-                    return False
-            V.__next__()
-        except StopIteration:
-            return True
-
-        return False
-
-# ------------------------------
-
-def     makeScalar(value, prototype=(0,)):
-    """
-    make an APL scalar quantity from a scalar Python value
-    """
-    if isinstance(value, aplQuantity):
-        assertError("makeScalar: needs more thought")
-
-    try:
-        value = value.__iter__().__next__()
-    except AttributeError:
-        pass
-
-    return aplQuantity((value,), None, prototype)
-
-# --------------
-
-def     makeVector(value, length=-1, prototype=(0,)):
-    """
-    make an APL vector quantity from a Python list
-    """
-    if length is None:
-        length = 1
-
-    if not isinstance(value, (tuple, lookAhead)):
-        if length < 0 or prototype is None:
-            value = lookAhead(value, 1)
-
-    if isinstance(value, lookAhead):
-        if length < 0:
-            if value.buffered() == 0:
-                length = 0
-
-        if prototype is None:
-            if value.buffered() == 0:
-                assertError("ASSERTION ERROR: makeVector()")
-            prototype = (makePrototype(value.peek()),)
-
-    if length == 0:
-        return makeEmptyVector(prototype)
-
-    if not isinstance(value, (tuple, lookAhead)):
-        value = lookAhead(value, 1)
-
-    return aplQuantity(value, length, None)
-
-# --------------
-
-def     makeArray(value, dimensions, prototype=(0,)):
-    return aplQuantity(value, dimensions, prototype)
-
-# --------------
-
-def     makeEmptyVector(prototype=(0,)):
-    """
-    make an empty APL vector quantity (⍬ or '')
-    """
-    return aplQuantity(prototype, 0, prototype)
-
-# --------------
-
-def     makeString(value, withDelimiter):
-    """
-    make an APL string quantity from a Python string
-    """
-    if withDelimiter:
-        delimiter = value[0]
-        value = value.replace(delimiter*2, delimiter)[1:-1]
-
-    length = len(value)
-
-    if length == 0:
-        value = ' '
-
-    if withDelimiter:
-        if length == 1 and delimiter == "'":
-            length = None
-
-    return aplQuantity(tuple(value), length, (' ',))
-
-# --------------
-
-def     makePrototype(value):
-    """
-    the 'array prototype' for this value
-    """
-    if isinstance(value, aplQuantity):
-        prototype = value.makePrototype()
-
-        return aplQuantity(prototype, len(prototype), prototype)
-
-    return ' ' if isinstance(value, str) else 0
 
 # EOF

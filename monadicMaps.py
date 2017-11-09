@@ -27,7 +27,9 @@ import monadicIterators as iterator
 
 from systemVariables import confirmInteger
 
-from aplQuantity import aplQuantity, makeScalar, makeVector, makeEmptyVector, makeArray
+from makeQuantity import makeScalar, makeVector, makeEmptyVector, makeArray
+
+from aplQuantity import aplQuantity
 from aplError import assertTrue, assertNotScalar, assertNotVector, assertNotArray
 
 # ------------------------------

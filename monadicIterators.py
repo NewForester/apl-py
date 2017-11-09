@@ -22,7 +22,8 @@
 
 from systemVariables import indexOrigin
 
-from aplQuantity import aplQuantity, lookAhead
+from aplIterators import stack
+from aplQuantity import aplQuantity
 from aplError import aplException, assertError
 
 # ------------------------------
@@ -105,41 +106,11 @@ def     transpose(B):
 
 # ------------------------------
 
-class   reverse(object):
+class   reverse(stack):
     """
     the iterator for monadic ⌽
     """
-    def __init__(self, B):
-        self._B = B.__iter__()
-        self._T = None
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self._T is None:
-            self._T = reverse._stack(self._B)
-
-        if self._T != []:
-            return self._T.pop(0)
-
-        return self._B.__next__()
-
-    @staticmethod
-    def _stack(B):
-        """
-        stack the all elements in reverse order
-        """
-        T = []
-
-        try:
-            while True:
-                T.insert(0, B.__next__())
-
-        except StopIteration:
-            pass
-
-        return T
+    pass
 
 # ------------------------------
 
