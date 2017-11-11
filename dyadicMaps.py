@@ -548,6 +548,11 @@ def     encode(Fn, A, B):
     if A.isEmptyVector():
         return makeEmptyVector()
 
+    if A.isScalar() and B.isScalar():
+        Rpy = Fn(A.vectorToPy(), B.scalarToPy())
+
+        return makeScalar(Rpy)
+
     if B.isScalarLike():
         Rpy = Fn(A.vectorToPy(), B.scalarToPy())
 
