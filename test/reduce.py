@@ -723,13 +723,21 @@ def     head_take():
     """
     pass
 
-
 # --------------
 
 def     compress_replicate():
     """
-    >>> test(r"/ ⍬")
-    SYNTAX ERROR
+    >>> test(r"// ⍬")
+    DOMAIN ERROR
+
+    >>> test(r"// 7")
+    7
+    >>> test(r"// 0 1")
+    (⍬)
+    >>> test(r"// 1 2")
+    (2)
+    >>> test(r"// 1 2 3")
+    (3 3)
     """
     pass
 
@@ -737,8 +745,17 @@ def     compress_replicate():
 
 def     expand():
     """
-    >>> test(r"\\ ⍬")
-    SYNTAX ERROR
+    >>> test(r"\ / ⍬")
+    DOMAIN ERROR
+
+    >>> test(r"\ / 7")
+    7
+    >>> test(r"\ / 0 1")
+    (0)
+    >>> test(r"\ / 1 2")
+    (2)
+    >>> test(r"\ / 1 2 3")
+    (3 3)
     """
     pass
 
@@ -746,8 +763,17 @@ def     expand():
 
 def     encode():
     """
-    >>> test(r"⊤ ⍬")
-    VALENCE ERROR
+    >>> test(r"⊤/ ⍬")
+    DOMAIN ERROR
+
+    >>> test(r"⊤/ 7")
+    7
+    >>> test(r"⊤/ 0 1")
+    1
+    >>> test(r"⊤/ 1 2")
+    0
+    >>> test(r"⊤/ 1 2 3")
+    0
     """
     pass
 
@@ -755,8 +781,17 @@ def     encode():
 
 def     decode():
     """
-    >>> test(r"⊥ ⍬")
-    VALENCE ERROR
+    >>> test(r"⊥/ ⍬")
+    DOMAIN ERROR
+
+    >>> test(r"⊥/ 7")
+    7
+    >>> test(r"⊥/ 0 1")
+    1
+    >>> test(r"⊥/ 1 2")
+    2
+    >>> test(r"⊥/ 1 2 3")
+    3
     """
     pass
 
