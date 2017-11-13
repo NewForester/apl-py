@@ -55,7 +55,7 @@ from functools import reduce
 
 import makeQuantity # makePrototype
 
-from aplIterators import lookAhead, scalarIterator, vectorIterator
+from aplIterators import lookAhead, scalarIterator, vectorIterator, lastAxisIterator
 from aplError import assertError, assertNotArray
 
 # ------------------------------
@@ -395,6 +395,15 @@ class   aplQuantity(object):
             return self._value
 
         assertError("ASSERTION ERROR: aplQuantity.arrayToPy()")
+
+    def arrayByLastAxis(self):
+        """
+        return an APL array wrapped in a Last Axis iterator
+        """
+        if self.isArray():
+            return lastAxisIterator(self._value, self.dimension()[-1])
+
+        assertError("ASSERTION ERROR: aplQuantity.arrayByLastAxis()")
 
     def promoteScalarToVectorPy(self):
         """

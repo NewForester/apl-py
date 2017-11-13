@@ -4,11 +4,11 @@
     UNDER DEVELOPMENT
 
     It was found some time ago that some iterators could not go in the existing
-    iterators without creating circular references.  There were temporarily
-    given a home in aplQuantity but that module is already too large.
+    iterator modules without creating circular references.  Temporarily they
+    were given a home in aplQuantity but that module was also too large.
 
     So, the useful, common, iterators have been separated out before adding any
-    new ones (to deal with arrays).
+    new ones (that deal with arrays).
 
     The common iterators defined here are:
 
@@ -302,5 +302,36 @@ class   lookAhead(object):
             return True
 
         return False
+
+# ------------------------------
+
+class   lastAxisIterator(object):
+    """
+    iterate over the last axis of an array one vector at a time
+    """
+    def __init__(self, B, L):
+        self._B = B.__iter__()  # the data
+        self._L = L             # the last axie row length
+
+        if L <= 0:
+            assertError("lastAxisIterator: sheep dip")
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        V = []                  # the vector (row) to return
+        L = self._L
+
+        try:
+            while L:
+                V.append(self._B.__next__())
+                L -= 1
+        except StopIteration:
+            if L != self._L:
+                assertError("lastAxisIterator: oops")
+            raise StopIteration
+
+        return makeQuantity.makeVector(V, self._L)
 
 # EOF
