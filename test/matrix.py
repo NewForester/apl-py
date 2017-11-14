@@ -1162,10 +1162,33 @@ def     tail_drop():
     >>> test(r"A ↓ 3")
     RANK ERROR
 
-    >>> test(r"(1 0) ↓ A")
-    3 4
     >>> test(r"2 ↓ A")
     LENGTH ERROR
+    >>> test(r"1 2 3 ↓ A")
+    LENGTH ERROR
+
+    >>> test(r"0 0 ↓ A")
+    1 2
+    3 4
+    >>> test(r"0 1 ↓ A")
+    2
+    4
+    >>> test(r"1 0 ↓ A")
+    3 4
+    >>> test(r"1 1 ↓ A")
+    4
+    >>> test(r"⍴ 2 2 ↓ A")
+    0 0
+
+    >>> test(r"0 ¯1 ↓ A")
+    1
+    3
+    >>> test(r"¯1 0 ↓ A")
+    1 2
+    >>> test(r"¯1 ¯1 ↓ A")
+    1
+    >>> test(r"⍴ ¯2 ¯2 ↓ A")
+    0 0
     """
     pass
 
@@ -1189,10 +1212,39 @@ def     head_take():
     >>> test(r"A ↑ 3")
     RANK ERROR
 
-    >>> test(r"(1 1) ↑ A")
-    1
     >>> test(r"2 ↑ A")
     LENGTH ERROR
+    >>> test(r"1 2 3 ↑ A")
+    LENGTH ERROR
+
+    >>> test(r"⍴ 0 0 ↑ A")
+    0 0
+    >>> test(r"1 1 ↑ A")
+    1
+    >>> test(r"1 2 ↑ A")
+    1 2
+    >>> test(r"2 1 ↑ A")
+    1
+    3
+    >>> test(r"2 2 ↑ A")
+    1 2
+    3 4
+
+    >>> test(r"¯1 ¯1 ↑ A")
+    4
+    >>> test(r"¯1 ¯2 ↑ A")
+    3 4
+    >>> test(r"¯2 ¯1 ↑ A")
+    2
+    4
+    >>> test(r"¯2 ¯2 ↑ A")
+    1 2
+    3 4
+
+    >>> test(r"2 2 ↑ 1 2 ⍴ 7 17")
+    WIP - MATRIX ERROR
+    >>> test(r"2 2 ↑ 2 1 ⍴ 7 17")
+    WIP - MATRIX ERROR
     """
     pass
 

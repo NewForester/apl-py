@@ -454,7 +454,17 @@ def     drop(Fn, A, B):
 
         return makeVector(Rpy, -1, B.prototype())
 
-    assertNotArray(B, "WIP - RANK ERROR")
+    Apy = [confirmInteger(I) for I in A.vectorToPy()]
+
+    assertTrue(B.dimension() == (2, 2), "WIP - MATRIX ERROR")
+
+    assertTrue(len(Apy) == B.rank(), "LENGTH ERROR")
+
+    Rpy = []
+    for Bit in Fn(Apy[0], B.arrayByLastAxis()):
+        Rpy += Fn(Apy[1], Bit.vectorToPy())
+
+    return makeArray(Rpy, [max(0, I[1] - abs(I[0])) for I in zip(Apy, B.dimension())], B.prototype())
 
 # ------------------------------
 
@@ -480,7 +490,17 @@ def     take(Fn, A, B):
 
         return makeVector(Rpy, abs(Apy), B.prototype())
 
-    assertNotArray(B, "WIP - RANK ERROR")
+    Apy = [confirmInteger(I) for I in A.vectorToPy()]
+
+    assertTrue(B.dimension() == (2, 2), "WIP - MATRIX ERROR")
+
+    assertTrue(len(Apy) == B.rank(), "LENGTH ERROR")
+
+    Rpy = []
+    for Bit in Fn(Apy[0], B.arrayByLastAxis(), B.padFill()):
+        Rpy += Fn(Apy[1], Bit.vectorToPy(), Bit.padFill())
+
+    return makeArray(Rpy, [abs(I) for I in Apy], B.prototype())
 
 # ------------------------------
 
