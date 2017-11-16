@@ -334,4 +334,45 @@ class   lastAxisIterator(object):
 
         return makeQuantity.makeVector(V, self._L)
 
+# ------------------------------
+
+class   firstAxisIterator(object):
+    """
+    iterate over the first axis of an array one vector at a time
+    """
+    def __init__(self, B, L):
+        self._B = tuple(B)      # the data
+        self._L = L             # the last axie row length
+
+        self._O = 0             # current last axis offset aka first axis row
+        self._R = None          # inferred first axis row count
+
+        if L <= 0:
+            assertError("lastAxisIterator: sheep dip")
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        V = []                  # the vector (row) to return
+        C = 0                   # loop variable: first axis column offset
+
+        if self._O == self._L:
+            raise StopIteration
+
+        try:
+            while True:
+                S = self._L * C + self._O
+                V.append(self._B[S])
+                C += 1
+        except IndexError:
+            if self._O == 0:
+                self._R = C
+            elif C != self._R:
+                assertError("firstAxisIterator: oops")
+
+        self._O += 1
+
+        return makeQuantity.makeVector(V, self._L)
+
 # EOF
