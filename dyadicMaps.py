@@ -32,7 +32,7 @@ from systemVariables import confirmInteger, indexOrigin
 from makeQuantity import makeScalar, makeVector, makeEmptyVector, makeArray
 
 from aplQuantity import aplQuantity
-from aplIterators import scalarIterator
+from aplIterators import scalarIterator, firstAxisIterator
 from aplError import assertError, assertTrue, assertNotTrue
 from aplError import assertNotScalar, assertNotVector, assertNotArray
 from aplError import assertNumeric, assertScalarLike, assertEmptyVector
@@ -552,33 +552,63 @@ def     encode(Fn, A, B):
     """
     implement dyadic ⊤
     """
-    if B.isArray():
-        assertNotArray(A)
-
-        assertError("WIP - RANK ERROR")
-
-    if A.isArray():
-        assertNotArray(B)
-
-        assertError("WIP - RANK ERROR")
-
     if B.isEmptyVector():
+        # Simplistic
         return makeEmptyVector()
 
     if A.isEmptyVector():
+        # Simplistic
         return makeEmptyVector()
 
-    if A.isScalar() and B.isScalar():
+    if B.isArray():
+        if A.isScalarLike():
+            Rpy = []
+            Apy = A.vectorToPy()
+            for Bpy in B.arrayToPy():
+                Rpy.append(Fn(Apy, Bpy).__next__())
+
+            return makeArray(Rpy, B.dimension())
+
+        assertError("WIP - RANK ERROR")
+
+    if B.isVector():
+        assertTrue(B.tally() == 2, "WIP - LENGTH ERROR")
+
+        if A.isArray():
+            assertError("WIP - RANK ERROR")
+
+        if A.isVector():
+            assertTrue(A.tally() == 2, "WIP - LENGTH ERROR")
+
+            Rpy, Apy = [], A.vectorToPy()
+            for Bpy in B.vectorToPy():
+                Rpy += Fn(Apy, Bpy)
+
+            Rpy, Tpy = [], Rpy
+            for Bit in firstAxisIterator(Tpy, A.tally()):
+                Rpy += Bit.vectorToPy()
+
+            return makeArray(Rpy, (A.tally(), B.tally()))
+
+        Rpy, Apy = [], A.vectorToPy()
+        for Bpy in B.vectorToPy():
+            Rpy += Fn(Apy, Bpy)
+
+    if A.isArray():
+        Rpy, Bpy = [], B.scalarToPy()
+        for Ait in A.arrayByFirstAxis():
+            Rpy += Fn(Ait.vectorToPy(), Bpy)
+
+        return makeArray(Rpy, A.dimension(), B.prototype())
+
+    if A.isVector():
         Rpy = Fn(A.vectorToPy(), B.scalarToPy())
 
-        return makeScalar(Rpy)
+        return makeVector(Rpy, A.tally())
 
-    if B.isScalarLike():
-        Rpy = Fn(A.vectorToPy(), B.scalarToPy())
+    Rpy = Fn(A.vectorToPy(), B.scalarToPy())
 
-        return makeVector(Rpy, A.dimension())
-
-    assertNotVector(B, "WIP - LENGTH ERROR")
+    return makeScalar(Rpy)
 
 # ------------------------------
 
@@ -586,15 +616,34 @@ def     decode(Fn, A, B):
     """
     implement dyadic ⊥
     """
-    if B.isScalar():
-        assertNumeric(B)
+    if B.isArray():
+        if A.isScalarLike():
+            Rpy = []
+            for Bit in B.arrayByFirstAxis():
+                Rpy.append(Fn(A.promoteScalarToVectorPy(), Bit))
 
-        if A.isScalar():
-            assertNumeric(A)
+            return makeVector(Rpy, B.dimension()[0], B.prototype())
 
-            return B
+        if A.isVector():
+            assertNotTrue(A.isEmptyVector(), "DOMAIN ERROR")
+            assertTrue(A.tally() == B.dimension()[0], "LENGTH ERROR")
 
-        return makeScalar(Fn(A.vectorToPy(), B.scalarIterator()))
+            Rpy = []
+            for Bit in B.arrayByFirstAxis():
+                Rpy.append(Fn(A.vectorToPy(), Bit))
+
+            return makeVector(Rpy, A.dimension(), B.prototype())
+
+        assertTrue(A.rank() == B.rank(), "WIP - RANK ERROR")
+
+        assertTrue(A.dimension()[-1] == B.dimension()[0], "LENGTH ERROR")
+
+        Rpy = []
+        for Ait in A.arrayByLastAxis():
+            for Bit in B.arrayByFirstAxis():
+                Rpy.append(Fn(Ait, Bit))
+
+        return makeArray(Rpy, A.dimension(), B.prototype())
 
     if B.isVector():
         if A.isEmptyVector() or B.isEmptyVector():
@@ -602,7 +651,13 @@ def     decode(Fn, A, B):
 
         return makeScalar(Fn(A.promoteScalarToVectorPy(), B.vectorToPy()))
 
-    assertNotArray(B, "WIP - RANK ERROR")
+    if A.isScalar():
+        assertNumeric(A)
+        assertNumeric(B)
+
+        return B
+
+    return makeScalar(Fn(A.vectorToPy(), B.scalarIterator()))
 
 # ------------------------------
 

@@ -418,7 +418,7 @@ class   aplQuantity(object):
         """
         return a scalar as a scalar iterator but a vector as a sequence (promise)
         """
-        if self.isScalar():
+        if self.isScalarLike():
             return self.scalarIterator()
 
         if self.isVector():

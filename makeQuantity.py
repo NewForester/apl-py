@@ -57,6 +57,9 @@ def     makeVector(value, length=-1, prototype=(0,)):
                 assertError("ASSERTION ERROR: makeVector()")
             prototype = (makePrototype(value.peek()),)
 
+    elif isinstance(value, list):
+        value = tuple(value)
+
     if length == 0:
         return makeEmptyVector(prototype)
 
@@ -68,8 +71,8 @@ def     makeVector(value, length=-1, prototype=(0,)):
 # --------------
 
 def     makeArray(value, dimensions, prototype=(0,)):
-    if value == []:
-        value = ()
+    if isinstance(value, list):
+        value = tuple(value)
 
     return aplQuantity(value, tuple(dimensions), prototype)
 

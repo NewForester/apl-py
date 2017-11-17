@@ -1318,11 +1318,11 @@ def     encode():
     VALENCE ERROR
 
     >>> test(r"A ⊤ A")
-    RANK ERROR
+    WIP - RANK ERROR
 
     >>> test(r"A ⊤ 0 1")
     WIP - RANK ERROR
-    >>> test(r"(1 0) ⊤ A")
+    >>> test(r"1 0 ⊤ A")
     WIP - RANK ERROR
 
     >>> test(r"A ⊤ 3")
@@ -1331,6 +1331,17 @@ def     encode():
     >>> test(r"2 ⊤ A")
     1 0
     1 0
+
+    >>> test(r"6 ⊤ 13 17")
+    1 5
+    >>> test(r"6 6 ⊤ 13 17")
+    2 2
+    1 5
+
+    >>> test(r"⍴ 6 ⊤ 13 17")
+    2
+    >>> test(r"⍴ (,6) ⊤ 13 17")
+    WIP - LENGTH ERROR
     """
     pass
 
@@ -1350,6 +1361,18 @@ def     decode():
     >>> test(r"A ⊥ A")
     5 8
     7 12
+    >>> test(r"1 2 ⊥ A")
+    5 8
+    >>> test(r"3 4 ⊥ A")
+    7 12
+    >>> test(r"1 2 3 4 ⊥ A")
+    LENGTH ERROR
+    >>> test(r"1 ⊥ A")
+    4 6
+    >>> test(r"(,4) ⊥ A")
+    7 12
+    >>> test(r"⍬ ⊥ A")
+    DOMAIN ERROR
     """
     pass
 
@@ -1417,10 +1440,10 @@ def     gradeDown():
     >>> test(r"A")
     AB
     CD
-    >>> test(r"⍋ A")
+    >>> test(r"⍒ A")
     1 0
 
-    >>> test(r"A ⍋ A")
+    >>> test(r"A ⍒ A")
     1 0
 
     >>> restoreIndexOrigin(IO)
