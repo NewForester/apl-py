@@ -809,13 +809,33 @@ def     gradeUp():
     >>> IO = saveIndexOrigin()
     >>> setIndexOrigin(1)
 
-    >>> test(r"⍋ ⍬")
+    >>> test(r"⍋\ ⍬")
     ⍬
+
+    >>> test(r"⍋\ 7")
+    7
+    >>> test(r"⍋\ 0 1")
+    RANK ERROR
+    >>> test(r"⍋\ 1 2")
+    RANK ERROR
+    >>> test(r"⍋\ 1 2 3")
+    RANK ERROR
 
     >>> setIndexOrigin(0)
 
-    >>> test(r"⍋ ⍬")
+    >>> test(r"⍋\ ⍬")
     ⍬
+
+    >>> test(r"⍋\ 7")
+    7
+    >>> test(r"⍋\ 0 1")
+    RANK ERROR
+    >>> test(r"⍋\ 1 2")
+    RANK ERROR
+    >>> test(r"⍋\ 1 2 3")
+    RANK ERROR
+    >>> test(r"⍋\ 1 2 3")
+    RANK ERROR
 
     >>> restoreIndexOrigin(IO)
     """
@@ -828,10 +848,31 @@ def     gradeDown():
     >>> IO = saveIndexOrigin()
     >>> setIndexOrigin(1)
 
-    >>> test(r"⍒ ⍬")
+    >>> test(r"⍒\ ⍬")
     ⍬
 
+    >>> test(r"⍒\ 7")
+    7
+    >>> test(r"⍒\ 0 1")
+    RANK ERROR
+    >>> test(r"⍒\ 1 2")
+    RANK ERROR
+    >>> test(r"⍒\ 1 2 3")
+    RANK ERROR
+
     >>> setIndexOrigin(0)
+
+    >>> test(r"⍒\ ⍬")
+    ⍬
+
+    >>> test(r"⍒\ 7")
+    7
+    >>> test(r"⍒\ 0 1")
+    RANK ERROR
+    >>> test(r"⍒\ 1 2")
+    RANK ERROR
+    >>> test(r"⍒\ 1 2 3")
+    RANK ERROR
 
     >>> restoreIndexOrigin(IO)
     """

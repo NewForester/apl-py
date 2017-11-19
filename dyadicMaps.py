@@ -675,7 +675,7 @@ def     grade(descending, A, B):
         except ValueError:
             return Len
 
-    assertNotScalar(B, "DOMAIN ERROR")
+    assertNotScalar(B, "RANK ERROR")
 
     if B.isVectorLike():
         A.resolve()
