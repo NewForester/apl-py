@@ -311,7 +311,7 @@ class   lastAxisIterator(object):
     """
     def __init__(self, B, L):
         self._B = B.__iter__()  # the data
-        self._L = L             # the last axie row length
+        self._L = L             # the last axis row length
 
         if L <= 0:
             assertError("lastAxisIterator: sheep dip")
@@ -342,7 +342,7 @@ class   firstAxisIterator(object):
     """
     def __init__(self, B, L):
         self._B = tuple(B)      # the data
-        self._L = L             # the last axie row length
+        self._L = L             # the last axis row length
 
         self._O = 0             # current last axis offset aka first axis row
         self._R = None          # inferred first axis row count
@@ -374,5 +374,38 @@ class   firstAxisIterator(object):
         self._O += 1
 
         return makeQuantity.makeVector(V, self._L)
+
+# ------------------------------
+
+class   monadicTranspose(object):
+    """
+    iterator for the monadic transpose of an array - version for 2x2 matrices
+    """
+    def __init__(self, B, D):
+        self._B = B             # the data
+        self._RC = D[0]         # row count (first axis vector length)
+        self._CC = D[-1]        # column count (last axis vector length)
+
+        self._RO = 0            # row offset (current row)
+        self._CO = 0            # column offset (current column)
+
+        if self._CC <= 0:
+            assertError("monadicTranspose: sheep dip")
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._CO == self._CC:
+            raise StopIteration
+
+        S = self._RO * self._CC + self._CO
+
+        self._RO += 1
+        self._RO %= self._RC
+        if self._RO == 0:
+            self._CO += 1
+
+        return self._B[S]
 
 # EOF
