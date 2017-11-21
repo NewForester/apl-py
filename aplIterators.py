@@ -408,4 +408,72 @@ class   monadicTranspose(object):
 
         return self._B[S]
 
+# ------------------------------
+
+class   dyadicTranspose(object):
+    """
+    iterator for the dyadic transpose of an array
+    """
+    def __init__(self, B, T, D):
+        self._B = B             # the data
+
+        self._A = list(range(len(D))) # order of processing axes
+        self._A.reverse()
+
+        self._L =  [1] * len(D)  # lengths of transposed rows
+        self._R =  [1] * len(D)  # offset multipliers for transposed rows
+        self._F = [-1] * len(D)  # axis to which offset is fixed or -1
+
+        self._O =  [0] * len(D)  # temporary (temporarily)
+
+        # Calculate offsets of start of rows
+        R = 1
+        for I in self._A:
+            self._R[T[I]] = R
+            L = D[T[I]]
+            R *= L
+            self._L[I] = L
+
+            self._O[I] = D[I]   # for next loop
+
+        # How many elements in the result ?
+        P = 1
+        for I in self._A:
+            for J in self._A:
+                if J == I:
+                    break
+                if T[J] == T[I]:
+                    self._F[I] = J
+                    self._O[T[I]] = 1
+
+            P *= self._O[T[I]]
+
+        self._E = P             # elements in the result
+        self._O = [0] * len(D)  # row offsets
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._E == 0:
+            raise StopIteration
+        self._E -= 1
+
+        S = 0
+        for I in self._A:
+            S += self._R[I] * self._O[I]
+
+        D = 1
+        for I in self._A:
+            if self._F[I] != -1:
+                self._O[I] = self._O[self._F[I]]
+            elif D != 0:
+                self._O[I] += 1
+                if self._O[I] == self._L[I]:
+                    self._O[I] = 0
+                else:
+                    D = 0
+
+        return self._B[S]
+
 # EOF
