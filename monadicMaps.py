@@ -30,6 +30,7 @@ from systemVariables import confirmInteger
 from makeQuantity import makeScalar, makeVector, makeEmptyVector, makeArray
 
 from aplQuantity import aplQuantity
+from aplIterators import monadicTranspose
 from aplError import assertTrue, assertNotScalar, assertNotVector, assertNotArray
 
 # ------------------------------
@@ -128,27 +129,56 @@ def     transpose(_, B):
     """
     implement monadic ⍉
     """
-    if B.isScalar():
-        return B
+    if B.isArray():
+        assertTrue(B.dimension() == (2, 2), "WIP - MATRIX ERROR")
 
-    if B.isVector():
-        return B
+        Rpy = monadicTranspose(B.arrayToPy(), B.dimension())
 
-    assertNotArray(B, "WIP - RANK ERROR")
+        return makeArray(Rpy, B.dimension(), None)
+
+    return B
 
 # ------------------------------
 
-def     reverse(Fn, B):
+def     reverselast(Fn, B):
     """
     implement monadic ⌽
     """
-    if B.isScalarLike() or B.isEmptyVector():
-        return B
+    if B.isArray():
+        assertTrue(B.dimension() == (2, 2), "WIP - MATRIX ERROR")
 
-    if B.isVector():
+        Rpy = []
+        for Bit in B.arrayByLastAxis():
+            Rpy += Fn(Bit.vectorToPy())
+
+        return makeArray(Rpy, B.dimension(), None)
+
+    if B.isVector() and not B.isEmptyVector():
         return makeVector(Fn(B.vectorToPy()), B.dimension(), None)
 
-    assertNotArray(B, "WIP - RANK ERROR")
+    return B
+
+# ------------------------------
+
+def     reversefirst(Fn, B):
+    """
+    implement monadic ⊖
+    """
+    if B.isArray():
+        assertTrue(B.dimension() == (2, 2), "WIP - MATRIX ERROR")
+
+        Rpy = []
+        for Bit in B.arrayByFirstAxis():
+            Rpy += Fn(Bit.vectorToPy())
+
+        Rpy = monadicTranspose(Rpy, B.dimension())
+
+        return makeArray(Rpy, B.dimension(), None)
+
+    if B.isVector() and not B.isEmptyVector():
+        return makeVector(Fn(B.vectorToPy()), B.dimension(), None)
+
+    return B
 
 # ------------------------------
 

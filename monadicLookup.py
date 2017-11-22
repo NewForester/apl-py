@@ -79,8 +79,8 @@ _MonadicFunctions = {
     '∊':        lambda B: mapper.enlist(iterator.enlist, B),
     '⍷':        lambda B: assertError("VALENCE ERROR"),
     '⍉':        lambda B: mapper.transpose(iterator.transpose, B),
-    '⌽':        lambda B: mapper.reverse(iterator.reverse, B),
-    '⊖':        lambda B: mapper.reverse(iterator.reverse, B),
+    '⌽':        lambda B: mapper.reverselast(iterator.reverse, B),
+    '⊖':        lambda B: mapper.reversefirst(iterator.reverse, B),
     '⊂':        lambda B: mapper.enclose(None, B),
     '⊃':        lambda B: mapper.disclose(iterator.disclose, B),
 

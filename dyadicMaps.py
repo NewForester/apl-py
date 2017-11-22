@@ -32,7 +32,7 @@ from systemVariables import confirmInteger, indexOrigin
 from makeQuantity import makeScalar, makeVector, makeEmptyVector, makeArray
 
 from aplQuantity import aplQuantity
-from aplIterators import scalarIterator, firstAxisIterator
+from aplIterators import scalarIterator, dyadicTranspose, monadicTranspose
 from aplError import assertError, assertTrue, assertNotTrue
 from aplError import assertNotScalar, assertNotVector, assertNotArray
 from aplError import assertNumeric, assertScalarLike, assertEmptyVector
@@ -211,10 +211,35 @@ def     transpose(_, A, B):
     """
     assertNotArray(A)
 
-    if B.isScalar():
-        assertEmptyVector(A)
+    if B.isArray():
+        assertTrue(A.tally() == B.rank(), "LENGTH ERROR")
 
-        return B
+        IO = indexOrigin()
+
+        Apy = [confirmInteger(I) - IO for I in A.vectorToPy()]
+
+        high = B.rank() + 1
+
+        assertTrue(all(x >= 0 and x <= high for x in Apy), "DOMAIN ERROR")
+
+        assertTrue(sum(Apy) <= sum(range(B.rank())), "DOMAIN ERROR")
+
+        Rpy = dyadicTranspose(B.arrayToPy(), Apy, B.dimension())
+
+        def newDimensions(A, B):
+            R = list(range(len(A)))
+
+            for I in R:
+                H = [B[X] for X in R if A[X] == I]
+                if H:
+                    yield min(H)
+
+        Dpy = tuple(newDimensions(Apy, B.dimension()))
+
+        if len(Dpy) == 1:
+            return makeVector(Rpy, Dpy[0], None)
+
+        return makeArray(Rpy, Dpy, None)
 
     if B.isVector():
         assertScalarLike(A)
@@ -225,32 +250,89 @@ def     transpose(_, A, B):
 
         return B
 
-    assertNotArray(B, "WIP - RANK ERROR")
+    assertEmptyVector(A)
+
+    return B
 
 # ------------------------------
 
-def     rotate(Fn, A, B):
+def     rotateLast(Fn, A, B):
     """
     implement dyadic ⌽
     """
     assertNotArray(A)
 
-    if B.isVectorLike():
-        assertScalarLike(A, "RANK ERROR")
+    if B.isArray():
+        if not A.isScalarLike():
+            assertTrue(A.tally() == B.rank(), "LENGTH ERROR")
 
-        Apy = confirmInteger(A.scalarToPy())
+        assertTrue(B.tally() != 0, "WIP - LENGTH ERROR")
 
-        if B.isEmptyVector():
-            return B
+        Apy = [operator.mod(confirmInteger(I), B.tally()) for I in A.vectorToPy()]
 
-        Apy = operator.mod(Apy, B.tally())
+        if A.isScalarLike():
+            Apy = Apy * B.rank()
 
-        if Apy == 0:
-            return B
+        Rpy = []
+        for Apy, Bit in zip(Apy, B.arrayByLastAxis()):
+            Rpy += Fn(Apy, Bit.vectorToPy())
 
-        return makeVector(Fn(Apy, B.vectorToPy()), B.dimension(), None)
+        return makeArray(Rpy, B.dimension(), None)
 
-    assertNotArray(B, "WIP - RANK ERROR")
+    assertScalarLike(A, "RANK ERROR")
+
+    Apy = confirmInteger(A.scalarToPy())
+
+    if B.isEmptyVector():
+        return B
+
+    Apy = operator.mod(Apy, B.tally())
+
+    if Apy == 0:
+        return B
+
+    return makeVector(Fn(Apy, B.vectorToPy()), B.dimension(), None)
+
+# ------------------------------
+
+def     rotateFirst(Fn, A, B):
+    """
+    implement dyadic ⌽
+    """
+    assertNotArray(A)
+
+    if B.isArray():
+        if not A.isScalarLike():
+            assertTrue(A.tally() == B.rank(), "LENGTH ERROR")
+
+        assertTrue(B.tally() != 0, "WIP - LENGTH ERROR")
+
+        Apy = [operator.mod(confirmInteger(I), B.tally()) for I in A.vectorToPy()]
+
+        if A.isScalarLike():
+            Apy = Apy * B.rank()
+
+        Rpy = []
+        for Apy, Bit in zip(Apy, B.arrayByFirstAxis()):
+            Rpy += Fn(Apy, Bit.vectorToPy())
+
+        Rpy = monadicTranspose(Rpy, B.dimension())
+
+        return makeArray(Rpy, B.dimension(), None)
+
+    assertScalarLike(A, "RANK ERROR")
+
+    Apy = confirmInteger(A.scalarToPy())
+
+    if B.isEmptyVector():
+        return B
+
+    Apy = operator.mod(Apy, B.tally())
+
+    if Apy == 0:
+        return B
+
+    return makeVector(Fn(Apy, B.vectorToPy()), B.dimension(), None)
 
 # ------------------------------
 
@@ -584,9 +666,7 @@ def     encode(Fn, A, B):
             for Bpy in B.vectorToPy():
                 Rpy += Fn(Apy, Bpy)
 
-            Rpy, Tpy = [], Rpy
-            for Bit in firstAxisIterator(Tpy, A.tally()):
-                Rpy += Bit.vectorToPy()
+            Rpy = monadicTranspose(Rpy, (A.tally(), B.tally()))
 
             return makeArray(Rpy, (A.tally(), B.tally()))
 

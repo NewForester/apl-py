@@ -78,8 +78,8 @@ _DyadicFunctions = {
     ',':        (None, lambda A, B: mapper.concatenate(iterator.concatenate, A, B)),
     '⍪':        (None, lambda A, B: mapper.concatenate(iterator.concatenate, A, B)),
     '⍉':        (None, lambda A, B: mapper.transpose(iterator.transpose, A, B)),
-    '⌽':        (None, lambda A, B: mapper.rotate(iterator.rotate, A, B)),
-    '⊖':        (None, lambda A, B: mapper.rotate(iterator.rotate, A, B)),
+    '⌽':        (None, lambda A, B: mapper.rotateLast(iterator.rotate, A, B)),
+    '⊖':        (None, lambda A, B: mapper.rotateFirst(iterator.rotate, A, B)),
     '⊂':        (None, lambda A, B: mapper.partition(iterator.partition, A, B)),
     '⊃':        (None, lambda A, B: mapper.pick(None, A, B)),
 

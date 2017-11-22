@@ -855,7 +855,7 @@ def     find():
 
 def     transpose():
     """
-    #>>> test(r"A ← 2 2 ⍴ ⍳ 4")
+    >>> test(r"A ← 2 2 ⍴ ⍳ 4")
     1 2
     3 4
     >>> test(r"A")
@@ -872,8 +872,23 @@ def     transpose():
     >>> test(r"A ⍉ 3")
     RANK ERROR
 
-    >>> test(r"(1 1) ⍉ A")
+    >>> test(r"1 2 ⍉ A")
+    1 2
+    3 4
+    >>> test(r"2 1 ⍉ A")
+    1 3
+    2 4
+
+    >>> test(r"0 0 ⍉ A")
+    DOMAIN ERROR
+    >>> test(r"1 1 ⍉ A")
     1 4
+    >>> test(r"2 2 ⍉ A")
+    DOMAIN ERROR
+
+    >>> test(r"⍴ 1 1 ⍉ A")
+    2
+
     >>> test(r"2 ⍉ A")
     LENGTH ERROR
     """
@@ -903,12 +918,20 @@ def     reverse_rotate():
     >>> test(r"A ⌽ 3")
     RANK ERROR
 
-    >>> test(r"(1 0) ⌽ A")
+    >>> test(r"1 2 3 ⌽ A")
+    LENGTH ERROR
+    >>> test(r"1 0 ⌽ A")
     2 1
     3 4
     >>> test(r"2 ⌽ A")
     1 2
     3 4
+    >>> test(r"(,¯1) ⌽ A")
+    2 1
+    4 3
+    >>> test(r"¯1 ⌽ A")
+    2 1
+    4 3
 
     >>> test(r"A ⊖ A")
     RANK ERROR
@@ -919,12 +942,20 @@ def     reverse_rotate():
     >>> test(r"A ⊖ 3")
     RANK ERROR
 
-    >>> test(r"(1 0) ⊖ A")
+    >>> test(r"1 2 3 ⊖ A")
+    LENGTH ERROR
+    >>> test(r"1 0 ⊖ A")
     3 2
     1 4
     >>> test(r"2 ⊖ A")
     1 2
     3 4
+    >>> test(r"(,¯1) ⊖ A")
+    3 4
+    1 2
+    >>> test(r"¯1 ⊖ A")
+    3 4
+    1 2
     """
     pass
 
