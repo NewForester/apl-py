@@ -344,21 +344,34 @@ def     partition(Fn, A, B):
 
     assertNotTrue(B.isScalar(), "RANK ERROR")
 
-    if B.isEmptyVector() and A.isEmptyVector():
+    if A.isEmptyVector() and B.isEmptyVector():
         return B
 
-    if B.isVector():
-        if A.isScalar():
-            Apy = confirmInteger(A.scalarToPy())
+    if A.isScalar():
+        Apy = confirmInteger(A.scalarToPy())
 
-            if Apy == 0:
-                return makeEmptyVector()
+        if Apy == 0:
+            return makeEmptyVector()
 
-            return makeScalar((B,), B.prototype())
+        return makeScalar((B,), B.prototype())
 
-        return makeVector(Fn(A.vectorToPy(), B.vectorToPy()), -1, B.prototype())
+    if B.isArray():
+        assertTrue(B.dimension() == (2, 2), "WIP - MATRIX ERROR")
 
-    assertNotArray(B, "WIP - RANK ERROR")
+        Apy = A.vectorToPy()
+
+        assertTrue(len(Apy) == B.rank(), "LENGTH ERROR")
+
+        Rpy = []
+        for Bit in B.arrayByLastAxis():
+            Rpy += makeScalar((Fn(A.vectorToPy(), Bit.vectorToPy(),), B.prototype()))
+
+        Dpy = list(B.dimension())
+        Dpy[-1] = 1
+
+        return makeArray(Rpy, Dpy, None)
+
+    return makeVector(Fn(A.vectorToPy(), B.vectorToPy()), -1, B.prototype())
 
 # ------------------------------
 

@@ -970,8 +970,8 @@ def     enclose_partition():
     1 2
     3 4
     >>> test(r"⊂ A")
-    (1 3
-     2 4)
+    (1 2
+    3 4)
 
     >>> test(r"A ⊂ A")
     RANK ERROR
@@ -980,9 +980,11 @@ def     enclose_partition():
     >>> test(r"A ⊂ 3")
     RANK ERROR
 
-    >>> test(r"(1 0) ⊂ A")
-    (1
-    3)
+    >>> test(r"1 2 3 ⊂ A")
+    LENGTH ERROR
+    >>> test(r"1 0 ⊂ A")
+    (1)
+    (3)
     >>> test(r"2 ⊂ A")
     (1 2
     3 4)
@@ -1000,8 +1002,8 @@ def     disclose_pick():
     1 2
     3 4
     >>> test(r"⊃ A")
-    1 3
-    2 4
+    1 2
+    3 4
 
     >>> test(r"A ⊃ A")
     RANK ERROR
@@ -1289,6 +1291,7 @@ def     compress_replicate():
     >>> test(r"A")
     1 2
     3 4
+
     >>> test(r"/ A")
     SYNTAX ERROR
 
@@ -1299,11 +1302,41 @@ def     compress_replicate():
     >>> test(r"A / 3")
     RANK ERROR
 
-    >>> test(r"(1 0) / A")
-    1
-    3
+    >>> test(r"1 0 1 / A")
+    LENGTH ERROR
+    >>> test(r"1 0 / A")
+    WIP - MATRIX ERROR
+    >>> test(r"0 / A")
+    ⍬
+    ⍬
+    >>> test(r"1 / A")
+    1 2
+    3 4
     >>> test(r"2 / A")
-    WIP - RANK ERROR
+    WIP - MATRIX ERROR
+
+    >>> test(r"⌿ A")
+    SYNTAX ERROR
+
+    >>> test(r"A ⌿ A")
+    RANK ERROR
+    >>> test(r"A ⌿ 0 1")
+    RANK ERROR
+    >>> test(r"A ⌿ 3")
+    RANK ERROR
+
+    >>> test(r"1 0 1 ⌿ A")
+    LENGTH ERROR
+    >>> test(r"1 0 ⌿ A")
+    WIP - MATRIX ERROR
+    >>> test(r"0 ⌿ A")
+    ⍬
+    ⍬
+    >>> test(r"1 ⌿ A")
+    1 2
+    3 4
+    >>> test(r"2 ⌿ A")
+    WIP - MATRIX ERROR
     """
     pass
 
@@ -1317,6 +1350,7 @@ def     expand():
     >>> test(r"A")
     1 2
     3 4
+
     >>> test(r"\ A")
     SYNTAX ERROR
 
@@ -1327,11 +1361,37 @@ def     expand():
     >>> test(r"A \ 3")
     RANK ERROR
 
-    >>> test(r"(1 0 1) \ A")
-    1 0 2
-    3 0 4
+    >>> test(r"1 0 1 \ A")
+    WIP - MATRIX ERROR
+    >>> test(r"1 0 \ A")
+    LENGTH ERROR
+    >>> test(r"0 \ A")
+    LENGTH ERROR
+    >>> test(r"1 \ A")
+    LENGTH ERROR
     >>> test(r"2 \ A")
-    DOMAIN ERROR ?
+    DOMAIN ERROR
+
+    >>> test(r"⍀ A")
+    SYNTAX ERROR
+
+    >>> test(r"A ⍀ A")
+    RANK ERROR
+    >>> test(r"A ⍀ 0 1")
+    RANK ERROR
+    >>> test(r"A ⍀ 3")
+    RANK ERROR
+
+    >>> test(r"1 0 1 ⍀ A")
+    WIP - MATRIX ERROR
+    >>> test(r"1 0 ⍀ A")
+    LENGTH ERROR
+    >>> test(r"0 ⍀ A")
+    LENGTH ERROR
+    >>> test(r"1 ⍀ A")
+    LENGTH ERROR
+    >>> test(r"2 ⍀ A")
+    DOMAIN ERROR
     """
     pass
 

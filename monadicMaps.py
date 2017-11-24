@@ -189,10 +189,7 @@ def     enclose(_, B):
     if B.isScalar():
         return B
 
-    if B.isVector():
-        return makeScalar((B,), None)
-
-    assertNotArray(B, "WIP - RANK ERROR")
+    return makeScalar((B,), None)
 
 # ------------------------------
 
@@ -200,6 +197,15 @@ def     disclose(Fn, B):
     """
     implement monadic ⊃
     """
+    if B.isArray():
+        return makeArray(Fn(B.arrayToPy()), B.dimension(), B.prototype())
+
+    if B.isVector():
+        if B.isEmptyVector():
+            return B
+
+        return makeVector(Fn(B.vectorToPy()), B.dimension(), B.prototype())
+
     if B.isScalar():
         Bpy = B.scalarToPy()
 
@@ -207,14 +213,6 @@ def     disclose(Fn, B):
             return Bpy
 
         return makeScalar(Bpy, None)
-
-    if B.isEmptyVector():
-        return B
-
-    if B.isVector():
-        return makeVector(Fn(B.vectorToPy()), B.dimension(), B.prototype())
-
-    assertNotArray(B, "WIP - RANK ERROR")
 
 # ------------------------------
 

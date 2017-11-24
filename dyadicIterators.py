@@ -272,7 +272,7 @@ class   rotate(object):
 
 # ------------------------------
 
-class   partition(object):
+class   partition(aplIterator):
     """
     the iterator for dyadic ⊂
     """

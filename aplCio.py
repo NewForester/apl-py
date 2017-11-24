@@ -22,6 +22,7 @@ import readline
 import traceback
 
 from aplQuantity import aplQuantity
+from aplIterators import aplIterator
 from aplError import aplException, aplQuit, assertNotArray
 
 # ------------------------------
@@ -208,12 +209,10 @@ class   _outputValue(object):
         """
         print an APL quantity recursively
         """
-        elementsPerLine = 1
-
-        if quantity.isVector():
-            elementsPerLine = quantity.tally()
-        elif quantity.isArray():
+        if quantity.isArray():
             elementsPerLine = quantity.dimension()[-1]
+        else:
+            elementsPerLine = quantity.tally()
 
         try:
             count = 0
@@ -233,6 +232,14 @@ class   _outputValue(object):
 
                     empty = self._emptyVector or element.isEmptyVector()
                     string, separator = self._formatQuantity(element, empty)
+
+                elif isinstance(element, aplIterator):
+                    self._output(string, '\n' if (separator == '\n') else ' ');
+
+                    empty = False
+                    for value in element:
+                        empty = self._emptyVector or value.isEmptyVector()
+                        string, separator = self._formatQuantity(value, empty)
 
                 else:
                     self._output(string, '\n' if (separator == '\n') else ' ');
@@ -259,7 +266,9 @@ class   _outputValue(object):
         """
         print an element that itself is an APL quantity
         """
-        if quantity.isVector():
+        if quantity.isArray():
+            outfix = '()'
+        elif quantity.isVector():
             if emptyVector or not quantity.isString():
                 outfix = '()'
             else:
