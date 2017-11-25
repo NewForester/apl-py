@@ -66,24 +66,32 @@ for name; do
         (1):
             ;;
         (*):
-            for function in ${function}; do
-                for essay in "${function%%_*}" "${function##*_}"; do
-                    if [[ "${essay}" == "${name}" ]]; then
-                        gotit="${name}";
-                        break;
-                    fi
-                done
-                [[ -n "${gotit}" ]] && break;
+            functions=$function
 
-                length=${#name};
-                for essay in "${function%%_*}" "${function##*_}"; do
-                    if [[ "${essay:0:$length}" == "${name}" ]]; then
-                        gotit="${name}";
-                        break;
-                    fi
+            if [[ -z "${gotit}" ]]; then
+                for function in ${functions}; do
+                    for essay in "${function%%_*}" "${function##*_}"; do
+                        if [[ "${essay}" == "${name}" ]]; then
+                            gotit="${name}";
+                            break;
+                        fi
+                    done
+                    [[ -n "${gotit}" ]] && break;
                 done
-                [[ -n "${gotit}" ]] && break;
-            done
+            fi
+
+            if [[ -z "${gotit}" ]]; then
+                for function in ${functions}; do
+                    length=${#name};
+                    for essay in "${function%%_*}" "${function##*_}"; do
+                        if [[ "${essay:0:$length}" == "${name}" ]]; then
+                            gotit="${name}";
+                            break;
+                        fi
+                    done
+                    [[ -n "${gotit}" ]] && break;
+                done
+            fi
 
             if [[ -z "${gotit}" ]]; then
                 usage "function name \"${name}\" ambiguous";
