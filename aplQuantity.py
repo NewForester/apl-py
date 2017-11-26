@@ -182,6 +182,10 @@ class   aplQuantity(object):
         """
         return a good enough lower bound for the length of a vector
         """
+        if isinstance(self._dimension, tuple):
+            if True: # self._dimension[-1] == -1:
+                assertError("DIMENSION ERROR: aplQuantity.lookAheadDimension()")
+
         dimension = self._dimension
 
         if dimension < 0:
@@ -243,6 +247,10 @@ class   aplQuantity(object):
         the dimension(s) of the quantity
         """
         if isinstance(self._dimension, tuple):
+            if self._dimension[-1] < 0:
+                assertError("DIMENSION ERROR: aplQuantity.elementCount()")
+
+        if isinstance(self._dimension, tuple):
             return reduce(operator.mul, self._dimension, 1)
 
         elif isinstance(self._dimension, int):
@@ -254,6 +262,10 @@ class   aplQuantity(object):
         """
         the dimension(s) of the quantity
         """
+        if isinstance(self._dimension, tuple):
+            if self._dimension[-1] < 0:
+                assertError("DIMENSION ERROR: aplQuantity.dimension()")
+
         return self._dimension
 
     def rank(self):
@@ -364,6 +376,14 @@ class   aplQuantity(object):
         """
         if isinstance(self._dimension, int):
             return self._lookAheadDimension(1) == 0
+        return False
+
+    def isEmptyArray(self):
+        """
+        true if quantity is an array with a last axis of length 0
+        """
+        if isinstance(self._dimension, tuple):
+            return self._dimension[-1] == 0
         return False
 
     def scalarToPy(self):

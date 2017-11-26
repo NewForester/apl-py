@@ -218,13 +218,13 @@ class   _outputValue(object):
             count = 0
             string = None
             separator = ''
-            emptyVector = quantity.isEmptyVector()
+            emptyQuantity = quantity.isEmptyVector() or quantity.isEmptyArray()
 
             for element in quantity:
                 if isinstance(element, str):
                     self._output(string, separator)
 
-                    empty = self._emptyVector or emptyVector
+                    empty = self._emptyVector or emptyQuantity
                     string, separator = self._formatCharacter(element, empty)
 
                 elif isinstance(element, aplQuantity):
@@ -244,8 +244,11 @@ class   _outputValue(object):
                 else:
                     self._output(string, '\n' if (separator == '\n') else ' ');
 
-                    empty = self._emptyVector or emptyVector
+                    empty = self._emptyVector or emptyQuantity
                     string, separator = self._formatNumber(element, empty)
+
+                    if emptyQuantity:
+                        separator = '\n'
 
                 count += 1
                 if (elementsPerLine != 0):
@@ -283,11 +286,11 @@ class   _outputValue(object):
         return '', ' '
 
     @staticmethod
-    def _formatNumber(number, emptyVector):
+    def _formatNumber(number, emptyQuantity):
         """
         format a number for output
         """
-        if emptyVector:
+        if emptyQuantity:
             string = '⍬'
         else:
             string = "{0:.10g}".format(number)

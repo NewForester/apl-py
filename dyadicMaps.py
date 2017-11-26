@@ -599,7 +599,7 @@ def     take(Fn, A, B):
 
 # ------------------------------
 
-def     compress(Fn, A, B):
+def     compressLast(Fn, A, B):
     """
     implement dyadic /
     """
@@ -613,11 +613,77 @@ def     compress(Fn, A, B):
 
         return makeVector(Rpy, -1, B.prototype())
 
-    assertNotArray(B, "WIP - RANK ERROR")
+    if B.isArray():
+        assertTrue(B.dimension() == (2, 2), "WIP - MATRIX ERROR")
+
+        Apy = [confirmInteger(I) for I in A.vectorToPy()]
+
+        if A.isScalarLike():
+            Lpy = abs(Apy[0]) * B.dimension()[-1]
+        else:
+            Lpy = sum(abs(I) for I in Apy)
+
+        Dpy = list(B.dimension())
+        Dpy[-1] = Lpy
+
+        if Lpy == 0:
+            return makeArray(B.padFill(), Dpy, B.prototype())
+
+        assertTrue(tuple(Dpy) == (2, 2), "WIP - MATRIX ERROR")
+
+        Rpy = []
+        for Bit in B.arrayByLastAxis():
+            Rpy += Fn(A.promoteScalarToVectorPy(), Bit.vectorToPy(), B.padFill()[-1])
+
+        return makeArray(Rpy, Dpy, B.prototype())
 
 # ------------------------------
 
-def     expand(Fn, A, B):
+def     compressFirst(Fn, A, B):
+    """
+    implement dyadic ⌿
+    """
+    assertNotArray(A)
+
+    if B.isScalar() and A.isEmptyVector():
+        return makeEmptyVector(B.prototype())
+
+    if B.isVectorLike():
+        Rpy = Fn(A.promoteScalarToVectorPy(), B.vectorToPy(), B.padFill())
+
+        return makeVector(Rpy, -1, B.prototype())
+
+    if B.isArray():
+        assertTrue(B.dimension() == (2, 2), "WIP - MATRIX ERROR")
+
+        Apy = [confirmInteger(I) for I in A.vectorToPy()]
+
+        if A.isScalarLike():
+            Lpy = abs(Apy[0]) * B.dimension()[0]
+        else:
+            Lpy = sum(abs(I) for I in Apy)
+
+        Dpy = list(B.dimension())
+        Dpy[0] = Lpy
+
+        Dpy[0], Dpy[-1] = Dpy[-1], Dpy[0]
+
+        if Lpy == 0:
+            return makeArray(B.padFill(), Dpy, B.prototype())
+
+        assertTrue(tuple(Dpy) == (2, 2), "WIP - MATRIX ERROR")
+
+        Rpy = []
+        for Bit in B.arrayByFirstAxis():
+            Rpy += Fn(A.promoteScalarToVectorPy(), Bit.vectorToPy(), B.padFill()[-1])
+
+        Rpy = monadicTranspose(Rpy, B.dimension())
+
+        return makeArray(Rpy, Dpy, B.prototype())
+
+# ------------------------------
+
+def     expandLast(Fn, A, B):
     """
     implement dyadic /
     """
@@ -639,7 +705,81 @@ def     expand(Fn, A, B):
 
         return makeVector(Rpy, -1, B.prototype())
 
-    assertNotArray(B, "WIP - RANK ERROR")
+    if B.isArray():
+        assertTrue(B.dimension() == (2, 2), "WIP - MATRIX ERROR")
+
+        Apy = [confirmInteger(I) for I in A.vectorToPy()]
+
+        if A.isScalarLike():
+            if Apy[0] < B.dimension()[-1]:
+                assertError("LENGTH ERROR")
+            else:
+                assertError("DOMAIN ERROR")
+        else:
+            Lpy = sum(abs(I) if I != 0 else 1 for I in Apy)
+
+        Dpy = list(B.dimension())
+        Dpy[-1] = Lpy
+
+        assertTrue(tuple(Dpy) == (2, 2), "WIP - MATRIX ERROR")
+
+        Rpy = []
+        for Bit in B.arrayByLastAxis():
+            Rpy += Fn(A.promoteScalarToVectorPy(), Bit.vectorToPy(), B.padFill()[-1])
+
+        return makeArray(Rpy, Dpy, B.prototype())
+
+# ------------------------------
+
+def     expandFirst(Fn, A, B):
+    """
+    implement dyadic ⍀
+    """
+    assertNotArray(A)
+
+    if B.isScalar() and A.isEmptyVector():
+        return makeEmptyVector(B.prototype())
+
+    if B.isVectorLike():
+        if A.isScalar():
+            Apy = confirmInteger(A.scalarToPy())
+
+            assertTrue(Apy >= 0, "LENGTH ERROR")
+
+            if Apy == 0:
+                return makeVector(B.prototype(), 1, B.prototype())
+
+        Rpy = Fn(A.promoteScalarToVectorPy(), B.vectorToPy(), B.padFill())
+
+        return makeVector(Rpy, -1, B.prototype())
+
+    if B.isArray():
+        assertTrue(B.dimension() == (2, 2), "WIP - MATRIX ERROR")
+
+        Apy = [confirmInteger(I) for I in A.vectorToPy()]
+
+        if A.isScalarLike():
+            if Apy[0] < B.dimension()[0]:
+                assertError("LENGTH ERROR")
+            else:
+                assertError("DOMAIN ERROR")
+        else:
+            Lpy = sum(abs(I) if I != 0 else 1 for I in Apy)
+
+        Dpy = list(B.dimension())
+        Dpy[-1] = Lpy
+
+        assertTrue(tuple(Dpy) == (2, 2), "WIP - MATRIX ERROR")
+
+        Rpy = []
+        for Bit in B.arrayByFirstAxis():
+            Rpy += Fn(A.promoteScalarToVectorPy(), Bit.vectorToPy(), B.padFill()[-1])
+
+        Rpy = monadicTranspose(Rpy, Dpy)
+
+        Dpy[0], Dpy[-1] = Dpy[-1], Dpy[0]
+
+        return makeArray(Rpy, Dpy, B.prototype())
 
 # ------------------------------
 
