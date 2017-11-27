@@ -15,8 +15,6 @@
 
 import operatorMaps as mapper
 
-from aplError import assertError
-
 # ------------------------------
 
 _OperatorFunctions = {

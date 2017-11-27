@@ -743,6 +743,8 @@ def     compress_replicate():
 
 # --------------
 
+# pylint: disable=anomalous-backslash-in-string
+
 def     expand():
     """
     >>> test(r"\ / ⍬")
@@ -758,6 +760,8 @@ def     expand():
     (3 3)
     """
     pass
+
+# pylint: enable=anomalous-backslash-in-string
 
 # ------------------------------
 

@@ -18,6 +18,8 @@
     function is used instead but the calling map function in unaware of this.
 """
 
+# pylint: disable=too-few-public-methods
+
 import operator
 from functools import reduce
 

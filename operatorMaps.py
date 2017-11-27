@@ -72,7 +72,10 @@ def     reduceFirst(Fn, A, B):
 
 # ------------------------------
 
-def     scanLast(Fn, A, B):
+def     scanLast(Fn, _, B):
+    """
+    the map for the \ (scan along last axis) operator
+    """
     if B.isScalar():
         return B
 
@@ -91,7 +94,10 @@ def     scanLast(Fn, A, B):
 
 # ------------------------------
 
-def     scanFirst(Fn, A, B):
+def     scanFirst(Fn, _, B):
+    """
+    the map for the ⍀ (scan along first axis) operator
+    """
     if B.isScalar():
         return B
 

@@ -109,7 +109,7 @@ argument-rgx=([a-z]+([A-Z][a-z]+)*|[A-Z]|Fn|[_]{1,2})$
 attr-name-hint=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
 
 # Regular expression matching correct attribute names
-attr-rgx=(_?([a-z]+([A-Z][a-z]+)*)|_[A-Z]{1,2})$
+attr-rgx=(_?([a-z]+([A-Z][a-z]+)*)|_[A-Z]{1,2}|_Fn)$
 
 # Bad variable names which should always be refused, separated by a comma
 bad-names=foo,bar,baz,toto,tutu,tata

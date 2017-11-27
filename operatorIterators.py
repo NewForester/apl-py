@@ -10,6 +10,8 @@
     iterator modules.  It is experimental and may be replaced.
 """
 
+# pylint: disable=too-few-public-methods
+
 from monadicIterators import reverse
 
 from makeQuantity import makeScalar
@@ -64,7 +66,7 @@ class   scanVector(object):
 
         if self._A == []:
             self._A.append(Y)
-            return (Y)
+            return Y
 
         self._A.append(Y)
 

@@ -444,6 +444,8 @@ def     parsePrototypes():
 
 # ------------------------------
 
+# pylint: disable=anomalous-backslash-in-string
+
 def     parseOperators():
     """
     >>> test(r"+/ 1 2 3")
@@ -475,6 +477,8 @@ def     parseOperators():
     2
     """
     pass
+
+# pylint: enable=anomalous-backslash-in-string
 
 # ------------------------------
 

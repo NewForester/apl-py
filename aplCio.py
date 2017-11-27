@@ -294,7 +294,7 @@ class   _outputValue(object):
             string = '⍬'
         else:
             string = "{0:.10g}".format(number)
-            string = "0" if string == "-0" else string.replace('-', '¯').replace("inf",'∞')
+            string = "0" if string == "-0" else string.replace('-', '¯').replace("inf", '∞')
 
         return string, ' '
 

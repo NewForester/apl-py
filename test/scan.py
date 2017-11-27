@@ -18,6 +18,8 @@
         testDyadic --lazy       # run with lazy evaluation
 """
 
+# pylint: disable=anomalous-backslash-in-string
+
 from test.base import preamble, testResult as test
 from test.base import saveIndexOrigin, setIndexOrigin, restoreIndexOrigin
 
