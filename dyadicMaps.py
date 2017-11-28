@@ -898,33 +898,42 @@ def     grade(descending, A, B):
     """
     implement dyadic ⍒ and ⍋
     """
-    def _sortKey(X):
+    def _sortKey(Y):
         """
-        sort key is the collation sequence index
+        return collation sequence index or 1 greater
         """
-        Y = Bpy[X]
         try:
             return Apy.index(Y)
         except ValueError:
-            return Len
+            return Csl
 
-    assertNotScalar(B, "RANK ERROR")
+    assertNotScalar(A, "RANK ERROR")
+
+    A.resolve()
+    assertTrue(A.isString(), "DOMAIN ERROR")
+
+    B.resolve()
+    assertTrue(B.isString(), "DOMAIN ERROR")
+
+    assertNotArray(A, "RANK ERROR")
+
+    Csl = A.dimension()
+    Apy = ''.join(A.vectorToPy())
+
+    if B.isArray():
+        assertTrue(B.dimension() == (2, 2), "WIP - MATRIX ERROR")
+
+        Bpy = [Bit.vectorToPy() for Bit in B.arrayByLastAxis()]
+        Key = lambda X: [_sortKey(Y) for Y in Bpy[X]]
 
     if B.isVectorLike():
-        A.resolve()
-        assertTrue(A.isString(), "DOMAIN ERROR")
-        Apy = A.vectorToPy()
-
-        B.resolve()
-        assertTrue(B.isString(), "DOMAIN ERROR")
-        Len = B.tally()
         Bpy = B.vectorToPy()
+        Key = lambda X: _sortKey(Bpy[X])
 
-        S = list(range(Len))
-        S.sort(key=_sortKey, reverse=descending)
+    Len = B.tally()
+    S = list(range(Len))
+    S.sort(key=Key, reverse=descending)
 
-        return makeVector(iterator.grade(S), Len)
-
-    assertNotArray(B, "WIP - RANK ERROR")
+    return makeVector(iterator.grade(S), Len)
 
 # EOF

@@ -1483,8 +1483,10 @@ def     gradeUp():
     >>> test(r"⍋ A")
     1 2
 
-    >>> test(r"A ⍋ A")
+    >>> test(r"(,A) ⍋ A")
     1 2
+    >>> test(r"(⌽,A) ⍋ A")
+    2 1
 
     >>> setIndexOrigin(0)
 
@@ -1497,8 +1499,10 @@ def     gradeUp():
     >>> test(r"⍋ A")
     0 1
 
-    >>> test(r"A ⍋ A")
+    >>> test(r"(,A) ⍋ A")
     0 1
+    >>> test(r"(⌽,A) ⍋ A")
+    1 0
 
     >>> restoreIndexOrigin(IO)
     """
@@ -1520,8 +1524,10 @@ def     gradeDown():
     >>> test(r"⍒ A")
     2 1
 
-    >>> test(r"A ⍒ A")
+    >>> test(r"(,A) ⍒ A")
     2 1
+    >>> test(r"(⌽,A) ⍒ A")
+    1 2
 
     >>> setIndexOrigin(0)
 
@@ -1534,8 +1540,11 @@ def     gradeDown():
     >>> test(r"⍒ A")
     1 0
 
-    >>> test(r"A ⍒ A")
+    >>> test(r"(,A) ⍒ A")
     1 0
+    >>> test(r"(⌽,A) ⍒ A")
+    0 1
+
 
     >>> restoreIndexOrigin(IO)
     """

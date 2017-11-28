@@ -263,12 +263,10 @@ def     grade(descending, B):
     """
     implement monadic ⍒ and ⍋
     """
-    def _sortKey(X):
+    def _sortKey(Y):
         """
         sort key depends on type as well value
         """
-        Y = Bpy[X]
-
         if isinstance(Y, aplQuantity):
             return 2 * Y.tally(), Y
 
@@ -279,16 +277,21 @@ def     grade(descending, B):
 
     assertNotScalar(B, "DOMAIN ERROR")
 
+    if B.isArray():
+        assertTrue(B.dimension() == (2, 2), "WIP - MATRIX ERROR")
+
+        Bpy = [Bit.vectorToPy() for Bit in B.arrayByLastAxis()]
+        Key = lambda X: [_sortKey(Y) for Y in Bpy[X]]
+
     if B.isVector():
         B.resolve()
-        Len = B.tally()
         Bpy = B.vectorToPy()
+        Key = lambda X: _sortKey(Bpy[X])
 
-        S = list(range(Len))
-        S.sort(key=_sortKey, reverse=descending)
+    Len = B.tally()
+    S = list(range(Len))
+    S.sort(key=Key, reverse=descending)
 
-        return makeVector(iterator.grade(S), Len)
-
-    assertNotArray(B, "WIP - RANK ERROR")
+    return makeVector(iterator.grade(S), Len)
 
 # EOF
