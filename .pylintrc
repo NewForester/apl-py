@@ -152,7 +152,7 @@ include-naming-hint=no
 inlinevar-name-hint=[A-Za-z_][A-Za-z0-9_]*$
 
 # Regular expression matching correct inline iteration names
-inlinevar-rgx=([a-z]+([A-Z][a-z]+)*)$
+inlinevar-rgx=([a-z]+([A-Z][a-z]+)*|[A-Z]|[A-Z][a-z]{2,2})$
 
 # Naming hint for method names
 method-name-hint=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
@@ -182,7 +182,7 @@ property-classes=abc.abstractproperty
 variable-name-hint=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
 
 # Regular expression matching correct variable names
-variable-rgx=([a-z]+([A-Z][a-z]+)*|[A-Z]{1,2}|[A-Z]py|Len)$
+variable-rgx=([a-z]+([A-Z][a-z]+)*|[A-Z]{1,2}|[A-Z][a-z]{2,2})$
 
 
 [MISCELLANEOUS]

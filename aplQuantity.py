@@ -55,7 +55,8 @@ from functools import reduce
 
 import makeQuantity # makePrototype
 
-from aplIterators import lookAhead, scalarIterator, vectorIterator, lastAxisIterator, firstAxisIterator
+from aplIterators import lookAhead, scalarIterator, vectorIterator
+from aplIterators import lastAxisIterator, firstAxisIterator
 from aplError import assertError, assertNotArray
 
 # ------------------------------
@@ -125,11 +126,13 @@ class   aplQuantity(object):
         take on the attributes of some othe APL quantity (without realising any promises)
         """
         if isinstance(other, aplQuantity):
+            # pylint: disable=protected-access
             self._value = other._value
             self._dimension = other._dimension
             self._prototype = other._prototype
             self._resolved = other._resolved
             self._hash = other._hash
+            # pylint: enable=protected-access
         else:
             assertError("ASSERTION ERROR: aplQuantity._clone()")
 
@@ -206,7 +209,9 @@ class   aplQuantity(object):
         if self.isEmptyVector():
             return 1
 
-        depth = reduce(lambda A, Y: max(A, Y.depth() if isinstance(Y, aplQuantity) else 0), self._value, 0)
+        depth = reduce(lambda A, Y:
+                       max(A, Y.depth() if isinstance(Y, aplQuantity) else 0),
+                       self._value, 0)
 
         if self.isScalar() and depth == 0:
             return 0

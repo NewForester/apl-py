@@ -23,7 +23,7 @@ import traceback
 
 from aplQuantity import aplQuantity
 from aplIterators import aplIterator
-from aplError import aplException, aplQuit, assertNotArray
+from aplError import aplException, aplQuit
 
 # ------------------------------
 
@@ -228,13 +228,13 @@ class   _outputValue(object):
                     string, separator = self._formatCharacter(element, empty)
 
                 elif isinstance(element, aplQuantity):
-                    self._output(string, '\n' if (separator == '\n') else ' ');
+                    self._output(string, '\n' if separator == '\n' else ' ')
 
                     empty = self._emptyVector or element.isEmptyVector()
                     string, separator = self._formatQuantity(element, empty)
 
                 elif isinstance(element, aplIterator):
-                    self._output(string, '\n' if (separator == '\n') else ' ');
+                    self._output(string, '\n' if separator == '\n' else ' ')
 
                     empty = False
                     for value in element:
@@ -242,7 +242,7 @@ class   _outputValue(object):
                         string, separator = self._formatQuantity(value, empty)
 
                 else:
-                    self._output(string, '\n' if (separator == '\n') else ' ');
+                    self._output(string, '\n' if separator == '\n' else ' ')
 
                     empty = self._emptyVector or emptyQuantity
                     string, separator = self._formatNumber(element, empty)
@@ -251,8 +251,8 @@ class   _outputValue(object):
                         separator = '\n'
 
                 count += 1
-                if (elementsPerLine != 0):
-                    if (count % elementsPerLine == 0):
+                if elementsPerLine != 0:
+                    if count % elementsPerLine == 0:
                         separator = '\n'
 
             self._output(string, end)

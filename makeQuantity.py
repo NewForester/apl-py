@@ -71,6 +71,9 @@ def     makeVector(value, length=-1, prototype=(0,)):
 # --------------
 
 def     makeArray(value, dimensions, prototype=(0,)):
+    """
+    make an APL array quantity from a Python list
+    """
     if isinstance(value, list):
         value = tuple(value)
 

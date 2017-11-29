@@ -1342,6 +1342,8 @@ def     compress_replicate():
 
 # --------------
 
+# pylint: disable=anomalous-backslash-in-string
+
 def     expand():
     """
     >>> test(r"A ← 2 2 ⍴ ⍳ 4")
@@ -1394,6 +1396,8 @@ def     expand():
     DOMAIN ERROR
     """
     pass
+
+# pylint: enable=anomalous-backslash-in-string
 
 # ------------------------------
 

@@ -34,7 +34,7 @@ from makeQuantity import makeScalar, makeVector, makeEmptyVector, makeArray
 from aplQuantity import aplQuantity
 from aplIterators import scalarIterator, dyadicTranspose, monadicTranspose
 from aplError import assertError, assertTrue, assertNotTrue
-from aplError import assertNotScalar, assertNotVector, assertNotArray
+from aplError import assertNotScalar, assertNotArray
 from aplError import assertNumeric, assertScalarLike, assertEmptyVector
 
 # ------------------------------
@@ -227,6 +227,9 @@ def     transpose(_, A, B):
         Rpy = dyadicTranspose(B.arrayToPy(), Apy, B.dimension())
 
         def newDimensions(A, B):
+            """
+            determine dimensions of the transposed result
+            """
             R = list(range(len(A)))
 
             for I in R:
@@ -559,7 +562,9 @@ def     drop(Fn, A, B):
     for Bit in Fn(Apy[0], B.arrayByLastAxis()):
         Rpy += Fn(Apy[1], Bit.vectorToPy())
 
-    return makeArray(Rpy, [max(0, I[1] - abs(I[0])) for I in zip(Apy, B.dimension())], B.prototype())
+    Dpy = [max(0, I[1] - abs(I[0])) for I in zip(Apy, B.dimension())]
+
+    return makeArray(Rpy, Dpy, B.prototype())
 
 # ------------------------------
 

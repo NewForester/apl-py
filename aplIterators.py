@@ -33,6 +33,8 @@
     as iterators.  Some of these may be complex.
 """
 
+# pylint: disable=too-few-public-methods
+
 import makeQuantity ## makeVector, makePrototype
 
 from aplError import assertError
@@ -420,11 +422,13 @@ class   dyadicTranspose(object):
         self._A = list(range(len(D))) # order of processing axes
         self._A.reverse()
 
+        # pylint: disable=bad-whitespace
         self._L =  [1] * len(D)  # lengths of transposed rows
         self._R =  [1] * len(D)  # offset multipliers for transposed rows
         self._F = [-1] * len(D)  # axis to which offset is fixed or -1
 
         self._O =  [0] * len(D)  # temporary (temporarily)
+        # pylint: enable=bad-whitespace
 
         # Calculate offsets of start of rows
         R = 1
